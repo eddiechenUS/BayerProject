@@ -13,15 +13,656 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-22T13:28:52.968Z"
+         lastModifiedDate="2018-05-24T13:23:18.310Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
-            <PropertyDefinitions></PropertyDefinitions>
-            <ServiceDefinitions></ServiceDefinitions>
+            <PropertyDefinitions>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeThreshold="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="0.0"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 baseType="NUMBER"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="previousCycleCounter"
+                 ordinal="2"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.dataShape="NumberArrayElement"
+                 aspect.defaultValue="{&quot;rows&quot;:[{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:50.0},{&quot;element&quot;:50.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:50.0},{&quot;element&quot;:50.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0}],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;element&quot;:{&quot;name&quot;:&quot;element&quot;,&quot;aspects&quot;:{},&quot;description&quot;:&quot;&quot;,&quot;baseType&quot;:&quot;NUMBER&quot;,&quot;ordinal&quot;:1}}}}"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 baseType="INFOTABLE"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="availability"
+                 ordinal="1"></PropertyDefinition>
+            </PropertyDefinitions>
+            <ServiceDefinitions>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="CalculateShiftsFromNow">
+                    <ResultType
+                     aspect.dataShape="BayerShiftSchedulesDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.defaultValue="1"
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="nrOfShifts"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetAvailability">
+                    <ResultType
+                     baseType="INTEGER"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         aspect.maximumValue="23"
+                         aspect.minimumValue="0"
+                         baseType="INTEGER"
+                         description=""
+                         name="hour"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetPcsPerShift">
+                    <ResultType
+                     baseType="NUMBER"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetShiftsFromNow">
+                    <ResultType
+                     aspect.dataShape="BayerShiftSchedulesDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.defaultValue="30"
+                         aspect.isRequired="true"
+                         aspect.maximumValue="60"
+                         aspect.minimumValue="6"
+                         aspect.units="minutes"
+                         baseType="INTEGER"
+                         description="MUST BE DIVISIBLE BY 6!!!!!"
+                         name="interval"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.defaultValue="0"
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="nrOfNextShifts"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.defaultValue="0"
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="nrOfPrevShifts"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="true"
+                 category=""
+                 description="Executed at the beginning of each shift"
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ScheduleShifts">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="true"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="UpdateShift">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="ScheduledEvent"
+                         aspect.isRequired="true"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="eventData"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+            </ServiceDefinitions>
             <EventDefinitions></EventDefinitions>
             <ServiceMappings></ServiceMappings>
-            <ServiceImplementations></ServiceImplementations>
+            <ServiceImplementations>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="CalculateShiftsFromNow">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: BayerShiftTimeDataShape
+                                    var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
+                                    
+                                    var startTime = shiftTime.startTime;
+                                    var endTime = shiftTime.endTime;
+                                    
+                                    var params = {
+                                    	infoTableName : "InfoTable",
+                                    	dataShapeName : "BayerShiftSchedulesDataShape"
+                                    };
+                                    
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerShiftSchedulesDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                    
+                                    var query = {
+                                      "filters": {
+                                        "type": "AND",
+                                        "filters": [
+                                          {
+                                            "fieldName": "productionLine",
+                                            "type": "EQ",
+                                            "value": me.name
+                                          },
+                                          {
+                                            "fieldName": "status",
+                                            "type": "NOTLIKE",
+                                            "value": "COMPLETED"
+                                          }
+                                        ]
+                                      }
+                                    };
+                                    
+                                    var params = {
+                                    	maxItems: undefined /* NUMBER */,
+                                    	values: undefined /* INFOTABLE*/,
+                                    	query: query /* QUERY */,
+                                    	source: undefined /* STRING */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var unfinishedProducts = Things["BayerProductionPlan"].QueryDataTableEntries(params);
+                                    
+                                    var x = 0;
+                                    var product = unfinishedProducts.rows[x];
+                                    var unassignedHours = product.remainingHours;
+                                    if (unassignedHours <= 0) {
+                                        unassignedHours = 1;
+                                    }
+                                    
+                                    for (var shiftNr = 0; shiftNr < nrOfShifts; shiftNr++) {
+                                        // BayerShiftSchedulesDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.totalQuantityProduced = 0; // NUMBER
+                                        newEntry.totalTargetQuantity = 0; // NUMBER
+                                        
+                                        var params = {
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "BayerScheduleDataShape"
+                                        };
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerScheduleDataShape)
+                                        newEntry.shiftSchedule = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        // BUILD SHIFT SCHEDULE WITH 0.1h=6min RESOLUTION
+                                        for (var i = 0; i < 480; i+=6) {
+                                            if (x >= unfinishedProducts.rows.length) {
+                                                break;
+                                            }
+                                            
+                                            // BayerScheduleDataShape entry object
+                                            var new6minEntry = new Object();
+                                            new6minEntry.duration = 360000; // INTEGER
+                                            new6minEntry.hour = Math.floor(i/60) + 1; // INTEGER
+                                            new6minEntry.productionPlanKey_actual = undefined; // STRING
+                                            new6minEntry.productId = product.productId; // STRING
+                                            new6minEntry.time = dateAddMinutes(startTime, i); // DATETIME
+                                            new6minEntry.productionPlanKey = product.key; // STRING
+                                            new6minEntry.quantityProduced = 0; // NUMBER
+                                            new6minEntry.productDescription = product.productDescription; // STRING
+                                            
+                                            var av = me.GetAvailability({hour: new6minEntry.time.getHours()});
+                                            new6minEntry.targetQuantity = (av/100) * product.targetQuantityPerHour * 0.1; // NUMBER
+                                            newEntry.totalTargetQuantity += new6minEntry.targetQuantity;
+                                    
+                                            newEntry.shiftSchedule.AddRow(new6minEntry);
+                                            
+                                            unassignedHours -= 0.1;
+                                            
+                                            if (unassignedHours <= 0) {
+                                                product = unfinishedProducts.rows[++x];
+                                                unassignedHours = product.remainingHours;
+                                                if (unassignedHours <= 0) {
+                                                    unassignedHours = 1;
+                                                }
+                                            }
+                                        }
+                                        
+                                        newEntry.totalTargetQuantity = Math.round(newEntry.totalTargetQuantity)
+                                    
+                                        result.AddRow(newEntry);
+                                    
+                                        // dateAddHours(dateValue:DATETIME,amount:NUMBER):STRING
+                                        startTime = dateAddHours(startTime, 8);
+                                        endTime = dateAddHours(endTime, 8);
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetAvailability">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = me.availability.rows[hour].element;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetPcsPerShift">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: STRING
+                                    var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId();
+                                    
+                                    var params = {
+                                    	streamEntryId: shiftId /* STRING */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var shift = Things["BayerShiftSchedules"].GetStreamEntry(params);
+                                    
+                                    var result = shift.totalQuantityProduced / shift.totalTargetQuantity;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetShiftsFromNow">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // !!!!!!!! interval MUST BE DIVISIBLE BY 6 IN ORDER FOR THIS SERVICE TO WORK !!!!!!!!!!!!!!!!!!!!
+                                    
+                                    if (interval % 6 != 0) {
+                                        throw "BayerShiftsManagement.GetShiftsFromNow: interval must be divisible by 6";
+                                    }
+                                    
+                                    // result: INFOTABLE dataShape: BayerShiftTimeDataShape
+                                    var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
+                                    
+                                    var startTime = shiftTime.startTime;
+                                    var endTime = shiftTime.endTime;
+                                    
+                                    var params = {
+                                    	oldestFirst: true /* BOOLEAN */,
+                                    	maxItems: 999999 /* NUMBER */,
+                                    	sourceTags: undefined /* TAGS */,
+                                    	endDate: dateAddHours(shiftTime.endTime, nrOfNextShifts*8 - 1) /* DATETIME */,
+                                    	query: undefined /* QUERY */,
+                                    	source: me.name /* STRING */,
+                                    	startDate: dateAddHours(shiftTime.startTime, nrOfPrevShifts*-8) /* DATETIME */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var result = Things["BayerShiftSchedules"].QueryStreamEntriesWithData(params);
+                                    
+                                    if (interval > 6) {
+                                        var groupingFactor = Math.floor(interval/6); // how many rows from schedule to group together
+                                        var tableLength = result.rows.length;
+                                    
+                                        for (var x = 0; x < tableLength; x++) {
+                                            var shift = result.rows[x];
+                                    
+                                            var scheduleTableLength = shift.shiftSchedule.rows.length;
+                                    
+                                            // keep every [groupingFactor] row and merge others into those
+                                            for (var y = 0; y < scheduleTableLength; y++) {        
+                                                if (y%groupingFactor == 0) {
+                                                    continue;
+                                                }
+                                    
+                                                var row = shift.shiftSchedule.rows[y];
+                                                var baseRow = shift.shiftSchedule.rows[Math.floor(y/groupingFactor)*groupingFactor];
+                                    
+                                                baseRow.targetQuantity += row.targetQuantity;
+                                                baseRow.quantityProduced += row.quantityProduced;
+                                                baseRow.duration += row.duration;
+                                            }
+                                    
+                                            for (var y = scheduleTableLength-1; y >= 0; y--) {
+                                                if (y%groupingFactor != 0) {
+                                                    shift.shiftSchedule.RemoveRow(y);
+                                                }
+                                                else {
+                                                    var row = shift.shiftSchedule.rows[y];
+                                                    row.targetQuantity = Math.round(row.targetQuantity);
+                                                    row.quantityTargetOk = row.quantityProduced >= row.targetQuantity;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ScheduleShifts">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: BayerShiftTimeDataShape
+                                    var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
+                                    
+                                    // REMOVE EXISTING SCHEDULES
+                                    
+                                    var params = {
+                                    	oldestFirst: true /* BOOLEAN */,
+                                    	maxItems: 999999 /* NUMBER */,
+                                    	sourceTags: undefined /* TAGS */,
+                                    	endDate: undefined /* DATETIME */,
+                                    	query: undefined /* QUERY */,
+                                    	source: me.name /* STRING */,
+                                    	startDate: shiftTime.startTime /* DATETIME */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var entriesToRemove = Things["BayerShiftSchedules"].QueryStreamEntries(params);
+                                    
+                                    var tableLength = entriesToRemove.rows.length;
+                                    
+                                    for (var x = 0; x < tableLength; x++) {
+                                    	var row = entriesToRemove.rows[x];
+                                    	
+                                        var params = {
+                                            streamEntryId: row.id /* STRING */
+                                        };
+                                    
+                                        // no return
+                                        Things["BayerShiftSchedules"].DeleteStreamEntry(params);
+                                    }
+                                    
+                                    // CREATE NEW SCHEDULES
+                                    
+                                    var params = {
+                                    	nrOfShifts: 3 /* STRING */
+                                    };
+                                    
+                                    // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
+                                    var result = me.CalculateShiftsFromNow(params);
+                                    
+                                    var tableLength = result.rows.length;
+                                    
+                                    for (var x = 0; x < tableLength; x++) {
+                                    	var row = result.rows[x];
+                                    	
+                                        var values = Things["BayerShiftSchedules"].CreateValues();
+                                    
+                                        values.shiftSchedule = row.shiftSchedule; //INFOTABLE
+                                        values.totalQuantityProduced = row.totalQuantityProduced; //NUMBER
+                                        values.totalTargetQuantity = row.totalTargetQuantity; //NUMBER
+                                    
+                                        var params = {
+                                            sourceType: "Thing" /* STRING */,
+                                            values: values /* INFOTABLE*/,
+                                            location: undefined /* LOCATION */,
+                                            source: me.name /* STRING */,
+                                            timestamp: row.shiftSchedule.rows[0].time /* DATETIME */,
+                                            tags: undefined /* TAGS */
+                                        };
+                                    
+                                        // no return
+                                        Things["BayerShiftSchedules"].AddStreamEntry(params);
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="UpdateShift">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: STRING
+                                    var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId();
+                                    
+                                    var params = {
+                                    	streamEntryId: shiftId /* STRING */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var shift = Things["BayerShiftSchedules"].GetStreamEntry(params);
+                                    shift.totalQuantityProduced = 0;
+                                    
+                                    var tableLength = shift.shiftSchedule.rows.length;
+                                    
+                                    for (var x = 0; x < tableLength; x++) {
+                                    	var row = shift.shiftSchedule.rows[x];
+                                        var nextRow = x < tableLength-1 ? shift.shiftSchedule.rows[x+1] : undefined;
+                                    	
+                                        if (eventData.timestamp >= row.time && (!nextRow || eventData.timestamp < nextRow.time)) {
+                                            if (me.previousCycleCounter > me.counter) {
+                                                me.previousCycleCounter = 0;
+                                            }
+                                            row.quantityProduced = me.counter - me.previousCycleCounter;
+                                            me.previousCycleCounter = me.counter;
+                                            row.productionPlanKey_actual = me.currentProductKey;
+                                            row.quantityTargetOk = row.quantityProduced >= row.targetQuantity;
+                                        }
+                                        
+                                        shift.totalQuantityProduced += row.quantityProduced;
+                                    }
+                                    
+                                    var params = {
+                                    	values: shift /* INFOTABLE*/,
+                                    	streamEntryId: shiftId /* STRING */,
+                                    	location: undefined /* LOCATION */,
+                                    	source: me.name /* STRING */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // no return
+                                    Things["BayerShiftSchedules"].UpdateStreamEntry(params);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+            </ServiceImplementations>
             <Subscriptions></Subscriptions>
             <avatar></avatar>
             <DesignTimePermissions>
@@ -40,7 +681,12 @@
             <RemotePropertyBindings></RemotePropertyBindings>
             <RemoteServiceBindings></RemoteServiceBindings>
             <RemoteEventBindings></RemoteEventBindings>
-            <AlertConfigurations></AlertConfigurations>
+            <AlertConfigurations>
+                <AlertDefinitions
+                 name="availability"></AlertDefinitions>
+                <AlertDefinitions
+                 name="previousCycleCounter"></AlertDefinitions>
+            </AlertConfigurations>
             <InstanceRunTimePermissions></InstanceRunTimePermissions>
         </ThingShape>
     </ThingShapes>

@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-05-22T12:33:45.522Z"
+         lastModifiedDate="2018-05-24T10:33:20.745Z"
          name="BayerUtilities"
          projectName="BayerIoT"
          published="false"
@@ -151,33 +151,14 @@
                                         // result: INFOTABLE dataShape: "BayerShiftTimeDataShape"
                                         var shiftTime = me.GetCurrentShiftTime();
                                         
-                                        var query = {
-                                          "filters": {
-                                            "type": "AND",
-                                            "filters": [
-                                              {
-                                                "fieldName": "timestamp",
-                                                "type": "GE",
-                                                "value": shiftTime.startTime
-                                              },
-                                              {
-                                                "fieldName": "timestamp",
-                                                "type": "LT",
-                                                "value": shiftTime.endTime
-                                              }
-                                            ]
-                                          }
-                                        };
-                                        
-                                        
                                         var params = {
                                         	oldestFirst: undefined /* BOOLEAN */,
-                                        	maxItems: undefined /* NUMBER */,
+                                        	maxItems: 1 /* NUMBER */,
                                         	sourceTags: undefined /* TAGS */,
-                                        	endDate: undefined /* DATETIME */,
-                                        	query: query /* QUERY */,
+                                        	endDate: dateAddHours(shiftTime.endTime, -1) /* DATETIME */,
+                                        	query: undefined /* QUERY */,
                                         	source: undefined /* STRING */,
-                                        	startDate: undefined /* DATETIME */,
+                                        	startDate: shiftTime.startTime /* DATETIME */,
                                         	tags: undefined /* TAGS */
                                         };
                                         
@@ -185,6 +166,10 @@
                                         var entry = Things["BayerShiftSchedules"].QueryStreamEntries(params);
                                         
                                         var result = entry && entry.rows.length > 0 ? entry.id : "";
+                                        
+                                        if (!result) {
+                                            logger.error("[BayerUtilities.GetCurrentShiftStreamId] Shift not found");
+                                        }
                                         ]]>
                                         </code>
                                     </Row>
@@ -241,6 +226,9 @@
                                             startTime.setHours(14);
                                         }
                                         else if (hour > 22 || hour < 6) {
+                                            if (hour < 6) {
+                                                startTime = dateAddDays(startTime, -1);
+                                            }
                                             startTime.setHours(22);
                                         }
                                         
@@ -258,6 +246,9 @@
                                             endTime.setHours(22);
                                         }
                                         else if (hour >= 22 || hour < 6) {
+                                            if (hour >= 22) {
+                                                endTime = dateAddDays(endTime, 1);
+                                            }
                                             endTime.setHours(6);
                                         }
                                         

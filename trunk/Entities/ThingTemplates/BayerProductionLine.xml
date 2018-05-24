@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2018-05-22T13:30:14.227Z"
+         lastModifiedDate="2018-05-24T10:10:23.401Z"
          name="BayerProductionLine"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -56,10 +56,108 @@
                      name="displayName"
                      ordinal="1"></PropertyDefinition>
                 </PropertyDefinitions>
-                <ServiceDefinitions></ServiceDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="ResetAll">
+                        <ResultType
+                         baseType="NOTHING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
-                <ServiceImplementations></ServiceImplementations>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="ResetAll">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        me.currentProductKey = "";
+                                        me.counter = 0;
+                                        me.previousProductCounter = 0;
+                                        
+                                        var query = {
+                                          "filters": {
+                                            "fieldName": "productionLine",
+                                            "type": "EQ",
+                                            "value": me.name
+                                          }
+                                        };
+                                        
+                                        var params = {
+                                        	sourceType: undefined /* STRING */,
+                                        	values: undefined /* INFOTABLE*/,
+                                        	query: query /* QUERY */,
+                                        	location: undefined /* LOCATION */,
+                                        	source: undefined /* STRING */,
+                                        	tags: undefined /* TAGS */
+                                        };
+                                        
+                                        // no return
+                                        Things["BayerProductionPlan"].DeleteDataTableEntriesWithQuery(params);
+                                        
+                                        var params = {
+                                        	oldestFirst: undefined /* BOOLEAN */,
+                                        	maxItems: undefined /* NUMBER */,
+                                        	sourceTags: undefined /* TAGS */,
+                                        	endDate: undefined /* DATETIME */,
+                                        	query: undefined /* QUERY */,
+                                        	source: me.name /* STRING */,
+                                        	startDate: undefined /* DATETIME */,
+                                        	tags: undefined /* TAGS */
+                                        };
+                                        
+                                        // result: INFOTABLE
+                                        var entries = Things["BayerShiftSchedules"].QueryStreamEntries(params);
+                                        
+                                        var tableLength = entries.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = entries.rows[x];
+                                            
+                                            var params = {
+                                                streamEntryId: row.id /* STRING */
+                                            };
+                                        
+                                            // no return
+                                            Things["BayerShiftSchedules"].DeleteStreamEntry(params);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
                 <Subscriptions></Subscriptions>
             </ThingShape>
             <ImplementedShapes>
