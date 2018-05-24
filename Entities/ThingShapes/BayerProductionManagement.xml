@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-22T15:15:17.384Z"
+         lastModifiedDate="2018-05-24T10:40:09.466Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -173,7 +173,7 @@
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
-                 aspect.isAsync="false"
+                 aspect.isAsync="true"
                  category=""
                  description=""
                  isAllowOverride="false"
@@ -228,13 +228,22 @@
                                         
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
                                         var current = me.GetCurrentProduct();
+                                        me.currentProductKey = ""; // to block the periodic "UpdateProduct" task
                                     
-                                        current.status = "COMPLETED";
-                                        current.endTime = new Date();
                                         current.producedQuantity = me.counter;
-                                        
                                         me.previousProductCounter = me.counter;
                                         me.counter = 0;
+                                        
+                                        current.status = "COMPLETED";
+                                        current.endTime = new Date();
+                                        
+                                        var difference = dateDifference(current.endTime, currentProduct.startTime);
+                                    
+                                        currentProduct.workedHours = difference / 1000.0 / 60.0 / 60.0;
+                                        currentProduct.remainingHours = currentProduct.targetHours - currentProduct.workedHours;
+                                        if (currentProduct.remainingHours < 0) {
+                                            currentProduct.remainingHours = 0;
+                                        }
                                         
                                         var params = {
                                             sourceType: undefined /* STRING */,
@@ -522,7 +531,7 @@
                                     <![CDATA[
                                     var incomingValue = eventData.newValue.value;
                                     
-                                    if (me.previousProductCounter < incomingValue) {
+                                    if (me.previousProductCounter <= incomingValue) {
                                         me.counter = incomingValue - me.previousProductCounter;
                                     }
                                     else {
