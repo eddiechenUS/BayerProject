@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-05-23T11:38:21.748Z"
+         lastModifiedDate="2018-05-25T20:07:42.290Z"
          name="BayerShiftTrackingPage"
          projectName="BayerIoT"
          published="false"
@@ -37,10 +37,106 @@
             <ConfigurationTables></ConfigurationTables>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
-                <ServiceDefinitions></ServiceDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetDailyPerformanceWithAxisMinMax">
+                        <ResultType
+                         aspect.dataShape="BayerDailyPerformanceWithAxisMinMax"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
-                <ServiceImplementations></ServiceImplementations>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetDailyPerformanceWithAxisMinMax">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: BayerDailyPerformanceDataShape
+                                        var result = Things[productionLine].GetDailyPerformance();
+                                        
+                                        var yAxisMin = 0;
+                                        var yAxisMax = 0;
+                                        
+                                        var tableLength = result.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var day = result.rows[x];
+                                        	
+                                            var dayTableLength = day.dailyPerformance.rows.length;
+                                            
+                                            for (var y = 0; y < tableLength; y++) {
+                                                var row = day.dailyPerformance.rows[y];
+                                                
+                                                if (row.quantityProduced > yAxisMax) {
+                                                    yAxisMax = row.quantityProduced;
+                                                }
+                                                if (row.targetQuantity > yAxisMax) {
+                                                    yAxisMax = row.targetQuantity;
+                                                }
+                                            }
+                                        }
+                                        
+                                        var newField = new Object();
+                                        newField.name = "yAxisMin";
+                                        newField.baseType = 'NUMBER';
+                                        result.AddField(newField);
+                                        var newField = new Object();
+                                        newField.name = "yAxisMax";
+                                        newField.baseType = 'NUMBER';
+                                        result.AddField(newField);
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var day = result.rows[x];
+                                            day.yAxisMin = yAxisMin;
+                                            day.yAxisMax = yAxisMax;
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
                 <Subscriptions></Subscriptions>
             </ThingShape>
             <PropertyBindings></PropertyBindings>

@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-24T13:23:18.310Z"
+         lastModifiedDate="2018-05-25T12:33:14.559Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -97,6 +97,23 @@
                          name="hour"
                          ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetDailyPerformance">
+                    <ResultType
+                     aspect.dataShape="BayerDailyPerformanceDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
@@ -359,6 +376,99 @@
                                     <code>
                                     <![CDATA[
                                     var result = me.availability.rows[hour].element;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetDailyPerformance">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: BayerShiftTimeDataShape
+                                    var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
+                                    
+                                    var startTime = shiftTime.startTime;
+                                    var endTime = new Date(startTime);
+                                    
+                                    // QUERY SHIFTS STARTED 6 DAYS AGO ON 6:00 UP TO TODAY 23:00
+                                    startTime.setHours(6);
+                                    startTime = dateAddDays(startTime, -6);
+                                    endTime.setHours(23);
+                                    
+                                    var params = {
+                                    	oldestFirst: true /* BOOLEAN */,
+                                    	maxItems: undefined /* NUMBER */,
+                                    	sourceTags: undefined /* TAGS */,
+                                    	endDate: endTime /* DATETIME */,
+                                    	query: undefined /* QUERY */,
+                                    	source: me.name /* STRING */,
+                                    	startDate: startTime /* DATETIME */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var shifts = Things["BayerShiftSchedules"].QueryStreamEntriesWithData(params);
+                                    
+                                    var params = {
+                                    	infoTableName : "InfoTable",
+                                    	dataShapeName : "BayerDailyPerformanceDataShape"
+                                    };
+                                    
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerDailyPerformanceDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                    
+                                    var tableLength = shifts.rows.length;
+                                    
+                                    for (var x = 0; x < tableLength;) {	
+                                        // BayerDailyPerformanceDataShape entry object
+                                        var newResultEntry = new Object();
+                                        newResultEntry.timestamp = shifts.rows[x].timestamp; // DATETIME
+                                            
+                                        var params = {
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "BayerPerformancePerShiftDataShape"
+                                        };
+                                    
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerPerformancePerShiftDataShape)
+                                        newResultEntry.dailyPerformance = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                    
+                                        for (var i = 0; i < 3; i++) {
+                                            var shift = shifts.rows[x++];
+                                                
+                                            // BayerPerformancePerShiftDataShape entry object
+                                            var newEntry = new Object();
+                                            newEntry.shift = "Shift " + (i+1); // STRING
+                                            newEntry.quantityProduced = shift.totalQuantityProduced; // NUMBER
+                                            newEntry.targetQuantity = shift.totalTargetQuantity; // NUMBER
+                                            newEntry.status = newEntry.quantityProduced >= newEntry.targetQuantity; // BOOLEAN
+                                            
+                                            newResultEntry.dailyPerformance.AddRow(newEntry);
+                                        }
+                                        
+                                        result.AddRow(newResultEntry);
+                                    }
                                     ]]>
                                     </code>
                                 </Row>
