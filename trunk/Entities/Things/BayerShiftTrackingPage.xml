@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-05-25T20:07:42.290Z"
+         lastModifiedDate="2018-05-28T12:08:35.454Z"
          name="BayerShiftTrackingPage"
          projectName="BayerIoT"
          published="false"
@@ -63,6 +63,56 @@
                              ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetDistinctProducts">
+                        <ResultType
+                         aspect.dataShape="BayerShiftPlanDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.dataShape="BayerScheduleDataShape"
+                             aspect.isRequired="true"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="shiftSchedule"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetShiftPlan">
+                        <ResultType
+                         aspect.dataShape="BayerShiftPlanDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.dataShape="BayerScheduleDataShape"
+                             aspect.isRequired="true"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="shiftSchedule"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                 </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
@@ -103,7 +153,7 @@
                                         	
                                             var dayTableLength = day.dailyPerformance.rows.length;
                                             
-                                            for (var y = 0; y < tableLength; y++) {
+                                            for (var y = 0; y < dayTableLength; y++) {
                                                 var row = day.dailyPerformance.rows[y];
                                                 
                                                 if (row.quantityProduced > yAxisMax) {
@@ -129,6 +179,100 @@
                                             day.yAxisMin = yAxisMin;
                                             day.yAxisMax = yAxisMax;
                                         }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetDistinctProducts">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	t: shiftSchedule /* INFOTABLE */,
+                                        	columns: "productId,productDescription" /* STRING */
+                                        };
+                                        
+                                        // result: INFOTABLE
+                                        var result = Resources["InfoTableFunctions"].Distinct(params);
+                                        
+                                        var newField = new Object();
+                                        newField.name = "sectionColorState";
+                                        newField.baseType = 'STRING';
+                                        result.AddField(newField);
+                                        
+                                        var tableLength = result.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = result.rows[x];
+                                        	
+                                            row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetShiftPlan">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var newField = new Object();
+                                        newField.name = "sectionColorState";
+                                        newField.baseType = 'STRING';
+                                        shiftSchedule.AddField(newField);
+                                        
+                                        var tableLength = shiftSchedule.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = shiftSchedule.rows[x];
+                                        	
+                                            row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
+                                        }
+                                        
+                                        var result = shiftSchedule;
                                         ]]>
                                         </code>
                                     </Row>
