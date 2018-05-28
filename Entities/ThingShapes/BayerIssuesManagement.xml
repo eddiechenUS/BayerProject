@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-25T19:28:06.064Z"
+         lastModifiedDate="2018-05-28T14:51:19.390Z"
          name="BayerIssuesManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -61,6 +61,30 @@
                          baseType="DATETIME"
                          description=""
                          name="timestamp"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetIssue">
+                    <ResultType
+                     aspect.dataShape="BayerIssuesDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="id"
                          ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
@@ -153,7 +177,7 @@
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
-                 name="GetIssues">
+                 name="GetIssue">
                     <ConfigurationTables>
                         <ConfigurationTable
                          description="Script"
@@ -174,18 +198,66 @@
                                     <code>
                                     <![CDATA[
                                     var params = {
-                                    	oldestFirst: false /* BOOLEAN */,
-                                    	maxItems: 99999 /* NUMBER */,
-                                    	sourceTags: undefined /* TAGS */,
-                                    	endDate: dateAddMilliseconds(dateAddHours(shiftStart, 8), -1) /* DATETIME */,
-                                    	query: undefined /* QUERY */,
-                                    	source: me.name /* STRING */,
-                                    	startDate: shiftStart /* DATETIME */,
-                                    	tags: undefined /* TAGS */
+                                    	streamEntryId: id /* STRING */
                                     };
                                     
                                     // result: INFOTABLE
-                                    var result = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                    var result = Things["BayerIssues"].GetStreamEntry(params);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetIssues">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = undefined;
+                                    
+                                    if (shiftStart) {
+                                        var params = {
+                                            oldestFirst: false /* BOOLEAN */,
+                                            maxItems: 99999 /* NUMBER */,
+                                            sourceTags: undefined /* TAGS */,
+                                            endDate: dateAddMilliseconds(dateAddHours(shiftStart, 8), -1) /* DATETIME */,
+                                            query: undefined /* QUERY */,
+                                            source: me.name /* STRING */,
+                                            startDate: shiftStart /* DATETIME */,
+                                            tags: undefined /* TAGS */
+                                        };
+                                    
+                                        // result: INFOTABLE
+                                        result = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                    }
+                                    else {
+                                        var params = {
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "StreamData"
+                                        };
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(StreamData)
+                                        result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                    }
                                     ]]>
                                     </code>
                                 </Row>
