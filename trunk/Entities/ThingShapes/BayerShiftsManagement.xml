@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-28T12:14:47.559Z"
+         lastModifiedDate="2018-05-29T15:22:22.015Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -129,7 +129,14 @@
                      description=""
                      name="result"
                      ordinal="0"></ResultType>
-                    <ParameterDefinitions></ParameterDefinitions>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="shiftStartTime"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
@@ -454,7 +461,8 @@
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerPerformancePerShiftDataShape)
                                         newResultEntry.dailyPerformance = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
                                     
-                                        for (var i = 0; i < 3; i++) {
+                                        for (var i = 0; i < 3 && x < tableLength; i++) {
+                                            
                                             var shift = shifts.rows[x++];
                                                 
                                             // BayerPerformancePerShiftDataShape entry object
@@ -462,6 +470,7 @@
                                             newEntry.shift = "Shift " + (i+1); // STRING
                                             newEntry.quantityProduced = shift.totalQuantityProduced; // NUMBER
                                             newEntry.targetQuantity = shift.totalTargetQuantity; // NUMBER
+                                            newEntry.performance = newEntry.quantityProduced / newEntry.targetQuantity * 100;
                                             newEntry.status = newEntry.quantityProduced >= newEntry.targetQuantity; // BOOLEAN
                                             
                                             newResultEntry.dailyPerformance.AddRow(newEntry);
@@ -499,15 +508,29 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // result: STRING
-                                    var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId();
+                                    //// result: STRING
+                                    //var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId();
+                                    //
+                                    //var params = {
+                                    //	streamEntryId: shiftId /* STRING */
+                                    //};
+                                    //
+                                    //// result: INFOTABLE
+                                    //var shift = Things["BayerShiftSchedules"].GetStreamEntry(params);
                                     
                                     var params = {
-                                    	streamEntryId: shiftId /* STRING */
+                                    	oldestFirst: undefined /* BOOLEAN */,
+                                    	maxItems: 1 /* NUMBER */,
+                                    	sourceTags: undefined /* TAGS */,
+                                    	endDate: shiftStartTime /* DATETIME */,
+                                    	query: undefined /* QUERY */,
+                                    	source: me.name /* STRING */,
+                                    	startDate: shiftStartTime /* DATETIME */,
+                                    	tags: undefined /* TAGS */
                                     };
                                     
                                     // result: INFOTABLE
-                                    var shift = Things["BayerShiftSchedules"].GetStreamEntry(params);
+                                    var shift = Things["BayerShiftSchedules"].QueryStreamEntriesWithData(params);
                                     
                                     var result = shift.totalQuantityProduced / shift.totalTargetQuantity * 100;
                                     ]]>

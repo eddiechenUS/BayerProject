@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-27T18:57:07.930Z"
+         lastModifiedDate="2018-05-29T14:28:42.312Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -132,6 +132,23 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="GetProductionPlan">
+                    <ResultType
+                     aspect.dataShape="BayerProductionPlanDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="LoadCSV">
                     <ResultType
                      aspect.dataShape="BayerProductionPlanDataShape"
@@ -223,15 +240,16 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    if (me.currentProductKey) {
-                                        // complete current in progress product
-                                        
-                                        // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
-                                        var current = me.GetCurrentProduct();
+                                    // complete current in progress product
+                                    
+                                    // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
+                                    var current = me.GetCurrentProduct();
+                                    
+                                    if (current.rows.length > 0) {
                                         me.currentProductKey = ""; // to block the periodic "UpdateProduct" task
                                     
                                         current.producedQuantity = me.counter;
-                                        me.previousProductCounter = me.counter;
+                                        me.previousProductCounter += me.counter;
                                         me.counter = 0;
                                         
                                         current.status = "COMPLETED";
@@ -349,15 +367,17 @@
                                     var currentProduct = me.GetCurrentProduct();
                                     
                                     if (currentProduct.productId == "Cambio") {
-                                        var targetMinutes = currentProduct.targetHours * 60;
+                                        var targetMinutes = currentProduct.targetHours * 60; 
                                     
                                         // dateDifference(date1:DATETIME,date2:DATETIME):NUMBER
                                         var difference = dateDifference(new Date(), currentProduct.startTime) / 1000 / 60;
                                     
                                         newEntry.max = targetMinutes; // NUMBER
                                         newEntry.value = difference; // NUMBER
-                                        newEntry.green = difference <= targetMinutes;
-                                        newEntry.red = difference > targetMinutes;
+                                        
+                                        // Bayer wants to be able to exceed the target by 10%
+                                        newEntry.green = difference < targetMinutes * 1.1; 
+                                        newEntry.red = !newEntry.green;
                                     }
                                     else {
                                         newEntry.max = 60; // NUMBER
@@ -400,22 +420,110 @@
                                     var result = undefined;
                                     
                                     if (me.currentProductKey) {
+                                        try {
+                                            var params = {
+                                                key: me.currentProductKey /* STRING */
+                                            };
+                                    
+                                            // result: INFOTABLE
+                                            result = Things["BayerProductionPlan"].GetDataTableEntryByKey(params);
+                                        }
+                                        catch (ex) {
+                                            logger.error(ex);
+                                        }
+                                    }
+                                    
+                                    if (!result || result.rows.length == 0) {
+                                        var query = {
+                                          "filters": {
+                                            "type": "AND",
+                                            "filters": [
+                                              {
+                                                "fieldName": "productionLine",
+                                                "type": "EQ",
+                                                "value": me.name
+                                              },
+                                              {
+                                                "fieldName": "status",
+                                                "type": "EQ",
+                                                "value": "INPROGRESS"
+                                              }
+                                            ]
+                                          }
+                                        };
+                                    
                                         var params = {
-                                            key: me.currentProductKey /* STRING */
+                                            maxItems: 1 /* NUMBER */,
+                                            values: undefined /* INFOTABLE*/,
+                                            query: query /* QUERY */,
+                                            source: undefined /* STRING */,
+                                            tags: undefined /* TAGS */
                                         };
                                     
                                         // result: INFOTABLE
-                                        result = Things["BayerProductionPlan"].GetDataTableEntryByKey(params);
-                                    }
-                                    else {
-                                        var params = {
-                                            infoTableName : "InfoTable",
-                                            dataShapeName : "BayerProductionPlanDataShape"
-                                        };
+                                        result = Things["BayerProductionPlan"].QueryDataTableEntries(params);
                                     
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
-                                        result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        if (result && result.rows.length > 0) {
+                                            me.currentProductKey = result.key;
+                                        }
+                                        else {
+                                            var params = {
+                                                infoTableName : "InfoTable",
+                                                dataShapeName : "BayerProductionPlanDataShape"
+                                            };
+                                    
+                                            // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
+                                            result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        }
                                     }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetProductionPlan">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var query = {
+                                      "filters": {
+                                        "fieldName": "productionLine",
+                                        "type": "EQ",
+                                        "value": me.name
+                                      }
+                                    };
+                                    
+                                    var params = {
+                                    	maxItems: 999999 /* NUMBER */,
+                                    	values: undefined /* INFOTABLE*/,
+                                    	query: query /* QUERY */,
+                                    	source: undefined /* STRING */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var result = Things["BayerProductionPlan"].QueryDataTableEntries(params);
                                     ]]>
                                     </code>
                                 </Row>
