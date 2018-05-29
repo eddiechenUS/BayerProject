@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-28T12:50:18.163Z"
+         lastModifiedDate="2018-05-29T14:05:39.915Z"
          name="BayerUploadExcelPopup"
          projectName="BayerIoT"
          rows="0.0"
@@ -64,6 +64,14 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "LoadCSV"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "aaf11fb8-867a-439a-b7a6-9787b538ef02",
+                    "Name" : "GetProductionPlan",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetProductionPlan"
                   } ]
                 },
                 "Session" : {
@@ -127,6 +135,23 @@
                 "TargetArea" : "Data",
                 "TargetId" : "EntityName",
                 "TargetSection" : "DynamicThingShapes_BayerProductionManagement"
+              }, {
+                "Id" : "204fad2f-8918-42bf-8be4-c63d9a6f21e8",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetProductionPlan",
+                "SourceSection" : "DynamicThingShapes_BayerProductionManagement",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxgrid-20",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -147,6 +172,15 @@
                 "EventTriggerId" : "LoadCSV",
                 "EventTriggerSection" : "DynamicThingShapes_BayerProductionManagement",
                 "Id" : "fde884b3-a90a-4630-aca3-78a73a8117bc"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingShapes_BayerProductionManagement",
+                "EventHandlerService" : "GetProductionPlan",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "3203f981-c15f-4f6c-a662-5c79c3820172"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -186,7 +220,7 @@
                     "Description" : "",
                     "ParameterName" : "LineID"
                   } ],
-                  "id_index" : 19,
+                  "id_index" : 20,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -301,7 +335,7 @@
                         "Columns" : 0,
                         "DisplayName" : "layout-5",
                         "Footer" : true,
-                        "FooterHeight" : 80,
+                        "FooterHeight" : 5,
                         "Header" : true,
                         "HeaderHeight" : 60,
                         "Id" : "layout-5",
@@ -481,6 +515,216 @@
                               "Width" : 302,
                               "Z-index" : 10,
                               "__TypeDisplayName" : "File Upload"
+                            },
+                            "Widgets" : [ ]
+                          }, {
+                            "Properties" : {
+                              "AlignHeader" : false,
+                              "Area" : "UI",
+                              "AutoSelectFirstRow" : false,
+                              "CellTextWrapping" : false,
+                              "ColumnFormat" : {
+                                "formatInfo" : [ {
+                                  "Align" : "left",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "productionLine",
+                                  "FormatOptions" : {
+                                    "FormatString" : "text",
+                                    "renderer" : "THINGNAME"
+                                  },
+                                  "Title" : "productionLine",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "right",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "id",
+                                  "FormatOptions" : {
+                                    "FormatString" : "0",
+                                    "renderer" : "INTEGER"
+                                  },
+                                  "Title" : "id",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "left",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "productId",
+                                  "FormatOptions" : {
+                                    "FormatString" : "full",
+                                    "renderer" : "STRING"
+                                  },
+                                  "Title" : "productId",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "left",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "orderNr",
+                                  "FormatOptions" : {
+                                    "FormatString" : "full",
+                                    "renderer" : "STRING"
+                                  },
+                                  "Title" : "orderNr",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "left",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "productDescription",
+                                  "FormatOptions" : {
+                                    "FormatString" : "full",
+                                    "renderer" : "STRING"
+                                  },
+                                  "Title" : "productDescription",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "right",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "targetQuantity",
+                                  "FormatOptions" : {
+                                    "FormatString" : "0.00",
+                                    "renderer" : "NUMBER"
+                                  },
+                                  "Title" : "targetQuantity",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "right",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "targetHours",
+                                  "FormatOptions" : {
+                                    "FormatString" : "0.00",
+                                    "renderer" : "NUMBER"
+                                  },
+                                  "Title" : "targetHours",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "right",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "targetQuantityPerHour",
+                                  "FormatOptions" : {
+                                    "FormatString" : "0.00",
+                                    "renderer" : "NUMBER"
+                                  },
+                                  "Title" : "targetQuantityPerHour",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "left",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "status",
+                                  "FormatOptions" : {
+                                    "FormatString" : "full",
+                                    "renderer" : "STRING"
+                                  },
+                                  "Title" : "status",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "right",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "remainingHours",
+                                  "FormatOptions" : {
+                                    "FormatString" : "0.00",
+                                    "renderer" : "NUMBER"
+                                  },
+                                  "Title" : "remainingHours",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "right",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "workedHours",
+                                  "FormatOptions" : {
+                                    "FormatString" : "0.00",
+                                    "renderer" : "NUMBER"
+                                  },
+                                  "Title" : "workedHours",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "right",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "producedQuantity",
+                                  "FormatOptions" : {
+                                    "FormatString" : "0.00",
+                                    "renderer" : "NUMBER"
+                                  },
+                                  "Title" : "producedQuantity",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "left",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "startTime",
+                                  "FormatOptions" : {
+                                    "FormatString" : "[[dateTimeFormat_Default]]",
+                                    "renderer" : "DATETIME"
+                                  },
+                                  "Title" : "startTime",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                }, {
+                                  "Align" : "left",
+                                  "AllowEdit" : false,
+                                  "FieldName" : "endTime",
+                                  "FormatOptions" : {
+                                    "FormatString" : "[[dateTimeFormat_Default]]",
+                                    "renderer" : "DATETIME"
+                                  },
+                                  "Title" : "endTime",
+                                  "ValidationExpression" : "",
+                                  "ValidationMessage" : "",
+                                  "Width" : "auto"
+                                } ]
+                              },
+                              "CurrentScrollTop" : 0,
+                              "DisplayName" : "dhxgrid-20",
+                              "FocusStyle" : "DefaultFocusStyle",
+                              "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
+                              "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
+                              "GridHeaderStyle" : "DefaultGridHeaderStyle",
+                              "GridHeaderTextCase" : "capitalize",
+                              "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
+                              "Height" : 305,
+                              "Id" : "dhxgrid-20",
+                              "IsEditable" : false,
+                              "IsPrintLayout" : false,
+                              "Left" : 0,
+                              "MultiSelect" : false,
+                              "ResponsiveLayout" : false,
+                              "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
+                              "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
+                              "RowFormat_StateParameters" : [ ],
+                              "RowHeight" : 30,
+                              "RowHoverStyle" : "DefaultRowHoverStyle",
+                              "RowSelectedStyle" : "DefaultRowSelectedStyle",
+                              "ScrollTop" : 0,
+                              "ShowAllColumns" : false,
+                              "ShowDataLoading" : true,
+                              "TabSequence" : 0,
+                              "Top" : 85,
+                              "Type" : "dhxgrid",
+                              "Visible" : true,
+                              "Width" : 745,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Grid"
                             },
                             "Widgets" : [ ]
                           } ]
