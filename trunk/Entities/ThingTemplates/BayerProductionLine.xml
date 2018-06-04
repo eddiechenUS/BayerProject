@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2018-05-28T13:30:09.317Z"
+         lastModifiedDate="2018-06-01T13:39:33.659Z"
          name="BayerProductionLine"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -158,7 +158,68 @@
                         </ConfigurationTables>
                     </ServiceImplementation>
                 </ServiceImplementations>
-                <Subscriptions></Subscriptions>
+                <Subscriptions>
+                    <Subscription
+                     enabled="true"
+                     eventName="ScheduledEvent"
+                     source="BayerSchedulerThing"
+                     sourceProperty=""
+                     sourceType="Thing">
+                        <ServiceImplementation
+                         description=""
+                         handlerName="Script"
+                         name="Type.Thing:Entity.BayerSchedulerThing:Event.ScheduledEvent">
+                            <ConfigurationTables>
+                                <ConfigurationTable
+                                 description=""
+                                 isMultiRow="false"
+                                 name="Script"
+                                 ordinal="0">
+                                    <DataShape>
+                                        <FieldDefinitions>
+                                            <FieldDefinition
+                                             baseType="STRING"
+                                             description="code"
+                                             name="code"
+                                             ordinal="0"></FieldDefinition>
+                                        </FieldDefinitions>
+                                    </DataShape>
+                                    <Rows>
+                                        <Row>
+                                            <code>
+                                            <![CDATA[
+                                            me.TestChangeover({eventData: eventData});
+                                            me.TestProduction({eventData: eventData});
+                                            
+                                            var minutesMod6 = eventData.timestamp.getMinutes() % 6;
+                                            
+                                            if (minutesMod6 == 5) {
+                                                // UPDATE PRODUCT AND SHIFT AT THE 5th MINUTE OF EACH 6 MINUTES CYCLE (e.g. 1:05:02|1:11:02|1:17:02 etc)
+                                                logger.debug(me.name + " Update shift and product event");
+                                            
+                                                me.UpdateShift({eventData: eventData});
+                                                me.UpdateProduct({eventData: eventData});
+                                            }
+                                            
+                                            if (eventData.timestamp.getMinutes() == 0) {
+                                                // SCHEDULE SHIFTS AT 6:00:02|14:00:02|22:00:02
+                                                
+                                                if (eventData.timestamp.getHours() == 6 || eventData.timestamp.getHours() == 14 || eventData.timestamp.getHours() == 22) {
+                                                    logger.debug(me.name + " Schedule shifts event");
+                                                           
+                                                    // no return
+                                                    me.ScheduleShifts();
+                                                }
+                                            }
+                                            ]]>
+                                            </code>
+                                        </Row>
+                                    </Rows>
+                                </ConfigurationTable>
+                            </ConfigurationTables>
+                        </ServiceImplementation>
+                    </Subscription>
+                </Subscriptions>
             </ThingShape>
             <ImplementedShapes>
                 <ImplementedShape
@@ -169,6 +230,9 @@
                  type="ThingShape"></ImplementedShape>
                 <ImplementedShape
                  name="BayerProductionManagement"
+                 type="ThingShape"></ImplementedShape>
+                <ImplementedShape
+                 name="BayerNotificationsManagement"
                  type="ThingShape"></ImplementedShape>
                 <ImplementedShape
                  name="BayerActionListManagement"

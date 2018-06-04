@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-05-24T12:08:13.754Z"
+         lastModifiedDate="2018-06-01T11:08:35.932Z"
          name="BayerSchedulerThing"
          projectName="BayerIoT"
          published="false"
@@ -114,42 +114,7 @@
                                         <Row>
                                             <code>
                                             <![CDATA[
-                                            logger.debug("Event fired: " + eventData.timestamp);
-                                            
-                                            // result: INFOTABLE dataShape: RootEntityList
-                                            var productionLines = ThingTemplates["BayerProductionLine"].GetImplementingThings();
-                                            
-                                            var minutesMod6 = eventData.timestamp.getMinutes() % 6;
-                                            if (minutesMod6 == 5) {
-                                                // UPDATE PRODUCT AND SHIFT AT THE 5th MINUTE OF EACH 6 MINUTES CYCLE (e.g. 1:05:02|1:11:02|1:17:02 etc)
-                                                logger.debug("Update shift and product event");
-                                                
-                                                var tableLength = productionLines.rows.length;
-                                            
-                                                for (var x = 0; x < tableLength; x++) {
-                                                    var row = productionLines.rows[x];
-                                                    
-                                                    // no return
-                                                    Things[row.name].UpdateProduct({eventData: eventData});
-                                                    Things[row.name].UpdateShift({eventData: eventData});
-                                                }
-                                            }
-                                            
-                                            if (eventData.timestamp.getMinutes() == 0) {
-                                                // SCHEDULE SHIFTS AT 6:00:02|14:00:02|22:00:02
-                                                
-                                                if (eventData.timestamp.getHours() == 6 || eventData.timestamp.getHours() == 14 || eventData.timestamp.getHours() == 22) {
-                                                    logger.debug("Schedule shifts event");
-                                                    var tableLength = productionLines.rows.length;
-                                            
-                                                    for (var x = 0; x < tableLength; x++) {
-                                                        var row = productionLines.rows[x];
-                                                   
-                                                        // no return
-                                                        Things[row.name].ScheduleShifts();
-                                                    }
-                                                }
-                                            }
+                                            logger.trace("Event fired: " + eventData.timestamp);
                                             ]]>
                                             </code>
                                         </Row>
