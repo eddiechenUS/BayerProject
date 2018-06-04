@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-29T15:25:36.792Z"
+         lastModifiedDate="2018-06-01T11:01:17.721Z"
          name="BayerDailyPerformancePanelCell"
          projectName="BayerIoT"
          rows="0.0"
@@ -181,10 +181,12 @@
                     "ParameterName" : "dailyPerformance"
                   }, {
                     "BaseType" : "NUMBER",
+                    "DefaultValue" : 1000,
                     "Description" : "",
                     "ParameterName" : "yAxisMax"
                   }, {
                     "BaseType" : "NUMBER",
+                    "DefaultValue" : 0,
                     "Description" : "",
                     "ParameterName" : "yAxisMin"
                   } ],
@@ -295,7 +297,7 @@
                         "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                         "ValueDisplayStyle" : "Bayer_PanelTitle",
                         "ValueFormat" : {
-                          "FormatString" : "yyyy-MM-dd",
+                          "FormatString" : "[[Bayer.TimeFormat2]]",
                           "formatInfo" : {
                             "FieldName" : "",
                             "StateDefinition" : "",
@@ -506,16 +508,21 @@
                         "SecondaryYAxisZeroscale" : false,
                         "SelectedItemStyle" : "DefaultChartSelectionStyle",
                         "SeriesDataStyle1" : {
-                          "FieldName" : "status",
+                          "FieldName" : "performance",
                           "StateDefinition" : "BayerBarChartStateFormatting",
-                          "StateDefinitionType" : "string",
+                          "StateDefinitionType" : "numeric",
                           "StateFormats" : [ {
-                            "comparator" : "==",
-                            "state" : "Bayer_Bar_Green",
+                            "comparator" : "<=",
+                            "state" : "Bayer_GaugeProgressRed",
                             "stateName" : "",
-                            "value" : "true"
+                            "value" : "75"
                           }, {
-                            "state" : "Bayer_Bar_Red",
+                            "comparator" : "<=",
+                            "state" : "Bayer_Color_Yellow",
+                            "stateName" : "",
+                            "value" : "90"
+                          }, {
+                            "state" : "Bayer_GaugeProgress",
                             "stateName" : ""
                           } ]
                         },

@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-29T12:49:43.348Z"
+         lastModifiedDate="2018-06-04T14:56:05.521Z"
          name="BayerActionListAddMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -35,13 +35,51 @@
             <ConfigurationTables></ConfigurationTables>
             <ParameterDefinitions>
                 <FieldDefinition
+                 aspect.ordinal="6"
+                 baseType="USERNAME"
+                 description=""
+                 name="assginedTo"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.ordinal="5"
+                 baseType="USERNAME"
+                 description=""
+                 name="createdBy"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.ordinal="1"
+                 baseType="DATETIME"
+                 description=""
+                 name="createdTime"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.ordinal="3"
+                 baseType="DATETIME"
+                 description=""
+                 name="dueDate"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.ordinal="2"
+                 baseType="DATETIME"
+                 description=""
+                 name="modifiedTime"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
                  aspect.ordinal="0"
                  baseType="THINGNAME"
                  description=""
                  name="productionLine"
                  ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.ordinal="4"
+                 baseType="STRING"
+                 description=""
+                 name="status"
+                 ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
-            <Things></Things>
+            <Things>
+                <Thing>BayerActionListPage</Thing>
+            </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates>
                 <ThingTemplate>BayerProductionLine</ThingTemplate>
@@ -59,25 +97,11 @@
                   "Services" : [ {
                     "APIMethod" : "post",
                     "Characteristic" : "Services",
-                    "Id" : "e8800a6d-e74b-49eb-a352-3c0ba495c6a5",
-                    "Name" : "AddIssue",
-                    "Parameters" : { },
-                    "Properties" : {
-                      "CustomErrorMessage" : "[[service.error]]",
-                      "CustomSuccessMessage" : "[[service.succeeded]]",
-                      "ShowErrorMessage" : true,
-                      "ShowSuccessMessage" : true
-                    },
-                    "RefreshInterval" : 0,
-                    "Target" : "AddIssue"
-                  }, {
-                    "APIMethod" : "post",
-                    "Characteristic" : "Services",
-                    "Id" : "fb311232-04bb-4002-80de-1db0d170d32a",
-                    "Name" : "GetIssuesCategories",
+                    "Id" : "f4ffe6ac-b637-4c50-8ecc-424789ccab86",
+                    "Name" : "EditAction",
                     "Parameters" : { },
                     "RefreshInterval" : 0,
-                    "Target" : "GetIssuesCategories"
+                    "Target" : "EditAction"
                   } ]
                 },
                 "Session" : {
@@ -93,6 +117,37 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerActionListPage" : {
+                  "DataName" : "Things_BayerActionListPage",
+                  "EntityName" : "BayerActionListPage",
+                  "EntityType" : "Things",
+                  "Id" : "a8c00346-2a78-41bc-8177-3e49caf07394",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "6593b289-a9c1-4d74-99bb-b97dd52bdf86",
+                    "Name" : "GetActionListUsers",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetActionListUsers"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "991c04d5-e1cf-4ba7-b1e4-0c94117398f7",
+                    "Name" : "GetActionListUsers1",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetActionListUsers"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "46c77f40-49b8-4e9b-bab1-ac42fe0fcc13",
+                    "Name" : "GetActionListStatus",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetActionListStatus"
                   } ]
                 },
                 "UserExtensions" : {
@@ -159,22 +214,6 @@
                 "TargetId" : "EntityName",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
               }, {
-                "Id" : "4808989b-da8e-4f22-948a-c0a415d4aa5c",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "item",
-                  "SourcePropertyBaseType" : "STRING",
-                  "TargetProperty" : "issue.category",
-                  "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "Parameter"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "SelectedRows",
-                "SourceId" : "GetIssuesCategories",
-                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
-                "TargetArea" : "Data",
-                "TargetId" : "AddIssue",
-                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
-              }, {
                 "Id" : "9400da87-c72b-4382-9903-12ecf4fce8cf",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "productionLine",
@@ -205,11 +244,137 @@
                 "TargetId" : "AddIssue",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
               }, {
-                "Id" : "a72d3119-8412-451f-a735-f0ff049a20ba",
+                "Id" : "41a30209-4c51-4e60-ad01-1fbca4101ea2",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "productionLine",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "action.productionLine",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "EditAction",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "6a36d46c-46e4-47c1-a901-14e6a94e0ac4",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "createdTime",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-114",
+                "TargetSection" : ""
+              }, {
+                "Id" : "c800f42a-98d7-4e8b-8b9f-88e37c9effe1",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "modifiedTime",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-115",
+                "TargetSection" : ""
+              }, {
+                "Id" : "0e2fa461-2044-455c-849e-ae95cc4d4751",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "dueDate",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "DateTime",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "datetimepicker-117",
+                "TargetSection" : ""
+              }, {
+                "Id" : "1525e5c5-b989-4aaf-a8ee-2e996b891b34",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "createdBy",
+                  "SourcePropertyBaseType" : "USERNAME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "SelectedText",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-118",
+                "TargetSection" : ""
+              }, {
+                "Id" : "7724c81c-edd3-4aba-bb8b-7f8993f5d7c0",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "assginedTo",
+                  "SourcePropertyBaseType" : "USERNAME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "SelectedText",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-119",
+                "TargetSection" : ""
+              }, {
+                "Id" : "6a9fcd20-32cf-4a21-9ca1-7b890ce0cc0b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "status",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "SelectedText",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-113",
+                "TargetSection" : ""
+              }, {
+                "Id" : "3ee9f718-1fe7-4173-bc77-394b43125bbf",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "createdTime",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "action.createdTime",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "EditAction",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "893a5833-411f-4b7f-be12-df981fb4c987",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "Output",
                   "SourcePropertyBaseType" : "DATETIME",
-                  "TargetProperty" : "issue.lastModified",
+                  "TargetProperty" : "action.modifiedTime",
                   "TargetPropertyBaseType" : "DATETIME",
                   "TargetPropertyType" : "Parameter"
                 } ],
@@ -217,8 +382,122 @@
                 "SourceId" : "expression-14",
                 "SourceSection" : "",
                 "TargetArea" : "Data",
-                "TargetId" : "AddIssue",
+                "TargetId" : "EditAction",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "62b1915c-93bb-48b9-84d2-82c25b06bd24",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "DateTime",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "action.dueDate",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "datetimepicker-117",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "EditAction",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "ba351248-db07-4a07-a193-d4b9926a6021",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetActionListUsers",
+                "SourceSection" : "Things_BayerActionListPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-118",
+                "TargetSection" : ""
+              }, {
+                "Id" : "fb607b78-0d67-40c2-bc1b-a0445b9e3db7",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetActionListUsers1",
+                "SourceSection" : "Things_BayerActionListPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-119",
+                "TargetSection" : ""
+              }, {
+                "Id" : "79867f3e-f72d-4ae5-b7fd-b6edf2835da7",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetActionListStatus",
+                "SourceSection" : "Things_BayerActionListPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-113",
+                "TargetSection" : ""
+              }, {
+                "Id" : "30fe260a-19b2-4bff-99d5-fa6f389ea0df",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "item",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "action.status",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetActionListStatus",
+                "SourceSection" : "Things_BayerActionListPage",
+                "TargetArea" : "Data",
+                "TargetId" : "EditAction",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "ba794541-7162-4b86-a60c-7090587fcd7c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "name",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "action.assignedTo",
+                  "TargetPropertyBaseType" : "USERNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetActionListUsers1",
+                "SourceSection" : "Things_BayerActionListPage",
+                "TargetArea" : "Data",
+                "TargetId" : "EditAction",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "c00239c5-5467-4cfa-825a-e003956d07f4",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "dueDate",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "label-122",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -267,24 +546,6 @@
                 "EventTriggerSection" : "",
                 "Id" : "ae3f1e57-eabc-4652-95bc-16c33ed93b60"
               }, {
-                "EventHandlerArea" : "Mashup",
-                "EventHandlerId" : "mashup-root",
-                "EventHandlerService" : "CloseIfPopup",
-                "EventTriggerArea" : "Data",
-                "EventTriggerEvent" : "ServiceInvokeCompleted",
-                "EventTriggerId" : "AddIssue",
-                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
-                "Id" : "7b4c61cd-7f46-4818-85f9-bf5014f55dc2"
-              }, {
-                "EventHandlerArea" : "Data",
-                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
-                "EventHandlerService" : "GetIssuesCategories",
-                "EventTriggerArea" : "Mashup",
-                "EventTriggerEvent" : "Loaded",
-                "EventTriggerId" : "mashup-root",
-                "EventTriggerSection" : "",
-                "Id" : "7a159d94-3113-48ee-9726-0a31d2fea888"
-              }, {
                 "EventHandlerArea" : "UI",
                 "EventHandlerId" : "expression-14",
                 "EventHandlerService" : "Evaluate",
@@ -295,13 +556,31 @@
                 "Id" : "ec6da95c-f3d4-4ca8-bd65-a1c6f2b995cc"
               }, {
                 "EventHandlerArea" : "Data",
-                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
-                "EventHandlerService" : "AddIssue",
-                "EventTriggerArea" : "UI",
-                "EventTriggerEvent" : "Changed",
-                "EventTriggerId" : "expression-14",
+                "EventHandlerId" : "Things_BayerActionListPage",
+                "EventHandlerService" : "GetActionListUsers",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
-                "Id" : "df34c6a1-2486-48fb-a4ab-8655c78419c7"
+                "Id" : "deeb2f39-5685-49a3-b485-9af7b8689a48"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerActionListPage",
+                "EventHandlerService" : "GetActionListUsers1",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "c69a1708-5b71-4f3e-84fb-79a8ca64a029"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerActionListPage",
+                "EventHandlerService" : "GetActionListStatus",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "c845d56b-26a0-47ea-b6a4-42d3837a6388"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -340,8 +619,32 @@
                     "BaseType" : "THINGNAME",
                     "Description" : "",
                     "ParameterName" : "productionLine"
+                  }, {
+                    "BaseType" : "DATETIME",
+                    "Description" : "",
+                    "ParameterName" : "createdTime"
+                  }, {
+                    "BaseType" : "DATETIME",
+                    "Description" : "",
+                    "ParameterName" : "modifiedTime"
+                  }, {
+                    "BaseType" : "DATETIME",
+                    "Description" : "",
+                    "ParameterName" : "dueDate"
+                  }, {
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "status"
+                  }, {
+                    "BaseType" : "USERNAME",
+                    "Description" : "",
+                    "ParameterName" : "createdBy"
+                  }, {
+                    "BaseType" : "USERNAME",
+                    "Description" : "",
+                    "ParameterName" : "assginedTo"
                   } ],
-                  "id_index" : 119,
+                  "id_index" : 122,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -706,6 +1009,29 @@
                                   "Width" : 200,
                                   "Z-index" : 10,
                                   "__TypeDisplayName" : "Expression"
+                                },
+                                "Widgets" : [ ]
+                              }, {
+                                "Properties" : {
+                                  "Alignment" : "left",
+                                  "AllowEllipsis" : false,
+                                  "Area" : "UI",
+                                  "DisplayName" : "label-122",
+                                  "Height" : 22,
+                                  "Id" : "label-122",
+                                  "Left" : 65,
+                                  "ResponsiveLayout" : false,
+                                  "ShowDataLoading" : true,
+                                  "Style" : "DefaultLabelStyle",
+                                  "ToolTipField" : "",
+                                  "ToolTipStyle" : "DefaultTooltipStyle",
+                                  "Top" : 35,
+                                  "Type" : "label",
+                                  "Visible" : true,
+                                  "Width" : 75,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "Label",
+                                  "__supportsTooltip" : true
                                 },
                                 "Widgets" : [ ]
                               } ]
@@ -1144,7 +1470,7 @@
                                               "Overflow" : "hidden",
                                               "ResponsiveLayout" : false,
                                               "ShowDataLoading" : true,
-                                              "TextIfNoValue" : "",
+                                              "TextIfNoValue" : "--",
                                               "TextIfNoValueOffset" : 0,
                                               "TextIfNoValueStyle" : "Bayer_GreyValue",
                                               "TextWrap" : true,
@@ -1153,7 +1479,22 @@
                                               "Top" : 10,
                                               "Type" : "valuedisplay",
                                               "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                                              "ValueDisplayStyle" : "Bayer_PopupTitle",
+                                              "ValueDisplayStyle" : "Bayer_GreyValue",
+                                              "ValueFormat" : {
+                                                "FormatString" : "[[Bayer.TimeFormat1]]",
+                                                "formatInfo" : {
+                                                  "FieldName" : "",
+                                                  "StateDefinition" : "",
+                                                  "StateDefinitionType" : "fixed",
+                                                  "StateFormats" : [ {
+                                                    "state" : "",
+                                                    "stateName" : "fixed"
+                                                  } ]
+                                                },
+                                                "renderer" : "DATETIME",
+                                                "roundingEnabled" : true
+                                              },
+                                              "ValueFormat_StateParameters" : [ ],
                                               "VerticalAlignment" : "middle",
                                               "Visible" : true,
                                               "Width" : 200,
@@ -1371,7 +1712,7 @@
                                               "Overflow" : "hidden",
                                               "ResponsiveLayout" : false,
                                               "ShowDataLoading" : true,
-                                              "TextIfNoValue" : "",
+                                              "TextIfNoValue" : "--",
                                               "TextIfNoValueOffset" : 0,
                                               "TextIfNoValueStyle" : "Bayer_GreyValue",
                                               "TextWrap" : true,
@@ -1380,7 +1721,22 @@
                                               "Top" : 10,
                                               "Type" : "valuedisplay",
                                               "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                                              "ValueDisplayStyle" : "Bayer_PopupTitle",
+                                              "ValueDisplayStyle" : "Bayer_GreyValue",
+                                              "ValueFormat" : {
+                                                "FormatString" : "[[Bayer.TimeFormat1]]",
+                                                "formatInfo" : {
+                                                  "FieldName" : "",
+                                                  "StateDefinition" : "",
+                                                  "StateDefinitionType" : "fixed",
+                                                  "StateFormats" : [ {
+                                                    "state" : "",
+                                                    "stateName" : "fixed"
+                                                  } ]
+                                                },
+                                                "renderer" : "DATETIME",
+                                                "roundingEnabled" : true
+                                              },
+                                              "ValueFormat_StateParameters" : [ ],
                                               "VerticalAlignment" : "middle",
                                               "Visible" : true,
                                               "Width" : 200,
@@ -1625,7 +1981,7 @@
                                               "DisplaySeconds" : false,
                                               "Height" : 28,
                                               "Id" : "datetimepicker-117",
-                                              "InitializeWithCurrentDateTime" : true,
+                                              "InitializeWithCurrentDateTime" : false,
                                               "Interval" : 0,
                                               "IntervalType" : "h",
                                               "Label" : "",
@@ -1633,7 +1989,7 @@
                                               "ResponsiveLayout" : false,
                                               "ShowDataLoading" : true,
                                               "Style" : "Bayer_GreyValue",
-                                              "TabSequence" : 0,
+                                              "TabSequence" : -1,
                                               "TimeFormat" : "hh:mm:ss",
                                               "ToolTipField" : "",
                                               "ToolTipStyle" : "DefaultTooltipStyle",
@@ -1839,7 +2195,7 @@
                                             "Alignment" : "left",
                                             "Area" : "UI",
                                             "BackgroundFill" : "content",
-                                            "DisplayName" : "valAssignorLabel",
+                                            "DisplayName" : "valCreatedByLabel",
                                             "Height" : 22,
                                             "Id" : "valuedisplay-94",
                                             "ImageScaling" : "Width",
@@ -1849,7 +2205,7 @@
                                             "Overflow" : "hidden",
                                             "ResponsiveLayout" : true,
                                             "ShowDataLoading" : true,
-                                            "TextIfNoValue" : "[[Bayer.Assignor]]",
+                                            "TextIfNoValue" : "[[Bayer.CreatedBy]]",
                                             "TextIfNoValueOffset" : 0,
                                             "TextIfNoValueStyle" : "Bayer_GreyValue",
                                             "TextWrap" : true,
@@ -1929,8 +2285,8 @@
                                               "ComboItemHighlightedStyle" : "DefaultComboItemHighlightedStyle",
                                               "ComboTextboxStyle" : "DefaultComboTextboxStyle",
                                               "DisableSelectedStyle" : false,
-                                              "DisplayField" : "item",
-                                              "DisplayName" : "ddlAssignor",
+                                              "DisplayField" : "name",
+                                              "DisplayName" : "ddlCreatedBy",
                                               "DropdownButtonStyle" : "DefaultDropdownButtonStyle",
                                               "DropdownSelectedStyle" : "Bayer_GreyValue",
                                               "DropdownStyle" : "DefaultDropdownStyle",
@@ -1958,7 +2314,7 @@
                                               "ToolTipStyle" : "DefaultTooltipStyle",
                                               "Top" : 10,
                                               "Type" : "dhxlist",
-                                              "ValueField" : "item",
+                                              "ValueField" : "name",
                                               "View" : "dropdown",
                                               "Visible" : true,
                                               "Width" : 200,
@@ -2083,7 +2439,7 @@
                                             "Alignment" : "left",
                                             "Area" : "UI",
                                             "BackgroundFill" : "content",
-                                            "DisplayName" : "valAssigneeLabel",
+                                            "DisplayName" : "valAssignedToLabel",
                                             "Height" : 22,
                                             "Id" : "valuedisplay-102",
                                             "ImageScaling" : "Width",
@@ -2093,7 +2449,7 @@
                                             "Overflow" : "hidden",
                                             "ResponsiveLayout" : true,
                                             "ShowDataLoading" : true,
-                                            "TextIfNoValue" : "[[Bayer.Assignee]]",
+                                            "TextIfNoValue" : "[[Bayer.AssignedTo]]",
                                             "TextIfNoValueOffset" : 0,
                                             "TextIfNoValueStyle" : "Bayer_GreyValue",
                                             "TextWrap" : true,
@@ -2173,8 +2529,8 @@
                                               "ComboItemHighlightedStyle" : "DefaultComboItemHighlightedStyle",
                                               "ComboTextboxStyle" : "DefaultComboTextboxStyle",
                                               "DisableSelectedStyle" : false,
-                                              "DisplayField" : "item",
-                                              "DisplayName" : "ddlAssignee",
+                                              "DisplayField" : "name",
+                                              "DisplayName" : "ddlAssignedTo",
                                               "DropdownButtonStyle" : "DefaultDropdownButtonStyle",
                                               "DropdownSelectedStyle" : "Bayer_GreyValue",
                                               "DropdownStyle" : "DefaultDropdownStyle",
@@ -2202,7 +2558,7 @@
                                               "ToolTipStyle" : "DefaultTooltipStyle",
                                               "Top" : 10,
                                               "Type" : "dhxlist",
-                                              "ValueField" : "item",
+                                              "ValueField" : "name",
                                               "View" : "dropdown",
                                               "Visible" : true,
                                               "Width" : 200,

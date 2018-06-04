@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b140"
+ majorVersion="8"
+ minorVersion="2"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="1"
+ schemaVersion="1020"
+ universal="">
+    <ThingShapes>
+        <ThingShape
+         className=""
+         description=""
+         documentationContent=""
+         homeMashup=""
+         lastModifiedDate="2018-06-04T13:38:03.074Z"
+         name="BayerNotificationsManagement"
+         projectName="BayerIoT"
+         tags="Applications:Bayer">
+            <PropertyDefinitions>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeThreshold="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="0"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="false"
+                 aspect.isReadOnly="false"
+                 aspect.maximumValue="3"
+                 aspect.minimumValue="0"
+                 baseType="INTEGER"
+                 category=""
+                 description="0 - no alert&#xA;1 - no production for last 5 min&#xA;2 - no production for last 10 min&#xA;3 - no production for last 30 min"
+                 isLocalOnly="false"
+                 name="productionAlertLevel"
+                 ordinal="3"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 baseType="STRING"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="smsNotificationTarget_supervisor"
+                 ordinal="1"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 baseType="STRING"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="smsNotificationTarget_HOP"
+                 ordinal="2"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeThreshold="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="0"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="false"
+                 aspect.isReadOnly="false"
+                 aspect.maximumValue="2"
+                 aspect.minimumValue="0"
+                 baseType="INTEGER"
+                 category=""
+                 description="0 - no alert&#xA;1 - blank&#xA;2 - changeover duration more than 110% target&#xA;3 - changeover duration more than 120% target"
+                 isLocalOnly="false"
+                 name="changeoverAlertLevel"
+                 ordinal="4"></PropertyDefinition>
+            </PropertyDefinitions>
+            <ServiceDefinitions>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ResetChangeoverAlert">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ResetProductionAlert">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="SendChangeoverAlertMessage">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="INTEGER"
+                         description=""
+                         name="level"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="SendProductionAlertMessage">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="INTEGER"
+                         description=""
+                         name="level"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="true"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="TestChangeover">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="ScheduledEvent"
+                         aspect.isRequired="true"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="eventData"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="true"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="TestProduction">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="ScheduledEvent"
+                         aspect.isRequired="true"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="eventData"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+            </ServiceDefinitions>
+            <EventDefinitions></EventDefinitions>
+            <ServiceMappings></ServiceMappings>
+            <ServiceImplementations>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ResetChangeoverAlert">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    me.changeoverAlertLevel = 0;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ResetProductionAlert">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    me.productionAlertLevel = 0;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="SendChangeoverAlertMessage">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var to = "";
+                                    var body = "Alert for " + me.name + ". ";
+                                    
+                                    if (level == 3) {
+                                        to = me.smsNotificationTarget_HOP;
+                                        body += "Changeover duration exceeds target by more than 20%.";
+                                    }
+                                    else if (level == 2) {
+                                        to = me.smsNotificationTarget_supervisor;
+                                        body += "Changeover duration exceeds target by more than 10%.";
+                                    }
+                                    
+                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
+                                    var current = me.GetCurrentProduct();
+                                    
+                                    var params = {
+                                    	oldestFirst: true /* BOOLEAN */,
+                                    	maxItems: undefined /* NUMBER */,
+                                    	sourceTags: undefined /* TAGS */,
+                                    	endDate: undefined /* DATETIME */,
+                                    	query: undefined /* QUERY */,
+                                    	source: me.name /* STRING */,
+                                    	startDate: current.startTime /* DATETIME */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                    
+                                    var tableLength = issues.rows.length;
+                                    
+                                    if (tableLength>0) {
+                                    	body += " Issues: ";
+                                    }
+                                    
+                                    for (var x = 0; x < tableLength; x++) {
+                                    	var row = issues.rows[x];
+                                    	
+                                        body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
+                                    
+                                    }
+                                    
+                                    logger.debug("Sending email notification to " + to + ". BODY: " + body);
+                                    
+                                    var params = {
+                                    	cc: undefined /* STRING */,
+                                    	bcc: undefined /* STRING */,
+                                    	subject: undefined /* STRING */,
+                                    	from: undefined /* STRING */,
+                                    	to: to /* STRING */,
+                                    	body: body /* HTML */
+                                    };
+                                    
+                                    // no return
+                                    Things["BayerMailServer"].SendMessage(params);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="SendProductionAlertMessage">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var to = "";
+                                    var body = "Alert for " + me.name + ". ";
+                                    var startDate = new Date();
+                                    
+                                    if (level == 3) {
+                                        to = me.smsNotificationTarget_HOP;
+                                        body += "No production recorded for last 30 minutes.";
+                                        startDate = dateAddMinutes(startDate, -30);
+                                    }
+                                    else if (level == 2) {
+                                        to = me.smsNotificationTarget_supervisor;
+                                        body += "No production recorded for last 10 minutes.";
+                                        startDate = dateAddMinutes(startDate, -10);
+                                    }
+                                    
+                                    var params = {
+                                    	oldestFirst: true /* BOOLEAN */,
+                                    	maxItems: undefined /* NUMBER */,
+                                    	sourceTags: undefined /* TAGS */,
+                                    	endDate: undefined /* DATETIME */,
+                                    	query: undefined /* QUERY */,
+                                    	source: me.name /* STRING */,
+                                    	startDate: startDate /* DATETIME */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                    
+                                    var tableLength = issues.rows.length;
+                                    
+                                    if (tableLength>0) {
+                                    	body += " Issues: ";
+                                    }
+                                    
+                                    for (var x = 0; x < tableLength; x++) {
+                                    	var row = issues.rows[x];
+                                    	
+                                        body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
+                                    
+                                    }
+                                    
+                                    logger.debug("Sending email notification to " + to + ". BODY: " + body);
+                                    
+                                    var params = {
+                                    	cc: undefined /* STRING */,
+                                    	bcc: undefined /* STRING */,
+                                    	subject: undefined /* STRING */,
+                                    	from: undefined /* STRING */,
+                                    	to: to /* STRING */,
+                                    	body: body /* HTML */
+                                    };
+                                    
+                                    // no return
+                                    Things["BayerMailServer"].SendMessage(params);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="TestChangeover">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: BayerProgressDisplayDataShape
+                                    var time = me.GetChangeoverTime();
+                                    
+                                    var ratio = time.value / time.max;
+                                    
+                                    if (ratio > 1.2) {
+                                        me.changeoverAlertLevel = 3;
+                                    }
+                                    else if (ratio > 1.1) {
+                                        me.changeoverAlertLevel = 2;
+                                    }
+                                    else {
+                                        me.changeoverAlertLevel = 0;
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="TestProduction">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
+                                    var currentProduct = me.GetCurrentProduct();
+                                    
+                                    if (currentProduct.productId != "Cambio") {
+                                        // result: DATETIME
+                                        var counterTimestamp = me.GetPropertyTime({propertyName: "counter"});
+                                        
+                                        // dateDifference(date1:DATETIME,date2:DATETIME):NUMBER
+                                        var productionTime = dateDifference(eventData.timestamp, currentProduct.startTime) / 1000 / 60;
+                                        var counterUpdateTime = dateDifference(eventData.timestamp, counterTimestamp) / 1000 / 60;
+                                        
+                                        if (productionTime >= 30 && counterUpdateTime >= 30) {
+                                            me.productionAlertLevel = 3;
+                                        }
+                                        else if (productionTime >= 10 && counterUpdateTime >= 10) {
+                                            me.productionAlertLevel = 2;
+                                        }
+                                        else if (productionTime >= 5 && counterUpdateTime >= 5) {
+                                            me.productionAlertLevel = 1;
+                                        }
+                                        else {
+                                            me.productionAlertLevel = 0;
+                                        }
+                                    }
+                                    else {
+                                        me.productionAlertLevel = 0;
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+            </ServiceImplementations>
+            <Subscriptions>
+                <Subscription
+                 enabled="true"
+                 eventName="DataChange"
+                 source=""
+                 sourceProperty="changeoverAlertLevel"
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="Event.DataChange:Property.changeoverAlertLevel">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        if (eventData.newValue.value > 0) {
+                                            
+                                            var params = {
+                                                level: eventData.newValue.value /* INTEGER */
+                                            };
+                                        
+                                            me.SendChangeoverAlertMessage(params);
+                                        
+                                        
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+                <Subscription
+                 enabled="true"
+                 eventName="DataChange"
+                 source=""
+                 sourceProperty="productionAlertLevel"
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="Event.DataChange:Property.productionAlertLevel">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        if (eventData.newValue.value > 0) {
+                                            
+                                            var params = {
+                                                level: eventData.newValue.value /* INTEGER */
+                                            };
+                                        
+                                            me.SendProductionAlertMessage(params);
+                                        
+                                        
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+            </Subscriptions>
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTables></ConfigurationTables>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations>
+                <AlertDefinitions
+                 name="changeoverAlertLevel"></AlertDefinitions>
+                <AlertDefinitions
+                 name="productionAlertLevel"></AlertDefinitions>
+                <AlertDefinitions
+                 name="smsNotificationTarget_HOP"></AlertDefinitions>
+                <AlertDefinitions
+                 name="smsNotificationTarget_supervisor"></AlertDefinitions>
+            </AlertConfigurations>
+            <InstanceRunTimePermissions></InstanceRunTimePermissions>
+        </ThingShape>
+    </ThingShapes>
+</Entities>

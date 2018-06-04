@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b140"
+ majorVersion="8"
+ minorVersion="2"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="1"
+ schemaVersion="1020"
+ universal="">
+    <Things>
+        <Thing
+         description=""
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2018-06-04T09:46:00.639Z"
+         name="BayerActionListPage"
+         projectName="BayerIoT"
+         published="false"
+         tags="Applications:Bayer"
+         thingTemplate="BayerPageController"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTables></ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions>
+                    <PropertyDefinition
+                     aspect.dataChangeType="VALUE"
+                     aspect.dataShape="GenericStringList"
+                     aspect.isPersistent="true"
+                     baseType="INFOTABLE"
+                     category=""
+                     description=""
+                     isLocalOnly="false"
+                     name="actionListStatus"
+                     ordinal="2"></PropertyDefinition>
+                </PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetActionList">
+                        <ResultType
+                         aspect.dataShape="BayerActionListDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="USERNAME"
+                             description=""
+                             name="assignedTo"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="false"
+                             baseType="USERNAME"
+                             description=""
+                             name="createdBy"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="createdFrom"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="createdTo"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="STRING"
+                             description=""
+                             name="productionLine"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="status"
+                             ordinal="4"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetActionListStatus">
+                        <ResultType
+                         aspect.dataShape="GenericStringList"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetActionListUsers">
+                        <ResultType
+                         aspect.dataShape="GroupMember"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetActionList">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var query = {
+                                            "filters": {
+                                                "type": "AND",
+                                                "filters": [
+                                                    {
+                                                        "fieldName": "productionLine",
+                                                        "type": "EQ",
+                                                        "value": productionLine
+                                                    }
+                                                ]
+                                            }
+                                        };
+                                        
+                                        var index = query.filters.filters.length;
+                                        
+                                        if (status) {
+                                            query.filters.filters.push({});
+                                            query.filters.filters[index]["fieldName"] = "status";
+                                            query.filters.filters[index]["type"] = "EQ";
+                                            query.filters.filters[index]["value"] = status;
+                                            index = query.filters.filters.length;
+                                        }
+                                        if (createdBy) {
+                                            query.filters.filters.push({});
+                                            query.filters.filters[index]["fieldName"] = "createdBy";
+                                            query.filters.filters[index]["type"] = "EQ";
+                                            query.filters.filters[index]["value"] = createdBy;
+                                            index = query.filters.filters.length;
+                                        }
+                                        if (assignedTo) {
+                                            query.filters.filters.push({});
+                                            query.filters.filters[index]["fieldName"] = "assignedTo";
+                                            query.filters.filters[index]["type"] = "EQ";
+                                            query.filters.filters[index]["value"] = assignedTo;
+                                            index = query.filters.filters.length;
+                                        }
+                                        if (createdFrom && createdTo) {
+                                            query.filters.filters.push({});
+                                            query.filters.filters[index]["fieldName"] = "createdTime";
+                                            query.filters.filters[index]["type"] = "Between";
+                                            query.filters.filters[index]["from"] = createdFrom;
+                                            query.filters.filters[index]["to"] = createdTo;
+                                            index = query.filters.filters.length;
+                                        }
+                                        
+                                        // result: INFOTABLE dataShape: "BayerActionListDataShape"
+                                        var result =  Things[productionLine].QueryActions({
+                                        	maxItems: undefined /* INTEGER */,
+                                        	query: query /* QUERY */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetActionListStatus">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        result = me.actionListStatus;
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetActionListUsers">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        result = Groups["BayerUsers"].GetGroupMembers();
+                                        result.AddRow({ name: "", description: "", type: "User" });
+                                        
+                                        var sort = new Object();
+                                        sort.name = "name";
+                                        sort.ascending = true;
+                                        result.Sort(sort);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations>
+                <AlertDefinitions
+                 name="actionListStatus"></AlertDefinitions>
+            </AlertConfigurations>
+            <ImplementedShapes></ImplementedShapes>
+            <ThingProperties>
+                <actionListStatus>
+                    <Value>
+                        <infoTable>
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     aspect.isPrimaryKey="true"
+                                     baseType="STRING"
+                                     description="Item"
+                                     name="item"
+                                     ordinal="1"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <item></item>
+                                </Row>
+                                <Row>
+                                    <item>
+                                    <![CDATA[
+                                    Closed
+                                    ]]>
+                                    </item>
+                                </Row>
+                                <Row>
+                                    <item>
+                                    <![CDATA[
+                                    In Progress
+                                    ]]>
+                                    </item>
+                                </Row>
+                                <Row>
+                                    <item>
+                                    <![CDATA[
+                                    Open
+                                    ]]>
+                                    </item>
+                                </Row>
+                            </Rows>
+                        </infoTable>
+                    </Value>
+                    <Timestamp>2018-06-01T08:34:04.046Z</Timestamp>
+                    <Quality>GOOD</Quality>
+                </actionListStatus>
+            </ThingProperties>
+        </Thing>
+    </Things>
+</Entities>
