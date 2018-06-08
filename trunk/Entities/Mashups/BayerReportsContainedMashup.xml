@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-04T12:56:03.354Z"
+         lastModifiedDate="2018-06-07T13:30:50.774Z"
          name="BayerReportsContainedMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -40,36 +40,24 @@
                  description=""
                  name="lineName"
                  ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.dataShape="BayerShiftTimeDataShape"
+                 aspect.ordinal="1"
+                 baseType="INFOTABLE"
+                 description=""
+                 name="timeframe"
+                 ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
             <Things>
                 <Thing>BayerReportsPage</Thing>
             </Things>
             <ThingShapes></ThingShapes>
-            <ThingTemplates>
-                <ThingTemplate>BayerProductionLine</ThingTemplate>
-            </ThingTemplates>
+            <ThingTemplates></ThingTemplates>
             <mashupContent>
             <![CDATA[
             {
               "CustomMashupCss" : "",
               "Data" : {
-                "DynamicThingTemplates_BayerProductionLine" : {
-                  "DataName" : "DynamicThingTemplates_BayerProductionLine",
-                  "EntityName" : "BayerProductionLine",
-                  "EntityType" : "DynamicThingTemplates",
-                  "Id" : "9486d1a6-362a-46b7-b4e4-4f5697772b19",
-                  "Services" : [ {
-                    "APIMethod" : "post",
-                    "Characteristic" : "Services",
-                    "Id" : "e9061488-1d5f-4237-9d93-94909c5692fa",
-                    "Name" : "GetDailyPerformance",
-                    "Parameters" : {
-                      "daysInThePast" : 1
-                    },
-                    "RefreshInterval" : 0,
-                    "Target" : "GetDailyPerformance"
-                  } ]
-                },
                 "Session" : {
                   "DataName" : "Session",
                   "EntityName" : "",
@@ -98,6 +86,22 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetProductionPerformance"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "d62499e3-2c42-4b01-8932-ebdc994a65fa",
+                    "Name" : "GetProblemsAndIssues",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetProblemsAndIssues"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "9f9bcf5c-b181-4197-ac91-68631ec411ee",
+                    "Name" : "GetChangeoverReport",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetChangeoverReport"
                   } ]
                 },
                 "UserExtensions" : {
@@ -117,37 +121,6 @@
                 }
               },
               "DataBindings" : [ {
-                "Id" : "b7d88a11-fb3b-4d4a-a91f-595798813ca6",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "lineName",
-                  "SourcePropertyBaseType" : "THINGNAME",
-                  "TargetProperty" : "value",
-                  "TargetPropertyBaseType" : "THINGNAME",
-                  "TargetPropertyType" : "Entity"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "Data",
-                "TargetId" : "EntityName",
-                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
-              }, {
-                "Id" : "25e676ac-9884-4ac2-8653-770f6fb8c760",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "TargetProperty" : "dailyPerformance",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "Parameter"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetDailyPerformance",
-                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
-                "TargetArea" : "Data",
-                "TargetId" : "GetProductionPerformance",
-                "TargetSection" : "Things_BayerReportsPage"
-              }, {
                 "Id" : "e02cff3f-99cd-44d9-808f-6f26e0075626",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "",
@@ -164,26 +137,226 @@
                 "TargetArea" : "UI",
                 "TargetId" : "dhxgrid-17",
                 "TargetSection" : ""
+              }, {
+                "Id" : "dab75ddd-493c-4672-865b-2ccf12664e4e",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetProblemsAndIssues",
+                "SourceSection" : "Things_BayerReportsPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxgrid-26",
+                "TargetSection" : ""
+              }, {
+                "Id" : "19170958-c8b7-4b7a-8e2b-a2f4dbe41252",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "lineName",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "lineName",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetProblemsAndIssues",
+                "TargetSection" : "Things_BayerReportsPage"
+              }, {
+                "Id" : "1f6b5e9b-24c4-448f-bf0c-2896b99b803d",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "lineName",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "lineName",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetChangeoverReport",
+                "TargetSection" : "Things_BayerReportsPage"
+              }, {
+                "Id" : "313e3af8-435f-4eb7-b328-ef0228cbf3c1",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetChangeoverReport",
+                "SourceSection" : "Things_BayerReportsPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxgrid-27",
+                "TargetSection" : ""
+              }, {
+                "Id" : "85437fa3-87e3-4eb4-89be-946d095603d5",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timeframe",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SubProperty" : "startTime",
+                  "TargetProperty" : "startTime",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceDetails" : "AllData",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetChangeoverReport",
+                "TargetSection" : "Things_BayerReportsPage"
+              }, {
+                "Id" : "52b65b3b-e393-4e2f-af32-d7be5f5264cf",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timeframe",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SubProperty" : "endTime",
+                  "TargetProperty" : "endTime",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceDetails" : "AllData",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetChangeoverReport",
+                "TargetSection" : "Things_BayerReportsPage"
+              }, {
+                "Id" : "e1a5dee3-2cb4-4b55-ab00-dfc51fe25250",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "lineName",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "lineName",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetProductionPerformance",
+                "TargetSection" : "Things_BayerReportsPage"
+              }, {
+                "Id" : "41c4fff6-426a-472d-ba4b-2f7e9c608680",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timeframe",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SubProperty" : "startTime",
+                  "TargetProperty" : "startTime",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceDetails" : "AllData",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetProductionPerformance",
+                "TargetSection" : "Things_BayerReportsPage"
+              }, {
+                "Id" : "74c85ba2-5f7c-407b-ab4a-0f5e5a9a979b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timeframe",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SubProperty" : "endTime",
+                  "TargetProperty" : "endTime",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceDetails" : "AllData",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetProductionPerformance",
+                "TargetSection" : "Things_BayerReportsPage"
+              }, {
+                "Id" : "6b37d0e7-3180-4e54-9b24-92031aa2a4b2",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timeframe",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SubProperty" : "startTime",
+                  "TargetProperty" : "startTime",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceDetails" : "AllData",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetProblemsAndIssues",
+                "TargetSection" : "Things_BayerReportsPage"
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "Things_BayerReportsPage",
-                "EventHandlerService" : "GetProductionPerformance",
+                "EventHandlerService" : "GetChangeoverReport",
                 "EventTriggerArea" : "Mashup",
-                "EventTriggerEvent" : "Loaded",
+                "EventTriggerEvent" : "lineNameChanged",
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
-                "Id" : "359eece2-b210-400a-9e52-7563162e96f3"
+                "Id" : "2056f406-6e67-4113-adc7-cdedeb0039bb"
               }, {
                 "EventHandlerArea" : "Data",
-                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
-                "EventHandlerService" : "GetDailyPerformance",
+                "EventHandlerId" : "Things_BayerReportsPage",
+                "EventHandlerService" : "GetProductionPerformance",
                 "EventTriggerArea" : "Mashup",
-                "EventTriggerEvent" : "Loaded",
+                "EventTriggerEvent" : "lineNameChanged",
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
-                "Id" : "07c39692-ff95-48f2-8038-cd8e0fa6b67d"
+                "Id" : "3daf0a75-e684-4364-bb61-ab657fe4b645"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerReportsPage",
+                "EventHandlerService" : "GetProblemsAndIssues",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "lineNameChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "03d2372f-18c6-4ae5-b55c-761b56f7fbea"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerReportsPage",
+                "EventHandlerService" : "GetProblemsAndIssues",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "timeframeChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "0fd6a18f-a925-4eab-85a2-934a72ca4059"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerReportsPage",
+                "EventHandlerService" : "GetChangeoverReport",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "timeframeChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "18f836f8-3bd2-4982-a475-80c6aeb5808b"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerReportsPage",
+                "EventHandlerService" : "GetProductionPerformance",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "timeframeChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "3e149e91-bce1-4768-98fc-2dc630405703"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -222,8 +395,15 @@
                     "BaseType" : "THINGNAME",
                     "Description" : "",
                     "ParameterName" : "lineName"
+                  }, {
+                    "Aspects" : {
+                      "dataShape" : "BayerShiftTimeDataShape"
+                    },
+                    "BaseType" : "INFOTABLE",
+                    "Description" : "",
+                    "ParameterName" : "timeframe"
                   } ],
-                  "id_index" : 27,
+                  "id_index" : 43,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -232,7 +412,7 @@
                     "Columns" : 0,
                     "DisplayName" : "layout-1",
                     "Footer" : true,
-                    "FooterHeight" : 20,
+                    "FooterHeight" : 95,
                     "Header" : true,
                     "HeaderHeight" : 5,
                     "Id" : "layout-1",
@@ -290,7 +470,7 @@
                       "ResponsiveLayout" : true,
                       "ShowDataLoading" : true,
                       "ShowExpandCollapseTab" : false,
-                      "Style" : "DefaultContainerStyle",
+                      "Style" : "Bayer_BlueBg",
                       "TabCollapseStyle" : "DefaultTabCollapseStyle",
                       "TabExpandStyle" : "DefaultTabExpandStyle",
                       "TabHeight" : 36,
@@ -320,7 +500,7 @@
                       "ResponsiveLayout" : true,
                       "ShowDataLoading" : true,
                       "ShowExpandCollapseTab" : false,
-                      "Style" : "DefaultContainerStyle",
+                      "Style" : "Bayer_BlueBg",
                       "TabCollapseStyle" : "DefaultTabCollapseStyle",
                       "TabExpandStyle" : "DefaultTabExpandStyle",
                       "TabHeight" : 36,
@@ -346,11 +526,11 @@
                         "IsPrintLayout" : false,
                         "Left" : 300,
                         "LeftSidebar" : true,
-                        "LeftSidebarWidth" : 5,
+                        "LeftSidebarWidth" : 15,
                         "Orientation" : "horizontal",
                         "PctColumn1" : 50,
                         "PctColumn2" : 50,
-                        "PctColumn3" : 1,
+                        "PctColumn3" : 75,
                         "PctColumn4" : 1,
                         "PctColumn5" : 1,
                         "PctColumn6" : 1,
@@ -369,10 +549,10 @@
                         "PrintWidth" : 650,
                         "ResponsiveLayout" : true,
                         "RightSidebar" : true,
-                        "RightSidebarWidth" : 30,
+                        "RightSidebarWidth" : 10,
                         "Rows" : 0,
                         "ShowDataLoading" : true,
-                        "Spacing" : 0,
+                        "Spacing" : 4,
                         "Top" : 150,
                         "Type" : "layout",
                         "Visible" : true,
@@ -404,7 +584,7 @@
                           "TabOffset" : 0,
                           "TabWidth" : 36,
                           "Type" : "container",
-                          "Visible" : false,
+                          "Visible" : true,
                           "Z-index" : 10,
                           "__TypeDisplayName" : "Container"
                         },
@@ -442,15 +622,15 @@
                           "Properties" : {
                             "Area" : "UI",
                             "Columns" : 0,
-                            "DisplayName" : "layout-10",
+                            "DisplayName" : "layout-41",
                             "Footer" : false,
                             "FooterHeight" : 0,
-                            "Header" : false,
-                            "HeaderHeight" : 0,
-                            "Id" : "layout-10",
+                            "Header" : true,
+                            "HeaderHeight" : 210,
+                            "Id" : "layout-41",
                             "IncludeSpacingInFixedAreas" : false,
                             "IsPrintLayout" : false,
-                            "Left" : 220,
+                            "Left" : 65,
                             "LeftSidebar" : false,
                             "LeftSidebarWidth" : 0,
                             "Orientation" : "vertical",
@@ -462,8 +642,8 @@
                             "PctColumn6" : 1,
                             "PctColumn7" : 1,
                             "PctColumn8" : 1,
-                            "PctRow1" : 50,
-                            "PctRow2" : 50,
+                            "PctRow1" : 100,
+                            "PctRow2" : 0,
                             "PctRow3" : 0,
                             "PctRow4" : 0,
                             "PctRow5" : 0,
@@ -476,10 +656,10 @@
                             "ResponsiveLayout" : true,
                             "RightSidebar" : false,
                             "RightSidebarWidth" : 0,
-                            "Rows" : 2,
+                            "Rows" : 1,
                             "ShowDataLoading" : true,
                             "Spacing" : 2,
-                            "Top" : 160,
+                            "Top" : 120,
                             "Type" : "layout",
                             "Visible" : true,
                             "Z-index" : 10,
@@ -491,10 +671,10 @@
                               "Area" : "UI",
                               "BGImageRepeat" : "no-repeat",
                               "BGImageSize" : "auto",
-                              "DisplayName" : "Row 1",
+                              "DisplayName" : "Header",
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
-                              "Id" : "container-11",
+                              "Id" : "container-42",
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -601,20 +781,20 @@
                                     "ImageScaling" : "Width",
                                     "Label" : "",
                                     "LabelAlignment" : "left",
-                                    "Left" : 170,
+                                    "Left" : 0,
                                     "Overflow" : "hidden",
                                     "ResponsiveLayout" : true,
                                     "ShowDataLoading" : true,
-                                    "TextIfNoValue" : "",
+                                    "TextIfNoValue" : "[[Bayer.ProductionPerformance]]",
                                     "TextIfNoValueOffset" : 0,
-                                    "TextIfNoValueStyle" : "DefaultValueDisplayNoTextStyle",
+                                    "TextIfNoValueStyle" : "Bayer_WhiteTitle",
                                     "TextWrap" : true,
                                     "ToolTipField" : "",
                                     "ToolTipStyle" : "DefaultTooltipStyle",
-                                    "Top" : 25,
+                                    "Top" : 0,
                                     "Type" : "valuedisplay",
                                     "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                                    "ValueDisplayStyle" : "DefaultValueDisplayStyle",
+                                    "ValueDisplayStyle" : "Bayer_WhiteTitle",
                                     "VerticalAlignment" : "middle",
                                     "Visible" : true,
                                     "Width" : 100,
@@ -631,7 +811,7 @@
                                   "Area" : "UI",
                                   "BGImageRepeat" : "no-repeat",
                                   "BGImageSize" : "auto",
-                                  "DisplayName" : "Row 1",
+                                  "DisplayName" : "Row",
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-15",
@@ -642,7 +822,7 @@
                                   "ResponsiveLayout" : true,
                                   "ShowDataLoading" : true,
                                   "ShowExpandCollapseTab" : false,
-                                  "Style" : "DefaultContainerStyle",
+                                  "Style" : "Bayer_WhiteBg",
                                   "TabCollapseStyle" : "DefaultTabCollapseStyle",
                                   "TabExpandStyle" : "DefaultTabExpandStyle",
                                   "TabHeight" : 36,
@@ -662,7 +842,7 @@
                                     "CellTextWrapping" : false,
                                     "ColumnFormat" : {
                                       "formatInfo" : [ {
-                                        "Align" : "left",
+                                        "Align" : "center",
                                         "AllowEdit" : false,
                                         "FieldName" : "Shift",
                                         "FormatOptions" : {
@@ -734,18 +914,28 @@
                                         "FormatOptions" : {
                                           "FormatString" : "0",
                                           "formatInfo" : {
-                                            "FieldName" : "",
-                                            "StateDefinition" : "",
-                                            "StateDefinitionType" : "fixed",
+                                            "FieldName" : "GapPsc",
+                                            "StateDefinition" : "BayerProductionPerformance",
+                                            "StateDefinitionType" : "numeric",
                                             "StateFormats" : [ {
-                                              "state" : "",
-                                              "stateName" : "fixed"
+                                              "comparator" : "<",
+                                              "state" : "Bayer_NegativeCellValueStyle",
+                                              "stateName" : "",
+                                              "value" : "0"
+                                            }, {
+                                              "comparator" : "<",
+                                              "state" : "Bayer_DefaultCellValueStyle",
+                                              "stateName" : "",
+                                              "value" : "1"
+                                            }, {
+                                              "state" : "Bayer_PositiveCellValueStyle",
+                                              "stateName" : ""
                                             } ]
                                           },
                                           "renderer" : "INTEGER",
                                           "roundingEnabled" : true
                                         },
-                                        "Title" : "GAP PSC",
+                                        "Title" : "difference",
                                         "ValidationExpression" : "",
                                         "ValidationMessage" : "",
                                         "Width" : "auto"
@@ -754,9 +944,9 @@
                                     "CurrentScrollTop" : 0,
                                     "DisplayName" : "dhxgrid-17",
                                     "FocusStyle" : "DefaultFocusStyle",
-                                    "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
+                                    "GridBackgroundStyle" : "Bayer_GridBackgroundStyle",
                                     "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
-                                    "GridHeaderStyle" : "DefaultGridHeaderStyle",
+                                    "GridHeaderStyle" : "Bayer_GridHeader",
                                     "GridHeaderTextCase" : "capitalize",
                                     "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
                                     "Height" : 200,
@@ -768,7 +958,8 @@
                                     "ResponsiveLayout" : true,
                                     "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
                                     "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
-                                    "RowHeight" : 30,
+                                    "RowFormat_StateParameters" : [ ],
+                                    "RowHeight" : 40,
                                     "RowHoverStyle" : "DefaultRowHoverStyle",
                                     "RowSelectedStyle" : "DefaultRowSelectedStyle",
                                     "ScrollTop" : 0,
@@ -792,10 +983,10 @@
                               "Area" : "UI",
                               "BGImageRepeat" : "no-repeat",
                               "BGImageSize" : "auto",
-                              "DisplayName" : "Row 2",
+                              "DisplayName" : "Row",
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
-                              "Id" : "container-12",
+                              "Id" : "container-43",
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -823,7 +1014,7 @@
                                 "Footer" : false,
                                 "FooterHeight" : 0,
                                 "Header" : true,
-                                "HeaderHeight" : 45,
+                                "HeaderHeight" : 40,
                                 "Id" : "layout-18",
                                 "IncludeSpacingInFixedAreas" : false,
                                 "IsPrintLayout" : false,
@@ -855,7 +1046,7 @@
                                 "RightSidebarWidth" : 0,
                                 "Rows" : 1,
                                 "ShowDataLoading" : true,
-                                "Spacing" : 2,
+                                "Spacing" : 0,
                                 "Top" : 100,
                                 "Type" : "layout",
                                 "Visible" : true,
@@ -896,26 +1087,26 @@
                                     "Alignment" : "left",
                                     "Area" : "UI",
                                     "BackgroundFill" : "content",
-                                    "DisplayName" : "valuedisplay-20",
+                                    "DisplayName" : "valuedisplay-34",
                                     "Height" : 22,
-                                    "Id" : "valuedisplay-20",
+                                    "Id" : "valuedisplay-34",
                                     "ImageScaling" : "Width",
                                     "Label" : "",
                                     "LabelAlignment" : "left",
-                                    "Left" : 170,
+                                    "Left" : 195,
                                     "Overflow" : "hidden",
                                     "ResponsiveLayout" : true,
                                     "ShowDataLoading" : true,
-                                    "TextIfNoValue" : "",
+                                    "TextIfNoValue" : "[[Bayer.ChangeoverPerformance]]",
                                     "TextIfNoValueOffset" : 0,
-                                    "TextIfNoValueStyle" : "DefaultValueDisplayNoTextStyle",
+                                    "TextIfNoValueStyle" : "Bayer_WhiteTitle",
                                     "TextWrap" : true,
                                     "ToolTipField" : "",
                                     "ToolTipStyle" : "DefaultTooltipStyle",
-                                    "Top" : 25,
+                                    "Top" : 10,
                                     "Type" : "valuedisplay",
                                     "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                                    "ValueDisplayStyle" : "DefaultValueDisplayStyle",
+                                    "ValueDisplayStyle" : "Bayer_WhiteTitle",
                                     "VerticalAlignment" : "middle",
                                     "Visible" : true,
                                     "Width" : 100,
@@ -943,7 +1134,7 @@
                                   "ResponsiveLayout" : true,
                                   "ShowDataLoading" : true,
                                   "ShowExpandCollapseTab" : false,
-                                  "Style" : "DefaultContainerStyle",
+                                  "Style" : "Bayer_WhiteBg",
                                   "TabCollapseStyle" : "DefaultTabCollapseStyle",
                                   "TabExpandStyle" : "DefaultTabExpandStyle",
                                   "TabHeight" : 36,
@@ -961,31 +1152,133 @@
                                     "Area" : "UI",
                                     "AutoSelectFirstRow" : false,
                                     "CellTextWrapping" : false,
+                                    "ColumnFormat" : {
+                                      "formatInfo" : [ {
+                                        "Align" : "left",
+                                        "AllowEdit" : false,
+                                        "FieldName" : "startTime",
+                                        "FormatOptions" : {
+                                          "FormatString" : "[[Bayer.TimeFormatHoursMinutes]]",
+                                          "formatInfo" : {
+                                            "FieldName" : "",
+                                            "StateDefinition" : "",
+                                            "StateDefinitionType" : "fixed",
+                                            "StateFormats" : [ {
+                                              "state" : "",
+                                              "stateName" : "fixed"
+                                            } ]
+                                          },
+                                          "renderer" : "DATETIME",
+                                          "roundingEnabled" : true
+                                        },
+                                        "Title" : "Start Time",
+                                        "ValidationExpression" : "",
+                                        "ValidationMessage" : "",
+                                        "Width" : "auto"
+                                      }, {
+                                        "Align" : "right",
+                                        "AllowEdit" : false,
+                                        "FieldName" : "targetTime",
+                                        "FormatOptions" : {
+                                          "FormatString" : "0",
+                                          "formatInfo" : {
+                                            "FieldName" : "",
+                                            "StateDefinition" : "",
+                                            "StateDefinitionType" : "fixed",
+                                            "StateFormats" : [ {
+                                              "state" : "",
+                                              "stateName" : "fixed"
+                                            } ]
+                                          },
+                                          "renderer" : "INTEGER",
+                                          "roundingEnabled" : true
+                                        },
+                                        "Title" : "[[Bayer.TargetDuration(min.)]]",
+                                        "ValidationExpression" : "",
+                                        "ValidationMessage" : "",
+                                        "Width" : "auto"
+                                      }, {
+                                        "Align" : "right",
+                                        "AllowEdit" : false,
+                                        "FieldName" : "actualTime",
+                                        "FormatOptions" : {
+                                          "FormatString" : "0",
+                                          "formatInfo" : {
+                                            "FieldName" : "",
+                                            "StateDefinition" : "",
+                                            "StateDefinitionType" : "fixed",
+                                            "StateFormats" : [ {
+                                              "state" : "",
+                                              "stateName" : "fixed"
+                                            } ]
+                                          },
+                                          "renderer" : "INTEGER",
+                                          "roundingEnabled" : true
+                                        },
+                                        "Title" : "[[Bayer.ActualTime(min.)]]",
+                                        "ValidationExpression" : "",
+                                        "ValidationMessage" : "",
+                                        "Width" : "auto"
+                                      }, {
+                                        "Align" : "right",
+                                        "AllowEdit" : false,
+                                        "FieldName" : "difference",
+                                        "FormatOptions" : {
+                                          "FormatString" : "0",
+                                          "formatInfo" : {
+                                            "FieldName" : "difference",
+                                            "StateDefinition" : "BayerChangeoverPanel",
+                                            "StateDefinitionType" : "numeric",
+                                            "StateFormats" : [ {
+                                              "comparator" : "<",
+                                              "state" : "Bayer_NegativeCellValueStyle",
+                                              "stateName" : "",
+                                              "value" : "0"
+                                            }, {
+                                              "comparator" : "<",
+                                              "state" : "Bayer_DefaultCellValueStyle",
+                                              "stateName" : "",
+                                              "value" : "1"
+                                            }, {
+                                              "state" : "Bayer_PositiveCellValueStyle",
+                                              "stateName" : ""
+                                            } ]
+                                          },
+                                          "renderer" : "INTEGER",
+                                          "roundingEnabled" : true
+                                        },
+                                        "Title" : "Difference",
+                                        "ValidationExpression" : "",
+                                        "ValidationMessage" : "",
+                                        "Width" : "auto"
+                                      } ]
+                                    },
                                     "CurrentScrollTop" : 0,
                                     "DisplayName" : "dhxgrid-27",
                                     "FocusStyle" : "DefaultFocusStyle",
-                                    "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
+                                    "GridBackgroundStyle" : "Bayer_GridBackgroundStyle",
                                     "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
-                                    "GridHeaderStyle" : "DefaultGridHeaderStyle",
-                                    "GridHeaderTextCase" : "capitalize",
+                                    "GridHeaderStyle" : "Bayer_GridHeader",
+                                    "GridHeaderTextCase" : "none",
                                     "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
                                     "Height" : 200,
                                     "Id" : "dhxgrid-27",
                                     "IsEditable" : false,
                                     "IsPrintLayout" : false,
-                                    "Left" : 135,
+                                    "Left" : 0,
                                     "MultiSelect" : false,
                                     "ResponsiveLayout" : true,
                                     "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
                                     "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
-                                    "RowHeight" : 30,
+                                    "RowFormat_StateParameters" : [ ],
+                                    "RowHeight" : 40,
                                     "RowHoverStyle" : "DefaultRowHoverStyle",
                                     "RowSelectedStyle" : "DefaultRowSelectedStyle",
                                     "ScrollTop" : 0,
                                     "ShowAllColumns" : false,
                                     "ShowDataLoading" : true,
                                     "TabSequence" : 0,
-                                    "Top" : 40,
+                                    "Top" : 0,
                                     "Type" : "dhxgrid",
                                     "Visible" : true,
                                     "Width" : 400,
@@ -1103,7 +1396,41 @@
                               "Z-index" : 10,
                               "__TypeDisplayName" : "Container"
                             },
-                            "Widgets" : [ ]
+                            "Widgets" : [ {
+                              "Properties" : {
+                                "Alignment" : "left",
+                                "Area" : "UI",
+                                "BackgroundFill" : "content",
+                                "DisplayName" : "valuedisplay-30",
+                                "Height" : 22,
+                                "Id" : "valuedisplay-30",
+                                "ImageScaling" : "Width",
+                                "Label" : "",
+                                "LabelAlignment" : "left",
+                                "Left" : 135,
+                                "Overflow" : "hidden",
+                                "ResponsiveLayout" : true,
+                                "ShowDataLoading" : true,
+                                "TextIfNoValue" : "[[Bayer.ProblemsAndIssues]]",
+                                "TextIfNoValueOffset" : 0,
+                                "TextIfNoValueStyle" : "Bayer_WhiteTitle",
+                                "TextWrap" : true,
+                                "ToolTipField" : "",
+                                "ToolTipStyle" : "DefaultTooltipStyle",
+                                "Top" : 15,
+                                "Type" : "valuedisplay",
+                                "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
+                                "ValueDisplayStyle" : "Bayer_WhiteTitle",
+                                "VerticalAlignment" : "middle",
+                                "Visible" : true,
+                                "Width" : 100,
+                                "Z-index" : 10,
+                                "__TypeDisplayName" : "Value Display",
+                                "__supportsLabel" : true,
+                                "__supportsTooltip" : true
+                              },
+                              "Widgets" : [ ]
+                            } ]
                           }, {
                             "Properties" : {
                               "AnimateExpandCollapse" : true,
@@ -1121,7 +1448,7 @@
                               "ResponsiveLayout" : true,
                               "ShowDataLoading" : true,
                               "ShowExpandCollapseTab" : false,
-                              "Style" : "DefaultContainerStyle",
+                              "Style" : "Bayer_WhiteBg",
                               "TabCollapseStyle" : "DefaultTabCollapseStyle",
                               "TabExpandStyle" : "DefaultTabExpandStyle",
                               "TabHeight" : 36,
@@ -1139,31 +1466,145 @@
                                 "Area" : "UI",
                                 "AutoSelectFirstRow" : false,
                                 "CellTextWrapping" : false,
+                                "ColumnFormat" : {
+                                  "formatInfo" : [ {
+                                    "Align" : "center",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "Shift",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "Shift",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "Duration",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "Duration",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "IssueCategory",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "Issue Category",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "IssueDescription",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "Issue Description",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "IssueSolution",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "Issue Solution",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  } ]
+                                },
                                 "CurrentScrollTop" : 0,
                                 "DisplayName" : "dhxgrid-26",
                                 "FocusStyle" : "DefaultFocusStyle",
-                                "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
+                                "GridBackgroundStyle" : "Bayer_GridBackgroundStyle",
                                 "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
-                                "GridHeaderStyle" : "DefaultGridHeaderStyle",
+                                "GridHeaderStyle" : "Bayer_GridHeader",
                                 "GridHeaderTextCase" : "capitalize",
                                 "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
                                 "Height" : 200,
                                 "Id" : "dhxgrid-26",
                                 "IsEditable" : false,
                                 "IsPrintLayout" : false,
-                                "Left" : 75,
+                                "Left" : 0,
                                 "MultiSelect" : false,
                                 "ResponsiveLayout" : true,
                                 "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
                                 "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
-                                "RowHeight" : 30,
+                                "RowFormat_StateParameters" : [ ],
+                                "RowHeight" : 40,
                                 "RowHoverStyle" : "DefaultRowHoverStyle",
                                 "RowSelectedStyle" : "DefaultRowSelectedStyle",
                                 "ScrollTop" : 0,
                                 "ShowAllColumns" : false,
                                 "ShowDataLoading" : true,
                                 "TabSequence" : 0,
-                                "Top" : 125,
+                                "Top" : 0,
                                 "Type" : "dhxgrid",
                                 "Visible" : true,
                                 "Width" : 400,
@@ -1223,7 +1664,7 @@
                       "ResponsiveLayout" : true,
                       "ShowDataLoading" : true,
                       "ShowExpandCollapseTab" : false,
-                      "Style" : "DefaultContainerStyle",
+                      "Style" : "Bayer_LightBlueBg",
                       "TabCollapseStyle" : "DefaultTabCollapseStyle",
                       "TabExpandStyle" : "DefaultTabExpandStyle",
                       "TabHeight" : 36,
@@ -1235,7 +1676,28 @@
                       "Z-index" : 10,
                       "__TypeDisplayName" : "Container"
                     },
-                    "Widgets" : [ ]
+                    "Widgets" : [ {
+                      "Properties" : {
+                        "Area" : "UI",
+                        "DisplayName" : "panel-31",
+                        "Height" : 200,
+                        "HideScrollbars" : false,
+                        "HorizontalAnchor" : "left",
+                        "Id" : "panel-31",
+                        "Left" : 460,
+                        "ResponsiveLayout" : true,
+                        "ShowDataLoading" : true,
+                        "Style" : "Bayer_BlueBg",
+                        "Top" : 15,
+                        "Type" : "panel",
+                        "VerticalAnchor" : "top",
+                        "Visible" : true,
+                        "Width" : 300,
+                        "Z-index" : 10,
+                        "__TypeDisplayName" : "Panel"
+                      },
+                      "Widgets" : [ ]
+                    } ]
                   } ]
                 } ]
               },

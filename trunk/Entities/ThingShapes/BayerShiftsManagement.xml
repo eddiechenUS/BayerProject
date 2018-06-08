@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-04T11:23:55.899Z"
+         lastModifiedDate="2018-06-07T10:12:33.595Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -119,6 +119,36 @@
                          baseType="INTEGER"
                          description=""
                          name="daysInThePast"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetDailyPerformanceForTimeframe">
+                    <ResultType
+                     aspect.dataShape="BayerDailyPerformanceDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="endTime"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="startTime"
                          ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
@@ -255,6 +285,24 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    var getRemainingHours = function (prodItem) {
+                                        if (prodItem.status == "INPROGRESS") {
+                                            if (prodItem.productId == "Cambio") {
+                                                return product.remainingHours > 0 ? product.remainingHours : 1;
+                                            }
+                                            else if (me.counter >= prodItem.targetQuantity) {
+                                                return 1;
+                                            }
+                                            else {
+                                                var remainingQ = prodItem.targetQuantity - me.counter;
+                                                return remainingQ / prodItem.targetQuantityPerHour;
+                                            }
+                                        }
+                                        else {
+                                            return product.remainingHours;
+                                        }
+                                    }
+                                    
                                     // result: INFOTABLE dataShape: BayerShiftTimeDataShape
                                     var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
                                     
@@ -300,10 +348,7 @@
                                     
                                     var x = 0;
                                     var product = unfinishedProducts.rows[x];
-                                    var unassignedHours = product.remainingHours;
-                                    if (unassignedHours <= 0) {
-                                        unassignedHours = 1;
-                                    }
+                                    var unassignedHours = getRemainingHours(product);
                                     
                                     for (var shiftNr = 0; shiftNr < nrOfShifts; shiftNr++) {
                                         // BayerShiftSchedulesDataShape entry object
@@ -345,10 +390,7 @@
                                             
                                             if (unassignedHours <= 0) {
                                                 product = unfinishedProducts.rows[++x];
-                                                unassignedHours = product.remainingHours;
-                                                if (unassignedHours <= 0) {
-                                                    unassignedHours = 1;
-                                                }
+                                                unassignedHours = getRemainingHours(product);
                                             }
                                         }
                                         
@@ -432,6 +474,43 @@
                                     startTime = dateAddDays(startTime, -1 * daysInThePast);
                                     endTime.setHours(23);
                                     
+                                    var params = {
+                                    	startTime: startTime /* DATETIME */,
+                                    	endTime: endTime /* DATETIME */
+                                    };
+                                    
+                                    // result: INFOTABLE dataShape: "BayerDailyPerformanceDataShape"
+                                    var result = me.GetDailyPerformanceForTimeframe(params);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetDailyPerformanceForTimeframe">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
                                     var params = {
                                     	oldestFirst: true /* BOOLEAN */,
                                     	maxItems: 99999 /* NUMBER */,

@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-05-28T12:08:35.454Z"
+         lastModifiedDate="2018-06-07T13:10:54.669Z"
          name="BayerShiftTrackingPage"
          projectName="BayerIoT"
          published="false"
@@ -144,7 +144,7 @@
                                         var result = Things[productionLine].GetDailyPerformance();
                                         
                                         var yAxisMin = 0;
-                                        var yAxisMax = 0;
+                                        var yAxisMax = 100;
                                         
                                         var tableLength = result.rows.length;
                                         
@@ -156,11 +156,8 @@
                                             for (var y = 0; y < dayTableLength; y++) {
                                                 var row = day.dailyPerformance.rows[y];
                                                 
-                                                if (row.quantityProduced > yAxisMax) {
-                                                    yAxisMax = row.quantityProduced;
-                                                }
-                                                if (row.targetQuantity > yAxisMax) {
-                                                    yAxisMax = row.targetQuantity;
+                                                if (row.performance > yAxisMax) {
+                                                    yAxisMax = row.performance;
                                                 }
                                             }
                                         }

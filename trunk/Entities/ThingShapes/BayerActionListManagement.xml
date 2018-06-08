@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-04T14:10:57.032Z"
+         lastModifiedDate="2018-06-06T07:59:08.659Z"
          name="BayerActionListManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -42,10 +42,20 @@
                          ordinal="2"></FieldDefinition>
                         <FieldDefinition
                          aspect.isRequired="true"
-                         baseType="USERNAME"
+                         baseType="DATETIME"
                          description=""
-                         name="createdBy"
-                         ordinal="1"></FieldDefinition>
+                         name="dueDate"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="problemDescription"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="solutionDescription"
+                         ordinal="4"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -70,13 +80,6 @@
                          description=""
                          name="action"
                          ordinal="1"></FieldDefinition>
-                        <FieldDefinition
-                         aspect.dataShape="BayerActionListCommentsDataShape"
-                         aspect.isRequired="true"
-                         baseType="INFOTABLE"
-                         description=""
-                         name="comment"
-                         ordinal="2"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -95,12 +98,36 @@
                      ordinal="0"></ResultType>
                     <ParameterDefinitions>
                         <FieldDefinition
-                         aspect.dataShape="BayerActionListDataShape"
-                         aspect.isRequired="true"
-                         baseType="INFOTABLE"
+                         baseType="USERNAME"
                          description=""
-                         name="action"
-                         ordinal="1"></FieldDefinition>
+                         name="assignedTo"
+                         ordinal="4"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="createdTime"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="dueDate"
+                         ordinal="5"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="problemDescription"
+                         ordinal="6"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="solutionDescription"
+                         ordinal="7"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="status"
+                         ordinal="5"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -164,21 +191,13 @@
                                     <![CDATA[
                                     var values = Things["BayerActionList"].CreateValues();
                                     
-                                    values.modifiedTime = new Date(); //DATETIME
-                                    
-                                    var params = {
-                                    	infoTableName : "InfoTable",
-                                    	dataShapeName : "BayerActionListCommentsDataShape"
-                                    };
-                                    
-                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerActionListCommentsDataShape)
-                                    values.comments = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
-                                    
-                                    values.createdBy = createdBy; //USERNAME [Primary Key]
                                     values.productionLine = me.name; //THINGNAME [Primary Key]
-                                    values.createdTime = values.modifiedTime; //DATETIME [Primary Key]
+                                    values.createdTime = new Date(); //DATETIME [Primary Key]
                                     values.assignedTo = assignedTo; //USERNAME
-                                    values.status = "OPEN"; //STRING
+                                    values.status = "Open"; //STRING
+                                    values.dueDate = dueDate; //DATETIME
+                                    values.problemDescription = problemDescription; //STRING
+                                    values.solutionDescription = solutionDescription; //STRING
                                     
                                     var params = {
                                     	sourceType: undefined /* STRING */,
@@ -259,13 +278,13 @@
                                     <![CDATA[
                                     var values = Things["BayerActionList"].CreateValues();
                                     
-                                    values.modifiedTime = new Date(); //DATETIME
-                                    values.comments = action.comments; //INFOTABLE
-                                    values.createdBy = action.createdBy; //USERNAME [Primary Key]
-                                    values.productionLine = action.productionLine; //THINGNAME [Primary Key]
-                                    values.createdTime = action.createdTime; //DATETIME [Primary Key]
-                                    values.assignedTo = action.assignedTo; //USERNAME
-                                    values.status = action.status; //STRING
+                                    values.productionLine = me.name; //THINGNAME [Primary Key]
+                                    values.createdTime = createdTime; //DATETIME [Primary Key]
+                                    values.assignedTo = assignedTo; //USERNAME
+                                    values.status = status; //STRING
+                                    values.dueDate = dueDate; //DATETIME
+                                    values.problemDescription = problemDescription; //STRING
+                                    values.solutionDescription = solutionDescription; //STRING
                                     
                                     var params = {
                                     	sourceType: undefined /* STRING */,
