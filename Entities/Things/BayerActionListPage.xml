@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-06-04T09:46:00.639Z"
+         lastModifiedDate="2018-06-07T11:56:25.455Z"
          name="BayerActionListPage"
          projectName="BayerIoT"
          published="false"
@@ -57,6 +57,104 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="AddActionList">
+                        <ResultType
+                         baseType="NOTHING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="USERNAME"
+                             description=""
+                             name="assignedTo"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="dueDate"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="problemDescription"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="solutionDescription"
+                             ordinal="6"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="EditActionList">
+                        <ResultType
+                         baseType="NOTHING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="USERNAME"
+                             description=""
+                             name="assignedTo"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="createdTime"
+                             ordinal="7"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="dueDate"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="problemDescription"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="solutionDescription"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="false"
+                             baseType="STRING"
+                             description=""
+                             name="status"
+                             ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetActionList">
                         <ResultType
                          aspect.dataShape="BayerActionListDataShape"
@@ -71,12 +169,6 @@
                              name="assignedTo"
                              ordinal="3"></FieldDefinition>
                             <FieldDefinition
-                             aspect.isRequired="false"
-                             baseType="USERNAME"
-                             description=""
-                             name="createdBy"
-                             ordinal="6"></FieldDefinition>
-                            <FieldDefinition
                              baseType="DATETIME"
                              description=""
                              name="createdFrom"
@@ -87,8 +179,13 @@
                              name="createdTo"
                              ordinal="6"></FieldDefinition>
                             <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="dueDate"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
                              aspect.isRequired="true"
-                             baseType="STRING"
+                             baseType="THINGNAME"
                              description=""
                              name="productionLine"
                              ordinal="6"></FieldDefinition>
@@ -140,6 +237,86 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
+                     name="AddActionList">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	solutionDescription: solutionDescription /* STRING */,
+                                        	dueDate: dueDate /* DATETIME */,
+                                        	problemDescription: problemDescription /* STRING */,
+                                        	assignedTo: assignedTo /* USERNAME */
+                                        };
+                                        
+                                        // no return
+                                        Things[productionLine].AddAction(params);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="EditActionList">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	solutionDescription: solutionDescription /* STRING */,
+                                        	dueDate: dueDate /* DATETIME */,
+                                        	problemDescription: problemDescription /* STRING */,
+                                        	createdTime: createdTime /* DATETIME */,
+                                        	assignedTo: assignedTo /* USERNAME */,
+                                        	status: status /* STRING */
+                                        };
+                                        
+                                        // no return
+                                        Things[productionLine].EditAction(params);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
                      name="GetActionList">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -161,6 +338,23 @@
                                         <code>
                                         <![CDATA[
                                         var query = {
+                                            "sorts": [
+                                                {
+                                                    "fieldName": "dueDate",
+                                                    "isAscending": false,
+                                                    "isCaseSensitive": false
+                                                },
+                                                {
+                                                    "fieldName": "status",
+                                                    "isAscending": false,
+                                                    "isCaseSensitive": false
+                                                },
+                                                {
+                                                    "fieldName": "assignedTo",
+                                                    "isAscending": true,
+                                                    "isCaseSensitive": false
+                                                }
+                                            ],
                                             "filters": {
                                                 "type": "AND",
                                                 "filters": [
@@ -182,18 +376,18 @@
                                             query.filters.filters[index]["value"] = status;
                                             index = query.filters.filters.length;
                                         }
-                                        if (createdBy) {
-                                            query.filters.filters.push({});
-                                            query.filters.filters[index]["fieldName"] = "createdBy";
-                                            query.filters.filters[index]["type"] = "EQ";
-                                            query.filters.filters[index]["value"] = createdBy;
-                                            index = query.filters.filters.length;
-                                        }
                                         if (assignedTo) {
                                             query.filters.filters.push({});
                                             query.filters.filters[index]["fieldName"] = "assignedTo";
                                             query.filters.filters[index]["type"] = "EQ";
                                             query.filters.filters[index]["value"] = assignedTo;
+                                            index = query.filters.filters.length;
+                                        }
+                                        if (dueDate) {
+                                            query.filters.filters.push({});
+                                            query.filters.filters[index]["fieldName"] = "dueDate";
+                                            query.filters.filters[index]["type"] = "EQ";
+                                            query.filters.filters[index]["value"] = dueDate;
                                             index = query.filters.filters.length;
                                         }
                                         if (createdFrom && createdTo) {

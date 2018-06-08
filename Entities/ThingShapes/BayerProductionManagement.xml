@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-04T11:25:01.370Z"
+         lastModifiedDate="2018-06-07T11:11:14.449Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -106,6 +106,36 @@
                      name="result"
                      ordinal="0"></ResultType>
                     <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetChangeoverTimes">
+                    <ResultType
+                     aspect.dataShape="BayerChangeoverTimesDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="endTime"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="startTime"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
@@ -392,6 +422,145 @@
                                     }
                                     
                                     result.AddRow(newEntry);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetChangeoverTimes">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var query1 = {
+                                      "filters": {
+                                        "type": "AND",
+                                        "filters": [
+                                          {
+                                            "fieldName": "productionLine",
+                                            "type": "EQ",
+                                            "value": me.name
+                                          },
+                                          {
+                                            "fieldName": "productId",
+                                            "type": "EQ",
+                                            "value": "Cambio"
+                                          },
+                                          {
+                                            "fieldName": "endTime",
+                                            "type": "GE",
+                                            "value": startTime
+                                          },
+                                          {
+                                            "fieldName": "startTime",
+                                            "type": "LT",
+                                            "value": endTime
+                                          }
+                                        ]
+                                      }
+                                    };
+                                    
+                                    var params = {
+                                    	maxItems: 99999 /* NUMBER */,
+                                    	values: undefined /* INFOTABLE*/,
+                                    	query: query1 /* QUERY */,
+                                    	source: undefined /* STRING */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // changeovers finished after startTime and started before endTime
+                                    var filtered1 = Things["BayerProductionPlan"].QueryDataTableEntries(params);
+                                    
+                                    var query2 = {
+                                      "filters": {
+                                        "type": "AND",
+                                        "filters": [
+                                          {
+                                            "fieldName": "productionLine",
+                                            "type": "EQ",
+                                            "value": me.name
+                                          },
+                                          {
+                                            "fieldName": "productId",
+                                            "type": "EQ",
+                                            "value": "Cambio"
+                                          },
+                                          {
+                                            "fieldName": "status",
+                                            "type": "EQ",
+                                            "value": "INPROGRESS"
+                                          }
+                                        ]
+                                      }
+                                    };
+                                    
+                                    var params = {
+                                    	maxItems: 99999 /* NUMBER */,
+                                    	values: undefined /* INFOTABLE*/,
+                                    	query: query2 /* QUERY */,
+                                    	source: undefined /* STRING */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // changeover in progress
+                                    var filtered2 = Things["BayerProductionPlan"].QueryDataTableEntries(params);
+                                    
+                                    
+                                    var params = {
+                                    	t1: filtered1 /* INFOTABLE */,
+                                    	t2: filtered2 /* INFOTABLE */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var filtered = Resources["InfoTableFunctions"].Union(params);
+                                    
+                                    // BUILDING RESULT
+                                    
+                                    var currentTime = new Date();
+                                    
+                                    var params = {
+                                    	infoTableName : "InfoTable",
+                                    	dataShapeName : "BayerChangeoverTimesDataShape"
+                                    };
+                                    
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTimesDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                    
+                                    var tableLength = filtered.rows.length;
+                                    
+                                    for (var x = 0; x < tableLength; x++) {
+                                    	var row = filtered.rows[x];
+                                    	
+                                        // BayerChangeoverTimesDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.startTime = row.startTime; // DATETIME
+                                        newEntry.endTime = row.endTime; // DATETIME
+                                        newEntry.targetTime = row.targetHours * 60; // INTEGER
+                                        newEntry.actualTime = Math.round(dateDifference(row.status == "INPROGRESS" ? currentTime : row.endTime, row.startTime) / 1000 / 60); // INTEGER
+                                        newEntry.difference = newEntry.actualTime - newEntry.targetTime; // INTEGER
+                                    
+                                    	result.AddRow(newEntry);
+                                    }
                                     ]]>
                                     </code>
                                 </Row>

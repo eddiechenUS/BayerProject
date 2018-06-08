@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-29T12:01:03.739Z"
+         lastModifiedDate="2018-06-08T13:15:43.847Z"
          name="BayerAddIssuePopup"
          projectName="BayerIoT"
          rows="0.0"
@@ -41,7 +41,9 @@
                  name="productionLine"
                  ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
-            <Things></Things>
+            <Things>
+                <Thing>BayerIssuePage</Thing>
+            </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates>
                 <ThingTemplate>BayerProductionLine</ThingTemplate>
@@ -93,6 +95,53 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerIssuePage" : {
+                  "DataName" : "Things_BayerIssuePage",
+                  "EntityName" : "BayerIssuePage",
+                  "EntityType" : "Things",
+                  "Id" : "7d657953-ce45-4b96-84b7-1d121b2cca97",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "cc4f438e-8bb6-4b21-8e69-047c417d7848",
+                    "Name" : "GetShiftHours",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetShiftHours"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "26d7df86-7cd2-4ced-af65-5ac56d48ce7f",
+                    "Name" : "GetPropertyValues",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetPropertyValues"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "372eded7-079f-4f92-b728-0b2316b5402f",
+                    "Name" : "SetHours",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "SetHours"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "a18c9129-3069-4271-a12f-4f6fbccb98b9",
+                    "Name" : "SetMinutes",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "SetMinutes"
+                  }, {
+                    "APIMethod" : "get",
+                    "Characteristic" : "Services",
+                    "Id" : "b1bf6e10-8b86-4948-8a6a-dc5f1b13eadb",
+                    "Name" : "SetProperties",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "SetProperties"
                   } ]
                 },
                 "UserExtensions" : {
@@ -284,20 +333,102 @@
                 "TargetId" : "textarea-67",
                 "TargetSection" : ""
               }, {
-                "Id" : "59fd5527-ba3a-4e72-b9e7-5bc9adc284f2",
+                "Id" : "97a69b2d-379e-43bd-b7bb-41a159bee54f",
                 "PropertyMaps" : [ {
-                  "SourceProperty" : "DateTime",
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetShiftHours",
+                "SourceSection" : "Things_BayerIssuePage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-99",
+                "TargetSection" : ""
+              }, {
+                "Id" : "26bf770c-fd3a-4818-b126-2e2d400a3d8e",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Minutes",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetPropertyValues",
+                "SourceSection" : "Things_BayerIssuePage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-100",
+                "TargetSection" : ""
+              }, {
+                "Id" : "4173e823-1fe4-45f9-8690-cb985b0cb9fd",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
                   "SourcePropertyBaseType" : "DATETIME",
                   "TargetProperty" : "timestamp",
                   "TargetPropertyBaseType" : "DATETIME",
                   "TargetPropertyType" : "Parameter"
                 } ],
                 "SourceArea" : "UI",
-                "SourceId" : "datetimepicker-89",
+                "SourceId" : "expression-90",
                 "SourceSection" : "",
                 "TargetArea" : "Data",
                 "TargetId" : "AddIssue",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "50d6660b-39b7-496e-be6e-977daac099a5",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "HourNumber",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "hours",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftHours",
+                "SourceSection" : "Things_BayerIssuePage",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-91",
+                "TargetSection" : ""
+              }, {
+                "Id" : "7fd305d7-a458-4de3-a1e2-64dbfd2ec33e",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-91",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-102",
+                "TargetSection" : ""
+              }, {
+                "Id" : "43f4b7ea-356f-4ee6-a891-6dbf6d80ce1e",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "IssueDate",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-90",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "SetProperties",
+                "TargetSection" : "Things_BayerIssuePage"
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -372,6 +503,42 @@
                 "EventTriggerId" : "button-74",
                 "EventTriggerSection" : "",
                 "Id" : "a1b9a899-dfa2-4fc1-a778-0c485dc30fc5"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerIssuePage",
+                "EventHandlerService" : "GetShiftHours",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "68c7430a-9f13-46cf-ac82-3d9942721abf"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerIssuePage",
+                "EventHandlerService" : "GetPropertyValues",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "b9d3ba66-465a-4b62-9750-f496b7d46932"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-90",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "6fa25b33-8950-4b84-b0ea-2208ed2312d4"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-91",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "SelectedRowsChanged",
+                "EventTriggerId" : "GetShiftHours",
+                "EventTriggerSection" : "Things_BayerIssuePage",
+                "Id" : "e897631e-8530-4247-95ad-90129fdbb926"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -411,7 +578,7 @@
                     "Description" : "",
                     "ParameterName" : "productionLine"
                   } ],
-                  "id_index" : 89,
+                  "id_index" : 102,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -944,7 +1111,7 @@
                                 "Widgets" : [ {
                                   "Properties" : {
                                     "Area" : "UI",
-                                    "Columns" : 1,
+                                    "Columns" : 2,
                                     "DisplayName" : "layout-25",
                                     "Footer" : false,
                                     "FooterHeight" : 0,
@@ -957,8 +1124,8 @@
                                     "LeftSidebar" : true,
                                     "LeftSidebarWidth" : 60,
                                     "Orientation" : "horizontal",
-                                    "PctColumn1" : 100,
-                                    "PctColumn2" : 0,
+                                    "PctColumn1" : 50,
+                                    "PctColumn2" : 50,
                                     "PctColumn3" : 1,
                                     "PctColumn4" : 1,
                                     "PctColumn5" : 1,
@@ -1084,6 +1251,157 @@
                                     "Widgets" : [ {
                                       "Properties" : {
                                         "Area" : "UI",
+                                        "DisplayName" : "panel-98",
+                                        "Height" : 200,
+                                        "HideScrollbars" : false,
+                                        "HorizontalAnchor" : "left",
+                                        "Id" : "panel-98",
+                                        "Left" : 75,
+                                        "ResponsiveLayout" : true,
+                                        "ShowDataLoading" : true,
+                                        "Style" : "DefaultContainerStyle",
+                                        "Top" : 20,
+                                        "Type" : "panel",
+                                        "VerticalAnchor" : "top",
+                                        "Visible" : true,
+                                        "Width" : 300,
+                                        "Z-index" : 10,
+                                        "__TypeDisplayName" : "Panel"
+                                      },
+                                      "Widgets" : [ {
+                                        "Properties" : {
+                                          "Alignment" : "left",
+                                          "Area" : "UI",
+                                          "AutoSelectFirstRow" : false,
+                                          "ClearIfNoSelection" : false,
+                                          "ComboDropdownButtonStyle" : "DefaultComboDropdownButtonStyle",
+                                          "ComboEnableCheckbox" : false,
+                                          "ComboItemHighlightedStyle" : "DefaultComboItemHighlightedStyle",
+                                          "ComboTextboxStyle" : "DefaultComboTextboxStyle",
+                                          "DisableSelectedStyle" : false,
+                                          "DisplayField" : "HourNumber",
+                                          "DisplayName" : "dhxlist-99",
+                                          "DropdownButtonStyle" : "DefaultDropdownButtonStyle",
+                                          "DropdownSelectedStyle" : "DefaultDropdownSelectedStyle",
+                                          "DropdownStyle" : "DefaultDropdownStyle",
+                                          "EnableKeyboardSelections" : true,
+                                          "Height" : 28,
+                                          "HeightOfDropdownView" : 170,
+                                          "Id" : "dhxlist-99",
+                                          "Label" : "",
+                                          "LabelAlignment" : "left",
+                                          "Left" : 5,
+                                          "ListBackgroundStyle" : "DefaultListBackgroundStyle",
+                                          "ListFocusStyle" : "DefaultFocusStyle",
+                                          "ListItemAlternateStyle" : "DefaultListItemAlternateStyle",
+                                          "ListItemHoverStyle" : "DefaultListItemHoverStyle",
+                                          "ListItemSelectedStyle" : "DefaultListItemSelectedStyle",
+                                          "ListItemStyle" : "DefaultListItemStyle",
+                                          "ListLabelStyle" : "DefaultWidgetLabelStyle",
+                                          "MultiSelect" : false,
+                                          "NumberOfItemsInDropdownView" : 6,
+                                          "ResponsiveLayout" : false,
+                                          "RowHeight" : 28,
+                                          "ShowDataLoading" : true,
+                                          "TabSequence" : -1,
+                                          "TextIfNoSelectionType" : "editable",
+                                          "ToolTipStyle" : "DefaultTooltipStyle",
+                                          "Top" : 5,
+                                          "Type" : "dhxlist",
+                                          "View" : "dropdown",
+                                          "Visible" : true,
+                                          "Width" : 80,
+                                          "WidthOfDropdownView" : 110,
+                                          "Z-index" : 10,
+                                          "__TypeDisplayName" : "List",
+                                          "__supportsLabel" : true,
+                                          "__supportsTooltip" : true
+                                        },
+                                        "Widgets" : [ ]
+                                      }, {
+                                        "Properties" : {
+                                          "Alignment" : "left",
+                                          "Area" : "UI",
+                                          "AutoSelectFirstRow" : false,
+                                          "ClearIfNoSelection" : false,
+                                          "ComboDropdownButtonStyle" : "DefaultComboDropdownButtonStyle",
+                                          "ComboEnableCheckbox" : false,
+                                          "ComboItemHighlightedStyle" : "DefaultComboItemHighlightedStyle",
+                                          "ComboTextboxStyle" : "DefaultComboTextboxStyle",
+                                          "DisableSelectedStyle" : false,
+                                          "DisplayField" : "Minutes",
+                                          "DisplayName" : "dhxlist-100",
+                                          "DropdownButtonStyle" : "DefaultDropdownButtonStyle",
+                                          "DropdownSelectedStyle" : "DefaultDropdownSelectedStyle",
+                                          "DropdownStyle" : "DefaultDropdownStyle",
+                                          "EnableKeyboardSelections" : true,
+                                          "Height" : 28,
+                                          "HeightOfDropdownView" : 170,
+                                          "Id" : "dhxlist-100",
+                                          "Label" : "",
+                                          "LabelAlignment" : "left",
+                                          "Left" : 105,
+                                          "ListBackgroundStyle" : "DefaultListBackgroundStyle",
+                                          "ListFocusStyle" : "DefaultFocusStyle",
+                                          "ListItemAlternateStyle" : "DefaultListItemAlternateStyle",
+                                          "ListItemHoverStyle" : "DefaultListItemHoverStyle",
+                                          "ListItemSelectedStyle" : "DefaultListItemSelectedStyle",
+                                          "ListItemStyle" : "DefaultListItemStyle",
+                                          "ListLabelStyle" : "DefaultWidgetLabelStyle",
+                                          "MultiSelect" : false,
+                                          "NumberOfItemsInDropdownView" : 6,
+                                          "ResponsiveLayout" : false,
+                                          "RowHeight" : 28,
+                                          "ShowDataLoading" : true,
+                                          "TabSequence" : -1,
+                                          "TextIfNoSelectionType" : "editable",
+                                          "ToolTipStyle" : "DefaultTooltipStyle",
+                                          "Top" : 5,
+                                          "Type" : "dhxlist",
+                                          "View" : "dropdown",
+                                          "Visible" : true,
+                                          "Width" : 75,
+                                          "WidthOfDropdownView" : 110,
+                                          "Z-index" : 10,
+                                          "__TypeDisplayName" : "List",
+                                          "__supportsLabel" : true,
+                                          "__supportsTooltip" : true
+                                        },
+                                        "Widgets" : [ ]
+                                      } ]
+                                    } ]
+                                  }, {
+                                    "Properties" : {
+                                      "AnimateExpandCollapse" : true,
+                                      "Area" : "UI",
+                                      "BGImageRepeat" : "no-repeat",
+                                      "BGImageSize" : "auto",
+                                      "DisplayName" : "Column",
+                                      "ExpandCollapseTabLocation" : "outside",
+                                      "Expanded" : true,
+                                      "Id" : "container-97",
+                                      "MinHeight" : 0,
+                                      "MinWidth" : 0,
+                                      "Overlay" : false,
+                                      "OverlayIsTransparent" : false,
+                                      "ResponsiveLayout" : true,
+                                      "ShowDataLoading" : true,
+                                      "ShowExpandCollapseTab" : false,
+                                      "Style" : "DefaultContainerStyle",
+                                      "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                                      "TabExpandStyle" : "DefaultTabExpandStyle",
+                                      "TabHeight" : 36,
+                                      "TabLocation" : "center",
+                                      "TabOffset" : 0,
+                                      "TabWidth" : 36,
+                                      "Type" : "container",
+                                      "Visible" : true,
+                                      "Z-index" : 10,
+                                      "__TypeDisplayName" : "Container"
+                                    },
+                                    "Widgets" : [ {
+                                      "Properties" : {
+                                        "Area" : "UI",
                                         "DisplayName" : "panel-29",
                                         "Height" : 200,
                                         "HideScrollbars" : false,
@@ -1104,63 +1422,86 @@
                                       "Widgets" : [ {
                                         "Properties" : {
                                           "Area" : "UI",
-                                          "DisplayName" : "shape-30",
-                                          "DynamicFillOrientation" : "vertical",
-                                          "DynamicRangeMaximum" : 100,
-                                          "DynamicRangeMinimum" : 0,
-                                          "EnableDynamicFill" : false,
-                                          "GradientOrientation" : "vertical",
-                                          "GradientType" : "linear",
-                                          "Height" : 30,
-                                          "Id" : "shape-30",
-                                          "Left" : 0,
-                                          "RectangleCornerRadius" : 10,
+                                          "AutoEvaluate" : false,
+                                          "DataChangeType" : "VALUE",
+                                          "DisplayName" : "expression-90",
+                                          "Expression" : "new Date();",
+                                          "FireOnFirstValue" : false,
+                                          "Height" : 28,
+                                          "Id" : "expression-90",
+                                          "Left" : 235,
+                                          "OutputBaseType" : "DATETIME",
                                           "ResponsiveLayout" : false,
-                                          "ShapeFormatter_StateParameters" : [ ],
-                                          "ShapeStyle" : "Bayer_TextAreaStyle",
-                                          "ShapeType" : "rectangle",
                                           "ShowDataLoading" : true,
-                                          "Top" : 10,
-                                          "Type" : "shape",
-                                          "UnfilledBackgroundStyle" : "DefaultShapeUnfilledBackgroundStyle",
+                                          "Top" : 5,
+                                          "Type" : "expression",
                                           "Visible" : true,
-                                          "Width" : 200,
-                                          "Z-index" : 6,
-                                          "__TypeDisplayName" : "Shape"
+                                          "Width" : 55,
+                                          "Z-index" : 10,
+                                          "__TypeDisplayName" : "Expression"
                                         },
                                         "Widgets" : [ ]
                                       }, {
                                         "Properties" : {
                                           "Area" : "UI",
-                                          "DateDelimiter" : "-",
-                                          "DateDisplay" : "short",
-                                          "DateFormat" : "yy-M-dd",
-                                          "DateFormatToken" : "",
-                                          "DateOnly" : false,
-                                          "DateOrder" : "yy-mm-dd",
-                                          "DecadeView" : false,
-                                          "DisplayName" : "datetimepicker-89",
-                                          "DisplaySeconds" : true,
+                                          "AutoEvaluate" : false,
+                                          "DataChangeType" : "VALUE",
+                                          "DisplayName" : "expression-91",
+                                          "Expression" : "",
+                                          "FireOnFirstValue" : false,
                                           "Height" : 28,
-                                          "Id" : "datetimepicker-89",
-                                          "InitializeWithCurrentDateTime" : true,
-                                          "Interval" : 0,
-                                          "IntervalType" : "h",
-                                          "Label" : "",
-                                          "Left" : 0,
+                                          "Id" : "expression-91",
+                                          "Left" : 295,
+                                          "OutputBaseType" : "DATETIME",
                                           "ResponsiveLayout" : false,
                                           "ShowDataLoading" : true,
-                                          "Style" : "Bayer_GreyValue",
-                                          "TabSequence" : 0,
-                                          "TimeFormat" : "hh:mm:ss",
+                                          "Top" : 10,
+                                          "Type" : "expression",
+                                          "Visible" : true,
+                                          "Width" : 55,
+                                          "Z-index" : 10,
+                                          "__TypeDisplayName" : "Expression",
+                                          "_currentParameterDefs" : [ {
+                                            "BaseType" : "NUMBER",
+                                            "Description" : "",
+                                            "ParameterName" : "hours"
+                                          } ]
+                                        },
+                                        "Widgets" : [ ]
+                                      }, {
+                                        "Properties" : {
+                                          "Alignment" : "left",
+                                          "Area" : "UI",
+                                          "BackgroundFill" : "content",
+                                          "DisplayName" : "valuedisplay-102",
+                                          "Height" : 22,
+                                          "Id" : "valuedisplay-102",
+                                          "ImageScaling" : "Width",
+                                          "Label" : "",
+                                          "LabelAlignment" : "left",
+                                          "Left" : 38,
+                                          "Overflow" : "hidden",
+                                          "ResponsiveLayout" : false,
+                                          "ShowDataLoading" : true,
+                                          "TextIfNoValue" : "",
+                                          "TextIfNoValueOffset" : 0,
+                                          "TextIfNoValueStyle" : "DefaultValueDisplayNoTextStyle",
+                                          "TextWrap" : true,
                                           "ToolTipField" : "",
                                           "ToolTipStyle" : "DefaultTooltipStyle",
-                                          "Top" : 10,
-                                          "Type" : "datetimepicker",
+                                          "Top" : 8,
+                                          "Type" : "valuedisplay",
+                                          "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
+                                          "ValueDisplayStyle" : "DefaultValueDisplayStyle",
+                                          "ValueFormat" : {
+                                            "renderer" : "DEFAULT"
+                                          },
+                                          "ValueFormat_StateParameters" : [ ],
+                                          "VerticalAlignment" : "middle",
                                           "Visible" : true,
-                                          "Width" : 200,
+                                          "Width" : 100,
                                           "Z-index" : 10,
-                                          "__TypeDisplayName" : "Date Time Picker",
+                                          "__TypeDisplayName" : "Value Display",
                                           "__supportsLabel" : true,
                                           "__supportsTooltip" : true
                                         },
@@ -1836,7 +2177,7 @@
                                         "ImageScaling" : "Width",
                                         "Label" : "",
                                         "LabelAlignment" : "left",
-                                        "Left" : 185,
+                                        "Left" : 0,
                                         "Overflow" : "hidden",
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
@@ -1846,7 +2187,7 @@
                                         "TextWrap" : true,
                                         "ToolTipField" : "",
                                         "ToolTipStyle" : "DefaultTooltipStyle",
-                                        "Top" : 15,
+                                        "Top" : 0,
                                         "Type" : "valuedisplay",
                                         "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                                         "ValueDisplayStyle" : "Bayer_PopupTitle",

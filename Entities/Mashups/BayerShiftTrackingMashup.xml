@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-04T15:39:44.002Z"
+         lastModifiedDate="2018-06-05T09:55:43.279Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -105,6 +105,14 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetChangeoverTime"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "febe2554-8723-4f7f-8ec9-11b54e686545",
+                    "Name" : "GetIssues",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetIssues"
                   } ]
                 },
                 "Session" : {
@@ -955,6 +963,38 @@
                 "TargetArea" : "UI",
                 "TargetId" : "validator-374",
                 "TargetSection" : ""
+              }, {
+                "Id" : "742aea34-2ca6-44b3-9d2f-bd4a1d88387a",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Visible",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-355",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "frame-381",
+                "TargetSection" : ""
+              }, {
+                "Id" : "f173c664-cdd6-4f36-9b83-5d1b0933ae32",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Visible",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-359",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "frame-382",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -1209,6 +1249,15 @@
                 "EventTriggerId" : "button-30",
                 "EventTriggerSection" : "",
                 "Id" : "1aa825ab-b981-497e-8d7b-007eb8f9639d"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetChangeoverTime",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "GetCurrentProduct",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "50758884-f6f0-4781-9c84-bd29c85f40e2"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -1244,7 +1293,7 @@
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
                   "_currentParameterDefs" : [ ],
-                  "id_index" : 379,
+                  "id_index" : 383,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -1423,7 +1472,7 @@
                             "Properties" : {
                               "Area" : "UI",
                               "AutoEvaluate" : true,
-                              "DataChangeType" : "VALUE",
+                              "DataChangeType" : "ALWAYS",
                               "DisplayName" : "expression-currentProductChanged",
                               "Expression" : "input",
                               "FireOnFirstValue" : false,
@@ -3662,38 +3711,150 @@
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
-                                        "Alignment" : "left",
                                         "Area" : "UI",
-                                        "BackgroundFill" : "content",
-                                        "DisplayName" : "valuedisplay-330",
-                                        "Height" : 22,
-                                        "Id" : "valuedisplay-330",
-                                        "ImageScaling" : "Width",
-                                        "Label" : "",
-                                        "LabelAlignment" : "left",
-                                        "Left" : 15,
-                                        "Overflow" : "hidden",
+                                        "BackgroundFrameVisible" : true,
+                                        "DisplayName" : "framelayout-380",
+                                        "ForegroundFrameVisible" : false,
+                                        "Id" : "framelayout-380",
+                                        "Left" : 35,
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
-                                        "TextIfNoValue" : "[[Bayer.Tot]]",
-                                        "TextIfNoValueOffset" : 0,
-                                        "TextIfNoValueStyle" : "Bayer_GreyValue",
-                                        "TextWrap" : true,
-                                        "ToolTipField" : "",
-                                        "ToolTipStyle" : "DefaultTooltipStyle",
+                                        "Style" : "DefaultContainerStyle",
                                         "Top" : 35,
-                                        "Type" : "valuedisplay",
-                                        "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                                        "ValueDisplayStyle" : "Bayer_GreyValue",
-                                        "VerticalAlignment" : "middle",
+                                        "Type" : "framelayout",
                                         "Visible" : true,
-                                        "Width" : 100,
                                         "Z-index" : 10,
-                                        "__TypeDisplayName" : "Value Display",
-                                        "__supportsLabel" : true,
-                                        "__supportsTooltip" : true
+                                        "__TypeDisplayName" : "Frame Layout"
                                       },
-                                      "Widgets" : [ ]
+                                      "Widgets" : [ {
+                                        "Properties" : {
+                                          "AnimateExpandCollapse" : true,
+                                          "Area" : "UI",
+                                          "BGImageRepeat" : "no-repeat",
+                                          "BGImageSize" : "auto",
+                                          "DisplayName" : "Frame",
+                                          "ExpandCollapseTabLocation" : "outside",
+                                          "Expanded" : true,
+                                          "Id" : "frame-381",
+                                          "MinHeight" : 0,
+                                          "MinWidth" : 0,
+                                          "Overlay" : false,
+                                          "OverlayIsTransparent" : false,
+                                          "ResponsiveLayout" : true,
+                                          "ShowDataLoading" : true,
+                                          "ShowExpandCollapseTab" : false,
+                                          "Style" : "DefaultContainerStyle",
+                                          "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                                          "TabExpandStyle" : "DefaultTabExpandStyle",
+                                          "TabHeight" : 36,
+                                          "TabLocation" : "center",
+                                          "TabOffset" : 0,
+                                          "TabWidth" : 36,
+                                          "Type" : "container",
+                                          "Visible" : true,
+                                          "Z-index" : 10,
+                                          "__TypeDisplayName" : "Container"
+                                        },
+                                        "Widgets" : [ {
+                                          "Properties" : {
+                                            "Alignment" : "left",
+                                            "Area" : "UI",
+                                            "BackgroundFill" : "content",
+                                            "DisplayName" : "valuedisplay-330",
+                                            "Height" : 22,
+                                            "Id" : "valuedisplay-330",
+                                            "ImageScaling" : "Width",
+                                            "Label" : "",
+                                            "LabelAlignment" : "left",
+                                            "Left" : 15,
+                                            "Overflow" : "hidden",
+                                            "ResponsiveLayout" : true,
+                                            "ShowDataLoading" : true,
+                                            "TextIfNoValue" : "[[Bayer.Tot]]",
+                                            "TextIfNoValueOffset" : 0,
+                                            "TextIfNoValueStyle" : "Bayer_GreyValue",
+                                            "TextWrap" : true,
+                                            "ToolTipField" : "",
+                                            "ToolTipStyle" : "DefaultTooltipStyle",
+                                            "Top" : 35,
+                                            "Type" : "valuedisplay",
+                                            "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
+                                            "ValueDisplayStyle" : "Bayer_GreyValue",
+                                            "VerticalAlignment" : "middle",
+                                            "Visible" : true,
+                                            "Width" : 100,
+                                            "Z-index" : 10,
+                                            "__TypeDisplayName" : "Value Display",
+                                            "__supportsLabel" : true,
+                                            "__supportsTooltip" : true
+                                          },
+                                          "Widgets" : [ ]
+                                        } ]
+                                      }, {
+                                        "Properties" : {
+                                          "AnimateExpandCollapse" : true,
+                                          "Area" : "UI",
+                                          "BGImageRepeat" : "no-repeat",
+                                          "BGImageSize" : "auto",
+                                          "DisplayName" : "Frame",
+                                          "ExpandCollapseTabLocation" : "outside",
+                                          "Expanded" : true,
+                                          "Id" : "frame-382",
+                                          "MinHeight" : 0,
+                                          "MinWidth" : 0,
+                                          "Overlay" : false,
+                                          "OverlayIsTransparent" : false,
+                                          "ResponsiveLayout" : true,
+                                          "ShowDataLoading" : true,
+                                          "ShowExpandCollapseTab" : false,
+                                          "Style" : "DefaultContainerStyle",
+                                          "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                                          "TabExpandStyle" : "DefaultTabExpandStyle",
+                                          "TabHeight" : 36,
+                                          "TabLocation" : "center",
+                                          "TabOffset" : 0,
+                                          "TabWidth" : 36,
+                                          "Type" : "container",
+                                          "Visible" : true,
+                                          "Z-index" : 10,
+                                          "__TypeDisplayName" : "Container"
+                                        },
+                                        "Widgets" : [ {
+                                          "Properties" : {
+                                            "Alignment" : "left",
+                                            "Area" : "UI",
+                                            "BackgroundFill" : "content",
+                                            "DisplayName" : "valuedisplay-383",
+                                            "Height" : 22,
+                                            "Id" : "valuedisplay-383",
+                                            "ImageScaling" : "Width",
+                                            "Label" : "",
+                                            "LabelAlignment" : "left",
+                                            "Left" : 15,
+                                            "Overflow" : "hidden",
+                                            "ResponsiveLayout" : true,
+                                            "ShowDataLoading" : true,
+                                            "TextIfNoValue" : "[[Bayer.TotalH]]",
+                                            "TextIfNoValueOffset" : 0,
+                                            "TextIfNoValueStyle" : "Bayer_GreyValue",
+                                            "TextWrap" : true,
+                                            "ToolTipField" : "",
+                                            "ToolTipStyle" : "DefaultTooltipStyle",
+                                            "Top" : 35,
+                                            "Type" : "valuedisplay",
+                                            "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
+                                            "ValueDisplayStyle" : "Bayer_GreyValue",
+                                            "VerticalAlignment" : "middle",
+                                            "Visible" : true,
+                                            "Width" : 100,
+                                            "Z-index" : 10,
+                                            "__TypeDisplayName" : "Value Display",
+                                            "__supportsLabel" : true,
+                                            "__supportsTooltip" : true
+                                          },
+                                          "Widgets" : [ ]
+                                        } ]
+                                      } ]
                                     } ]
                                   }, {
                                     "Properties" : {
@@ -3819,7 +3980,7 @@
                                           "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                                           "ValueDisplayStyle" : "Bayer_GreenValue",
                                           "ValueFormat" : {
-                                            "FormatString" : "[[Bayer.NumberDisplay1]]",
+                                            "FormatString" : "0.00",
                                             "formatInfo" : {
                                               "FieldName" : "",
                                               "StateDefinition" : "",
@@ -3829,7 +3990,7 @@
                                                 "stateName" : "fixed"
                                               } ]
                                             },
-                                            "renderer" : "NUMBER",
+                                            "renderer" : "DEFAULT",
                                             "roundingEnabled" : true
                                           },
                                           "ValueFormat_StateParameters" : [ ],
@@ -5192,7 +5353,7 @@
                                     "DisplayName" : "mashupcontainer-issues",
                                     "Height" : 300,
                                     "Id" : "mashupcontainer-309",
-                                    "Left" : 380,
+                                    "Left" : 0,
                                     "MashupParameters" : [ {
                                       "BaseType" : "THINGNAME",
                                       "Description" : "",
@@ -5224,7 +5385,7 @@
                                     "ResponsiveLayout" : true,
                                     "ShowDataLoading" : true,
                                     "TabSequenceGroup" : 0,
-                                    "Top" : 75,
+                                    "Top" : 0,
                                     "Type" : "mashupcontainer",
                                     "Visible" : true,
                                     "Width" : 400,

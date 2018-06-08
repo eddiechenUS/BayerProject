@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-06-04T12:50:52.722Z"
+         lastModifiedDate="2018-06-08T10:29:35.422Z"
          name="BayerReportsPage"
          projectName="BayerIoT"
          published="false"
@@ -46,6 +46,73 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetChangeoverReport">
+                        <ResultType
+                         aspect.dataShape="BayerChangeoverTimesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="endTime"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="lineName"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="startTime"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetProblemsAndIssues">
+                        <ResultType
+                         aspect.dataShape="BayerProblemsAndIssuesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="lineName"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="startTime"
+                             ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetProductionPerformance">
                         <ResultType
                          aspect.dataShape="BayerProductionPerformanceDataShape"
@@ -55,10 +122,23 @@
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
                             <FieldDefinition
-                             aspect.dataShape="BayerDailyPerformanceDataShape"
-                             baseType="INFOTABLE"
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
                              description=""
-                             name="dailyPerformance"
+                             name="endTime"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="lineName"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="startTime"
                              ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
@@ -66,6 +146,103 @@
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetChangeoverReport">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	startTime: startTime /* DATETIME */,
+                                        	endTime: endTime /* DATETIME */
+                                        };
+                                        
+                                        // result: INFOTABLE dataShape: BayerChangeoverTimesDataShape
+                                        var result = Things[lineName].GetChangeoverTimes(params);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetProblemsAndIssues">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var shifts = {
+                                            shift1 : startTime,
+                                            shift2 : dateAddHours(startTime, 8),
+                                            shift3 : dateAddHours(startTime, 16)
+                                        }
+                                        logger.warn(startTime.getHours());
+                                        var params = {
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "BayerProblemsAndIssuesDataShape"
+                                        };
+                                        
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        for (var i = 1; i < 4; i++) {
+                                            var params = {
+                                                shiftStart: shifts["shift" + i] /* DATETIME */
+                                            };
+                                            
+                                            var issuesIT = Things[lineName].GetIssues(params);
+                                            
+                                            for(var j = 0; j < issuesIT.rows.length; j++) {
+                                                var row = new Object();
+                                        		row.Shift = i;
+                                                row.IssueDescription = issuesIT.getRow(j).problem;
+                                                row.Duration = issuesIT.getRow(j).duration;
+                                                row.IssueSolution = issuesIT.getRow(j).solution;
+                                                row.IssueCategory = issuesIT.getRow(j).category;
+                                                result.AddRow(row);
+                                            }
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
@@ -89,13 +266,31 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        logger.warn(dailyPerformance.getRow(0).rows.length);
-                                        	yesterdayPerformance = dailyPerformance.getRow(0).dailyPerformance.rows.length;
-                                            for (var i = 0; i < yesterdayPerformance; i++) {
-                                            result.getRow(i).Shift = yesterdayPerformance[i].shift;
-                                            resultgetRow(i).ActualQuantity = yesterdayPerformance[i].quantityProduced;
-                                            resultgetRow(i).TargetQuantity = yesterdayPerformance[i].targetQuantity;
-                                            }
+                                        var params = {
+                                        	startTime: startTime /* DATETIME */,
+                                        	endTime: endTime /* DATETIME */
+                                        };
+                                        
+                                        // result: INFOTABLE dataShape: BayerDailyPerformanceDataShape
+                                        var dailyPerformance = Things[lineName].GetDailyPerformanceForTimeframe(params);
+                                        
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerProductionPerformanceDataShape"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPerformanceDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        yesterdayPerformance = dailyPerformance.dailyPerformance;
+                                        for (var i = 0; i < yesterdayPerformance.rows.length; i++) {
+                                            var row = new Object();
+                                            row.Shift = yesterdayPerformance[i].shift.replace("Shift ", "");
+                                            row.ActualQuantity = yesterdayPerformance[i].quantityProduced;
+                                            row.TargetQuantity = yesterdayPerformance[i].targetQuantity;
+                                            row.GapPsc = yesterdayPerformance[i].quantityProduced - yesterdayPerformance[i].targetQuantity;
+                                            result.AddRow(row);
+                                        }
                                         ]]>
                                         </code>
                                     </Row>
