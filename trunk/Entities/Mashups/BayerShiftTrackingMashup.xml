@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-05T09:55:43.279Z"
+         lastModifiedDate="2018-06-18T14:54:31.938Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -57,6 +57,10 @@
                     "Id" : "b1eccab0-c0a0-4483-af77-d6061328cc6d",
                     "Name" : "GetCurrentProduct",
                     "Parameters" : { },
+                    "Properties" : {
+                      "ShowErrorMessage" : false,
+                      "ShowSuccessMessage" : false
+                    },
                     "RefreshInterval" : 0,
                     "Target" : "GetCurrentProduct"
                   }, {
@@ -67,6 +71,10 @@
                     "Parameters" : {
                       "useWebsockets" : true
                     },
+                    "Properties" : {
+                      "CustomErrorMessage" : "[[service.error]]",
+                      "ShowErrorMessage" : true
+                    },
                     "RefreshInterval" : 0,
                     "Target" : "GetProperties"
                   }, {
@@ -75,6 +83,10 @@
                     "Id" : "852795e3-4378-47ba-a3a1-7b1bcfdb4938",
                     "Name" : "CompleteCurrentProduct",
                     "Parameters" : { },
+                    "Properties" : {
+                      "ShowErrorMessage" : false,
+                      "ShowSuccessMessage" : false
+                    },
                     "RefreshInterval" : 0,
                     "Target" : "CompleteCurrentProduct"
                   }, {
@@ -995,6 +1007,23 @@
                 "TargetArea" : "UI",
                 "TargetId" : "frame-382",
                 "TargetSection" : ""
+              }, {
+                "Id" : "61c7b550-2ba5-4dfc-bf6c-ceec1d7977f7",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "updateSuccess",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CompleteCurrentProduct",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "validator-385",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -1258,6 +1287,42 @@
                 "EventTriggerId" : "GetCurrentProduct",
                 "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
                 "Id" : "50758884-f6f0-4781-9c84-bd29c85f40e2"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetCurrentProduct",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Refresh",
+                "EventTriggerId" : "autorefresh-384",
+                "EventTriggerSection" : "",
+                "Id" : "f91b0721-5066-4da8-922d-093ed530d0e7"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "validator-385",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "CompleteCurrentProduct",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "787f5655-ada3-4171-88bb-4349e43b6759"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "statusmessage-386",
+                "EventHandlerService" : "ShowMessage",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "False",
+                "EventTriggerId" : "validator-385",
+                "EventTriggerSection" : "",
+                "Id" : "4e6d7c32-98b0-41d5-98fd-622325000357"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetCurrentProduct",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "CompleteCurrentProduct",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "8f87228e-e586-4c48-b02c-ec051eda262e"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -1293,7 +1358,7 @@
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
                   "_currentParameterDefs" : [ ],
-                  "id_index" : 383,
+                  "id_index" : 386,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -1547,6 +1612,39 @@
                               "__TypeDisplayName" : "Infotable Selector"
                             },
                             "Widgets" : [ ]
+                          }, {
+                            "Properties" : {
+                              "ActiveStyle" : "DefaultButtonActiveStyle",
+                              "Area" : "UI",
+                              "AutoRefresh" : true,
+                              "AutoRefreshTabSequence" : 180,
+                              "DisplayName" : "autorefresh-384",
+                              "FocusStyle" : "DefaultButtonFocusStyle",
+                              "Height" : 10,
+                              "HoverStyle" : "DefaultButtonHoverStyle",
+                              "IconAlignment" : "left",
+                              "Id" : "autorefresh-384",
+                              "Label" : "Refresh Now",
+                              "Left" : 10,
+                              "RefreshInterval" : 300,
+                              "RefreshNowTabSequence" : 0,
+                              "RefreshToggleLabel" : "On",
+                              "RefreshToggleLabelOff" : "Off",
+                              "RefreshToggleSliderStyle" : "DefaultAutoRefreshToggleSliderStyle",
+                              "RefreshToggleStyle" : "DefaultAutoRefreshToggleStyle",
+                              "RefreshToggleStyleOff" : "DefaultAutoRefreshToggleOffStyle",
+                              "ResponsiveLayout" : false,
+                              "ShowControls" : false,
+                              "ShowDataLoading" : true,
+                              "Style" : "DefaultButtonStyle",
+                              "Top" : 10,
+                              "Type" : "autorefresh",
+                              "Visible" : false,
+                              "Width" : 50,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Auto Refresh"
+                            },
+                            "Widgets" : [ ]
                           } ]
                         } ]
                       }, {
@@ -1671,6 +1769,50 @@
                               "Z-index" : 10,
                               "__TypeDisplayName" : "Label",
                               "__supportsTooltip" : true
+                            },
+                            "Widgets" : [ ]
+                          }, {
+                            "Properties" : {
+                              "Area" : "UI",
+                              "AutoEvaluate" : false,
+                              "DisplayName" : "validator-385",
+                              "Expression" : "updateSuccess",
+                              "Height" : 28,
+                              "Id" : "validator-385",
+                              "Left" : 10,
+                              "Output" : false,
+                              "ResponsiveLayout" : false,
+                              "ShowDataLoading" : true,
+                              "Top" : 55,
+                              "Type" : "validator",
+                              "Visible" : true,
+                              "Width" : 200,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Validator",
+                              "_currentParameterDefs" : [ {
+                                "BaseType" : "BOOLEAN",
+                                "Description" : "",
+                                "ParameterName" : "updateSuccess"
+                              } ]
+                            },
+                            "Widgets" : [ ]
+                          }, {
+                            "Properties" : {
+                              "Area" : "UI",
+                              "DisplayName" : "statusmessage-386",
+                              "Height" : 28,
+                              "Id" : "statusmessage-386",
+                              "Left" : 10,
+                              "Message" : "[[service.exception]]",
+                              "MessageType" : "error",
+                              "ResponsiveLayout" : false,
+                              "ShowDataLoading" : true,
+                              "Top" : 75.00000953674316,
+                              "Type" : "statusmessage",
+                              "Visible" : true,
+                              "Width" : 200,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Status Message"
                             },
                             "Widgets" : [ ]
                           } ]

@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-07T11:11:14.449Z"
+         lastModifiedDate="2018-06-20T14:27:41.957Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -30,6 +30,34 @@
                  isLocalOnly="false"
                  name="currentProductKey"
                  ordinal="4"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="false"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="false"
+                 aspect.isReadOnly="false"
+                 baseType="BOOLEAN"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="updateProductLock"
+                 ordinal="6"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeThreshold="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="90"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 aspect.units="min"
+                 baseType="INTEGER"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="additionalChangeoverTime"
+                 ordinal="7"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeThreshold="0.0"
@@ -72,6 +100,20 @@
                  isLocalOnly="false"
                  name="counter"
                  ordinal="2"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeThreshold="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="0.6"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 baseType="NUMBER"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="nominalRateCorrection"
+                 ordinal="5"></PropertyDefinition>
             </PropertyDefinitions>
             <ServiceDefinitions>
                 <ServiceDefinition
@@ -84,7 +126,7 @@
                  isPrivate="false"
                  name="CompleteCurrentProduct">
                     <ResultType
-                     baseType="NOTHING"
+                     baseType="BOOLEAN"
                      description=""
                      name="result"
                      ordinal="0"></ResultType>
@@ -205,6 +247,30 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="LoadCSVv2">
+                    <ResultType
+                     aspect.dataShape="BayerProductionPlanDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="path"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="UpdateCounter">
                     <ResultType
                      baseType="NOTHING"
@@ -273,31 +339,89 @@
                                     <code>
                                     <![CDATA[
                                     // complete current in progress product
+                                    var result = true;
                                     
-                                    // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
-                                    var current = me.GetCurrentProduct();
-                                    
-                                    if (current.rows.length > 0) {
-                                        me.currentProductKey = ""; // to block the periodic "UpdateProduct" task
-                                    
-                                        current.producedQuantity = me.counter;
-                                        me.previousProductCounter += me.counter;
-                                        me.counter = 0;
+                                    try {
+                                        me.updateProductLock = true; // to block the periodic "UpdateProduct" task
                                         
-                                        current.status = "COMPLETED";
-                                        current.endTime = new Date();
+                                        //throw test;
                                         
-                                        var difference = dateDifference(current.endTime, current.startTime);
+                                        // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
+                                        var current = me.GetCurrentProduct();
                                     
-                                        current.workedHours = difference / 1000.0 / 60.0 / 60.0;
-                                        current.remainingHours = current.targetHours - current.workedHours;
-                                        if (current.remainingHours < 0) {
-                                            current.remainingHours = 0;
+                                        if (current.rows.length > 0) {
+                                            current.producedQuantity = me.counter;
+                                            me.previousProductCounter += me.counter;
+                                            me.counter = 0;
+                                    
+                                            current.status = "COMPLETED";
+                                            current.endTime = new Date();
+                                    
+                                            var difference = dateDifference(current.endTime, current.startTime);
+                                    
+                                            current.workedHours = difference / 1000.0 / 60.0 / 60.0;
+                                            current.remainingHours = current.targetHours - current.workedHours;
+                                            if (current.remainingHours < 0) {
+                                                current.remainingHours = 0;
+                                            }
+                                    
+                                            var params = {
+                                                sourceType: undefined /* STRING */,
+                                                values: current /* INFOTABLE*/,
+                                                location: undefined /* LOCATION */,
+                                                source: undefined /* STRING */,
+                                                tags: undefined /* TAGS */
+                                            };
+                                    
+                                            // no return
+                                            Things["BayerProductionPlan"].UpdateDataTableEntry(params);
                                         }
-                                        
+                                    
+                                        // start first pending product
+                                    
+                                        var query = {
+                                            "sorts": [
+                                            {
+                                                "fieldName": "id",
+                                                "isAscending": true
+                                            }
+                                        ],
+                                          "filters": {
+                                            "type": "AND",
+                                            "filters": [
+                                              {
+                                                "fieldName": "status",
+                                                "type": "EQ",
+                                                "value": "PENDING"
+                                              },
+                                              {
+                                                "fieldName": "productionLine",
+                                                "type": "EQ",
+                                                "value": me.name
+                                              }
+                                            ]
+                                          }
+                                        };
+                                    
+                                        var params = {
+                                            maxItems: 1 /* NUMBER */,
+                                            values: undefined /* INFOTABLE*/,
+                                            query: query /* QUERY */,
+                                            source: undefined /* STRING */,
+                                            tags: undefined /* TAGS */
+                                        };
+                                    
+                                        // result: INFOTABLE
+                                        var pending = Things["BayerProductionPlan"].QueryDataTableEntries(params);
+                                    
+                                        me.currentProductKey = pending.key;
+                                    
+                                        pending.startTime = new Date();
+                                        pending.status = "INPROGRESS";
+                                    
                                         var params = {
                                             sourceType: undefined /* STRING */,
-                                            values: current /* INFOTABLE*/,
+                                            values: pending /* INFOTABLE*/,
                                             location: undefined /* LOCATION */,
                                             source: undefined /* STRING */,
                                             tags: undefined /* TAGS */
@@ -305,57 +429,17 @@
                                     
                                         // no return
                                         Things["BayerProductionPlan"].UpdateDataTableEntry(params);
+                                    
+                                        me.ResetProductionAlert();
+                                        me.ResetChangeoverAlert();
                                     }
-                                    
-                                    // start first pending product
-                                    
-                                    var query = {
-                                      "filters": {
-                                        "type": "AND",
-                                        "filters": [
-                                          {
-                                            "fieldName": "status",
-                                            "type": "EQ",
-                                            "value": "PENDING"
-                                          },
-                                          {
-                                            "fieldName": "productionLine",
-                                            "type": "EQ",
-                                            "value": me.name
-                                          }
-                                        ]
-                                      }
-                                    };
-                                    
-                                    var params = {
-                                        maxItems: 1 /* NUMBER */,
-                                        values: undefined /* INFOTABLE*/,
-                                        query: query /* QUERY */,
-                                        source: undefined /* STRING */,
-                                        tags: undefined /* TAGS */
-                                    };
-                                    
-                                    // result: INFOTABLE
-                                    var pending = Things["BayerProductionPlan"].QueryDataTableEntries(params);
-                                    
-                                    me.currentProductKey = pending.key;
-                                    
-                                    pending.startTime = new Date();
-                                    pending.status = "INPROGRESS";
-                                    
-                                    var params = {
-                                        sourceType: undefined /* STRING */,
-                                        values: pending /* INFOTABLE*/,
-                                        location: undefined /* LOCATION */,
-                                        source: undefined /* STRING */,
-                                        tags: undefined /* TAGS */
-                                    };
-                                    
-                                    // no return
-                                    Things["BayerProductionPlan"].UpdateDataTableEntry(params);
-                                    
-                                    me.ResetProductionAlert();
-                                    me.ResetChangeoverAlert();
+                                    catch (ex) {
+                                        logger.error(ex);
+                                        result = false;
+                                    }
+                                    finally {
+                                        me.updateProductLock = false;
+                                    }
                                     ]]>
                                     </code>
                                 </Row>
@@ -681,6 +765,12 @@
                                     <code>
                                     <![CDATA[
                                     var query = {
+                                        "sorts": [
+                                            {
+                                                "fieldName": "id",
+                                                "isAscending": true
+                                            }
+                                        ],
                                       "filters": {
                                         "fieldName": "productionLine",
                                         "type": "EQ",
@@ -689,7 +779,7 @@
                                     };
                                     
                                     var params = {
-                                    	maxItems: 999999 /* NUMBER */,
+                                    	maxItems: 999999999 /* NUMBER */,
                                     	values: undefined /* INFOTABLE*/,
                                     	query: query /* QUERY */,
                                     	source: undefined /* STRING */,
@@ -791,6 +881,170 @@
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
+                 name="LoadCSVv2">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var getChangeover = function(prevItem, newItem, entryId) {
+                                        // BayerProductionPlanDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.productId = "Cambio"; // STRING
+                                        newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                        newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.startTime = undefined; // DATETIME
+                                        newEntry.id = entryId; // INTEGER - isPrimaryKey = true
+                                        newEntry.endTime = undefined; // DATETIME
+                                        newEntry.workedHours = 0; // NUMBER
+                                        newEntry.orderNr = ""; // STRING
+                                        newEntry.productDescription = "Cambio"; // STRING
+                                        newEntry.targetQuantity = 0; // NUMBER
+                                        newEntry.targetQuantityPerHour = 0; // NUMBER
+                                        newEntry.status = "PENDING"; // STRING
+                                        
+                                        var params = {
+                                            sourceCode: prevItem.activeMaterialNumber /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.activeMaterialNumber /* STRING */
+                                        };
+                                    
+                                        // result: INTEGER
+                                        var activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime(params);
+                                        
+                                        var params = {
+                                            sourceCode: prevItem.blisterType /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.blisterType /* STRING */
+                                        };
+                                    
+                                        // result: INTEGER
+                                        var blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime(params);
+                                    
+                                        var params = {
+                                            sourceCode: prevItem.foldedBoxFormat /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.foldedBoxFormat /* STRING */
+                                        };
+                                    
+                                        // result: INTEGER
+                                        var fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime(params);
+                                    
+                                        newEntry.targetHours = (Math.max(activeMaterialTime, blisterTime, fbTime) + me.additionalChangeoverTime) / 60;
+                                        newEntry.targetHours = Math.round(newEntry.targetHours * 100) / 100;
+                                        newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                        
+                                        return newEntry;
+                                    }
+                                    
+                                    var params = {
+                                    	delimiter: ";" /* STRING */,
+                                    	filePath: path /* STRING */,
+                                    	repository: "BayerCSVRepository" /* THINGNAME */
+                                    };
+                                    
+                                    // result: INFOTABLE
+                                    var data = Things["BayerUtilities"].LoadCSVGeneric(params);
+                                    
+                                    var params = {
+                                    	infoTableName : "InfoTable",
+                                    	dataShapeName : "BayerProductionPlanDataShape"
+                                    };
+                                    
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                    
+                                    var params = {
+                                    	productionLine: me.name /* THINGNAME */
+                                    };
+                                    
+                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
+                                    var lastItem = Things["BayerProductionPlan"].GetLastItem(params);
+                                    var id = lastItem.rows.length > 0 ? lastItem.id : 0;
+                                    
+                                    var tableLength = data.rows.length;
+                                    
+                                    var prev = lastItem.rows.length > 0 ? lastItem.rows[0] : undefined;
+                                    for (var x = 0; x < tableLength; x++) {
+                                    	var row = data.rows[x];
+                                    	
+                                        // BayerProductionPlanDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.productId = row["Product Number"]; // STRING
+                                        
+                                        if(isNaN(parseInt(newEntry.productId))) {
+                                            logger.warn(me.name + ".LoadCSVv2: Skipping line " + x + "; product id " + newEntry.productId);
+                                            continue;
+                                        }
+                                        
+                                        newEntry.activeMaterialNumber = row["Ingredient product number"];
+                                        newEntry.blisterType = row["Blister  LxW"];
+                                        newEntry.foldedBoxFormat = row["Folded box LxHxW"];
+                                        newEntry.orderNr = row["Order Number"]; // STRING
+                                        newEntry.productDescription = row["Product Description"]; // STRING
+                                        newEntry.targetQuantity = parseFloat(row["Operation Quantity"].replace(',', '.').replace(' ', '')); // NUMBER
+                                        
+                                        newEntry.targetQuantityPerHour = Things["BayerMaterialPerformanceTable"].GetNominalRate({code: newEntry.productId, productionLine: me.name}) * me.nominalRateCorrection; // NUMBER
+                                        if (!newEntry.targetQuantityPerHour) {
+                                            logger.error(me.name + ": no NominalRate for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
+                                            newEntry.targetQuantityPerHour = 60;
+                                        }
+                                        newEntry.targetQuantityPerHour = Math.round(newEntry.targetQuantityPerHour);
+                                        
+                                        newEntry.targetHours = Math.round(newEntry.targetQuantity / newEntry.targetQuantityPerHour * 100) / 100; // NUMBER
+                                        newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                        newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                        newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.startTime = undefined; // DATETIME
+                                        newEntry.endTime = undefined; // DATETIME
+                                        newEntry.workedHours = 0; // NUMBER
+                                        newEntry.status = "PENDING"; // STRING
+                                        
+                                        if (prev) {
+                                            result.AddRow(getChangeover(prev, newEntry, ++id));
+                                        }
+                                        
+                                        newEntry.id = ++id; // INTEGER - isPrimaryKey = true
+                                        
+                                        prev = newEntry;
+                                    
+                                        result.AddRow(newEntry);
+                                    }
+                                    
+                                    var params = {
+                                    	sourceType: undefined /* STRING */,
+                                    	values: result /* INFOTABLE*/,
+                                    	location: undefined /* LOCATION */,
+                                    	source: undefined /* STRING */,
+                                    	tags: undefined /* TAGS */
+                                    };
+                                    
+                                    // no return
+                                    Things["BayerProductionPlan"].AddDataTableEntries(params);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
                  name="UpdateCounter">
                     <ConfigurationTables>
                         <ConfigurationTable
@@ -850,28 +1104,30 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
-                                    var currentProduct = me.GetCurrentProduct();
+                                    if (!me.updateProductLock) {
+                                        // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
+                                        var currentProduct = me.GetCurrentProduct();
                                     
-                                    // dateDifference(date1:DATETIME,date2:DATETIME):NUMBER
-                                    var difference = dateDifference(eventData.timestamp, currentProduct.startTime);
+                                        // dateDifference(date1:DATETIME,date2:DATETIME):NUMBER
+                                        var difference = dateDifference(eventData.timestamp, currentProduct.startTime);
                                     
-                                    currentProduct.workedHours = difference / 1000.0 / 60.0 / 60.0;
-                                    currentProduct.remainingHours = currentProduct.targetHours - currentProduct.workedHours;
-                                    if (currentProduct.remainingHours < 0) {
-                                        currentProduct.remainingHours = 0;
+                                        currentProduct.workedHours = difference / 1000.0 / 60.0 / 60.0;
+                                        currentProduct.remainingHours = currentProduct.targetHours - currentProduct.workedHours;
+                                        if (currentProduct.remainingHours < 0) {
+                                            currentProduct.remainingHours = 0;
+                                        }
+                                    
+                                        var params = {
+                                            sourceType: undefined /* STRING */,
+                                            values: currentProduct /* INFOTABLE*/,
+                                            location: undefined /* LOCATION */,
+                                            source: undefined /* STRING */,
+                                            tags: undefined /* TAGS */
+                                        };
+                                    
+                                        // no return
+                                        Things["BayerProductionPlan"].UpdateDataTableEntry(params);
                                     }
-                                    
-                                    var params = {
-                                    	sourceType: undefined /* STRING */,
-                                    	values: currentProduct /* INFOTABLE*/,
-                                    	location: undefined /* LOCATION */,
-                                    	source: undefined /* STRING */,
-                                    	tags: undefined /* TAGS */
-                                    };
-                                    
-                                    // no return
-                                    Things["BayerProductionPlan"].UpdateDataTableEntry(params);
                                     ]]>
                                     </code>
                                 </Row>
@@ -943,13 +1199,19 @@
             <RemoteEventBindings></RemoteEventBindings>
             <AlertConfigurations>
                 <AlertDefinitions
+                 name="additionalChangeoverTime"></AlertDefinitions>
+                <AlertDefinitions
                  name="counter"></AlertDefinitions>
                 <AlertDefinitions
                  name="currentProductKey"></AlertDefinitions>
                 <AlertDefinitions
                  name="kepwareCounter"></AlertDefinitions>
                 <AlertDefinitions
+                 name="nominalRateCorrection"></AlertDefinitions>
+                <AlertDefinitions
                  name="previousProductCounter"></AlertDefinitions>
+                <AlertDefinitions
+                 name="updateProductLock"></AlertDefinitions>
             </AlertConfigurations>
             <InstanceRunTimePermissions></InstanceRunTimePermissions>
         </ThingShape>

@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-06-01T12:23:13.519Z"
+         lastModifiedDate="2018-06-18T13:58:15.548Z"
          name="BayerProductionPlan"
          projectName="BayerIoT"
          published="false"
@@ -102,7 +102,7 @@
                             <accumulatedDataShape>
                                 <json>
                                 <![CDATA[
-                                {"fieldDefinitions":{"productId":{"name":"productId","aspects":{},"description":"","baseType":"STRING","ordinal":5},"remainingHours":{"name":"remainingHours","aspects":{},"description":"","baseType":"NUMBER","ordinal":7},"targetHours":{"name":"targetHours","aspects":{},"description":"","baseType":"NUMBER","ordinal":10},"productionLine":{"name":"productionLine","aspects":{"isPrimaryKey":true,"thingTemplate":"BayerProductionLine"},"description":"","baseType":"THINGNAME","ordinal":6},"producedQuantity":{"name":"producedQuantity","aspects":{},"description":"","baseType":"NUMBER","ordinal":3},"startTime":{"name":"startTime","aspects":{},"description":"","baseType":"DATETIME","ordinal":8},"endTime":{"name":"endTime","aspects":{},"description":"","baseType":"DATETIME","ordinal":0},"id":{"name":"id","aspects":{"isPrimaryKey":true},"description":"","baseType":"INTEGER","ordinal":1},"workedHours":{"name":"workedHours","aspects":{},"description":"","baseType":"NUMBER","ordinal":13},"orderNr":{"name":"orderNr","aspects":{},"description":"","baseType":"STRING","ordinal":2},"productDescription":{"name":"productDescription","aspects":{},"description":"","baseType":"STRING","ordinal":4},"status":{"name":"status","aspects":{},"description":"","baseType":"STRING","ordinal":9},"targetQuantity":{"name":"targetQuantity","aspects":{},"description":"","baseType":"NUMBER","ordinal":11},"targetQuantityPerHour":{"name":"targetQuantityPerHour","aspects":{},"description":"","baseType":"NUMBER","ordinal":12}}}
+                                {"fieldDefinitions":{"activeMaterialNumber":{"name":"activeMaterialNumber","aspects":{},"description":"","baseType":"STRING","ordinal":14},"productId":{"name":"productId","aspects":{},"description":"","baseType":"STRING","ordinal":5},"foldedBoxFormat":{"name":"foldedBoxFormat","aspects":{},"description":"","baseType":"STRING","ordinal":16},"remainingHours":{"name":"remainingHours","aspects":{},"description":"","baseType":"NUMBER","ordinal":7},"targetHours":{"name":"targetHours","aspects":{},"description":"","baseType":"NUMBER","ordinal":10},"productionLine":{"name":"productionLine","aspects":{"isPrimaryKey":true,"thingTemplate":"BayerProductionLine"},"description":"","baseType":"THINGNAME","ordinal":6},"producedQuantity":{"name":"producedQuantity","aspects":{},"description":"","baseType":"NUMBER","ordinal":3},"startTime":{"name":"startTime","aspects":{},"description":"","baseType":"DATETIME","ordinal":8},"endTime":{"name":"endTime","aspects":{},"description":"","baseType":"DATETIME","ordinal":0},"id":{"name":"id","aspects":{"isPrimaryKey":true},"description":"","baseType":"INTEGER","ordinal":1},"workedHours":{"name":"workedHours","aspects":{},"description":"","baseType":"NUMBER","ordinal":13},"blisterType":{"name":"blisterType","aspects":{},"description":"","baseType":"STRING","ordinal":15},"orderNr":{"name":"orderNr","aspects":{},"description":"","baseType":"STRING","ordinal":2},"productDescription":{"name":"productDescription","aspects":{},"description":"","baseType":"STRING","ordinal":4},"status":{"name":"status","aspects":{},"description":"","baseType":"STRING","ordinal":9},"targetQuantity":{"name":"targetQuantity","aspects":{},"description":"","baseType":"NUMBER","ordinal":11},"targetQuantityPerHour":{"name":"targetQuantityPerHour","aspects":{},"description":"","baseType":"NUMBER","ordinal":12}}}
                                 ]]>
                                 </json>
                             </accumulatedDataShape>
@@ -129,6 +129,32 @@
                      name="GetLastID">
                         <ResultType
                          baseType="INTEGER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetLastItem">
+                        <ResultType
+                         aspect.dataShape="BayerProductionPlanDataShape"
+                         aspect.isDataTableEntry="true"
+                         baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
@@ -169,7 +195,54 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        var params = {
+                                        	productionLine: productionLine /* THINGNAME */
+                                        };
+                                        
+                                        // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
+                                        var entry = me.GetLastItem(params);
+                                        
+                                        var result = 0;
+                                        if (entry && entry.rows.length > 0) {
+                                            result = entry.id;
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetLastItem">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
                                         var query = {
+                                            "sorts": [
+                                                {
+                                                    "fieldName": "id",
+                                                    "isAscending": false
+                                                }
+                                            ],
                                           "filters": {
                                             "fieldName": "productionLine",
                                             "type": "EQ",
@@ -178,7 +251,7 @@
                                         };
                                         
                                         var params = {
-                                        	maxItems: 99999999 /* NUMBER */,
+                                        	maxItems: 1 /* NUMBER */,
                                         	values: undefined /* INFOTABLE*/,
                                         	query: query /* QUERY */,
                                         	source: undefined /* STRING */,
@@ -188,9 +261,16 @@
                                         // result: INFOTABLE dataShape: "undefined"
                                         var entries = me.QueryDataTableEntries(params);
                                         
-                                        var result = 0;
-                                        if (entries && entries.rows.length > 0) {
-                                            result = entries.rows[entries.rows.length - 1].id;
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerProductionPlanDataShape"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        if (entries.rows.length > 0) {
+                                        	result.AddRow(entries.rows[entries.rows.length-1]);
                                         }
                                         ]]>
                                         </code>

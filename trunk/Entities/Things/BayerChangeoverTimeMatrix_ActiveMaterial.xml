@@ -11,16 +11,16 @@
         <Thing
          description=""
          documentationContent=""
-         effectiveThingPackage="StreamThing"
+         effectiveThingPackage="DataTableThing"
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-06-19T08:08:48.061Z"
-         name="BayerShiftSchedules"
+         lastModifiedDate="2018-06-20T12:30:11.992Z"
+         name="BayerChangeoverTimeMatrix_ActiveMaterial"
          projectName="BayerIoT"
          published="false"
          tags="Applications:Bayer"
-         thingTemplate="Stream"
+         thingTemplate="BayerChangeoverTimeMatrixTemplate"
          valueStream="">
             <avatar></avatar>
             <DesignTimePermissions>
@@ -60,6 +60,29 @@
                     </Rows>
                 </ConfigurationTable>
                 <ConfigurationTable
+                 description="Index Settings"
+                 isMultiRow="true"
+                 name="Indexes"
+                 ordinal="1">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.friendlyName="Index Field Names"
+                             baseType="STRING"
+                             description="Index fields"
+                             name="fieldNames"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.friendlyName="Index Name"
+                             baseType="STRING"
+                             description="Index name"
+                             name="name"
+                             ordinal="0"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows></Rows>
+                </ConfigurationTable>
+                <ConfigurationTable
                  description="Data Shape Configuration"
                  isMultiRow="false"
                  name="Settings"
@@ -79,13 +102,13 @@
                             <accumulatedDataShape>
                                 <json>
                                 <![CDATA[
-                                {"fieldDefinitions":{"shiftSchedule":{"name":"shiftSchedule","aspects":{"dataShape":"BayerScheduleDataShape"},"description":"","baseType":"INFOTABLE","ordinal":0},"totalQuantityProduced":{"name":"totalQuantityProduced","aspects":{},"description":"","baseType":"NUMBER","ordinal":2},"t1":{"name":"t1","aspects":{"isDeleted":true},"description":"","baseType":"DATETIME","ordinal":1},"totalTargetQuantity":{"name":"totalTargetQuantity","aspects":{},"description":"","baseType":"NUMBER","ordinal":3}}}
+                                {"fieldDefinitions":{"sourceCode":{"name":"sourceCode","aspects":{"isPrimaryKey":true},"description":"","baseType":"STRING","ordinal":1},"productionLine":{"name":"productionLine","aspects":{"isPrimaryKey":true,"thingTemplate":"BayerProductionLine"},"description":"","baseType":"THINGNAME","ordinal":0},"targetCode":{"name":"targetCode","aspects":{"isPrimaryKey":true},"description":"","baseType":"STRING","ordinal":2},"time":{"name":"time","aspects":{"units":"minutes"},"description":"","baseType":"INTEGER","ordinal":3}}}
                                 ]]>
                                 </json>
                             </accumulatedDataShape>
                             <dataShape>
                             <![CDATA[
-                            BayerShiftSchedulesDataShape
+                            BayerChangeoverTimeMatrixDataShape
                             ]]>
                             </dataShape>
                         </Row>
@@ -94,51 +117,14 @@
             </ConfigurationTables>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
-                <ServiceDefinitions>
-                    <ServiceDefinition
-                     aspect.isAsync="false"
-                     category=""
-                     description=""
-                     isAllowOverride="false"
-                     isLocalOnly="false"
-                     isOpen="false"
-                     isPrivate="false"
-                     name="UpdateSchedule">
-                        <ResultType
-                         baseType="NOTHING"
-                         description=""
-                         name="result"
-                         ordinal="0"></ResultType>
-                        <ParameterDefinitions>
-                            <FieldDefinition
-                             aspect.isRequired="true"
-                             baseType="STRING"
-                             description=""
-                             name="id"
-                             ordinal="2"></FieldDefinition>
-                            <FieldDefinition
-                             aspect.isRequired="true"
-                             aspect.thingTemplate="BayerProductionLine"
-                             baseType="THINGNAME"
-                             description=""
-                             name="line"
-                             ordinal="3"></FieldDefinition>
-                            <FieldDefinition
-                             aspect.isRequired="true"
-                             baseType="DATETIME"
-                             description=""
-                             name="time"
-                             ordinal="1"></FieldDefinition>
-                        </ParameterDefinitions>
-                    </ServiceDefinition>
-                </ServiceDefinitions>
+                <ServiceDefinitions></ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="UpdateSchedule">
+                     name="LoadFromCSV">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description="Script"
@@ -159,39 +145,46 @@
                                         <code>
                                         <![CDATA[
                                         var params = {
-                                        	streamEntryId: id /* STRING */
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerChangeoverTimeMatrixDataShape"
                                         };
                                         
-                                        // result: INFOTABLE dataShape: "undefined"
-                                        var entry = me.GetStreamEntry(params);
-                                        
-                                        var tableLength = entry.shiftSchedule.rows.length;
-                                        
-                                        for (var x = 0; x < tableLength; x++) {
-                                        	var row = entry.shiftSchedule.rows[x];
-                                        	
-                                            if (row.time.getHours() == time.getHours() && row.time.getMinutes() == time.getMinutes()) {
-                                                entry.totalQuantityProduced -= row.quantityProduced;
-                                                row.quantityProduced = 0;
-                                            }
-                                        }
-                                        
-                                        
-                                        var values = me.CreateValues();
-                                        
-                                        values.shiftSchedule = entry.shiftSchedule; //INFOTABLE
-                                        values.totalQuantityProduced = entry.totalQuantityProduced; //NUMBER
-                                        values.totalTargetQuantity = entry.totalTargetQuantity; //NUMBER
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTimeMatrixDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
                                         
                                         var params = {
-                                        	values: values /* INFOTABLE*/,
-                                        	streamEntryId: id /* STRING */,
+                                        	delimiter: ";" /* STRING */,
+                                        	filePath: path /* STRING */,
+                                        	repository: "BayerCSVRepository" /* THINGNAME */
+                                        };
+                                        
+                                        // result: INFOTABLE
+                                        var content = Things["BayerUtilities"].LoadCSVGeneric(params);
+                                        
+                                        var tableLength = content.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = content.rows[x];
+                                        	
+                                            // BayerChangeoverTimeMatrixDataShape entry object
+                                            var newEntry = new Object();
+                                            newEntry.sourceCode = row["Char. Value: Preceding Order"]; // STRING - isPrimaryKey = true
+                                            newEntry.productionLine = productionLine; // THINGNAME - isPrimaryKey = true
+                                            newEntry.targetCode = row["Char. Value: Succeeding Order"]; // STRING - isPrimaryKey = true
+                                            newEntry.time = row["Setup time"]; // INTEGER
+                                            
+                                            result.AddRow(newEntry);
+                                        }
+                                        
+                                        var params = {
+                                        	sourceType: undefined /* STRING */,
+                                        	values: result /* INFOTABLE*/,
                                         	location: undefined /* LOCATION */,
-                                        	source: line /* STRING */,
+                                        	source: undefined /* STRING */,
                                         	tags: undefined /* TAGS */
                                         };
                                         
-                                        me.UpdateStreamEntry(params);
+                                        me.AddOrUpdateDataTableEntries(params);
                                         ]]>
                                         </code>
                                     </Row>
