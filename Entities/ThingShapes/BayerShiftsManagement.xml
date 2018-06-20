@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-07T10:12:33.595Z"
+         lastModifiedDate="2018-06-19T12:02:52.149Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -318,6 +318,12 @@
                                     var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
                                     
                                     var query = {
+                                        "sorts": [
+                                            {
+                                                "fieldName": "id",
+                                                "isAscending": true
+                                            }
+                                        ],
                                       "filters": {
                                         "type": "AND",
                                         "filters": [
@@ -847,7 +853,7 @@
                                     <code>
                                     <![CDATA[
                                     // result: STRING
-                                    var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId();
+                                    var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId({ lineName: me.name });
                                     
                                     var params = {
                                     	streamEntryId: shiftId /* STRING */

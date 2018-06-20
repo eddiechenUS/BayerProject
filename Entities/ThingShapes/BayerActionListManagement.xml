@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-06T07:59:08.659Z"
+         lastModifiedDate="2018-06-19T11:36:48.807Z"
          name="BayerActionListManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -80,6 +80,53 @@
                          description=""
                          name="action"
                          ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="DeleteAction">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="USERNAME"
+                         description=""
+                         name="assignedTo"
+                         ordinal="1"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="createdTime"
+                         ordinal="5"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="dueDate"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="problemDescription"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="SolutionDescription"
+                         ordinal="4"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="status"
+                         ordinal="6"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -246,6 +293,53 @@
                                     };
                                     
                                     me.EditAction(params);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="DeleteAction">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var values = Things["BayerActionList"].CreateValues();
+                                    
+                                    values.productionLine = me.name; //THINGNAME [Primary Key]
+                                    values.solutionDescription = SolutionDescription; //STRING
+                                    values.dueDate = dueDate; //DATETIME
+                                    values.problemDescription = problemDescription; //STRING
+                                    values.createdTime = createdTime; //DATETIME [Primary Key]
+                                    values.assignedTo = assignedTo; //USERNAME
+                                    values.status = status; //STRING
+                                    
+                                    var params = {
+                                    	values: values /* INFOTABLE*/
+                                    };
+                                    
+                                    logger.warn("DeleteAction");
+                                    // no return
+                                    Things["BayerActionList"].DeleteDataTableEntries(params);
                                     ]]>
                                     </code>
                                 </Row>

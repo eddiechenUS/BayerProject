@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-31T08:55:30.556Z"
+         lastModifiedDate="2018-06-18T11:05:33.926Z"
          name="BayerUploadExcelPopup"
          projectName="BayerIoT"
          rows="0.0"
@@ -72,6 +72,18 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetProductionPlan"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "a6bec457-c542-4b6e-90ee-023101da847f",
+                    "Name" : "LoadCSVv2",
+                    "Parameters" : { },
+                    "Properties" : {
+                      "CustomErrorMessage" : "[[service.error]]",
+                      "ShowErrorMessage" : true
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "LoadCSVv2"
                   } ]
                 },
                 "Session" : {
@@ -152,18 +164,24 @@
                 "TargetArea" : "UI",
                 "TargetId" : "dhxgrid-20",
                 "TargetSection" : ""
+              }, {
+                "Id" : "7b2aebbf-7123-4f02-b9fe-a6a8470ec823",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "FullPath",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "path",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "fileupload-11",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "LoadCSVv2",
+                "TargetSection" : "DynamicThingShapes_BayerProductionManagement"
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
-                "EventHandlerArea" : "Data",
-                "EventHandlerId" : "DynamicThingShapes_BayerProductionManagement",
-                "EventHandlerService" : "LoadCSV",
-                "EventTriggerArea" : "UI",
-                "EventTriggerEvent" : "UploadComplete",
-                "EventTriggerId" : "fileupload-11",
-                "EventTriggerSection" : "",
-                "Id" : "b2cfe5c2-20c6-421a-8b4f-8185b157d91c"
-              }, {
                 "EventHandlerArea" : "Mashup",
                 "EventHandlerId" : "mashup-root",
                 "EventHandlerService" : "CloseIfPopup",
@@ -190,6 +208,24 @@
                 "EventTriggerId" : "button-22",
                 "EventTriggerSection" : "",
                 "Id" : "85f5d234-6617-414f-b1af-43969167bf42"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingShapes_BayerProductionManagement",
+                "EventHandlerService" : "LoadCSVv2",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "UploadComplete",
+                "EventTriggerId" : "fileupload-11",
+                "EventTriggerSection" : "",
+                "Id" : "e8d5968f-ec90-472c-9204-889ebde60c8f"
+              }, {
+                "EventHandlerArea" : "Mashup",
+                "EventHandlerId" : "mashup-root",
+                "EventHandlerService" : "CloseIfPopup",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "LoadCSVv2",
+                "EventTriggerSection" : "DynamicThingShapes_BayerProductionManagement",
+                "Id" : "4b5ad8db-ad7b-41f6-ae7b-af8d150452d3"
               } ],
               "RunTimePermissions" : { },
               "UI" : {

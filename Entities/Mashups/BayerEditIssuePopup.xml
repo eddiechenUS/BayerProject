@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-07T14:35:38.878Z"
+         lastModifiedDate="2018-06-18T13:18:32.143Z"
          name="BayerEditIssuePopup"
          projectName="BayerIoT"
          rows="0.0"
@@ -49,6 +49,7 @@
             </ParameterDefinitions>
             <Things>
                 <Thing>BayerIssues</Thing>
+                <Thing>BayerIssuePage</Thing>
             </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates>
@@ -109,6 +110,61 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerIssuePage" : {
+                  "DataName" : "Things_BayerIssuePage",
+                  "EntityName" : "BayerIssuePage",
+                  "EntityType" : "Things",
+                  "Id" : "5ad3c640-ccfc-43dd-8e71-6bfdc9c9c7fd",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "c22aed6a-9ed2-4536-9b4b-e834d2bf5523",
+                    "Name" : "GetPropertyValues",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetPropertyValues"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "66f110d9-e3d2-4ec2-adb2-fe4bc9006098",
+                    "Name" : "SetMinutes",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "SetMinutes"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "6118fc51-704e-4b15-8231-ff4f52454f6d",
+                    "Name" : "SetHours",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "SetHours"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "87de4d70-9c85-4cd9-8f87-1c719044173e",
+                    "Name" : "SetIssueDate",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "SetIssueDate"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "d7485c07-28d1-4100-9fea-d0eb1329ffbf",
+                    "Name" : "GetShiftHours",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetShiftHours"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "76ba1192-7780-4018-a2fc-a54e87861b56",
+                    "Name" : "GetShiftMinutes",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetShiftMinutes"
                   } ]
                 },
                 "Things_BayerIssues" : {
@@ -369,23 +425,6 @@
                 "TargetId" : "dhxlist-40",
                 "TargetSection" : ""
               }, {
-                "Id" : "6d6692d3-0174-4f16-aaa2-92f41cca9206",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "timestamp",
-                  "SourcePropertyBaseType" : "DATETIME",
-                  "SourcePropertyType" : "Field",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "ANYSCALAR",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetIssue",
-                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
-                "TargetArea" : "UI",
-                "TargetId" : "valuedisplay-90",
-                "TargetSection" : ""
-              }, {
                 "Id" : "2aa1aa6c-211f-4793-b337-c6cc15472b87",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "entryId",
@@ -492,6 +531,23 @@
                 "TargetArea" : "Data",
                 "TargetId" : "DeleteStreamEntry",
                 "TargetSection" : "Things_BayerIssues"
+              }, {
+                "Id" : "3a706966-db1b-48ba-a699-84feb95e566c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timestamp",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetIssue",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-112",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -593,6 +649,24 @@
                 "EventTriggerId" : "button-106",
                 "EventTriggerSection" : "",
                 "Id" : "976dc5a0-fc92-4dac-a9d7-6120f19229f0"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerIssuePage",
+                "EventHandlerService" : "GetShiftHours",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "7051c069-f5f2-481a-a859-c8ec69631b65"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerIssuePage",
+                "EventHandlerService" : "GetShiftMinutes",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "4942c92f-44b9-4b5e-8e53-65cea5a2d2c4"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -636,7 +710,7 @@
                     "Description" : "",
                     "ParameterName" : "entryId"
                   } ],
-                  "id_index" : 106,
+                  "id_index" : 112,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -1140,8 +1214,8 @@
                                 "LeftSidebar" : false,
                                 "LeftSidebarWidth" : 0,
                                 "Orientation" : "horizontal",
-                                "PctColumn1" : 25,
-                                "PctColumn2" : 25,
+                                "PctColumn1" : 29,
+                                "PctColumn2" : 21,
                                 "PctColumn3" : 50,
                                 "PctColumn4" : 29,
                                 "PctColumn5" : 1,
@@ -1291,7 +1365,7 @@
                                         "Overflow" : "hidden",
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
-                                        "TextIfNoValue" : "[[Bayer.Date]]",
+                                        "TextIfNoValue" : "[[Bayer.Time]]",
                                         "TextIfNoValueOffset" : 0,
                                         "TextIfNoValueStyle" : "Bayer_GreyValue",
                                         "TextWrap" : true,
@@ -1363,7 +1437,7 @@
                                       "Widgets" : [ {
                                         "Properties" : {
                                           "Area" : "UI",
-                                          "DisplayName" : "shape-30",
+                                          "DisplayName" : "shape-111",
                                           "DynamicFillOrientation" : "vertical",
                                           "DynamicRangeMaximum" : 100,
                                           "DynamicRangeMinimum" : 0,
@@ -1371,11 +1445,10 @@
                                           "GradientOrientation" : "vertical",
                                           "GradientType" : "linear",
                                           "Height" : 30,
-                                          "Id" : "shape-30",
-                                          "Left" : 0,
+                                          "Id" : "shape-111",
+                                          "Left" : 65,
                                           "RectangleCornerRadius" : 10,
                                           "ResponsiveLayout" : false,
-                                          "ShapeFormatter_StateParameters" : [ ],
                                           "ShapeStyle" : "Bayer_TextAreaStyle",
                                           "ShapeType" : "rectangle",
                                           "ShowDataLoading" : true,
@@ -1384,32 +1457,32 @@
                                           "UnfilledBackgroundStyle" : "DefaultShapeUnfilledBackgroundStyle",
                                           "Visible" : true,
                                           "Width" : 150,
-                                          "Z-index" : 6,
+                                          "Z-index" : 10,
                                           "__TypeDisplayName" : "Shape"
                                         },
                                         "Widgets" : [ ]
                                       }, {
                                         "Properties" : {
-                                          "Alignment" : "center",
+                                          "Alignment" : "left",
                                           "Area" : "UI",
                                           "BackgroundFill" : "content",
-                                          "DisplayName" : "valuedisplay-90",
-                                          "Height" : 30,
-                                          "Id" : "valuedisplay-90",
+                                          "DisplayName" : "valuedisplay-112",
+                                          "Height" : 22,
+                                          "Id" : "valuedisplay-112",
                                           "ImageScaling" : "Width",
                                           "Label" : "",
                                           "LabelAlignment" : "left",
-                                          "Left" : 0,
+                                          "Left" : 67,
                                           "Overflow" : "hidden",
                                           "ResponsiveLayout" : false,
                                           "ShowDataLoading" : true,
                                           "TextIfNoValue" : "",
                                           "TextIfNoValueOffset" : 0,
-                                          "TextIfNoValueStyle" : "DefaultValueDisplayNoTextStyle",
+                                          "TextIfNoValueStyle" : "Bayer_GreyValue",
                                           "TextWrap" : true,
                                           "ToolTipField" : "",
                                           "ToolTipStyle" : "DefaultTooltipStyle",
-                                          "Top" : 10,
+                                          "Top" : 15,
                                           "Type" : "valuedisplay",
                                           "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                                           "ValueDisplayStyle" : "Bayer_GreyValue",
@@ -1430,7 +1503,7 @@
                                           "ValueFormat_StateParameters" : [ ],
                                           "VerticalAlignment" : "middle",
                                           "Visible" : true,
-                                          "Width" : 160,
+                                          "Width" : 135,
                                           "Z-index" : 10,
                                           "__TypeDisplayName" : "Value Display",
                                           "__supportsLabel" : true,

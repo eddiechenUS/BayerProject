@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-06-08T10:29:35.422Z"
+         lastModifiedDate="2018-06-18T09:59:54.071Z"
          name="BayerReportsPage"
          projectName="BayerIoT"
          published="false"
@@ -169,13 +169,15 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var params = {
-                                        	startTime: startTime /* DATETIME */,
-                                        	endTime: endTime /* DATETIME */
-                                        };
+                                        if (lineName) {
+                                            var params = {
+                                                startTime: startTime /* DATETIME */,
+                                                endTime: endTime /* DATETIME */
+                                            };
                                         
-                                        // result: INFOTABLE dataShape: BayerChangeoverTimesDataShape
-                                        var result = Things[lineName].GetChangeoverTimes(params);
+                                            // result: INFOTABLE dataShape: BayerChangeoverTimesDataShape
+                                            var result = Things[lineName].GetChangeoverTimes(params);
+                                        }
                                         ]]>
                                         </code>
                                     </Row>
@@ -211,7 +213,7 @@
                                             shift2 : dateAddHours(startTime, 8),
                                             shift3 : dateAddHours(startTime, 16)
                                         }
-                                        logger.warn(startTime.getHours());
+                                        
                                         var params = {
                                             infoTableName : "InfoTable",
                                             dataShapeName : "BayerProblemsAndIssuesDataShape"
@@ -219,21 +221,23 @@
                                         
                                         var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
                                         
-                                        for (var i = 1; i < 4; i++) {
-                                            var params = {
-                                                shiftStart: shifts["shift" + i] /* DATETIME */
-                                            };
-                                            
-                                            var issuesIT = Things[lineName].GetIssues(params);
-                                            
-                                            for(var j = 0; j < issuesIT.rows.length; j++) {
-                                                var row = new Object();
-                                        		row.Shift = i;
-                                                row.IssueDescription = issuesIT.getRow(j).problem;
-                                                row.Duration = issuesIT.getRow(j).duration;
-                                                row.IssueSolution = issuesIT.getRow(j).solution;
-                                                row.IssueCategory = issuesIT.getRow(j).category;
-                                                result.AddRow(row);
+                                        if (lineName) {
+                                            for (var i = 1; i < 4; i++) {
+                                                var params = {
+                                                    shiftStart: shifts["shift" + i] /* DATETIME */
+                                                };
+                                        
+                                                var issuesIT = Things[lineName].GetIssues(params);
+                                        
+                                                for(var j = 0; j < issuesIT.rows.length; j++) {
+                                                    var row = new Object();
+                                                    row.Shift = i;
+                                                    row.IssueDescription = issuesIT.getRow(j).problem;
+                                                    row.Duration = issuesIT.getRow(j).duration;
+                                                    row.IssueSolution = issuesIT.getRow(j).solution;
+                                                    row.IssueCategory = issuesIT.getRow(j).category;
+                                                    result.AddRow(row);
+                                                }
                                             }
                                         }
                                         ]]>
@@ -266,30 +270,34 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var params = {
-                                        	startTime: startTime /* DATETIME */,
-                                        	endTime: endTime /* DATETIME */
-                                        };
+                                        if (lineName) {
+                                            var params = {
+                                                startTime: startTime /* DATETIME */,
+                                                endTime: endTime /* DATETIME */
+                                            };
                                         
-                                        // result: INFOTABLE dataShape: BayerDailyPerformanceDataShape
-                                        var dailyPerformance = Things[lineName].GetDailyPerformanceForTimeframe(params);
+                                            // result: INFOTABLE dataShape: BayerDailyPerformanceDataShape
+                                            var dailyPerformance = Things[lineName].GetDailyPerformanceForTimeframe(params);
                                         
-                                        var params = {
-                                        	infoTableName : "InfoTable",
-                                        	dataShapeName : "BayerProductionPerformanceDataShape"
-                                        };
+                                            var params = {
+                                                infoTableName : "InfoTable",
+                                                dataShapeName : "BayerProductionPerformanceDataShape"
+                                            };
                                         
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPerformanceDataShape)
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                            // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPerformanceDataShape)
+                                            var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
                                         
-                                        yesterdayPerformance = dailyPerformance.dailyPerformance;
-                                        for (var i = 0; i < yesterdayPerformance.rows.length; i++) {
-                                            var row = new Object();
-                                            row.Shift = yesterdayPerformance[i].shift.replace("Shift ", "");
-                                            row.ActualQuantity = yesterdayPerformance[i].quantityProduced;
-                                            row.TargetQuantity = yesterdayPerformance[i].targetQuantity;
-                                            row.GapPsc = yesterdayPerformance[i].quantityProduced - yesterdayPerformance[i].targetQuantity;
-                                            result.AddRow(row);
+                                            if (dailyPerformance.rows.length > 0) {
+                                                yesterdayPerformance = dailyPerformance.dailyPerformance;
+                                                for (var i = 0; i < yesterdayPerformance.rows.length; i++) {
+                                                    var row = new Object();
+                                                    row.Shift = yesterdayPerformance[i].shift.replace("Shift ", "");
+                                                    row.ActualQuantity = yesterdayPerformance[i].quantityProduced;
+                                                    row.TargetQuantity = yesterdayPerformance[i].targetQuantity;
+                                                    row.GapPsc = yesterdayPerformance[i].quantityProduced - yesterdayPerformance[i].targetQuantity;
+                                                    result.AddRow(row);
+                                                }
+                                            }
                                         }
                                         ]]>
                                         </code>

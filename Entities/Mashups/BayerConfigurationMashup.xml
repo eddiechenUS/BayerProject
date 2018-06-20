@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-08T09:30:29.536Z"
+         lastModifiedDate="2018-06-20T14:27:58.365Z"
          name="BayerConfigurationMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -44,6 +44,49 @@
             {
               "CustomMashupCss" : "",
               "Data" : {
+                "DynamicThingTemplates_BayerProductionLine" : {
+                  "DataName" : "DynamicThingTemplates_BayerProductionLine",
+                  "EntityName" : "BayerProductionLine",
+                  "EntityType" : "DynamicThingTemplates",
+                  "Id" : "80e39e66-1262-4e9e-a51b-c901d8f3d7b0",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "354dedda-4f40-4304-bc3a-c9e067e5b659",
+                    "Name" : "LoadCSVv2",
+                    "Parameters" : { },
+                    "Properties" : {
+                      "CustomErrorMessage" : "[[service.error]]",
+                      "ShowErrorMessage" : true
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "LoadCSVv2"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "35c98872-dd75-41a3-a4ad-c9f4d7dcfd92",
+                    "Name" : "GetProductionPlan",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetProductionPlan"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "ecdacd6e-aee1-4660-9ff7-2c6650a47980",
+                    "Name" : "ResetAll",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "ResetAll"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "7b71991d-1ed0-4611-8e46-2cef65756030",
+                    "Name" : "ScheduleShifts",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "ScheduleShifts"
+                  } ]
+                },
                 "Session" : {
                   "DataName" : "Session",
                   "EntityName" : "",
@@ -124,6 +167,71 @@
                 "TargetArea" : "UI",
                 "TargetId" : "mashupcontainer-9",
                 "TargetSection" : ""
+              }, {
+                "Id" : "132a7b14-aaf0-41ea-afde-e3fe8ac2e5db",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "name",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "lineName",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetImplementingThingsWithData",
+                "SourceSection" : "ThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "mashupcontainer-10",
+                "TargetSection" : ""
+              }, {
+                "Id" : "aa33a889-c0fb-4209-b158-bca33ca2928c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "name",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "value",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Entity"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetImplementingThingsWithData",
+                "SourceSection" : "ThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "EntityName",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "b721585c-28a2-4685-a5d6-12619908d740",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "FullPath",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "path",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "fileupload-14",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "LoadCSVv2",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "cbce1bd3-c5d0-4d40-8577-15be088f7dd3",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetProductionPlan",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxgrid-18",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -135,6 +243,60 @@
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
                 "Id" : "d9ed9e8d-9f3a-4758-a3bf-b77fdcb0dbc2"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "LoadCSVv2",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "UploadComplete",
+                "EventTriggerId" : "fileupload-14",
+                "EventTriggerSection" : "",
+                "Id" : "0603fc8d-6dc0-4d71-bb17-969da2461489"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetProductionPlan",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "LoadCSVv2",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "441b2a92-b544-4f3c-92b2-079a4a742d31"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetProductionPlan",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "SelectedRowsChanged",
+                "EventTriggerId" : "GetImplementingThingsWithData",
+                "EventTriggerSection" : "ThingTemplates_BayerProductionLine",
+                "Id" : "a5672696-a016-4fd0-af1c-f3fea453da96"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "ResetAll",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-19",
+                "EventTriggerSection" : "",
+                "Id" : "7c0f6694-d2ae-452b-9207-2b564162dba4"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "ScheduleShifts",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-20",
+                "EventTriggerSection" : "",
+                "Id" : "f4d5cd56-2a13-4b8a-a593-e5600279e0f9"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetProductionPlan",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "ResetAll",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "5a92ed34-5620-4e18-a656-f5fbf4733817"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -169,7 +331,7 @@
                   "Width" : 1024,
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
-                  "id_index" : 12,
+                  "id_index" : 20,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -180,7 +342,7 @@
                     "Footer" : false,
                     "FooterHeight" : 0,
                     "Header" : true,
-                    "HeaderHeight" : 100,
+                    "HeaderHeight" : 50,
                     "Id" : "layout-5",
                     "IncludeSpacingInFixedAreas" : false,
                     "IsPrintLayout" : false,
@@ -353,7 +515,7 @@
                     "Widgets" : [ {
                       "Properties" : {
                         "Area" : "UI",
-                        "CurrentTab" : 2,
+                        "CurrentTab" : 1,
                         "DefaultTabAtRuntime" : 1,
                         "DisplayName" : "tabsv2-1",
                         "Height" : 300,
@@ -489,22 +651,446 @@
                         "Widgets" : [ {
                           "Properties" : {
                             "Area" : "UI",
-                            "DisplayName" : "mashupcontainer-8",
-                            "Height" : 300,
-                            "Id" : "mashupcontainer-8",
-                            "Left" : 270,
-                            "MashupParameters" : [ ],
+                            "Columns" : 0,
+                            "DisplayName" : "layout-15",
+                            "Footer" : true,
+                            "FooterHeight" : 120,
+                            "Header" : false,
+                            "HeaderHeight" : 0,
+                            "Id" : "layout-15",
+                            "IncludeSpacingInFixedAreas" : false,
+                            "IsPrintLayout" : false,
+                            "Left" : 245,
+                            "LeftSidebar" : false,
+                            "LeftSidebarWidth" : 0,
+                            "Orientation" : "vertical",
+                            "PctColumn1" : 50,
+                            "PctColumn2" : 50,
+                            "PctColumn3" : 1,
+                            "PctColumn4" : 1,
+                            "PctColumn5" : 1,
+                            "PctColumn6" : 1,
+                            "PctColumn7" : 1,
+                            "PctColumn8" : 1,
+                            "PctRow1" : 100,
+                            "PctRow2" : 0,
+                            "PctRow3" : 0,
+                            "PctRow4" : 0,
+                            "PctRow5" : 0,
+                            "PctRow6" : 0,
+                            "PctRow7" : 0,
+                            "PctRow8" : 0,
+                            "PrintMarginLeftRight" : 0.5,
+                            "PrintMarginTopBottom" : 0.5,
+                            "PrintWidth" : 650,
                             "ResponsiveLayout" : true,
+                            "RightSidebar" : false,
+                            "RightSidebarWidth" : 0,
+                            "Rows" : 1,
                             "ShowDataLoading" : true,
-                            "TabSequenceGroup" : 0,
-                            "Top" : 160,
-                            "Type" : "mashupcontainer",
+                            "Spacing" : 2,
+                            "Top" : 80,
+                            "Type" : "layout",
                             "Visible" : true,
-                            "Width" : 400,
                             "Z-index" : 10,
-                            "__TypeDisplayName" : "Contained Mashup"
+                            "__TypeDisplayName" : "Layout"
                           },
-                          "Widgets" : [ ]
+                          "Widgets" : [ {
+                            "Properties" : {
+                              "AnimateExpandCollapse" : true,
+                              "Area" : "UI",
+                              "BGImageRepeat" : "no-repeat",
+                              "BGImageSize" : "auto",
+                              "DisplayName" : "Row 1",
+                              "ExpandCollapseTabLocation" : "outside",
+                              "Expanded" : true,
+                              "Id" : "container-16",
+                              "MinHeight" : 0,
+                              "MinWidth" : 0,
+                              "Overlay" : false,
+                              "OverlayIsTransparent" : false,
+                              "ResponsiveLayout" : true,
+                              "ShowDataLoading" : true,
+                              "ShowExpandCollapseTab" : false,
+                              "Style" : "DefaultContainerStyle",
+                              "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                              "TabExpandStyle" : "DefaultTabExpandStyle",
+                              "TabHeight" : 36,
+                              "TabLocation" : "center",
+                              "TabOffset" : 0,
+                              "TabWidth" : 36,
+                              "Type" : "container",
+                              "Visible" : true,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Container"
+                            },
+                            "Widgets" : [ {
+                              "Properties" : {
+                                "AlignHeader" : false,
+                                "Area" : "UI",
+                                "AutoSelectFirstRow" : false,
+                                "CellTextWrapping" : false,
+                                "ColumnFormat" : {
+                                  "formatInfo" : [ {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "productionLine",
+                                    "FormatOptions" : {
+                                      "FormatString" : "text",
+                                      "renderer" : "THINGNAME"
+                                    },
+                                    "Title" : "productionLine",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "id",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0",
+                                      "renderer" : "INTEGER"
+                                    },
+                                    "Title" : "id",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "productId",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "renderer" : "STRING"
+                                    },
+                                    "Title" : "productId",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "orderNr",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "renderer" : "STRING"
+                                    },
+                                    "Title" : "orderNr",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "productDescription",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "renderer" : "STRING"
+                                    },
+                                    "Title" : "productDescription",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetQuantity",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "renderer" : "NUMBER"
+                                    },
+                                    "Title" : "targetQuantity",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "renderer" : "NUMBER"
+                                    },
+                                    "Title" : "targetHours",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetQuantityPerHour",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "renderer" : "NUMBER"
+                                    },
+                                    "Title" : "targetQuantityPerHour",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "status",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "renderer" : "STRING"
+                                    },
+                                    "Title" : "status",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "remainingHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "renderer" : "NUMBER"
+                                    },
+                                    "Title" : "remainingHours",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "workedHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "renderer" : "NUMBER"
+                                    },
+                                    "Title" : "workedHours",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "producedQuantity",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "renderer" : "NUMBER"
+                                    },
+                                    "Title" : "producedQuantity",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "startTime",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "renderer" : "DATETIME"
+                                    },
+                                    "Title" : "startTime",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "endTime",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "renderer" : "DATETIME"
+                                    },
+                                    "Title" : "endTime",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  } ]
+                                },
+                                "CurrentScrollTop" : 0,
+                                "DisplayName" : "dhxgrid-18",
+                                "FocusStyle" : "DefaultFocusStyle",
+                                "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
+                                "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
+                                "GridHeaderStyle" : "DefaultGridHeaderStyle",
+                                "GridHeaderTextCase" : "capitalize",
+                                "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
+                                "Height" : 200,
+                                "Id" : "dhxgrid-18",
+                                "IsEditable" : false,
+                                "IsPrintLayout" : false,
+                                "Left" : 320,
+                                "MultiSelect" : false,
+                                "ResponsiveLayout" : true,
+                                "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
+                                "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
+                                "RowFormat_StateParameters" : [ ],
+                                "RowHeight" : 30,
+                                "RowHoverStyle" : "DefaultRowHoverStyle",
+                                "RowSelectedStyle" : "DefaultRowSelectedStyle",
+                                "ScrollTop" : 0,
+                                "ShowAllColumns" : true,
+                                "ShowDataLoading" : true,
+                                "TabSequence" : 0,
+                                "Top" : 70,
+                                "Type" : "dhxgrid",
+                                "Visible" : true,
+                                "Width" : 400,
+                                "Z-index" : 10,
+                                "__TypeDisplayName" : "Grid"
+                              },
+                              "Widgets" : [ ]
+                            } ]
+                          }, {
+                            "Properties" : {
+                              "AnimateExpandCollapse" : true,
+                              "Area" : "UI",
+                              "BGImageRepeat" : "no-repeat",
+                              "BGImageSize" : "auto",
+                              "DisplayName" : "Footer",
+                              "ExpandCollapseTabLocation" : "outside",
+                              "Expanded" : true,
+                              "Id" : "container-17",
+                              "MinHeight" : 0,
+                              "MinWidth" : 0,
+                              "Overlay" : false,
+                              "OverlayIsTransparent" : false,
+                              "ResponsiveLayout" : true,
+                              "ShowDataLoading" : true,
+                              "ShowExpandCollapseTab" : false,
+                              "Style" : "DefaultContainerStyle",
+                              "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                              "TabExpandStyle" : "DefaultTabExpandStyle",
+                              "TabHeight" : 36,
+                              "TabLocation" : "center",
+                              "TabOffset" : 0,
+                              "TabWidth" : 36,
+                              "Type" : "container",
+                              "Visible" : true,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Container"
+                            },
+                            "Widgets" : [ {
+                              "Properties" : {
+                                "Area" : "UI",
+                                "DisplayName" : "panel-13",
+                                "Height" : 200,
+                                "HideScrollbars" : false,
+                                "HorizontalAnchor" : "left",
+                                "Id" : "panel-13",
+                                "Left" : 30,
+                                "ResponsiveLayout" : true,
+                                "ShowDataLoading" : true,
+                                "Style" : "DefaultPanelStyle",
+                                "Top" : 35,
+                                "Type" : "panel",
+                                "VerticalAnchor" : "top",
+                                "Visible" : true,
+                                "Width" : 300,
+                                "Z-index" : 10,
+                                "__TypeDisplayName" : "Panel"
+                              },
+                              "Widgets" : [ {
+                                "Properties" : {
+                                  "AllowedFileTypes" : "",
+                                  "Area" : "UI",
+                                  "DisplayName" : "fileupload-14",
+                                  "DisplayPathTextBox" : false,
+                                  "DisplayRepositorySelector" : false,
+                                  "FileName" : "",
+                                  "FocusStyle" : "DefaultButtonFocusStyle",
+                                  "FullPath" : "",
+                                  "Height" : 40,
+                                  "Id" : "fileupload-14",
+                                  "Left" : 5,
+                                  "Path" : "/",
+                                  "RepositoryName" : "BayerCSVRepository",
+                                  "RepositoryStyle" : "DefaultRepositoryStyle",
+                                  "ResponsiveLayout" : false,
+                                  "ShowDataLoading" : true,
+                                  "Style" : "DefaultFileUploadStyle",
+                                  "TabSequence" : 0,
+                                  "Top" : 5,
+                                  "Type" : "fileupload",
+                                  "Visible" : true,
+                                  "Width" : 302,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "File Upload"
+                                },
+                                "Widgets" : [ ]
+                              }, {
+                                "Properties" : {
+                                  "ActiveStyle" : "DefaultButtonActiveStyle",
+                                  "Area" : "UI",
+                                  "CancelConfirmationButton" : "button2",
+                                  "ConfirmationButton1Label" : "Yes",
+                                  "ConfirmationButton2Label" : "No",
+                                  "ConfirmationPrompt" : "Do Action?",
+                                  "ConfirmationRequired" : false,
+                                  "ConfirmationTitle" : "Confirm Action",
+                                  "ContextId" : "",
+                                  "DefaultConfirmationButton" : "button1",
+                                  "Disabled" : false,
+                                  "DisabledStyle" : "DefaultButtonDisabledStyle",
+                                  "DisplayName" : "button-19",
+                                  "FocusStyle" : "DefaultButtonFocusStyle",
+                                  "Height" : 30,
+                                  "HoverStyle" : "DefaultButtonHoverStyle",
+                                  "IconAlignment" : "left",
+                                  "Id" : "button-19",
+                                  "Label" : "RESET",
+                                  "Left" : 345,
+                                  "ResponsiveLayout" : false,
+                                  "RoundedCorners" : true,
+                                  "ShowDataLoading" : true,
+                                  "Style" : "DefaultButtonStyle",
+                                  "TabSequence" : 0,
+                                  "ToolTipField" : "",
+                                  "ToolTipStyle" : "DefaultTooltipStyle",
+                                  "Top" : 15,
+                                  "Type" : "button",
+                                  "Visible" : true,
+                                  "Width" : 75,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "Button",
+                                  "__supportsTooltip" : true
+                                },
+                                "Widgets" : [ ]
+                              }, {
+                                "Properties" : {
+                                  "ActiveStyle" : "DefaultButtonActiveStyle",
+                                  "Area" : "UI",
+                                  "CancelConfirmationButton" : "button2",
+                                  "ConfirmationButton1Label" : "Yes",
+                                  "ConfirmationButton2Label" : "No",
+                                  "ConfirmationPrompt" : "Do Action?",
+                                  "ConfirmationRequired" : false,
+                                  "ConfirmationTitle" : "Confirm Action",
+                                  "ContextId" : "",
+                                  "DefaultConfirmationButton" : "button1",
+                                  "Disabled" : false,
+                                  "DisabledStyle" : "DefaultButtonDisabledStyle",
+                                  "DisplayName" : "button-20",
+                                  "FocusStyle" : "DefaultButtonFocusStyle",
+                                  "Height" : 30,
+                                  "HoverStyle" : "DefaultButtonHoverStyle",
+                                  "IconAlignment" : "left",
+                                  "Id" : "button-20",
+                                  "Label" : "SCHEDULE",
+                                  "Left" : 430,
+                                  "ResponsiveLayout" : false,
+                                  "RoundedCorners" : true,
+                                  "ShowDataLoading" : true,
+                                  "Style" : "DefaultButtonStyle",
+                                  "TabSequence" : 0,
+                                  "ToolTipField" : "",
+                                  "ToolTipStyle" : "DefaultTooltipStyle",
+                                  "Top" : 15,
+                                  "Type" : "button",
+                                  "Visible" : true,
+                                  "Width" : 75,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "Button",
+                                  "__supportsTooltip" : true
+                                },
+                                "Widgets" : [ ]
+                              } ]
+                            } ]
+                          } ]
                         } ]
                       }, {
                         "Properties" : {
@@ -604,12 +1190,26 @@
                             "DisplayName" : "mashupcontainer-10",
                             "Height" : 300,
                             "Id" : "mashupcontainer-10",
-                            "Left" : 465,
-                            "MashupParameters" : [ ],
+                            "Left" : 0,
+                            "MashupParameters" : [ {
+                              "BaseType" : "THINGNAME",
+                              "Description" : "",
+                              "ParameterName" : "lineName",
+                              "ParmDef" : {
+                                "aspects" : {
+                                  "ordinal" : "0"
+                                },
+                                "baseType" : "THINGNAME",
+                                "description" : "",
+                                "name" : "lineName",
+                                "ordinal" : 0
+                              }
+                            } ],
+                            "Name" : "BayerChangeoverMatrixConfigurationMashup",
                             "ResponsiveLayout" : true,
                             "ShowDataLoading" : true,
                             "TabSequenceGroup" : 0,
-                            "Top" : 100,
+                            "Top" : 0,
                             "Type" : "mashupcontainer",
                             "Visible" : true,
                             "Width" : 400,
