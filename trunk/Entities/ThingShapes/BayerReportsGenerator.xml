@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-06T11:36:00.344Z"
+         lastModifiedDate="2018-06-22T10:36:03.171Z"
          name="BayerReportsGenerator"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -30,6 +30,18 @@
                  isLocalOnly="false"
                  name="reportsRecipient"
                  ordinal="1"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 baseType="STRING"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="reportsSender"
+                 ordinal="2"></PropertyDefinition>
             </PropertyDefinitions>
             <ServiceDefinitions>
                 <ServiceDefinition
@@ -134,7 +146,7 @@
                                     
                                     var params = {
                                     	file: report /* INFOTABLE */,
-                                    	from: me.reportsRecipient /* STRING */,
+                                    	from: me.reportsSender /* STRING */,
                                     	to: me.reportsRecipient /* STRING */
                                     };
                                     
@@ -182,7 +194,7 @@
                                     	FileRepository: "BayerReportsRepository" /* THINGNAME */,
                                     	Rotated90Deg: true /* BOOLEAN */,
                                     	AppKey: "3f6cb48c-3087-4998-a3be-d79d4132cac2" /* STRING */,
-                                    	ServerAddress: "http://localhost/Thingworx/Runtime/index-jq3.html#mashup=BayerReportsPrintPageMashup&lineName=" + me.name /* STRING */,
+                                    	ServerAddress: "https://localhost:8443/Thingworx/Runtime/index-jq3.html#mashup=BayerReportsPrintPageMashup&lineName=" + me.name /* STRING */,
                                     	OutputFileName: fileName /* STRING */,
                                         Resolution: "1754*1240" /* STRING */
                                     	//Resolution: "1754*1240" /* STRING */
@@ -313,6 +325,8 @@
             <AlertConfigurations>
                 <AlertDefinitions
                  name="reportsRecipient"></AlertDefinitions>
+                <AlertDefinitions
+                 name="reportsSender"></AlertDefinitions>
             </AlertConfigurations>
             <InstanceRunTimePermissions></InstanceRunTimePermissions>
         </ThingShape>

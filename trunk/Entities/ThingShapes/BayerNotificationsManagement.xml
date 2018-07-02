@@ -13,11 +13,23 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-04T13:38:03.074Z"
+         lastModifiedDate="2018-06-21T13:14:29.418Z"
          name="BayerNotificationsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
             <PropertyDefinitions>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 baseType="STRING"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="smsSenderAddress"
+                 ordinal="1"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeThreshold="0.0"
@@ -33,7 +45,7 @@
                  description="0 - no alert&#xA;1 - no production for last 5 min&#xA;2 - no production for last 10 min&#xA;3 - no production for last 30 min"
                  isLocalOnly="false"
                  name="productionAlertLevel"
-                 ordinal="3"></PropertyDefinition>
+                 ordinal="4"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
@@ -45,7 +57,7 @@
                  description=""
                  isLocalOnly="false"
                  name="smsNotificationTarget_supervisor"
-                 ordinal="1"></PropertyDefinition>
+                 ordinal="2"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
@@ -57,7 +69,7 @@
                  description=""
                  isLocalOnly="false"
                  name="smsNotificationTarget_HOP"
-                 ordinal="2"></PropertyDefinition>
+                 ordinal="3"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeThreshold="0.0"
@@ -73,7 +85,7 @@
                  description="0 - no alert&#xA;1 - blank&#xA;2 - changeover duration more than 110% target&#xA;3 - changeover duration more than 120% target"
                  isLocalOnly="false"
                  name="changeoverAlertLevel"
-                 ordinal="4"></PropertyDefinition>
+                 ordinal="5"></PropertyDefinition>
             </PropertyDefinitions>
             <ServiceDefinitions>
                 <ServiceDefinition
@@ -338,10 +350,10 @@
                                     var params = {
                                     	cc: undefined /* STRING */,
                                     	bcc: undefined /* STRING */,
-                                    	subject: undefined /* STRING */,
-                                    	from: undefined /* STRING */,
+                                    	subject: body /* STRING */,
+                                    	from: me.smsSenderAddress /* STRING */,
                                     	to: to /* STRING */,
-                                    	body: body /* HTML */
+                                    	body: "" /* HTML */
                                     };
                                     
                                     // no return
@@ -423,10 +435,10 @@
                                     var params = {
                                     	cc: undefined /* STRING */,
                                     	bcc: undefined /* STRING */,
-                                    	subject: undefined /* STRING */,
-                                    	from: undefined /* STRING */,
+                                    	subject: body /* STRING */,
+                                    	from: me.smsSenderAddress /* STRING */,
                                     	to: to /* STRING */,
-                                    	body: body /* HTML */
+                                    	body: "" /* HTML */
                                     };
                                     
                                     // no return
@@ -662,6 +674,8 @@
                  name="smsNotificationTarget_HOP"></AlertDefinitions>
                 <AlertDefinitions
                  name="smsNotificationTarget_supervisor"></AlertDefinitions>
+                <AlertDefinitions
+                 name="smsSenderAddress"></AlertDefinitions>
             </AlertConfigurations>
             <InstanceRunTimePermissions></InstanceRunTimePermissions>
         </ThingShape>

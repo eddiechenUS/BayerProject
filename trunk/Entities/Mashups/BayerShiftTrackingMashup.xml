@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-18T14:54:31.938Z"
+         lastModifiedDate="2018-07-02T14:04:03.718Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -58,7 +58,8 @@
                     "Name" : "GetCurrentProduct",
                     "Parameters" : { },
                     "Properties" : {
-                      "ShowErrorMessage" : false,
+                      "CustomErrorMessage" : "[[service.error]]",
+                      "ShowErrorMessage" : true,
                       "ShowSuccessMessage" : false
                     },
                     "RefreshInterval" : 0,
@@ -84,6 +85,7 @@
                     "Name" : "CompleteCurrentProduct",
                     "Parameters" : { },
                     "Properties" : {
+                      "CustomErrorMessage" : "[[service.error]]",
                       "ShowErrorMessage" : false,
                       "ShowSuccessMessage" : false
                     },
@@ -125,6 +127,30 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetIssues"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "13c98ca8-c818-4796-a5f4-e79ebff98f6d",
+                    "Name" : "AddNearMiss",
+                    "Parameters" : { },
+                    "Properties" : {
+                      "CustomErrorMessage" : "[[service.error]]",
+                      "ShowErrorMessage" : true
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "AddNearMiss"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "8f7f9b14-c9f6-448d-830a-9b04e481806f",
+                    "Name" : "UndoNearMiss",
+                    "Parameters" : { },
+                    "Properties" : {
+                      "CustomErrorMessage" : "[[service.error]]",
+                      "ShowErrorMessage" : true
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "UndoNearMiss"
                   } ]
                 },
                 "Session" : {
@@ -153,6 +179,10 @@
                     "Id" : "e548136e-db92-41fd-aa83-1d72e7098396",
                     "Name" : "GetImplementingThingsWithData",
                     "Parameters" : { },
+                    "Properties" : {
+                      "CustomErrorMessage" : "[[service.error]]",
+                      "ShowErrorMessage" : true
+                    },
                     "RefreshInterval" : 0,
                     "Target" : "GetImplementingThingsWithData"
                   } ]
@@ -1024,6 +1054,40 @@
                 "TargetArea" : "UI",
                 "TargetId" : "validator-385",
                 "TargetSection" : ""
+              }, {
+                "Id" : "269245b4-adfc-42bf-9e07-939f7a6404f5",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "name",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "lineName",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetImplementingThingsWithData",
+                "SourceSection" : "ThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "navigation-387",
+                "TargetSection" : ""
+              }, {
+                "Id" : "f66f36fa-0355-4d9b-868d-78331515734e",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "nearMisses",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetProperties",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "progressgauge-388",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -1323,6 +1387,42 @@
                 "EventTriggerId" : "CompleteCurrentProduct",
                 "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
                 "Id" : "8f87228e-e586-4c48-b02c-ec051eda262e"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "navigation-387",
+                "EventHandlerService" : "Navigate",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-31",
+                "EventTriggerSection" : "",
+                "Id" : "fcd01a13-2a21-4020-b425-2f0bff224a6e"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetShiftsFromNow",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "PopupClosed",
+                "EventTriggerId" : "navigation-387",
+                "EventTriggerSection" : "",
+                "Id" : "6b61180b-44b7-45bd-9598-904d74eb6b4f"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "AddNearMiss",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-392",
+                "EventTriggerSection" : "",
+                "Id" : "91062a81-e0f8-483b-b78f-a90efcb12a82"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "UndoNearMiss",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-390",
+                "EventTriggerSection" : "",
+                "Id" : "6673c77f-95ec-4023-b012-78375770f96d"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -1358,7 +1458,7 @@
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
                   "_currentParameterDefs" : [ ],
-                  "id_index" : 386,
+                  "id_index" : 392,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -2452,7 +2552,7 @@
                               }, {
                                 "Properties" : {
                                   "Area" : "UI",
-                                  "AudioFileURL" : "http://pp-1805190734wd.portal.ptc.io/Thingworx/FileRepositories/SystemRepository/sounds/alert.mp3",
+                                  "AudioFileURL" : "https://localhost:8443/Thingworx/FileRepositories/SystemRepository/sounds/alert.mp3",
                                   "DisplayName" : "audioPlayer-377",
                                   "Height" : 30,
                                   "Id" : "audioPlayer-377",
@@ -2584,8 +2684,8 @@
                               "Area" : "UI",
                               "ClickOutsideToClose" : true,
                               "DisplayName" : "navigation-33",
-                              "FixedPopupHeight" : 500,
-                              "FixedPopupWidth" : 800,
+                              "FixedPopupHeight" : 0,
+                              "FixedPopupWidth" : 0,
                               "Height" : 30,
                               "IconAlignment" : "left",
                               "Id" : "navigation-33",
@@ -2731,7 +2831,7 @@
                             "Widgets" : [ ]
                           }, {
                             "Properties" : {
-                              "ActiveStyle" : "Bayer_Data_Style",
+                              "ActiveStyle" : "Bayer_SettingsButtonNavStyle",
                               "Area" : "UI",
                               "CancelConfirmationButton" : "button2",
                               "ConfirmationButton1Label" : "Yes",
@@ -2741,12 +2841,12 @@
                               "ConfirmationTitle" : "Confirm Action",
                               "ContextId" : "",
                               "DefaultConfirmationButton" : "button1",
-                              "Disabled" : true,
-                              "DisabledStyle" : "Bayer_Data_Style",
+                              "Disabled" : false,
+                              "DisabledStyle" : "Bayer_SettingsButtonNavStyle",
                               "DisplayName" : "button-31",
-                              "FocusStyle" : "Bayer_Data_Style",
-                              "Height" : 45,
-                              "HoverStyle" : "Bayer_Data_Style_h",
+                              "FocusStyle" : "Bayer_SettingsButtonNavStyle",
+                              "Height" : 38,
+                              "HoverStyle" : "Bayer_SettingsButtonNavHoverStyle",
                               "IconAlignment" : "left",
                               "Id" : "button-31",
                               "Label" : "Button",
@@ -2754,14 +2854,14 @@
                               "ResponsiveLayout" : false,
                               "RoundedCorners" : true,
                               "ShowDataLoading" : true,
-                              "Style" : "Bayer_Data_Style",
+                              "Style" : "Bayer_SettingsButtonNavStyle",
                               "TabSequence" : 0,
                               "ToolTipField" : "",
                               "ToolTipStyle" : "DefaultTooltipStyle",
-                              "Top" : 15,
+                              "Top" : 18.5,
                               "Type" : "button",
                               "Visible" : true,
-                              "Width" : 45,
+                              "Width" : 38,
                               "Z-index" : 10,
                               "__TypeDisplayName" : "Button",
                               "__supportsTooltip" : true
@@ -2840,6 +2940,63 @@
                               "Width" : 40,
                               "Z-index" : 10,
                               "__TypeDisplayName" : "Button",
+                              "__supportsTooltip" : true
+                            },
+                            "Widgets" : [ ]
+                          }, {
+                            "Properties" : {
+                              "Alignment" : "left",
+                              "Area" : "UI",
+                              "ClickOutsideToClose" : true,
+                              "DisplayName" : "navigation-387",
+                              "FixedPopupHeight" : 0,
+                              "FixedPopupWidth" : 0,
+                              "Height" : 30,
+                              "IconAlignment" : "left",
+                              "Id" : "navigation-387",
+                              "Left" : 295,
+                              "MashupName" : "BayerConfigurationPopup",
+                              "MashupParameters" : [ {
+                                "BaseType" : "THINGNAME",
+                                "Description" : "",
+                                "ParameterName" : "lineName",
+                                "ParmDef" : {
+                                  "aspects" : {
+                                    "ordinal" : "0"
+                                  },
+                                  "baseType" : "THINGNAME",
+                                  "description" : "",
+                                  "name" : "lineName",
+                                  "ordinal" : 0
+                                }
+                              } ],
+                              "MessageToShow" : "Mashup must be selected",
+                              "ModalPopupOpacity" : 0.5,
+                              "NavigationActiveStyle" : "DefaultNavigationActiveStyle",
+                              "NavigationFocusStyle" : "DefaultNavigationFocusStyle",
+                              "NavigationHoverStyle" : "DefaultNavigationHoverStyle",
+                              "PopupScrolling" : "visible",
+                              "PopupTitle" : "",
+                              "PopupTitleStyle" : "DefaultPopupTitleStyle",
+                              "ReloadOnReplace" : false,
+                              "ResponsiveLayout" : false,
+                              "RoundedCorners" : true,
+                              "ShowCloseButton" : false,
+                              "ShowDataLoading" : true,
+                              "ShowMessageIfNoMashup" : false,
+                              "Style" : "DefaultNavigationStyle",
+                              "TabSequence" : 0,
+                              "TargetWindow" : "modal-popup",
+                              "Text" : "Mashup Link",
+                              "ToolTipField" : "",
+                              "ToolTipStyle" : "DefaultTooltipStyle",
+                              "Top" : 5,
+                              "Transparent" : false,
+                              "Type" : "navigation",
+                              "Visible" : false,
+                              "Width" : 25,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Navigation",
                               "__supportsTooltip" : true
                             },
                             "Widgets" : [ ]
@@ -5880,9 +6037,9 @@
                                 "Columns" : 0,
                                 "DisplayName" : "layout-139",
                                 "Footer" : true,
-                                "FooterHeight" : 35,
+                                "FooterHeight" : 40,
                                 "Header" : true,
-                                "HeaderHeight" : 40,
+                                "HeaderHeight" : 32,
                                 "Id" : "layout-139",
                                 "IncludeSpacingInFixedAreas" : false,
                                 "IsPrintLayout" : false,
@@ -5914,7 +6071,7 @@
                                 "RightSidebarWidth" : 0,
                                 "Rows" : 1,
                                 "ShowDataLoading" : true,
-                                "Spacing" : 2,
+                                "Spacing" : 0,
                                 "Top" : 35,
                                 "Type" : "layout",
                                 "Visible" : true,
@@ -6035,7 +6192,76 @@
                                   "Z-index" : 10,
                                   "__TypeDisplayName" : "Container"
                                 },
-                                "Widgets" : [ ]
+                                "Widgets" : [ {
+                                  "Properties" : {
+                                    "Aperture" : 360,
+                                    "Area" : "UI",
+                                    "DisplayName" : "progressgauge-388",
+                                    "GaugeBorder" : 0,
+                                    "GaugeFaceStyle" : "DefaultProgressGaugeStyle",
+                                    "GaugeStyle" : "DefaultProgressGaugeStyle",
+                                    "Height" : 100,
+                                    "Id" : "progressgauge-388",
+                                    "Left" : 10,
+                                    "MaxValue" : 0,
+                                    "MinValue" : -1,
+                                    "ProgressFormatter" : {
+                                      "FieldName" : "nearMisses",
+                                      "StateDefinition" : "BayerNearMissesGaugeStates",
+                                      "StateDefinitionType" : "numeric",
+                                      "StateFormats" : [ {
+                                        "comparator" : "<=",
+                                        "state" : "Bayer_GaugeProgress",
+                                        "stateName" : "",
+                                        "value" : "0"
+                                      }, {
+                                        "comparator" : "<=",
+                                        "state" : "Bayer_GaugeProgress_Yellow",
+                                        "stateName" : "",
+                                        "value" : "1"
+                                      }, {
+                                        "state" : "Bayer_GaugeProgressRed",
+                                        "stateName" : ""
+                                      } ]
+                                    },
+                                    "ProgressFormatter_StateParameters" : [ ],
+                                    "ProgressStyle" : "Bayer_GaugeProgress",
+                                    "ReferenceAngle" : 0,
+                                    "ResponsiveLayout" : true,
+                                    "RingWidth" : 5,
+                                    "ShowDataLoading" : true,
+                                    "Top" : 10,
+                                    "Type" : "progressgauge",
+                                    "ValueDecimals" : 0,
+                                    "ValueDigits" : 3,
+                                    "ValueFormatter" : {
+                                      "FieldName" : "nearMisses",
+                                      "StateDefinition" : "BayerNearMissesGaugeStates",
+                                      "StateDefinitionType" : "numeric",
+                                      "StateFormats" : [ {
+                                        "comparator" : "<=",
+                                        "state" : "Bayer_GaugeProgress",
+                                        "stateName" : "",
+                                        "value" : "0"
+                                      }, {
+                                        "comparator" : "<=",
+                                        "state" : "Bayer_GaugeProgress_Yellow",
+                                        "stateName" : "",
+                                        "value" : "1"
+                                      }, {
+                                        "state" : "Bayer_GaugeProgressRed",
+                                        "stateName" : ""
+                                      } ]
+                                    },
+                                    "ValueFormatter_StateParameters" : [ ],
+                                    "ValueStyle" : "Bayer_GaugeProgress",
+                                    "Visible" : true,
+                                    "Width" : 100,
+                                    "Z-index" : 10,
+                                    "__TypeDisplayName" : "Progress Gauge"
+                                  },
+                                  "Widgets" : [ ]
+                                } ]
                               }, {
                                 "Properties" : {
                                   "AnimateExpandCollapse" : true,
@@ -6079,7 +6305,7 @@
                                     "IsPrintLayout" : false,
                                     "Left" : 65,
                                     "LeftSidebar" : true,
-                                    "LeftSidebarWidth" : 125,
+                                    "LeftSidebarWidth" : 75,
                                     "Orientation" : "horizontal",
                                     "PctColumn1" : 100,
                                     "PctColumn2" : 0,
@@ -6102,10 +6328,10 @@
                                     "PrintWidth" : 650,
                                     "ResponsiveLayout" : true,
                                     "RightSidebar" : true,
-                                    "RightSidebarWidth" : 105,
+                                    "RightSidebarWidth" : 75,
                                     "Rows" : 0,
                                     "ShowDataLoading" : true,
-                                    "Spacing" : 2,
+                                    "Spacing" : 0,
                                     "Top" : 20,
                                     "Type" : "layout",
                                     "Visible" : true,
@@ -6144,12 +6370,12 @@
                                     "Widgets" : [ {
                                       "Properties" : {
                                         "Area" : "UI",
-                                        "DisplayName" : "panel-224",
+                                        "DisplayName" : "panel-389",
                                         "Height" : 200,
                                         "HideScrollbars" : false,
                                         "HorizontalAnchor" : "left",
-                                        "Id" : "panel-224",
-                                        "Left" : 35,
+                                        "Id" : "panel-389",
+                                        "Left" : 25,
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
                                         "Style" : "DefaultContainerStyle",
@@ -6163,89 +6389,39 @@
                                       },
                                       "Widgets" : [ {
                                         "Properties" : {
+                                          "ActiveStyle" : "BayerRedMinusButtonStyle",
                                           "Area" : "UI",
-                                          "DisplayName" : "shape-226",
-                                          "DynamicFillOrientation" : "vertical",
-                                          "DynamicRangeMaximum" : 100,
-                                          "DynamicRangeMinimum" : 0,
-                                          "EnableDynamicFill" : false,
-                                          "GradientOrientation" : "vertical",
-                                          "GradientType" : "linear",
-                                          "Height" : 15,
-                                          "Id" : "shape-226",
-                                          "Left" : 5,
-                                          "RectangleCornerRadius" : 10,
+                                          "CancelConfirmationButton" : "button2",
+                                          "ConfirmationButton1Label" : "Yes",
+                                          "ConfirmationButton2Label" : "No",
+                                          "ConfirmationPrompt" : "Do Action?",
+                                          "ConfirmationRequired" : false,
+                                          "ConfirmationTitle" : "Confirm Action",
+                                          "ContextId" : "",
+                                          "DefaultConfirmationButton" : "button1",
+                                          "Disabled" : false,
+                                          "DisabledStyle" : "DefaultButtonDisabledStyle",
+                                          "DisplayName" : "button-390",
+                                          "FocusStyle" : "BayerRedMinusButtonStyle",
+                                          "Height" : 32,
+                                          "HoverStyle" : "BayerRedMinusButtonHoverStyle",
+                                          "IconAlignment" : "left",
+                                          "Id" : "button-390",
+                                          "Label" : "Button",
+                                          "Left" : 10,
                                           "ResponsiveLayout" : false,
-                                          "ShapeFormatter_StateParameters" : [ ],
-                                          "ShapeStyle" : "Bayer_GreenBg",
-                                          "ShapeType" : "rectangle",
+                                          "RoundedCorners" : true,
                                           "ShowDataLoading" : true,
-                                          "Top" : 8,
-                                          "Type" : "shape",
-                                          "UnfilledBackgroundStyle" : "DefaultShapeUnfilledBackgroundStyle",
-                                          "Visible" : true,
-                                          "Width" : 15,
-                                          "Z-index" : 10,
-                                          "__TypeDisplayName" : "Shape"
-                                        },
-                                        "Widgets" : [ ]
-                                      }, {
-                                        "Properties" : {
-                                          "Alignment" : "left",
-                                          "Area" : "UI",
-                                          "BackgroundFill" : "content",
-                                          "DisplayName" : "valuedisplay-293",
-                                          "Height" : 22,
-                                          "Id" : "valuedisplay-293",
-                                          "ImageScaling" : "Width",
-                                          "Label" : "",
-                                          "LabelAlignment" : "left",
-                                          "Left" : 25,
-                                          "Overflow" : "hidden",
-                                          "ResponsiveLayout" : false,
-                                          "ShowDataLoading" : true,
-                                          "TextIfNoValue" : "[[Bayer.NearMisses]]",
-                                          "TextIfNoValueOffset" : 0,
-                                          "TextIfNoValueStyle" : {
-                                            "backgroundColor" : "",
-                                            "displayString" : "",
-                                            "fontEmphasisBold" : false,
-                                            "fontEmphasisItalic" : false,
-                                            "fontEmphasisUnderline" : false,
-                                            "foregroundColor" : "#808080",
-                                            "image" : "",
-                                            "lineColor" : "",
-                                            "lineStyle" : "solid",
-                                            "lineThickness" : 1,
-                                            "secondaryBackgroundColor" : "",
-                                            "textSize" : "normal"
-                                          },
-                                          "TextWrap" : true,
+                                          "Style" : "BayerRedMinusButtonStyle",
+                                          "TabSequence" : 0,
                                           "ToolTipField" : "",
                                           "ToolTipStyle" : "DefaultTooltipStyle",
-                                          "Top" : 2,
-                                          "Type" : "valuedisplay",
-                                          "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                                          "ValueDisplayStyle" : {
-                                            "backgroundColor" : "",
-                                            "displayString" : "",
-                                            "fontEmphasisBold" : false,
-                                            "fontEmphasisItalic" : false,
-                                            "fontEmphasisUnderline" : false,
-                                            "foregroundColor" : "#808080",
-                                            "image" : "",
-                                            "lineColor" : "",
-                                            "lineStyle" : "solid",
-                                            "lineThickness" : 1,
-                                            "secondaryBackgroundColor" : "",
-                                            "textSize" : "normal"
-                                          },
-                                          "VerticalAlignment" : "middle",
+                                          "Top" : 1,
+                                          "Type" : "button",
                                           "Visible" : true,
-                                          "Width" : 70,
+                                          "Width" : 32,
                                           "Z-index" : 10,
-                                          "__TypeDisplayName" : "Value Display",
-                                          "__supportsLabel" : true,
+                                          "__TypeDisplayName" : "Button",
                                           "__supportsTooltip" : true
                                         },
                                         "Widgets" : [ ]
@@ -6313,16 +6489,16 @@
                                     "Widgets" : [ {
                                       "Properties" : {
                                         "Area" : "UI",
-                                        "DisplayName" : "panel-225",
+                                        "DisplayName" : "panel-391",
                                         "Height" : 200,
                                         "HideScrollbars" : false,
                                         "HorizontalAnchor" : "left",
-                                        "Id" : "panel-225",
-                                        "Left" : 75,
+                                        "Id" : "panel-391",
+                                        "Left" : 25,
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
                                         "Style" : "DefaultContainerStyle",
-                                        "Top" : 15,
+                                        "Top" : 5,
                                         "Type" : "panel",
                                         "VerticalAnchor" : "top",
                                         "Visible" : true,
@@ -6332,89 +6508,39 @@
                                       },
                                       "Widgets" : [ {
                                         "Properties" : {
+                                          "ActiveStyle" : "BayerGreenPlusButtonStyle",
                                           "Area" : "UI",
-                                          "DisplayName" : "shape-227",
-                                          "DynamicFillOrientation" : "vertical",
-                                          "DynamicRangeMaximum" : 100,
-                                          "DynamicRangeMinimum" : 0,
-                                          "EnableDynamicFill" : false,
-                                          "GradientOrientation" : "vertical",
-                                          "GradientType" : "linear",
-                                          "Height" : 15,
-                                          "Id" : "shape-227",
-                                          "Left" : 5,
-                                          "RectangleCornerRadius" : 10,
+                                          "CancelConfirmationButton" : "button2",
+                                          "ConfirmationButton1Label" : "Yes",
+                                          "ConfirmationButton2Label" : "No",
+                                          "ConfirmationPrompt" : "Do Action?",
+                                          "ConfirmationRequired" : false,
+                                          "ConfirmationTitle" : "Confirm Action",
+                                          "ContextId" : "",
+                                          "DefaultConfirmationButton" : "button1",
+                                          "Disabled" : false,
+                                          "DisabledStyle" : "DefaultButtonDisabledStyle",
+                                          "DisplayName" : "button-392",
+                                          "FocusStyle" : "BayerGreenPlusButtonStyle",
+                                          "Height" : 32,
+                                          "HoverStyle" : "BayerGreenPlusButtonHoverStyle",
+                                          "IconAlignment" : "left",
+                                          "Id" : "button-392",
+                                          "Label" : "Button",
+                                          "Left" : 33,
                                           "ResponsiveLayout" : false,
-                                          "ShapeFormatter_StateParameters" : [ ],
-                                          "ShapeStyle" : "Bayer_BlueBg",
-                                          "ShapeType" : "rectangle",
+                                          "RoundedCorners" : true,
                                           "ShowDataLoading" : true,
-                                          "Top" : 8,
-                                          "Type" : "shape",
-                                          "UnfilledBackgroundStyle" : "DefaultShapeUnfilledBackgroundStyle",
-                                          "Visible" : true,
-                                          "Width" : 15,
-                                          "Z-index" : 10,
-                                          "__TypeDisplayName" : "Shape"
-                                        },
-                                        "Widgets" : [ ]
-                                      }, {
-                                        "Properties" : {
-                                          "Alignment" : "left",
-                                          "Area" : "UI",
-                                          "BackgroundFill" : "content",
-                                          "DisplayName" : "valuedisplay-294",
-                                          "Height" : 22,
-                                          "Id" : "valuedisplay-294",
-                                          "ImageScaling" : "Width",
-                                          "Label" : "",
-                                          "LabelAlignment" : "left",
-                                          "Left" : 25,
-                                          "Overflow" : "hidden",
-                                          "ResponsiveLayout" : false,
-                                          "ShowDataLoading" : true,
-                                          "TextIfNoValue" : "[[Bayer.Anomalies]]",
-                                          "TextIfNoValueOffset" : 0,
-                                          "TextIfNoValueStyle" : {
-                                            "backgroundColor" : "",
-                                            "displayString" : "",
-                                            "fontEmphasisBold" : false,
-                                            "fontEmphasisItalic" : false,
-                                            "fontEmphasisUnderline" : false,
-                                            "foregroundColor" : "#808080",
-                                            "image" : "",
-                                            "lineColor" : "",
-                                            "lineStyle" : "solid",
-                                            "lineThickness" : 1,
-                                            "secondaryBackgroundColor" : "",
-                                            "textSize" : "normal"
-                                          },
-                                          "TextWrap" : true,
+                                          "Style" : "BayerGreenPlusButtonStyle",
+                                          "TabSequence" : 0,
                                           "ToolTipField" : "",
                                           "ToolTipStyle" : "DefaultTooltipStyle",
-                                          "Top" : 2,
-                                          "Type" : "valuedisplay",
-                                          "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                                          "ValueDisplayStyle" : {
-                                            "backgroundColor" : "",
-                                            "displayString" : "",
-                                            "fontEmphasisBold" : false,
-                                            "fontEmphasisItalic" : false,
-                                            "fontEmphasisUnderline" : false,
-                                            "foregroundColor" : "#808080",
-                                            "image" : "",
-                                            "lineColor" : "",
-                                            "lineStyle" : "solid",
-                                            "lineThickness" : 1,
-                                            "secondaryBackgroundColor" : "",
-                                            "textSize" : "normal"
-                                          },
-                                          "VerticalAlignment" : "middle",
+                                          "Top" : 1,
+                                          "Type" : "button",
                                           "Visible" : true,
-                                          "Width" : 70,
+                                          "Width" : 32,
                                           "Z-index" : 10,
-                                          "__TypeDisplayName" : "Value Display",
-                                          "__supportsLabel" : true,
+                                          "__TypeDisplayName" : "Button",
                                           "__supportsTooltip" : true
                                         },
                                         "Widgets" : [ ]
