@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-06-20T14:35:28.773Z"
+         lastModifiedDate="2018-06-22T09:29:19.565Z"
          name="BayerActionListPage"
          projectName="BayerIoT"
          published="false"
@@ -163,11 +163,18 @@
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
                             <FieldDefinition
+                             aspect.dataShape="BayerActionListDataShape"
+                             aspect.isRequired="true"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="actionList"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
                              aspect.isRequired="true"
                              baseType="USERNAME"
                              description=""
-                             name="assignedTo"
-                             ordinal="1"></FieldDefinition>
+                             name="recipient"
+                             ordinal="2"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -394,48 +401,57 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var params = {
-                                        	infoTableName : "InfoTable",
-                                        	dataShapeName : "BayerActionListDataShape"
-                                        };
+                                        var textCSV = "assignedTo;status;createdTime;dueDate;problemDescription;solutionDescription;productionLine\n";
                                         
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerActionListDataShape)
-                                        var actionList = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
-                                        
-                                        var textCsv;
-                                        var params = {
-                                        	createdFrom: undefined /* DATETIME */,
-                                        	productionLine: undefined /* THINGNAME */,
-                                        	dueDate: undefined /* DATETIME */,
-                                        	createdTo: undefined /* DATETIME */,
-                                        	assignedTo: assignedTo /* USERNAME */,
-                                        	status: undefined /* STRING */
-                                        };
-                                        actionList = me.GetActionList(params);
-                                        
-                                        for (var i = 0; i <actionList.rows.length; i++) {
-                                            textCSV += actionList[i].assignedTo;
-                                            textCSV += ",";
-                                            textCSV += actionList[i].status;
-                                            textCSV += ",";
-                                            textCSV += actionList[i].createdFrom;
-                                            textCSV += ",";
-                                            textCSV += actionList[i].createdTo;
-                                            textCSV += ",";
-                                            textCSV += actionList[i].dueDate;
-                                            textCSV += ",";
-                                            textCSV += actionList[i].productionLine;
-                                            textCSV += "\n"; 
+                                        for (var i = 0; i < actionList.rows.length; i++) {
+                                            var row = actionList.rows[i];
                                             
+                                            textCSV += row.assignedTo + ";"
+                                                	+ row.status
+                                            		+ ";"
+                                            		+ (row.createdTime ? dateFormatISO(row.createdTime) : "")
+                                            		+ ";"
+                                            		+ (row.dueDate ? dateFormatISO(row.dueDate) : "")
+                                            		+ ";"
+                                            		+ (row.problemDescription ? row.problemDescription : "")
+                                            		+ ";"
+                                            		+ (row.solutionDescription ? row.solutionDescription : "")
+                                            		+ ";"
+                                            		+ row.productionLine
+                                            		+ "\n";
                                         }
+                                        
+                                        
+                                        // generateGUID():STRING
+                                        var fileName = dateFormat(new Date(), "yyyyMMddHHmmssSSS") + ".csv";
+                                        var path = "/exports/" + fileName;
+                                        
                                         var params = {
-                                        	path: "testFile.csv" /* STRING */,
+                                        	path: path /* STRING */,
                                         	data: textCSV /* STRING */,
                                         	overwrite: true /* BOOLEAN */
                                         };
                                         
                                         // no return
-                                        Things["SystemRepository"].CreateTextFile(params);
+                                        Things["BayerCSVRepository"].CreateTextFile(params);
+                                        
+                                        
+                                        var params = {
+                                        	cc: undefined /* STRING */,
+                                        	path: path /* STRING */,
+                                        	bcc: undefined /* STRING */,
+                                        	subject: "Action list export" /* STRING */,
+                                        	fileRepository: "BayerCSVRepository" /* THINGNAME */,
+                                        	from: Users[recipient].emailAddress /* STRING */,
+                                        	attachmentName: fileName /* STRING */,
+                                        	to: Users[recipient].emailAddress /* STRING */,
+                                        	mimeType: "text/csv" /* STRING */,
+                                        	body: undefined /* HTML */
+                                        };
+                                        
+                                        // no return
+                                        Things["BayerMailServer2"].SendMessageWithAttachment(params);
+                                        //Things["TestMailServer"].SendMessageWithAttachment(params);
                                         ]]>
                                         </code>
                                     </Row>
@@ -501,27 +517,31 @@
                                         var index = query.filters.filters.length;
                                         
                                         if (status) {
-                                            query.filters.filters.push({
+                                            if(status.indexOf("Open") !== -1) {
+                                        logger.warn("testetste");
+                                                query.filters.filters.push({});
+                                                query.filters.filters[index]["fieldName"] = "status";
+                                                query.filters.filters[index]["type"] = "EQ";
+                                                query.filters.filters[index]["value"] = "Open";
+                                                index = query.filters.filters.length;
                                             }
-                                                                      );
-                                            query.filters.filters[index]["fieldName"] = "status";
-                                            query.filters.filters[index]["type"] = "EQ";
-                                            query.filters.filters[index]["value"] = status;
-                                            index = query.filters.filters.length;
+                                            else {
+                                                query.filters.filters.push({});
+                                                query.filters.filters[index]["fieldName"] = "status";
+                                                query.filters.filters[index]["type"] = "EQ";
+                                                query.filters.filters[index]["value"] = status;
+                                                index = query.filters.filters.length;
+                                            }
                                         }
                                         if (dueDate) {
-                                            query.filters.filters.push({
-                                            }
-                                                                      );
+                                            query.filters.filters.push({});
                                             query.filters.filters[index]["fieldName"] = "dueDate";
                                             query.filters.filters[index]["type"] = "EQ";
                                             query.filters.filters[index]["value"] = dueDate;
                                             index = query.filters.filters.length;
                                         }
                                         if (assignedTo) {
-                                            query.filters.filters.push({
-                                            }
-                                                                      );
+                                            query.filters.filters.push({});
                                             query.filters.filters[index]["fieldName"] = "assignedTo";
                                             query.filters.filters[index]["type"] = "EQ";
                                             query.filters.filters[index]["value"] = assignedTo;
@@ -529,9 +549,7 @@
                                         }
                                         
                                         if (createdFrom && createdTo) {
-                                            query.filters.filters.push({
-                                            }
-                                                                      );
+                                            query.filters.filters.push({});
                                             query.filters.filters[index]["fieldName"] = "createdTime";
                                             query.filters.filters[index]["type"] = "Between";
                                             query.filters.filters[index]["from"] = createdFrom;
@@ -545,11 +563,19 @@
                                             query: query /* QUERY */
                                         });
                                         
-                                        for (var i = 0; i < result.rows.length; i++) {
-                                        if(result[i].status === "Open") {
-                                            result[i].status = result[i].dueDate >= (new Date()) ? "Open before Due Date" : "Open after Due Date";
-                                            logger.warn("status: " + result[i].status);
+                                        if (status === "Open (before Due Date)" ||  status === "Open (after Due Date)") {
+                                            for (var i = 0; i < result.rows.length; i++) {
+                                                if(result[i].status === "Open") {
+                                                    result[i].status = status;
+                                                }
+                                            }
                                         }
+                                        else {
+                                            for (var i = 0; i < result.rows.length; i++) {
+                                                if(result[i].status === "Open") {
+                                                    result[i].status = result[i].dueDate >= (new Date()) ? "Open (before Due Date)" : "Open (after Due Date)";
+                                                }
+                                            }
                                         }
                                         ]]>
                                         </code>
