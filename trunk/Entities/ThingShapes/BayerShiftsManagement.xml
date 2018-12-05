@@ -3,7 +3,7 @@
  build="b140"
  majorVersion="8"
  minorVersion="2"
- modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ modelPersistenceProviderPackage="H2PersistenceProviderPackage"
  revision="1"
  schemaVersion="1020"
  universal="">
@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-06-19T12:02:52.149Z"
+         lastModifiedDate="2018-12-05T02:57:36.762-08:00"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -565,7 +565,10 @@
                                             if (shift.timestamp.getHours() == 6 + (i*8)) {
                                                 newEntry.quantityProduced = shift.totalQuantityProduced; // NUMBER
                                                 newEntry.targetQuantity = shift.totalTargetQuantity; // NUMBER
-                                                newEntry.performance = newEntry.quantityProduced / newEntry.targetQuantity * 100;
+                                                
+                                                // if target==0, then performance=quantity
+                                                newEntry.performance = newEntry.targetQuantity ? (newEntry.quantityProduced / newEntry.targetQuantity * 100) : newEntry.quantityProduced;
+                                                
                                                 newEntry.status = newEntry.quantityProduced >= newEntry.targetQuantity; // BOOLEAN
                                                 x++;
                                             }

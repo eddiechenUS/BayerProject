@@ -3,7 +3,7 @@
  build="b140"
  majorVersion="8"
  minorVersion="2"
- modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ modelPersistenceProviderPackage="H2PersistenceProviderPackage"
  revision="1"
  schemaVersion="1020"
  universal="">
@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-06-01T11:14:52.385Z"
+         lastModifiedDate="2018-12-05T02:54:20.677-08:00"
          name="BayerMainPage"
          projectName="BayerIoT"
          published="false"
@@ -67,7 +67,13 @@
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
-                        <ParameterDefinitions></ParameterDefinitions>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="demo"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
@@ -96,7 +102,16 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var result = me.navigationMenu;
+                                        var params = {
+                                        	t1: me.navigationMenu /* INFOTABLE */
+                                        };
+                                        
+                                        // result: INFOTABLE
+                                        var result = Resources["InfoTableFunctions"].Clone(params);
+                                        
+                                        if (demo == "demo") {
+                                            result.rows[0].mashup = "BayerShiftTrackingMashup_Demo1";
+                                        }
                                         ]]>
                                         </code>
                                     </Row>
@@ -250,7 +265,7 @@
                             </Rows>
                         </infoTable>
                     </Value>
-                    <Timestamp>2018-06-01T11:15:15.036Z</Timestamp>
+                    <Timestamp>2018-06-01T04:15:15.036-07:00</Timestamp>
                     <Quality>GOOD</Quality>
                 </navigationMenu>
             </ThingProperties>

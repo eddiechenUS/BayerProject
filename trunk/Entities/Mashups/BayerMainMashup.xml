@@ -3,7 +3,7 @@
  build="b140"
  majorVersion="8"
  minorVersion="2"
- modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ modelPersistenceProviderPackage="H2PersistenceProviderPackage"
  revision="1"
  schemaVersion="1020"
  universal="">
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-05-24T15:26:00.638Z"
+         lastModifiedDate="2018-12-05T02:54:20.616-08:00"
          name="BayerMainMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -33,7 +33,14 @@
                 <Visibility></Visibility>
             </VisibilityPermissions>
             <ConfigurationTables></ConfigurationTables>
-            <ParameterDefinitions></ParameterDefinitions>
+            <ParameterDefinitions>
+                <FieldDefinition
+                 aspect.ordinal="0"
+                 baseType="STRING"
+                 description=""
+                 name="demo"
+                 ordinal="0"></FieldDefinition>
+            </ParameterDefinitions>
             <Things>
                 <Thing>BayerMainPage</Thing>
             </Things>
@@ -141,6 +148,21 @@
                 "TargetArea" : "UI",
                 "TargetId" : "infotableselector-19",
                 "TargetSection" : ""
+              }, {
+                "Id" : "a89b37af-8427-4144-ac42-9cc4ffa28e83",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "demo",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "demo",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetMenuContent",
+                "TargetSection" : "Things_BayerMainPage"
               } ],
               "DesignTimePermissions" : { },
               "Events" : [ {
@@ -195,7 +217,11 @@
                   "Width" : 1024,
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
-                  "_currentParameterDefs" : [ ],
+                  "_currentParameterDefs" : [ {
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "demo"
+                  } ],
                   "id_index" : 25,
                   "supportsAutoResize" : true
                 },
