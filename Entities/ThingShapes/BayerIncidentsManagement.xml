@@ -3,7 +3,7 @@
  build="b140"
  majorVersion="8"
  minorVersion="2"
- modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ modelPersistenceProviderPackage="H2PersistenceProviderPackage"
  revision="1"
  schemaVersion="1020"
  universal="">
@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-07-02T14:16:28.393Z"
+         lastModifiedDate="2018-12-05T02:54:20.525-08:00"
          name="BayerIncidentsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -26,6 +26,7 @@
                  aspect.isLogged="true"
                  aspect.isPersistent="true"
                  aspect.isReadOnly="false"
+                 aspect.minimumValue="0"
                  baseType="INTEGER"
                  category=""
                  description=""
@@ -66,10 +67,38 @@
                      ordinal="0"></ResultType>
                     <ParameterDefinitions>
                         <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="startOptional"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
                          aspect.isRequired="true"
                          baseType="DATETIME"
                          description=""
                          name="time"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetNearMissesForShift">
+                    <ResultType
+                     baseType="INTEGER"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="shiftStart"
                          ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
@@ -153,13 +182,50 @@
                                     	propertyName: "nearMisses" /* STRING */,
                                     	endDate: time /* DATETIME */,
                                     	query: undefined /* QUERY */,
-                                    	startDate: undefined /* DATETIME */
+                                    	startDate: startOptional /* DATETIME */
                                     };
                                     
                                     // result: INFOTABLE dataShape: "IntegerValueStream"
                                     var lastEntry = me.QueryIntegerPropertyHistory(params);
                                     
                                     var result = lastEntry.value ? lastEntry.value : 0;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetNearMissesForShift">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var params = {
+                                    	time: dateAddHours(shiftStart, 8), /* DATETIME */
+                                        startOptional: shiftStart
+                                    };
+                                    
+                                    // result: INTEGER
+                                    var result = me.GetNearMisses(params);
                                     ]]>
                                     </code>
                                 </Row>
@@ -190,7 +256,9 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    me.nearMisses -= 1;
+                                    if (me.nearMisses > 0) {
+                                    	me.nearMisses -= 1;
+                                    }
                                     ]]>
                                     </code>
                                 </Row>

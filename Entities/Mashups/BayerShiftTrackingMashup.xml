@@ -3,7 +3,7 @@
  build="b140"
  majorVersion="8"
  minorVersion="2"
- modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ modelPersistenceProviderPackage="H2PersistenceProviderPackage"
  revision="1"
  schemaVersion="1020"
  universal="">
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-07-02T14:04:03.718Z"
+         lastModifiedDate="2018-12-05T02:54:20.618-08:00"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -151,6 +151,14 @@
                     },
                     "RefreshInterval" : 0,
                     "Target" : "UndoNearMiss"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "fac1c0c7-191f-4aed-a4c9-54b960dddabb",
+                    "Name" : "GetNearMissesForShift",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetNearMissesForShift"
                   } ]
                 },
                 "Session" : {
@@ -1072,12 +1080,45 @@
                 "TargetId" : "navigation-387",
                 "TargetSection" : ""
               }, {
-                "Id" : "f66f36fa-0355-4d9b-868d-78331515734e",
+                "Id" : "8063ad0b-55b6-4d8d-9d85-4980e0042768",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timestamp",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "shiftStart",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetNearMissesForShift",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "0df9472b-9b24-4f05-96d8-904c8800a23b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetNearMissesForShift",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "progressgauge-388",
+                "TargetSection" : ""
+              }, {
+                "Id" : "8b3e00e0-bbdc-4ec9-9907-1c23d73816db",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "nearMisses",
                   "SourcePropertyBaseType" : "INTEGER",
                   "SourcePropertyType" : "Property",
-                  "TargetProperty" : "Data",
+                  "TargetProperty" : "input",
                   "TargetPropertyBaseType" : "NUMBER",
                   "TargetPropertyType" : "property"
                 } ],
@@ -1086,7 +1127,7 @@
                 "SourceId" : "GetProperties",
                 "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
                 "TargetArea" : "UI",
-                "TargetId" : "progressgauge-388",
+                "TargetId" : "expression-396",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : { },
@@ -1423,6 +1464,42 @@
                 "EventTriggerId" : "button-390",
                 "EventTriggerSection" : "",
                 "Id" : "6673c77f-95ec-4023-b012-78375770f96d"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetNearMissesForShift",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "SelectedRowsChanged",
+                "EventTriggerId" : "GetShiftsFromNow",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "a9d172d5-d282-4752-bbca-34b30794edc0"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetNearMissesForShift",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "AddNearMiss",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "77a9ffcb-9315-4ea1-a5e1-d53b06038fbe"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetNearMissesForShift",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "UndoNearMiss",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "4c08d02f-fa53-4273-b441-fed8e0dae618"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetNearMissesForShift",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Changed",
+                "EventTriggerId" : "expression-396",
+                "EventTriggerSection" : "",
+                "Id" : "746a79fe-6a7f-484f-96ba-360863d17fb7"
               } ],
               "RunTimePermissions" : { },
               "UI" : {
@@ -1458,7 +1535,7 @@
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
                   "_currentParameterDefs" : [ ],
-                  "id_index" : 392,
+                  "id_index" : 397,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -3649,7 +3726,7 @@
                                           "HoverStyle" : "BayerButtonHoverStyle",
                                           "IconAlignment" : "right",
                                           "Id" : "button-82",
-                                          "Label" : "Complete",
+                                          "Label" : "[[Bayer.ConfirmComplete]]",
                                           "Left" : 5,
                                           "ResponsiveLayout" : false,
                                           "RoundedCorners" : true,
@@ -6206,7 +6283,7 @@
                                     "MaxValue" : 0,
                                     "MinValue" : -1,
                                     "ProgressFormatter" : {
-                                      "FieldName" : "nearMisses",
+                                      "FieldName" : "result",
                                       "StateDefinition" : "BayerNearMissesGaugeStates",
                                       "StateDefinitionType" : "numeric",
                                       "StateFormats" : [ {
@@ -6235,7 +6312,7 @@
                                     "ValueDecimals" : 0,
                                     "ValueDigits" : 3,
                                     "ValueFormatter" : {
-                                      "FieldName" : "nearMisses",
+                                      "FieldName" : "result",
                                       "StateDefinition" : "BayerNearMissesGaugeStates",
                                       "StateDefinitionType" : "numeric",
                                       "StateFormats" : [ {
@@ -6400,7 +6477,7 @@
                                           "ContextId" : "",
                                           "DefaultConfirmationButton" : "button1",
                                           "Disabled" : false,
-                                          "DisabledStyle" : "DefaultButtonDisabledStyle",
+                                          "DisabledStyle" : "DefaultContainerStyle",
                                           "DisplayName" : "button-390",
                                           "FocusStyle" : "BayerRedMinusButtonStyle",
                                           "Height" : 32,
@@ -6456,7 +6533,55 @@
                                       "Z-index" : 10,
                                       "__TypeDisplayName" : "Container"
                                     },
-                                    "Widgets" : [ ]
+                                    "Widgets" : [ {
+                                      "Properties" : {
+                                        "Area" : "UI",
+                                        "DisplayName" : "panel-395",
+                                        "Height" : 200,
+                                        "HideScrollbars" : false,
+                                        "HorizontalAnchor" : "left",
+                                        "Id" : "panel-395",
+                                        "Left" : 30,
+                                        "ResponsiveLayout" : true,
+                                        "ShowDataLoading" : true,
+                                        "Style" : "DefaultContainerStyle",
+                                        "Top" : 5,
+                                        "Type" : "panel",
+                                        "VerticalAnchor" : "top",
+                                        "Visible" : true,
+                                        "Width" : 300,
+                                        "Z-index" : 10,
+                                        "__TypeDisplayName" : "Panel"
+                                      },
+                                      "Widgets" : [ {
+                                        "Properties" : {
+                                          "Area" : "UI",
+                                          "AutoEvaluate" : true,
+                                          "DataChangeType" : "VALUE",
+                                          "DisplayName" : "expression-396",
+                                          "Expression" : "input",
+                                          "FireOnFirstValue" : false,
+                                          "Height" : 28,
+                                          "Id" : "expression-396",
+                                          "Left" : 20,
+                                          "OutputBaseType" : "NUMBER",
+                                          "ResponsiveLayout" : false,
+                                          "ShowDataLoading" : true,
+                                          "Top" : 0,
+                                          "Type" : "expression",
+                                          "Visible" : true,
+                                          "Width" : 200,
+                                          "Z-index" : 10,
+                                          "__TypeDisplayName" : "Expression",
+                                          "_currentParameterDefs" : [ {
+                                            "BaseType" : "NUMBER",
+                                            "Description" : "",
+                                            "ParameterName" : "input"
+                                          } ]
+                                        },
+                                        "Widgets" : [ ]
+                                      } ]
+                                    } ]
                                   }, {
                                     "Properties" : {
                                       "AnimateExpandCollapse" : true,
@@ -6519,7 +6644,7 @@
                                           "ContextId" : "",
                                           "DefaultConfirmationButton" : "button1",
                                           "Disabled" : false,
-                                          "DisabledStyle" : "DefaultButtonDisabledStyle",
+                                          "DisabledStyle" : "DefaultContainerStyle",
                                           "DisplayName" : "button-392",
                                           "FocusStyle" : "BayerGreenPlusButtonStyle",
                                           "Height" : 32,
@@ -7707,10 +7832,10 @@
                                 "Area" : "UI",
                                 "Columns" : 0,
                                 "DisplayName" : "layout-155",
-                                "Footer" : false,
-                                "FooterHeight" : 0,
+                                "Footer" : true,
+                                "FooterHeight" : 5,
                                 "Header" : true,
-                                "HeaderHeight" : 23,
+                                "HeaderHeight" : 25,
                                 "Id" : "layout-155",
                                 "IncludeSpacingInFixedAreas" : false,
                                 "IsPrintLayout" : false,
@@ -8061,6 +8186,36 @@
                                     } ]
                                   } ]
                                 } ]
+                              }, {
+                                "Properties" : {
+                                  "AnimateExpandCollapse" : true,
+                                  "Area" : "UI",
+                                  "BGImageRepeat" : "no-repeat",
+                                  "BGImageSize" : "auto",
+                                  "DisplayName" : "Footer",
+                                  "ExpandCollapseTabLocation" : "outside",
+                                  "Expanded" : true,
+                                  "Id" : "container-397",
+                                  "MinHeight" : 0,
+                                  "MinWidth" : 0,
+                                  "Overlay" : false,
+                                  "OverlayIsTransparent" : false,
+                                  "ResponsiveLayout" : true,
+                                  "ShowDataLoading" : true,
+                                  "ShowExpandCollapseTab" : false,
+                                  "Style" : "DefaultContainerStyle",
+                                  "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                                  "TabExpandStyle" : "DefaultTabExpandStyle",
+                                  "TabHeight" : 36,
+                                  "TabLocation" : "center",
+                                  "TabOffset" : 0,
+                                  "TabWidth" : 36,
+                                  "Type" : "container",
+                                  "Visible" : true,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "Container"
+                                },
+                                "Widgets" : [ ]
                               } ]
                             } ]
                           } ]

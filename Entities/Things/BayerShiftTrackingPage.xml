@@ -3,7 +3,7 @@
  build="b140"
  majorVersion="8"
  minorVersion="2"
- modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ modelPersistenceProviderPackage="H2PersistenceProviderPackage"
  revision="1"
  schemaVersion="1020"
  universal="">
@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-06-07T13:10:54.669Z"
+         lastModifiedDate="2018-12-05T02:54:20.674-08:00"
          name="BayerShiftTrackingPage"
          projectName="BayerIoT"
          published="false"
@@ -87,6 +87,40 @@
                              name="shiftSchedule"
                              ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetFakeLineStoppageDetails">
+                        <ResultType
+                         aspect.dataShape="BayerLineStoppageDetailsShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetLineStopReasonCodes">
+                        <ResultType
+                         aspect.dataShape="GenericStringList"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
                      aspect.isAsync="false"
@@ -226,6 +260,154 @@
                                         	
                                             row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
                                         }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetFakeLineStoppageDetails">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: BayerShiftTimeDataShape
+                                        var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
+                                        
+                                        
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerLineStoppageDetailsShape"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerLineStoppageDetailsShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "lightblue"; // STRING
+                                        newEntry.timestamp = new Date(shiftTime.startTime); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 4 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "grey2"; // STRING
+                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 4); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 1 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "lightblue"; // STRING
+                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 5); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 1 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "grey2"; // STRING
+                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 6); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 1 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "lightblue"; // STRING
+                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 7); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 1 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetLineStopReasonCodes">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="Script"
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "GenericStringList"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(GenericStringList)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Mechanical Failure"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Scheduling Change"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Not Enough Personnel"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Out of Infeed Material"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Changeover Overrun"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Other"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
                                         ]]>
                                         </code>
                                     </Row>
