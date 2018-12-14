@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b441"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
+ minorVersion="3"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="1"
- schemaVersion="1020"
+ schemaVersion="1030"
  universal="">
     <ThingShapes>
         <ThingShape
@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-12-05T02:57:36.762-08:00"
+         lastModifiedDate="2018-12-14T16:52:44.551+01:00"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -570,7 +570,6 @@
                                                 newEntry.performance = newEntry.targetQuantity ? (newEntry.quantityProduced / newEntry.targetQuantity * 100) : newEntry.quantityProduced;
                                                 
                                                 newEntry.status = newEntry.quantityProduced >= newEntry.targetQuantity; // BOOLEAN
-                                                x++;
                                             }
                                             else {
                                                 logger.warn("[" + me.name + ".GetDailyPerformance] Skipping shift");
@@ -581,6 +580,8 @@
                                             }
                                             
                                             newResultEntry.dailyPerformance.AddRow(newEntry);
+                                            
+                                            x++;
                                         }
                                         
                                         result.AddRow(newResultEntry);
@@ -916,6 +917,7 @@
             <VisibilityPermissions>
                 <Visibility></Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
             <PropertyBindings></PropertyBindings>
             <RemotePropertyBindings></RemotePropertyBindings>
