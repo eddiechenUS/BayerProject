@@ -1,11 +1,7 @@
 USE [BayerDevDb]
 GO
 
-/****** Object:  Table [dbo].[SafetyIssue]    Script Date: 9/3/2019 2:16:07 PM ******/
-DROP TABLE [dbo].[SafetyIssue]
-GO
-
-/****** Object:  Table [dbo].[SafetyIssue]    Script Date: 9/3/2019 2:16:07 PM ******/
+/****** Object:  Table [dbo].[SafetyIssue]    Script Date: 9/10/2019 1:38:01 PM ******/
 SET ANSI_NULLS ON
 GO
 
