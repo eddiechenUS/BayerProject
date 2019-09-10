@@ -1,14 +1,7 @@
 USE [BayerDevDb]
 GO
 
-ALTER TABLE [dbo].[Delay] DROP CONSTRAINT [FK_Delay_ShiftSchedule]
-GO
-
-/****** Object:  Table [dbo].[Delay]    Script Date: 9/3/2019 2:15:18 PM ******/
-DROP TABLE [dbo].[Delay]
-GO
-
-/****** Object:  Table [dbo].[Delay]    Script Date: 9/3/2019 2:15:18 PM ******/
+/****** Object:  Table [dbo].[Delay]    Script Date: 9/10/2019 1:37:43 PM ******/
 SET ANSI_NULLS ON
 GO
 

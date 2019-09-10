@@ -1,14 +1,7 @@
 USE [BayerDevDb]
 GO
 
-ALTER TABLE [dbo].[ShiftEvent] DROP CONSTRAINT [FK_ShiftEvent_ShiftSchedule]
-GO
-
-/****** Object:  Table [dbo].[ShiftEvent]    Script Date: 9/3/2019 2:16:15 PM ******/
-DROP TABLE [dbo].[ShiftEvent]
-GO
-
-/****** Object:  Table [dbo].[ShiftEvent]    Script Date: 9/3/2019 2:16:15 PM ******/
+/****** Object:  Table [dbo].[ShiftEvent]    Script Date: 9/10/2019 1:38:08 PM ******/
 SET ANSI_NULLS ON
 GO
 

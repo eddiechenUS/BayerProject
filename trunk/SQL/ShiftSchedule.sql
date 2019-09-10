@@ -1,11 +1,7 @@
 USE [BayerDevDb]
 GO
 
-/****** Object:  Table [dbo].[ShiftSchedule]    Script Date: 9/3/2019 2:16:22 PM ******/
-DROP TABLE [dbo].[ShiftSchedule]
-GO
-
-/****** Object:  Table [dbo].[ShiftSchedule]    Script Date: 9/3/2019 2:16:22 PM ******/
+/****** Object:  Table [dbo].[ShiftSchedule]    Script Date: 9/10/2019 1:38:13 PM ******/
 SET ANSI_NULLS ON
 GO
 

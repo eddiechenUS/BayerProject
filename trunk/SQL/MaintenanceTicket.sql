@@ -1,11 +1,7 @@
 USE [BayerDevDb]
 GO
 
-/****** Object:  Table [dbo].[MaintenanceTicket]    Script Date: 9/3/2019 2:15:30 PM ******/
-DROP TABLE [dbo].[MaintenanceTicket]
-GO
-
-/****** Object:  Table [dbo].[MaintenanceTicket]    Script Date: 9/3/2019 2:15:30 PM ******/
+/****** Object:  Table [dbo].[MaintenanceTicket]    Script Date: 9/10/2019 1:37:50 PM ******/
 SET ANSI_NULLS ON
 GO
 

@@ -1,11 +1,7 @@
 USE [BayerDevDb]
 GO
 
-/****** Object:  Table [dbo].[ProductionPlan]    Script Date: 9/3/2019 2:16:00 PM ******/
-DROP TABLE [dbo].[ProductionPlan]
-GO
-
-/****** Object:  Table [dbo].[ProductionPlan]    Script Date: 9/3/2019 2:16:00 PM ******/
+/****** Object:  Table [dbo].[ProductionPlan]    Script Date: 9/10/2019 1:37:56 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -16,8 +12,8 @@ CREATE TABLE [dbo].[ProductionPlan](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[productionLine] [varchar](255) NOT NULL,
 	[productId] [nvarchar](50) NOT NULL,
-	[orderNr] [varchar](50) NOT NULL,
-	[productDescription] [nvarchar](255) NOT NULL,
+	[orderNr] [varchar](50) NULL,
+	[productDescription] [nvarchar](255) NULL,
 	[targetQuantity] [float] NOT NULL,
 	[targetHours] [float] NOT NULL,
 	[targetQuantityPerHour] [float] NOT NULL,
@@ -27,9 +23,9 @@ CREATE TABLE [dbo].[ProductionPlan](
 	[producedQuantity] [float] NOT NULL,
 	[startTime] [datetime] NULL,
 	[endTime] [datetime] NULL,
-	[activeMaterialNumber] [varchar](50) NOT NULL,
-	[blisterType] [varchar](20) NOT NULL,
-	[foldedBoxFormat] [varchar](30) NOT NULL,
+	[activeMaterialNumber] [varchar](50) NULL,
+	[blisterType] [varchar](20) NULL,
+	[foldedBoxFormat] [varchar](30) NULL,
  CONSTRAINT [PK_ProductionPlan] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

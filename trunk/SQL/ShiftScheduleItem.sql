@@ -1,17 +1,7 @@
 USE [BayerDevDb]
 GO
 
-ALTER TABLE [dbo].[ShiftScheduleItem] DROP CONSTRAINT [FK_ShiftScheduleItem_ShiftSchedule]
-GO
-
-ALTER TABLE [dbo].[ShiftScheduleItem] DROP CONSTRAINT [FK_ShiftScheduleItem_ProductionPlan]
-GO
-
-/****** Object:  Table [dbo].[ShiftScheduleItem]    Script Date: 9/3/2019 2:16:34 PM ******/
-DROP TABLE [dbo].[ShiftScheduleItem]
-GO
-
-/****** Object:  Table [dbo].[ShiftScheduleItem]    Script Date: 9/3/2019 2:16:34 PM ******/
+/****** Object:  Table [dbo].[ShiftScheduleItem]    Script Date: 9/10/2019 1:38:21 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -25,6 +15,10 @@ CREATE TABLE [dbo].[ShiftScheduleItem](
 	[duration] [int] NOT NULL,
 	[scheduleId] [int] NOT NULL,
 	[productionPlanId] [int] NULL,
+	[quantityProduced] [float] NOT NULL,
+	[targetQuantity] [float] NOT NULL,
+	[quantityTargetOk] [bit] NULL,
+	[productionPlanId_actual] [int] NULL,
  CONSTRAINT [PK_ShiftScheduleItem] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -38,6 +32,13 @@ ON DELETE SET NULL
 GO
 
 ALTER TABLE [dbo].[ShiftScheduleItem] CHECK CONSTRAINT [FK_ShiftScheduleItem_ProductionPlan]
+GO
+
+ALTER TABLE [dbo].[ShiftScheduleItem]  WITH CHECK ADD  CONSTRAINT [FK_ShiftScheduleItem_ProductionPlan1] FOREIGN KEY([productionPlanId_actual])
+REFERENCES [dbo].[ProductionPlan] ([id])
+GO
+
+ALTER TABLE [dbo].[ShiftScheduleItem] CHECK CONSTRAINT [FK_ShiftScheduleItem_ProductionPlan1]
 GO
 
 ALTER TABLE [dbo].[ShiftScheduleItem]  WITH CHECK ADD  CONSTRAINT [FK_ShiftScheduleItem_ShiftSchedule] FOREIGN KEY([scheduleId])
