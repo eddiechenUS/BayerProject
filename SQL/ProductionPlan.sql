@@ -1,7 +1,7 @@
 USE [BayerDevDb]
 GO
 
-/****** Object:  Table [dbo].[ProductionPlan]    Script Date: 9/10/2019 1:37:56 PM ******/
+/****** Object:  Table [dbo].[ProductionPlan]    Script Date: 9/11/2019 2:49:49 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -26,6 +26,7 @@ CREATE TABLE [dbo].[ProductionPlan](
 	[activeMaterialNumber] [varchar](50) NULL,
 	[blisterType] [varchar](20) NULL,
 	[foldedBoxFormat] [varchar](30) NULL,
+	[blistersPerFoldedBox] [int] NULL,
  CONSTRAINT [PK_ProductionPlan] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
