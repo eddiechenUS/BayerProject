@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b2319"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
- revision="1"
- schemaVersion="1020"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <Mashups>
         <Mashup
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-12-05T02:54:20.624-08:00"
+         lastModifiedDate="2019-09-27T11:08:06.032Z"
          name="BayerReportsMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -30,10 +30,25 @@
             </DesignTimePermissions>
             <RunTimePermissions></RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
-            <ParameterDefinitions></ParameterDefinitions>
+            <ParameterDefinitions>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="0"
+                 baseType="THINGNAME"
+                 description=""
+                 name="line"
+                 ordinal="0"></FieldDefinition>
+            </ParameterDefinitions>
             <Things>
                 <Thing>BayerUtilities</Thing>
             </Things>
@@ -76,21 +91,6 @@
                     "Target" : "GetGlobalSessionValues"
                   } ]
                 },
-                "ThingTemplates_BayerProductionLine" : {
-                  "DataName" : "ThingTemplates_BayerProductionLine",
-                  "EntityName" : "BayerProductionLine",
-                  "EntityType" : "ThingTemplates",
-                  "Id" : "15e7e0be-e490-4ceb-9375-2b714f6e6a3e",
-                  "Services" : [ {
-                    "APIMethod" : "post",
-                    "Characteristic" : "Services",
-                    "Id" : "8e3a1f05-8c9a-42bf-a84e-66eac75712f5",
-                    "Name" : "GetImplementingThingsWithData",
-                    "Parameters" : { },
-                    "RefreshInterval" : 0,
-                    "Target" : "GetImplementingThingsWithData"
-                  } ]
-                },
                 "Things_BayerUtilities" : {
                   "DataName" : "Things_BayerUtilities",
                   "EntityName" : "BayerUtilities",
@@ -123,56 +123,6 @@
                 }
               },
               "DataBindings" : [ {
-                "Id" : "98aa21e4-c272-4a6b-be4c-9431da3ac2b3",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "InfoTable",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetImplementingThingsWithData",
-                "SourceSection" : "ThingTemplates_BayerProductionLine",
-                "TargetArea" : "UI",
-                "TargetId" : "dhxlist-15",
-                "TargetSection" : ""
-              }, {
-                "Id" : "e25dfa3d-accf-42b1-977b-85162bb2fbca",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "name",
-                  "SourcePropertyBaseType" : "STRING",
-                  "SourcePropertyType" : "Field",
-                  "TargetProperty" : "lineName",
-                  "TargetPropertyBaseType" : "THINGNAME",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "SelectedRows",
-                "SourceId" : "GetImplementingThingsWithData",
-                "SourceSection" : "ThingTemplates_BayerProductionLine",
-                "TargetArea" : "UI",
-                "TargetId" : "mashupcontainer-17",
-                "TargetSection" : ""
-              }, {
-                "Id" : "9e3030e4-992a-48b8-963b-f5cdad3ac652",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "name",
-                  "SourcePropertyBaseType" : "STRING",
-                  "TargetProperty" : "value",
-                  "TargetPropertyBaseType" : "THINGNAME",
-                  "TargetPropertyType" : "Entity"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "SelectedRows",
-                "SourceId" : "GetImplementingThingsWithData",
-                "SourceSection" : "ThingTemplates_BayerProductionLine",
-                "TargetArea" : "Data",
-                "TargetId" : "EntityName",
-                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
-              }, {
                 "Id" : "79ddbc87-dcdb-43c9-8549-6910eef96d36",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "downloadLink",
@@ -223,18 +173,62 @@
                 "TargetArea" : "UI",
                 "TargetId" : "valuedisplay-35",
                 "TargetSection" : ""
-              } ],
-              "DesignTimePermissions" : { },
-              "Events" : [ {
-                "EventHandlerArea" : "Data",
-                "EventHandlerId" : "ThingTemplates_BayerProductionLine",
-                "EventHandlerService" : "GetImplementingThingsWithData",
-                "EventTriggerArea" : "Mashup",
-                "EventTriggerEvent" : "Loaded",
-                "EventTriggerId" : "mashup-root",
-                "EventTriggerSection" : "",
-                "Id" : "18988f16-340f-4889-858d-83892a1effa1"
               }, {
+                "Id" : "95a0af84-48c0-4611-8321-0577348c8e6b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "label-14",
+                "TargetSection" : ""
+              }, {
+                "Id" : "93ed4b2e-5a61-4a07-80bb-e003beeca2b8",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "value",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Entity"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "EntityName",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "f204a75e-b5d3-4de2-9c5c-4920bed8c1d5",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "lineName",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "mashupcontainer-17",
+                "TargetSection" : ""
+              } ],
+              "DesignTimePermissions" : {
+                "Create" : [ ],
+                "Delete" : [ ],
+                "Metadata" : [ ],
+                "Read" : [ ],
+                "Update" : [ ]
+              },
+              "Events" : [ {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
                 "EventHandlerService" : "GenerateAndSendReport",
@@ -266,19 +260,33 @@
                 "EventHandlerId" : "Things_BayerUtilities",
                 "EventHandlerService" : "GetPastDayStartEndTime",
                 "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "lineChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "0d5a11f7-8dda-4643-ad1e-71d6a6dcbd3f"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerUtilities",
+                "EventHandlerService" : "GetPastDayStartEndTime",
+                "EventTriggerArea" : "Mashup",
                 "EventTriggerEvent" : "Loaded",
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
-                "Id" : "db9d4e7e-dd1c-42f8-8952-b9bc418d7cf2"
+                "Id" : "39266403-dcfb-4db1-a9c1-080d072b4639"
               } ],
-              "RunTimePermissions" : { },
+              "RunTimePermissions" : {
+                "permissions" : [ ]
+              },
               "UI" : {
                 "Properties" : {
+                  "AddToDashboardButton" : "SimplePlus",
                   "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
                   "Area" : "Mashup",
+                  "BGImage" : "",
                   "BGImageRepeat" : "no-repeat",
                   "BGImageSize" : "auto",
                   "Columns" : 0,
+                  "ConfigureGadgetButton" : "SimpleGear",
                   "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
                   "DisplayName" : "Mashup",
                   "EnableParameterEditing" : false,
@@ -294,16 +302,28 @@
                   "Rows" : 0,
                   "ShowDataLoading" : true,
                   "Style" : "DefaultMashupStyle",
+                  "StyleTheme" : "Base Theme",
                   "Title" : "",
                   "TitleBar" : false,
                   "TitleBarStyle" : "DefaultTitleBarStyle",
                   "TitleBarText" : "Gadget Title Here",
                   "Top" : 0,
                   "Type" : "mashup",
+                  "UseTheme" : false,
+                  "UseThemeForHybrids" : false,
                   "Visible" : true,
                   "Width" : 1024,
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
+                  "_currentParameterDefs" : [ {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "THINGNAME",
+                    "Description" : "",
+                    "ParameterName" : "line"
+                  } ],
                   "id_index" : 39,
                   "supportsAutoResize" : true
                 },
@@ -381,7 +401,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -397,7 +418,7 @@
                         "IsPrintLayout" : false,
                         "Left" : 135,
                         "LeftSidebar" : true,
-                        "LeftSidebarWidth" : 370,
+                        "LeftSidebarWidth" : 470,
                         "Orientation" : "horizontal",
                         "PctColumn1" : 50,
                         "PctColumn2" : 50,
@@ -457,7 +478,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -473,7 +495,7 @@
                             "IsPrintLayout" : false,
                             "Left" : 150,
                             "LeftSidebar" : true,
-                            "LeftSidebarWidth" : 100,
+                            "LeftSidebarWidth" : 465,
                             "Orientation" : "horizontal",
                             "PctColumn1" : 100,
                             "PctColumn2" : 0,
@@ -499,7 +521,7 @@
                             "RightSidebarWidth" : 0,
                             "Rows" : 0,
                             "ShowDataLoading" : true,
-                            "Spacing" : 2,
+                            "Spacing" : 1,
                             "Top" : 45,
                             "Type" : "layout",
                             "Visible" : true,
@@ -533,7 +555,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -566,14 +589,14 @@
                                   "Left" : 5,
                                   "ResponsiveLayout" : false,
                                   "ShowDataLoading" : true,
-                                  "Style" : "Bayer_WhiteTitle",
-                                  "Text" : "[[bayer.line]]",
+                                  "Style" : "Bayer_WhiteTitleBig",
+                                  "Text" : "[[Bayer.Line]]",
                                   "ToolTipField" : "",
                                   "ToolTipStyle" : "DefaultTooltipStyle",
-                                  "Top" : 28,
+                                  "Top" : 21,
                                   "Type" : "label",
                                   "Visible" : true,
-                                  "Width" : 75,
+                                  "Width" : 140,
                                   "Z-index" : 10,
                                   "__TypeDisplayName" : "Label",
                                   "__supportsTooltip" : true
@@ -591,39 +614,20 @@
                                   "LinkHoverStyle" : "DefaultLinkHoverStyle",
                                   "LinkStyle" : "DefaultLinkStyle",
                                   "ResponsiveLayout" : false,
-                                  "ShowDataLoading" : true,
+                                  "ShowDataLoading" : false,
                                   "SourceURL" : "",
                                   "TabSequence" : 0,
                                   "TargetWindow" : "new",
                                   "Text" : "Link Text",
                                   "ToolTipField" : "",
                                   "ToolTipStyle" : "DefaultTooltipStyle",
-                                  "Top" : 40,
+                                  "Top" : 15,
                                   "Type" : "link",
                                   "Visible" : false,
-                                  "Width" : 100,
+                                  "Width" : 55,
                                   "Z-index" : 10,
                                   "__TypeDisplayName" : "Link",
                                   "__supportsTooltip" : true
-                                },
-                                "Widgets" : [ ]
-                              }, {
-                                "Properties" : {
-                                  "Area" : "UI",
-                                  "DisplayName" : "statusmessage-21",
-                                  "Height" : 28,
-                                  "Id" : "statusmessage-21",
-                                  "Left" : 0,
-                                  "Message" : "[[Bayer.WaitForReport]]",
-                                  "MessageType" : "info",
-                                  "ResponsiveLayout" : false,
-                                  "ShowDataLoading" : true,
-                                  "Top" : 60,
-                                  "Type" : "statusmessage",
-                                  "Visible" : true,
-                                  "Width" : 200,
-                                  "Z-index" : 10,
-                                  "__TypeDisplayName" : "Status Message"
                                 },
                                 "Widgets" : [ ]
                               } ]
@@ -655,7 +659,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -679,53 +684,21 @@
                               },
                               "Widgets" : [ {
                                 "Properties" : {
-                                  "Alignment" : "left",
                                   "Area" : "UI",
-                                  "AutoSelectFirstRow" : true,
-                                  "ClearIfNoSelection" : false,
-                                  "ComboDropdownButtonStyle" : "DefaultComboDropdownButtonStyle",
-                                  "ComboEnableCheckbox" : false,
-                                  "ComboItemHighlightedStyle" : "DefaultComboItemHighlightedStyle",
-                                  "ComboTextboxStyle" : "DefaultComboTextboxStyle",
-                                  "DisableSelectedStyle" : false,
-                                  "DisplayField" : "displayName",
-                                  "DisplayName" : "dhxlist-15",
-                                  "DropdownButtonStyle" : "DefaultDropdownButtonStyle",
-                                  "DropdownSelectedStyle" : "DefaultDropdownSelectedStyle",
-                                  "DropdownStyle" : "DefaultDropdownStyle",
-                                  "EnableKeyboardSelections" : true,
+                                  "DisplayName" : "statusmessage-21",
                                   "Height" : 28,
-                                  "HeightOfDropdownView" : 170,
-                                  "Id" : "dhxlist-15",
-                                  "Label" : "",
-                                  "LabelAlignment" : "left",
+                                  "Id" : "statusmessage-21",
                                   "Left" : 10,
-                                  "ListBackgroundStyle" : "DefaultListBackgroundStyle",
-                                  "ListFocusStyle" : "DefaultFocusStyle",
-                                  "ListItemAlternateStyle" : "DefaultListItemAlternateStyle",
-                                  "ListItemHoverStyle" : "DefaultListItemHoverStyle",
-                                  "ListItemSelectedStyle" : "DefaultListItemSelectedStyle",
-                                  "ListItemStyle" : "DefaultListItemStyle",
-                                  "ListLabelStyle" : "DefaultWidgetLabelStyle",
-                                  "MultiSelect" : false,
-                                  "NumberOfItemsInDropdownView" : 6,
+                                  "Message" : "[[Bayer.WaitForReport]]",
+                                  "MessageType" : "info",
                                   "ResponsiveLayout" : false,
-                                  "RowHeight" : 28,
                                   "ShowDataLoading" : true,
-                                  "TabSequence" : -1,
-                                  "TextIfNoSelectionType" : "editable",
-                                  "ToolTipStyle" : "DefaultTooltipStyle",
-                                  "Top" : 28,
-                                  "Type" : "dhxlist",
-                                  "ValueField" : "name",
-                                  "View" : "dropdown",
+                                  "Top" : 10,
+                                  "Type" : "statusmessage",
                                   "Visible" : true,
-                                  "Width" : 110,
-                                  "WidthOfDropdownView" : 110,
+                                  "Width" : 200,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "List",
-                                  "__supportsLabel" : true,
-                                  "__supportsTooltip" : true
+                                  "__TypeDisplayName" : "Status Message"
                                 },
                                 "Widgets" : [ ]
                               } ]
@@ -747,7 +720,7 @@
                           "Overlay" : false,
                           "OverlayIsTransparent" : false,
                           "ResponsiveLayout" : true,
-                          "ShowDataLoading" : true,
+                          "ShowDataLoading" : false,
                           "ShowExpandCollapseTab" : false,
                           "Style" : "DefaultContainerStyle",
                           "TabCollapseStyle" : "DefaultTabCollapseStyle",
@@ -759,7 +732,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -835,7 +809,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -860,6 +835,7 @@
                                 "ToolTipStyle" : "DefaultTooltipStyle",
                                 "Top" : 35,
                                 "Type" : "valuedisplay",
+                                "UseTheme" : false,
                                 "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                                 "ValueDisplayStyle" : "Bayer_WhiteTitle",
                                 "VerticalAlignment" : "middle",
@@ -899,7 +875,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -924,6 +901,7 @@
                                 "ToolTipStyle" : "DefaultTooltipStyle",
                                 "Top" : 45,
                                 "Type" : "valuedisplay",
+                                "UseTheme" : false,
                                 "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                                 "ValueDisplayStyle" : "Bayer_WhiteTitle",
                                 "ValueFormat" : {
@@ -980,7 +958,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ ]
                       }, {
@@ -1010,7 +989,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1057,6 +1037,7 @@
                               "ResponsiveLayout" : false,
                               "RoundedCorners" : true,
                               "ShowDataLoading" : true,
+                              "SingleClickSelectOnTablets" : true,
                               "Style" : "Bayer_ButtonBlue",
                               "TabSequence" : 0,
                               "ToolTipField" : "",
@@ -1101,7 +1082,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -1177,7 +1159,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1254,7 +1237,8 @@
                           "Type" : "container",
                           "Visible" : false,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ ]
                       } ]
@@ -1286,7 +1270,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ ]
                   } ]
@@ -1296,6 +1281,7 @@
             }
             ]]>
             </mashupContent>
+            <preview></preview>
         </Mashup>
     </Mashups>
 </Entities>

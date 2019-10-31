@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b2319"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
- revision="1"
- schemaVersion="1020"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <Mashups>
         <Mashup
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-12-05T02:54:20.633-08:00"
+         lastModifiedDate="2019-09-27T11:08:06.048Z"
          name="BayerUploadExcelPopup"
          projectName="BayerIoT"
          rows="0.0"
@@ -30,8 +30,14 @@
             </DesignTimePermissions>
             <RunTimePermissions></RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
             <ParameterDefinitions>
                 <FieldDefinition
@@ -57,22 +63,6 @@
                   "EntityType" : "DynamicThingShapes",
                   "Id" : "f33203cf-4e01-4e2f-9a44-f0b930e9310f",
                   "Services" : [ {
-                    "APIMethod" : "post",
-                    "Characteristic" : "Services",
-                    "Id" : "9401fbd0-6a5b-4960-82fa-dbd940db8d48",
-                    "Name" : "LoadCSV",
-                    "Parameters" : { },
-                    "RefreshInterval" : 0,
-                    "Target" : "LoadCSV"
-                  }, {
-                    "APIMethod" : "post",
-                    "Characteristic" : "Services",
-                    "Id" : "aaf11fb8-867a-439a-b7a6-9787b538ef02",
-                    "Name" : "GetProductionPlan",
-                    "Parameters" : { },
-                    "RefreshInterval" : 0,
-                    "Target" : "GetProductionPlan"
-                  }, {
                     "APIMethod" : "post",
                     "Characteristic" : "Services",
                     "Id" : "a6bec457-c542-4b6e-90ee-023101da847f",
@@ -118,53 +108,6 @@
                 }
               },
               "DataBindings" : [ {
-                "Id" : "3337d3fe-2bec-4e0f-8cd8-8775f405619b",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "FullPath",
-                  "SourcePropertyBaseType" : "STRING",
-                  "TargetProperty" : "path",
-                  "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "Parameter"
-                } ],
-                "SourceArea" : "UI",
-                "SourceId" : "fileupload-11",
-                "SourceSection" : "",
-                "TargetArea" : "Data",
-                "TargetId" : "LoadCSV",
-                "TargetSection" : "DynamicThingShapes_BayerProductionManagement"
-              }, {
-                "Id" : "2a14c137-a0c0-4db5-b392-bd7d674135ae",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "LineID",
-                  "SourcePropertyBaseType" : "THINGNAME",
-                  "TargetProperty" : "value",
-                  "TargetPropertyBaseType" : "THINGNAME",
-                  "TargetPropertyType" : "Entity"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "Data",
-                "TargetId" : "EntityName",
-                "TargetSection" : "DynamicThingShapes_BayerProductionManagement"
-              }, {
-                "Id" : "204fad2f-8918-42bf-8be4-c63d9a6f21e8",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "InfoTable",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetProductionPlan",
-                "SourceSection" : "DynamicThingShapes_BayerProductionManagement",
-                "TargetArea" : "UI",
-                "TargetId" : "dhxgrid-20",
-                "TargetSection" : ""
-              }, {
                 "Id" : "7b2aebbf-7123-4f02-b9fe-a6a8470ec823",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "FullPath",
@@ -179,27 +122,30 @@
                 "TargetArea" : "Data",
                 "TargetId" : "LoadCSVv2",
                 "TargetSection" : "DynamicThingShapes_BayerProductionManagement"
+              }, {
+                "Id" : "962e0983-94f4-4504-a1eb-c02bf491bad8",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "LineID",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "value",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Entity"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "EntityName",
+                "TargetSection" : "DynamicThingShapes_BayerProductionManagement"
               } ],
-              "DesignTimePermissions" : { },
+              "DesignTimePermissions" : {
+                "Create" : [ ],
+                "Delete" : [ ],
+                "Metadata" : [ ],
+                "Read" : [ ],
+                "Update" : [ ]
+              },
               "Events" : [ {
-                "EventHandlerArea" : "Mashup",
-                "EventHandlerId" : "mashup-root",
-                "EventHandlerService" : "CloseIfPopup",
-                "EventTriggerArea" : "Data",
-                "EventTriggerEvent" : "ServiceInvokeCompleted",
-                "EventTriggerId" : "LoadCSV",
-                "EventTriggerSection" : "DynamicThingShapes_BayerProductionManagement",
-                "Id" : "fde884b3-a90a-4630-aca3-78a73a8117bc"
-              }, {
-                "EventHandlerArea" : "Data",
-                "EventHandlerId" : "DynamicThingShapes_BayerProductionManagement",
-                "EventHandlerService" : "GetProductionPlan",
-                "EventTriggerArea" : "Mashup",
-                "EventTriggerEvent" : "Loaded",
-                "EventTriggerId" : "mashup-root",
-                "EventTriggerSection" : "",
-                "Id" : "3203f981-c15f-4f6c-a662-5c79c3820172"
-              }, {
                 "EventHandlerArea" : "Mashup",
                 "EventHandlerId" : "mashup-root",
                 "EventHandlerService" : "CloseIfPopup",
@@ -227,14 +173,19 @@
                 "EventTriggerSection" : "DynamicThingShapes_BayerProductionManagement",
                 "Id" : "4b5ad8db-ad7b-41f6-ae7b-af8d150452d3"
               } ],
-              "RunTimePermissions" : { },
+              "RunTimePermissions" : {
+                "permissions" : [ ]
+              },
               "UI" : {
                 "Properties" : {
+                  "AddToDashboardButton" : "SimplePlus",
                   "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
                   "Area" : "Mashup",
+                  "BGImage" : "",
                   "BGImageRepeat" : "repeat",
                   "BGImageSize" : "auto",
                   "Columns" : 0,
+                  "ConfigureGadgetButton" : "SimpleGear",
                   "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
                   "DisplayName" : "Mashup",
                   "EnableParameterEditing" : false,
@@ -250,12 +201,15 @@
                   "Rows" : 0,
                   "ShowDataLoading" : true,
                   "Style" : "Bayer_PopupBgStyle",
+                  "StyleTheme" : "Base Theme",
                   "Title" : "",
                   "TitleBar" : false,
                   "TitleBarStyle" : "DefaultTitleBarStyle",
                   "TitleBarText" : "Gadget Title Here",
                   "Top" : 0,
                   "Type" : "mashup",
+                  "UseTheme" : false,
+                  "UseThemeForHybrids" : false,
                   "Visible" : true,
                   "Width" : 1024,
                   "Z-index" : 10,
@@ -342,7 +296,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -418,7 +373,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -443,6 +399,7 @@
                             "ToolTipStyle" : "DefaultTooltipStyle",
                             "Top" : 25,
                             "Type" : "valuedisplay",
+                            "UseTheme" : false,
                             "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                             "ValueDisplayStyle" : "Bayer_PopupTitle",
                             "VerticalAlignment" : "middle",
@@ -482,7 +439,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -558,7 +516,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -593,6 +552,7 @@
                                   "Height" : 40,
                                   "Id" : "fileupload-11",
                                   "Left" : 5,
+                                  "MultiFilesSelect" : false,
                                   "Path" : "/csv_files",
                                   "RepositoryName" : "BayerCSVRepository",
                                   "RepositoryStyle" : "DefaultRepositoryStyle",
@@ -602,6 +562,7 @@
                                   "TabSequence" : 0,
                                   "Top" : 0,
                                   "Type" : "fileupload",
+                                  "UseTheme" : false,
                                   "Visible" : true,
                                   "Width" : 302,
                                   "Z-index" : 10,
@@ -637,207 +598,10 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
-                            "Widgets" : [ {
-                              "Properties" : {
-                                "AlignHeader" : false,
-                                "Area" : "UI",
-                                "AutoSelectFirstRow" : false,
-                                "CellTextWrapping" : false,
-                                "ColumnFormat" : {
-                                  "formatInfo" : [ {
-                                    "Align" : "right",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "id",
-                                    "FormatOptions" : {
-                                      "FormatString" : "0",
-                                      "renderer" : "INTEGER"
-                                    },
-                                    "Title" : "id",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "left",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "productId",
-                                    "FormatOptions" : {
-                                      "FormatString" : "full",
-                                      "renderer" : "STRING"
-                                    },
-                                    "Title" : "productId",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "left",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "orderNr",
-                                    "FormatOptions" : {
-                                      "FormatString" : "full",
-                                      "renderer" : "STRING"
-                                    },
-                                    "Title" : "orderNr",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "left",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "productDescription",
-                                    "FormatOptions" : {
-                                      "FormatString" : "full",
-                                      "renderer" : "STRING"
-                                    },
-                                    "Title" : "productDescription",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "right",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "targetQuantity",
-                                    "FormatOptions" : {
-                                      "FormatString" : "0.00",
-                                      "renderer" : "NUMBER"
-                                    },
-                                    "Title" : "targetQuantity",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "right",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "targetHours",
-                                    "FormatOptions" : {
-                                      "FormatString" : "0.00",
-                                      "renderer" : "NUMBER"
-                                    },
-                                    "Title" : "targetHours",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "right",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "targetQuantityPerHour",
-                                    "FormatOptions" : {
-                                      "FormatString" : "0.00",
-                                      "renderer" : "NUMBER"
-                                    },
-                                    "Title" : "targetQuantityPerHour",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "left",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "status",
-                                    "FormatOptions" : {
-                                      "FormatString" : "full",
-                                      "renderer" : "STRING"
-                                    },
-                                    "Title" : "status",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "right",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "remainingHours",
-                                    "FormatOptions" : {
-                                      "FormatString" : "0.00",
-                                      "renderer" : "NUMBER"
-                                    },
-                                    "Title" : "remainingHours",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "right",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "workedHours",
-                                    "FormatOptions" : {
-                                      "FormatString" : "0.00",
-                                      "renderer" : "NUMBER"
-                                    },
-                                    "Title" : "workedHours",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "right",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "producedQuantity",
-                                    "FormatOptions" : {
-                                      "FormatString" : "0.00",
-                                      "renderer" : "NUMBER"
-                                    },
-                                    "Title" : "producedQuantity",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "left",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "startTime",
-                                    "FormatOptions" : {
-                                      "FormatString" : "[[dateTimeFormat_Default]]",
-                                      "renderer" : "DATETIME"
-                                    },
-                                    "Title" : "startTime",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  }, {
-                                    "Align" : "left",
-                                    "AllowEdit" : false,
-                                    "FieldName" : "endTime",
-                                    "FormatOptions" : {
-                                      "FormatString" : "[[dateTimeFormat_Default]]",
-                                      "renderer" : "DATETIME"
-                                    },
-                                    "Title" : "endTime",
-                                    "ValidationExpression" : "",
-                                    "ValidationMessage" : "",
-                                    "Width" : "auto"
-                                  } ]
-                                },
-                                "CurrentScrollTop" : 0,
-                                "DisplayName" : "dhxgrid-20",
-                                "FocusStyle" : "DefaultFocusStyle",
-                                "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
-                                "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
-                                "GridHeaderStyle" : "DefaultGridHeaderStyle",
-                                "GridHeaderTextCase" : "capitalize",
-                                "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
-                                "Height" : 295,
-                                "Id" : "dhxgrid-20",
-                                "IsEditable" : false,
-                                "IsPrintLayout" : false,
-                                "Left" : 0,
-                                "MultiSelect" : false,
-                                "ResponsiveLayout" : true,
-                                "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
-                                "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
-                                "RowFormat_StateParameters" : [ ],
-                                "RowHeight" : 30,
-                                "RowHoverStyle" : "DefaultRowHoverStyle",
-                                "RowSelectedStyle" : "DefaultRowSelectedStyle",
-                                "ScrollTop" : 0,
-                                "ShowAllColumns" : false,
-                                "ShowDataLoading" : true,
-                                "TabSequence" : 0,
-                                "Top" : 85,
-                                "Type" : "dhxgrid",
-                                "Visible" : true,
-                                "Width" : 745,
-                                "Z-index" : 10,
-                                "__TypeDisplayName" : "Grid"
-                              },
-                              "Widgets" : [ ]
-                            } ]
+                            "Widgets" : [ ]
                           } ]
                         } ]
                       }, {
@@ -867,7 +631,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -943,7 +708,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ ]
                           }, {
@@ -973,7 +739,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -1020,6 +787,7 @@
                                   "ResponsiveLayout" : false,
                                   "RoundedCorners" : true,
                                   "ShowDataLoading" : true,
+                                  "SingleClickSelectOnTablets" : true,
                                   "Style" : "Bayer_ButtonRed",
                                   "TabSequence" : 0,
                                   "ToolTipField" : "",
@@ -1046,6 +814,7 @@
             }
             ]]>
             </mashupContent>
+            <preview></preview>
         </Mashup>
     </Mashups>
 </Entities>

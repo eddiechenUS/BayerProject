@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b2319"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
- revision="1"
- schemaVersion="1020"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <Mashups>
         <Mashup
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-12-05T02:54:20.617-08:00"
+         lastModifiedDate="2019-09-27T11:08:05.985Z"
          name="BayerActionListCellMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -30,49 +30,77 @@
             </DesignTimePermissions>
             <RunTimePermissions></RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
             <ParameterDefinitions>
                 <FieldDefinition
+                 aspect.bindingDirection="IN"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="7"
+                 baseType="INTEGER"
+                 description=""
+                 name="actionId"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
                  aspect.ordinal="2"
                  baseType="USERNAME"
                  description=""
                  name="assignedTo"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
                  aspect.ordinal="4"
                  baseType="DATETIME"
                  description=""
                  name="createdTime"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
                  aspect.ordinal="0"
                  baseType="DATETIME"
                  description=""
                  name="dueDate"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
                  aspect.ordinal="5"
                  baseType="STRING"
                  description=""
                  name="problemDescription"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
                  aspect.ordinal="3"
                  baseType="THINGNAME"
                  description=""
                  name="productionLine"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
                  aspect.ordinal="6"
                  baseType="STRING"
                  description=""
                  name="solutionDescription"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
                  aspect.ordinal="1"
-                 baseType="STRING"
+                 baseType="INTEGER"
                  description=""
                  name="status"
                  ordinal="0"></FieldDefinition>
@@ -133,22 +161,6 @@
                 "TargetId" : "valuedisplay-5",
                 "TargetSection" : ""
               }, {
-                "Id" : "c65231e3-9ca3-40fc-8819-c67f2f891097",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "status",
-                  "SourcePropertyBaseType" : "STRING",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "ANYSCALAR",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "valuedisplay-45",
-                "TargetSection" : ""
-              }, {
                 "Id" : "639e2c5e-f4fc-43e1-bde5-46f474b6518f",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "assignedTo",
@@ -173,20 +185,6 @@
                   "TargetProperty" : "assginedTo",
                   "TargetPropertyBaseType" : "USERNAME",
                   "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "navigation-53",
-                "TargetSection" : ""
-              }, {
-                "Id" : "100afa99-53a3-487c-a3a3-d0a778ad1643",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "status",
-                  "SourcePropertyBaseType" : "STRING",
-                  "TargetProperty" : "status",
-                  "TargetPropertyBaseType" : "STRING"
                 } ],
                 "SourceArea" : "Mashup",
                 "SourceId" : "mashup-root",
@@ -315,8 +313,62 @@
                 "TargetArea" : "Session",
                 "TargetId" : "Session",
                 "TargetSection" : "Session"
+              }, {
+                "Id" : "855072c7-f1e7-4980-a190-2d1715e94acb",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "actionId",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "actionId",
+                  "TargetPropertyBaseType" : "INTEGER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "navigation-53",
+                "TargetSection" : ""
+              }, {
+                "Id" : "880edf95-081f-473e-b4be-37f0acead820",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "status",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "status",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "navigation-53",
+                "TargetSection" : ""
+              }, {
+                "Id" : "ec171986-ca40-4e92-bcdd-d4ba7d76555b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "status",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-67",
+                "TargetSection" : ""
               } ],
-              "DesignTimePermissions" : { },
+              "DesignTimePermissions" : {
+                "Create" : [ ],
+                "Delete" : [ ],
+                "Metadata" : [ ],
+                "Read" : [ ],
+                "Update" : [ ]
+              },
               "Events" : [ {
                 "EventHandlerArea" : "UI",
                 "EventHandlerId" : "navigation-53",
@@ -336,14 +388,19 @@
                 "EventTriggerSection" : "",
                 "Id" : "60092989-9855-48cd-86f3-15fc69c2c2fb"
               } ],
-              "RunTimePermissions" : { },
+              "RunTimePermissions" : {
+                "permissions" : [ ]
+              },
               "UI" : {
                 "Properties" : {
+                  "AddToDashboardButton" : "SimplePlus",
                   "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
                   "Area" : "Mashup",
+                  "BGImage" : "",
                   "BGImageRepeat" : "no-repeat",
                   "BGImageSize" : "auto",
                   "Columns" : 0,
+                  "ConfigureGadgetButton" : "SimpleGear",
                   "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
                   "DisplayName" : "Mashup",
                   "EnableParameterEditing" : false,
@@ -359,46 +416,85 @@
                   "Rows" : 0,
                   "ShowDataLoading" : true,
                   "Style" : "DefaultMashupStyle",
+                  "StyleTheme" : "Base Theme",
                   "Title" : "",
                   "TitleBar" : false,
                   "TitleBarStyle" : "DefaultTitleBarStyle",
                   "TitleBarText" : "Gadget Title Here",
                   "Top" : 0,
                   "Type" : "mashup",
+                  "UseTheme" : false,
+                  "UseThemeForHybrids" : false,
                   "Visible" : true,
                   "Width" : 1024,
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
                   "_currentParameterDefs" : [ {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
                     "BaseType" : "DATETIME",
                     "Description" : "",
                     "ParameterName" : "dueDate"
                   }, {
-                    "BaseType" : "STRING",
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "INTEGER",
                     "Description" : "",
                     "ParameterName" : "status"
                   }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
                     "BaseType" : "USERNAME",
                     "Description" : "",
                     "ParameterName" : "assignedTo"
                   }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
                     "BaseType" : "THINGNAME",
                     "Description" : "",
                     "ParameterName" : "productionLine"
                   }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
                     "BaseType" : "DATETIME",
                     "Description" : "",
                     "ParameterName" : "createdTime"
                   }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
                     "BaseType" : "STRING",
                     "Description" : "",
                     "ParameterName" : "problemDescription"
                   }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
                     "BaseType" : "STRING",
                     "Description" : "",
                     "ParameterName" : "solutionDescription"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "IN",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "INTEGER",
+                    "Description" : "",
+                    "ParameterName" : "actionId"
                   } ],
-                  "id_index" : 64,
+                  "id_index" : 67,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -420,11 +516,8 @@
                     "PctColumn1" : 12,
                     "PctColumn2" : 12,
                     "PctColumn3" : 12,
-                    "PctColumn4" : 31.7,
-                    "PctColumn5" : 31.700000000000006,
-                    "PctColumn6" : 16.6,
-                    "PctColumn7" : 14.285714285714278,
-                    "PctColumn8" : 6,
+                    "PctColumn4" : 32,
+                    "PctColumn5" : 32,
                     "PctRow1" : 50,
                     "PctRow2" : 50,
                     "PctRow3" : 0,
@@ -475,7 +568,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -551,7 +645,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -576,6 +671,7 @@
                             "ToolTipStyle" : "DefaultTooltipStyle",
                             "Top" : 0,
                             "Type" : "valuedisplay",
+                            "UseTheme" : false,
                             "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                             "ValueDisplayStyle" : "Bayer_GreyValue",
                             "ValueFormat" : {
@@ -630,7 +726,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -704,7 +801,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -780,98 +878,103 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
-                            "Alignment" : "left",
+                            "Alignment" : "center",
                             "Area" : "UI",
                             "BackgroundFill" : "content",
-                            "DisplayName" : "valStatus",
+                            "DisplayName" : "valuedisplay-67",
                             "Height" : 22,
-                            "Id" : "valuedisplay-45",
+                            "Id" : "valuedisplay-67",
                             "ImageScaling" : "Width",
                             "Label" : "",
-                            "LabelAlignment" : "left",
-                            "Left" : 10,
+                            "LabelAlignment" : "center",
+                            "Left" : 15,
                             "Overflow" : "hidden",
                             "ResponsiveLayout" : true,
                             "ShowDataLoading" : true,
                             "TextIfNoValue" : "",
                             "TextIfNoValueOffset" : 0,
-                            "TextIfNoValueStyle" : "Bayer_PanelTitle",
+                            "TextIfNoValueStyle" : "DefaultValueDisplayNoTextStyle",
                             "TextWrap" : true,
                             "ToolTipField" : "",
                             "ToolTipStyle" : "DefaultTooltipStyle",
-                            "Top" : 0,
+                            "Top" : 105,
                             "Type" : "valuedisplay",
+                            "UseTheme" : false,
                             "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                            "ValueDisplayStyle" : "Bayer_GreyValue",
+                            "ValueDisplayStyle" : "Bayer_WhiteValue",
                             "ValueFormat" : {
-                              "FormatString" : "",
+                              "FormatString" : "0",
                               "formatInfo" : {
                                 "FieldName" : "status",
-                                "StateDefinition" : "BayerActionListStatus",
+                                "StateDefinition" : "BayerActionStatusGaugeState",
                                 "StateDefinitionType" : "string",
                                 "StateFormats" : [ {
                                   "comparator" : "==",
-                                  "state" : "StatusAvailable",
-                                  "stateName" : "Closed",
-                                  "value" : "Closed"
+                                  "state" : "BayerGaugePie0",
+                                  "stateName" : "0",
+                                  "value" : "0"
                                 }, {
                                   "comparator" : "==",
-                                  "state" : "StatusOffline",
-                                  "stateName" : "",
-                                  "value" : ""
+                                  "state" : "BayerGaugePie1",
+                                  "stateName" : "1",
+                                  "value" : "1"
                                 }, {
                                   "comparator" : "==",
-                                  "state" : "StatusBusy",
-                                  "stateName" : "In Progress",
-                                  "value" : "In Progress"
+                                  "state" : "BayerGaugePie2",
+                                  "stateName" : "2",
+                                  "value" : "2"
                                 }, {
                                   "comparator" : "==",
-                                  "state" : "StatusError",
-                                  "stateName" : "Open (after Due Date)",
-                                  "value" : "Open (after Due Date)"
+                                  "state" : "BayerGaugePie3",
+                                  "stateName" : "3",
+                                  "value" : "3"
                                 }, {
                                   "comparator" : "==",
-                                  "state" : "StatusBlue",
-                                  "stateName" : "Open (before Due Date)",
-                                  "value" : "Open (before Due Date)"
+                                  "state" : "BayerGaugePie4",
+                                  "stateName" : "4",
+                                  "value" : "4"
                                 }, {
-                                  "state" : "StatusUnknown",
-                                  "stateName" : "UNKNOWN"
+                                  "state" : "BayerGaugePie0",
+                                  "stateName" : ""
                                 } ]
                               },
-                              "renderer" : "DEFAULT",
-                              "roundingEnabled" : true
+                              "renderer" : "NUMBER",
+                              "roundingEnabled" : false
                             },
-                            "ValueFormat_Closed" : "",
-                            "ValueFormat_In Progress" : "",
                             "ValueFormat_StateParameters" : [ {
                               "BaseType" : "STRING",
-                              "DefaultValue" : "Closed",
-                              "Description" : "Closed",
-                              "ParameterName" : "ValueFormat_Closed"
+                              "DefaultValue" : "0",
+                              "Description" : "0",
+                              "ParameterName" : "ValueFormat_0"
                             }, {
                               "BaseType" : "STRING",
-                              "DefaultValue" : "In Progress",
-                              "Description" : "In Progress",
-                              "ParameterName" : "ValueFormat_In Progress"
+                              "DefaultValue" : "1",
+                              "Description" : "1",
+                              "ParameterName" : "ValueFormat_1"
                             }, {
                               "BaseType" : "STRING",
-                              "DefaultValue" : "Open (after Due Date)",
-                              "Description" : "Open (after Due Date)",
-                              "ParameterName" : "ValueFormat_Open (after Due Date)"
+                              "DefaultValue" : "2",
+                              "Description" : "2",
+                              "ParameterName" : "ValueFormat_2"
                             }, {
                               "BaseType" : "STRING",
-                              "DefaultValue" : "Open (before Due Date)",
-                              "Description" : "Open (before Due Date)",
-                              "ParameterName" : "ValueFormat_Open (before Due Date)"
+                              "DefaultValue" : "3",
+                              "Description" : "3",
+                              "ParameterName" : "ValueFormat_3"
+                            }, {
+                              "BaseType" : "STRING",
+                              "DefaultValue" : "4",
+                              "Description" : "4",
+                              "ParameterName" : "ValueFormat_4"
                             } ],
                             "VerticalAlignment" : "middle",
                             "Visible" : true,
-                            "Width" : 95,
+                            "Width" : 100,
                             "Z-index" : 10,
                             "__TypeDisplayName" : "Value Display",
                             "__supportsLabel" : true,
@@ -906,7 +1009,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -980,7 +1084,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -1056,7 +1161,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1081,6 +1187,7 @@
                             "ToolTipStyle" : "DefaultTooltipStyle",
                             "Top" : 0,
                             "Type" : "valuedisplay",
+                            "UseTheme" : false,
                             "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                             "ValueDisplayStyle" : "Bayer_GreyValue",
                             "ValueFormat" : {
@@ -1124,7 +1231,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1198,7 +1306,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -1274,7 +1383,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1299,6 +1409,7 @@
                             "ToolTipStyle" : "DefaultTooltipStyle",
                             "Top" : 0,
                             "Type" : "valuedisplay",
+                            "UseTheme" : false,
                             "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                             "ValueDisplayStyle" : "Bayer_GreyValue",
                             "ValueFormat" : {
@@ -1342,7 +1453,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1416,7 +1528,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -1492,7 +1605,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1517,6 +1631,7 @@
                             "ToolTipStyle" : "DefaultTooltipStyle",
                             "Top" : 0,
                             "Type" : "valuedisplay",
+                            "UseTheme" : false,
                             "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                             "ValueDisplayStyle" : "Bayer_GreyValue",
                             "ValueFormat" : {
@@ -1560,7 +1675,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1634,7 +1750,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -1681,6 +1798,7 @@
                           "ResponsiveLayout" : false,
                           "RoundedCorners" : true,
                           "ShowDataLoading" : true,
+                          "SingleClickSelectOnTablets" : true,
                           "Style" : "Bayer_edit_style",
                           "TabSequence" : 0,
                           "ToolTipField" : "",
@@ -1703,6 +1821,7 @@
                           "FixedPopupHeight" : 0,
                           "FixedPopupWidth" : 0,
                           "Height" : 30,
+                          "Icon" : "",
                           "IconAlignment" : "left",
                           "Id" : "navigation-53",
                           "Left" : 30,
@@ -1713,6 +1832,8 @@
                             "ParameterName" : "assginedTo",
                             "ParmDef" : {
                               "aspects" : {
+                                "bindingDirection" : "BOTH",
+                                "isMandatory" : "false",
                                 "ordinal" : "4"
                               },
                               "baseType" : "USERNAME",
@@ -1726,6 +1847,8 @@
                             "ParameterName" : "productionLine",
                             "ParmDef" : {
                               "aspects" : {
+                                "bindingDirection" : "BOTH",
+                                "isMandatory" : "false",
                                 "ordinal" : "0"
                               },
                               "baseType" : "THINGNAME",
@@ -1739,6 +1862,8 @@
                             "ParameterName" : "solutionDescription",
                             "ParmDef" : {
                               "aspects" : {
+                                "bindingDirection" : "BOTH",
+                                "isMandatory" : "false",
                                 "ordinal" : "6"
                               },
                               "baseType" : "STRING",
@@ -1752,6 +1877,8 @@
                             "ParameterName" : "dueDate",
                             "ParmDef" : {
                               "aspects" : {
+                                "bindingDirection" : "BOTH",
+                                "isMandatory" : "false",
                                 "ordinal" : "2"
                               },
                               "baseType" : "DATETIME",
@@ -1765,6 +1892,8 @@
                             "ParameterName" : "problemDescription",
                             "ParmDef" : {
                               "aspects" : {
+                                "bindingDirection" : "BOTH",
+                                "isMandatory" : "false",
                                 "ordinal" : "5"
                               },
                               "baseType" : "STRING",
@@ -1773,11 +1902,28 @@
                               "ordinal" : 0
                             }
                           }, {
+                            "BaseType" : "INTEGER",
+                            "Description" : "",
+                            "ParameterName" : "actionId",
+                            "ParmDef" : {
+                              "aspects" : {
+                                "bindingDirection" : "IN",
+                                "isMandatory" : "false",
+                                "ordinal" : "7"
+                              },
+                              "baseType" : "INTEGER",
+                              "description" : "",
+                              "name" : "actionId",
+                              "ordinal" : 0
+                            }
+                          }, {
                             "BaseType" : "DATETIME",
                             "Description" : "",
                             "ParameterName" : "createdTime",
                             "ParmDef" : {
                               "aspects" : {
+                                "bindingDirection" : "BOTH",
+                                "isMandatory" : "false",
                                 "ordinal" : "1"
                               },
                               "baseType" : "DATETIME",
@@ -1786,14 +1932,16 @@
                               "ordinal" : 0
                             }
                           }, {
-                            "BaseType" : "STRING",
+                            "BaseType" : "INTEGER",
                             "Description" : "",
                             "ParameterName" : "status",
                             "ParmDef" : {
                               "aspects" : {
+                                "bindingDirection" : "BOTH",
+                                "isMandatory" : "false",
                                 "ordinal" : "3"
                               },
-                              "baseType" : "STRING",
+                              "baseType" : "INTEGER",
                               "description" : "",
                               "name" : "status",
                               "ordinal" : 0
@@ -1813,6 +1961,7 @@
                           "ShowCloseButton" : false,
                           "ShowDataLoading" : true,
                           "ShowMessageIfNoMashup" : false,
+                          "SingleClickSelectOnTablets" : true,
                           "Style" : "DefaultNavigationStyle",
                           "TabSequence" : 0,
                           "TargetWindow" : "modal-popup",
@@ -1822,6 +1971,7 @@
                           "Top" : 45,
                           "Transparent" : false,
                           "Type" : "navigation",
+                          "UseTheme" : false,
                           "Visible" : false,
                           "Width" : 35,
                           "Z-index" : 10,
@@ -1860,6 +2010,7 @@
             }
             ]]>
             </mashupContent>
+            <preview></preview>
         </Mashup>
     </Mashups>
 </Entities>

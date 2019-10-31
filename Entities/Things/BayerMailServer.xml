@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b2319"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
- revision="1"
- schemaVersion="1020"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <Things>
         <Thing
@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-12-05T02:54:20.686-08:00"
+         lastModifiedDate="2019-10-11T11:34:01.821Z"
          name="BayerMailServer"
          projectName="BayerIoT"
          published="false"
@@ -30,10 +30,35 @@
                 <Delete></Delete>
                 <Metadata></Metadata>
             </DesignTimePermissions>
-            <RunTimePermissions></RunTimePermissions>
+            <RunTimePermissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables>
                 <ConfigurationTable
                  description="Mail Server Connection Parameters"
@@ -142,12 +167,21 @@
                     </DataShape>
                     <Rows>
                         <Row>
-                            <accountId></accountId>
-                            <accountPassword></accountPassword>
+                            <accountId>
+                            <![CDATA[
+                            apikey
+                            ]]>
+                            </accountId>
+                            <accountPassword>
+                            <![CDATA[
+                            4VShykcyY3kHctR2+0aStA==:0w54x4HFNradkDfTfSgl4XofGgbte0s/uJh9WluKv83hkxlDyvY05kVKLyCnKw+PkfBKnfromw3U
+                            NW4aFG5JL5CoRI5ZUWOFbqpVgQyBB5k=
+                            ]]>
+                            </accountPassword>
                             <connectionTimeout>30000.0</connectionTimeout>
                             <defaultFrom>
                             <![CDATA[
-                            marco.signorini@bayer.com
+                            lstrzelecki@ptc.com
                             ]]>
                             </defaultFrom>
                             <fileRepository>
@@ -158,15 +192,15 @@
                             <operationTimeout>30000.0</operationTimeout>
                             <pop3Port>110.0</pop3Port>
                             <pop3Server></pop3Server>
-                            <smtpPort>25.0</smtpPort>
+                            <smtpPort>465.0</smtpPort>
                             <smtpServer>
                             <![CDATA[
-                            10.190.58.79
+                            smtp.sendgrid.net
                             ]]>
                             </smtpServer>
                             <socksHost></socksHost>
                             <socksPort>1080.0</socksPort>
-                            <useSSL>false</useSSL>
+                            <useSSL>true</useSSL>
                             <useTLS>false</useTLS>
                         </Row>
                     </Rows>

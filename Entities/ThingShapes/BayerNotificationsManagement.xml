@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b2319"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
- revision="1"
- schemaVersion="1020"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <ThingShapes>
         <ThingShape
@@ -13,30 +13,68 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-12-05T02:54:20.526-08:00"
+         lastModifiedDate="2019-10-15T17:53:15.062Z"
          name="BayerNotificationsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
+                 aspect.dataChangeThreshold="0.0"
                  aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="0"
                  aspect.isLogged="false"
                  aspect.isPersistent="true"
                  aspect.isReadOnly="false"
-                 baseType="STRING"
+                 aspect.maximumValue="3"
+                 aspect.minimumValue="0"
+                 baseType="INTEGER"
+                 category=""
+                 description="0 - no alert&#xA;1 - blank&#xA;2 - changeover duration more than 110% target&#xA;3 - changeover duration more than 120% target"
+                 isLocalOnly="false"
+                 name="changeoverAlertLevel"
+                 ordinal="5"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="BOOLEAN"
                  category=""
                  description=""
                  isLocalOnly="false"
-                 name="smsSenderAddress"
-                 ordinal="1"></PropertyDefinition>
+                 name="changeoverComingNotificationSent"
+                 ordinal="7"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.dataShape="GenericStringList"
+                 aspect.defaultValue="{&quot;rows&quot;:[],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;item&quot;:{&quot;name&quot;:&quot;item&quot;,&quot;aspects&quot;:{&quot;isPrimaryKey&quot;:true},&quot;description&quot;:&quot;Item&quot;,&quot;baseType&quot;:&quot;STRING&quot;,&quot;ordinal&quot;:0}}}}"
+                 aspect.isPersistent="true"
+                 baseType="INFOTABLE"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="notificationTargetGroupA"
+                 ordinal="8"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.dataShape="GenericStringList"
+                 aspect.defaultValue="{&quot;rows&quot;:[],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;item&quot;:{&quot;name&quot;:&quot;item&quot;,&quot;aspects&quot;:{&quot;isPrimaryKey&quot;:true},&quot;description&quot;:&quot;Item&quot;,&quot;baseType&quot;:&quot;STRING&quot;,&quot;ordinal&quot;:0}}}}"
+                 aspect.isPersistent="true"
+                 baseType="INFOTABLE"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="notificationTargetGroupB"
+                 ordinal="9"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeThreshold="0.0"
                  aspect.dataChangeType="VALUE"
                  aspect.defaultValue="0"
                  aspect.isLogged="false"
-                 aspect.isPersistent="false"
+                 aspect.isPersistent="true"
                  aspect.isReadOnly="false"
                  aspect.maximumValue="3"
                  aspect.minimumValue="0"
@@ -56,36 +94,8 @@
                  category=""
                  description=""
                  isLocalOnly="false"
-                 name="smsNotificationTarget_supervisor"
-                 ordinal="2"></PropertyDefinition>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.isLogged="false"
-                 aspect.isPersistent="true"
-                 aspect.isReadOnly="false"
-                 baseType="STRING"
-                 category=""
-                 description=""
-                 isLocalOnly="false"
-                 name="smsNotificationTarget_HOP"
-                 ordinal="3"></PropertyDefinition>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
-                 aspect.dataChangeThreshold="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.defaultValue="0"
-                 aspect.isLogged="false"
-                 aspect.isPersistent="false"
-                 aspect.isReadOnly="false"
-                 aspect.maximumValue="2"
-                 aspect.minimumValue="0"
-                 baseType="INTEGER"
-                 category=""
-                 description="0 - no alert&#xA;1 - blank&#xA;2 - changeover duration more than 110% target&#xA;3 - changeover duration more than 120% target"
-                 isLocalOnly="false"
-                 name="changeoverAlertLevel"
-                 ordinal="5"></PropertyDefinition>
+                 name="smsSenderAddress"
+                 ordinal="1"></PropertyDefinition>
             </PropertyDefinitions>
             <ServiceDefinitions>
                 <ServiceDefinition
@@ -96,13 +106,21 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
-                 name="ResetChangeoverAlert">
+                 name="ProcessNotificationRules">
                     <ResultType
                      baseType="NOTHING"
                      description=""
                      name="result"
                      ordinal="0"></ResultType>
-                    <ParameterDefinitions></ParameterDefinitions>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="TimerEvent"
+                         aspect.isRequired="true"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="eventData"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
@@ -112,7 +130,7 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
-                 name="ResetProductionAlert">
+                 name="ResetNotifications">
                     <ResultType
                      baseType="NOTHING"
                      description=""
@@ -151,6 +169,30 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="SendChangeoverComingMessage">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="BayerScheduleItemDbDataShape"
+                         aspect.isRequired="true"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="changeoverData"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="SendProductionAlertMessage">
                     <ResultType
                      baseType="NOTHING"
@@ -166,65 +208,136 @@
                          ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition
-                 aspect.isAsync="true"
-                 category=""
-                 description=""
-                 isAllowOverride="false"
-                 isLocalOnly="false"
-                 isOpen="false"
-                 isPrivate="false"
-                 name="TestChangeover">
-                    <ResultType
-                     baseType="NOTHING"
-                     description=""
-                     name="result"
-                     ordinal="0"></ResultType>
-                    <ParameterDefinitions>
-                        <FieldDefinition
-                         aspect.dataShape="ScheduledEvent"
-                         aspect.isRequired="true"
-                         baseType="INFOTABLE"
-                         description=""
-                         name="eventData"
-                         ordinal="1"></FieldDefinition>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition
-                 aspect.isAsync="true"
-                 category=""
-                 description=""
-                 isAllowOverride="false"
-                 isLocalOnly="false"
-                 isOpen="false"
-                 isPrivate="false"
-                 name="TestProduction">
-                    <ResultType
-                     baseType="NOTHING"
-                     description=""
-                     name="result"
-                     ordinal="0"></ResultType>
-                    <ParameterDefinitions>
-                        <FieldDefinition
-                         aspect.dataShape="ScheduledEvent"
-                         aspect.isRequired="true"
-                         baseType="INFOTABLE"
-                         description=""
-                         name="eventData"
-                         ordinal="1"></FieldDefinition>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
             </ServiceDefinitions>
-            <EventDefinitions></EventDefinitions>
+            <EventDefinitions>
+                <EventDefinition
+                 category=""
+                 dataShape="BayerScheduleItemDbDataShape"
+                 description=""
+                 name="ChangeoverComing"></EventDefinition>
+            </EventDefinitions>
             <ServiceMappings></ServiceMappings>
             <ServiceImplementations>
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
-                 name="ResetChangeoverAlert">
+                 name="ProcessNotificationRules">
                     <ConfigurationTables>
                         <ConfigurationTable
-                         description="Script"
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var covAlertLevel = 0;
+                                    var prodAlertLevel = 0;
+                                    
+                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
+                                    var currentProduct = me.GetCurrentProduct();
+                                    
+                                    if (currentProduct && currentProduct.getRowCount() > 0) {
+                                        if (currentProduct.productId === "Cambio") {
+                                            try {
+                                                // Test if changeover time exceeded
+                                    
+                                                var targetMinutes = currentProduct.targetHours * 60; 
+                                                var difference = dateDifference(eventData.timestamp, currentProduct.startTime) / 1000 / 60;
+                                    
+                                                // Bayer wants to be able to exceed the target by 10%      
+                                                var ratio = difference / targetMinutes;
+                                    
+                                                if (ratio > 1.2) {
+                                                    covAlertLevel = 3;
+                                                }
+                                                else if (ratio > 1.1) {
+                                                    covAlertLevel = 2;
+                                                }
+                                            }
+                                            catch (ex) {
+                                                logger.error(me.name + ".ProcessNotificationRules error validating changeover time: " + ex);
+                                            }
+                                        }
+                                        else {
+                                            try {
+                                                // Test if no production active
+                                                
+                                                var counterTimestamp = me.GetPropertyTime({propertyName: "counter"});
+                                    
+                                    
+                                                var productionTime = dateDifference(eventData.timestamp, currentProduct.startTime) / 1000 / 60;
+                                                var counterUpdateTime = dateDifference(eventData.timestamp, counterTimestamp) / 1000 / 60;
+                                    
+                                                if (productionTime > 60 && counterUpdateTime > 60) {
+                                                    prodAlertLevel = 3;
+                                                }
+                                                else if (productionTime > 30 && counterUpdateTime > 30) {
+                                                    prodAlertLevel = 2;
+                                                }
+                                            }
+                                            catch (ex) {
+                                                logger.error(me.name + ".ProcessNotificationRules error validating production time: " + ex);
+                                            }
+                                            
+                                            try {
+                                                // Test if changeover coming in 30 min
+                                                if (!me.changeoverComingNotificationSent) {
+                                                    var nearestChangeover = me.GetNearestChangeoverFromSchedule({ fromTime: eventData.timestamp });
+                                                    
+                                                    if (nearestChangeover && nearestChangeover.getRowCount() > 0) {
+                                                    	var timeToNearestChangeover = dateDifference(nearestChangeover.time, eventData.timestamp) / 1000 / 60;
+                                                        if (timeToNearestChangeover <= 30) {
+                                                            me.changeoverComingNotificationSent = true;
+                                                            me.ChangeoverComing({
+                                                                duration: nearestChangeover.duration /* INTEGER */,
+                                                                productionPlanId: nearestChangeover.productionPlanId /* INTEGER */,
+                                                                productionPlanId_actual: nearestChangeover.productionPlanId_actual /* INTEGER */,
+                                                                hour: nearestChangeover.hour /* INTEGER */,
+                                                                quantityTargetOk: nearestChangeover.quantityTargetOk /* BOOLEAN */,
+                                                                id: nearestChangeover.id /* LONG */,
+                                                                time: nearestChangeover.time /* DATETIME */,
+                                                                quantityProduced: nearestChangeover.quantityProduced /* NUMBER */,
+                                                                scheduleId: nearestChangeover.scheduleId /* INTEGER */,
+                                                                targetQuantity: nearestChangeover.targetQuantity /* NUMBER */
+                                                            });
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            catch (ex)
+                                            {
+                                                logger.error(me.name + ".ProcessNotificationRules error validating incoming changeover: " + ex);
+                                            }
+                                        }
+                                    }
+                                    
+                                    me.changeoverAlertLevel = covAlertLevel;
+                                    me.productionAlertLevel = prodAlertLevel;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ResetNotifications">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
                          isMultiRow="false"
                          name="Script"
                          ordinal="0">
@@ -242,36 +355,7 @@
                                     <code>
                                     <![CDATA[
                                     me.changeoverAlertLevel = 0;
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation
-                 description=""
-                 handlerName="Script"
-                 name="ResetProductionAlert">
-                    <ConfigurationTables>
-                        <ConfigurationTable
-                         description="Script"
-                         isMultiRow="false"
-                         name="Script"
-                         ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition
-                                     baseType="STRING"
-                                     description="code"
-                                     name="code"
-                                     ordinal="0"></FieldDefinition>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
+                                    me.changeoverComingNotificationSent = false;
                                     me.productionAlertLevel = 0;
                                     ]]>
                                     </code>
@@ -303,61 +387,130 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var to = "";
-                                    var body = "Alert for " + me.name + ". ";
+                                    var body = "Changeover target exceeded for " + me.name + ". ";
                                     
-                                    if (level == 3) {
-                                        to = me.smsNotificationTarget_HOP;
-                                        body += "Changeover duration exceeds target by more than 20%.";
+                                    var recipients = me.notificationTargetGroupB;
+                                    
+                                    if (me.smsSenderAddress && recipients && recipients.getRowCount() > 0) {
+                                        // result: INFOTABLE dataShape: BayerProductionPlanDataShape
+                                        var current = me.GetCurrentProduct();
+                                        
+                                        if (current && current.getRowCount() > 0) {
+                                    //        var params = {
+                                    //            oldestFirst: true /* BOOLEAN */,
+                                    //            maxItems: undefined /* NUMBER */,
+                                    //            sourceTags: undefined /* TAGS */,
+                                    //            endDate: undefined /* DATETIME */,
+                                    //            query: undefined /* QUERY */,
+                                    //            source: me.name /* STRING */,
+                                    //            startDate: current.startTime /* DATETIME */,
+                                    //            tags: undefined /* TAGS */
+                                    //        };
+                                    //
+                                    //        // result: INFOTABLE
+                                    //        var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                    //
+                                    //        var tableLength = issues.rows.length;
+                                    //
+                                    //        if (tableLength>0) {
+                                    //            body += " Issues: ";
+                                    //        }
+                                    //
+                                    //        for (var x = 0; x < tableLength; x++) {
+                                    //            var row = issues.rows[x];
+                                    //
+                                    //            body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
+                                    //
+                                    //        }
+                                    //
+                                            var tableLength = recipients.rows.length;
+                                            for (var x=0; x < tableLength; x++) {
+                                                var row = recipients.rows[x];
+                                                logger.debug("Sending email notification to " + row.item + ". BODY: " + body);
+                                    
+                                                try {
+                                                    var params = {
+                                                        cc: undefined /* STRING */,
+                                                        bcc: undefined /* STRING */,
+                                                        subject: body /* STRING */,
+                                                        from: me.smsSenderAddress /* STRING */,
+                                                        to: row.item /* STRING */,
+                                                        body: "" /* HTML */
+                                                    };
+                                    
+                                                    // no return
+                                                    Things["BayerMailServer"].SendMessage(params);
+                                                }
+                                                catch (ex) {
+                                                    logger.error(me.name + ".SendChangeoverAlertMessage error sending email to " + row.item + ". " + ex);
+                                                }
+                                            }
+                                        }
                                     }
-                                    else if (level == 2) {
-                                        to = me.smsNotificationTarget_supervisor;
-                                        body += "Changeover duration exceeds target by more than 10%.";
+                                    else {
+                                        logger.warn(me.name + ".SendChangeoverAlertMessage - no sender/recipient provided");
                                     }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="SendChangeoverComingMessage">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var body = "Changeover in 30 minutes at " + me.name + ". ";
                                     
-                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
-                                    var current = me.GetCurrentProduct();
+                                    var recipients = me.notificationTargetGroupA;
                                     
-                                    var params = {
-                                    	oldestFirst: true /* BOOLEAN */,
-                                    	maxItems: undefined /* NUMBER */,
-                                    	sourceTags: undefined /* TAGS */,
-                                    	endDate: undefined /* DATETIME */,
-                                    	query: undefined /* QUERY */,
-                                    	source: me.name /* STRING */,
-                                    	startDate: current.startTime /* DATETIME */,
-                                    	tags: undefined /* TAGS */
-                                    };
+                                    if (me.smsSenderAddress && recipients && recipients.getRowCount() > 0) {
+                                        var tableLength = recipients.rows.length;
+                                        for (var x=0; x < tableLength; x++) {
+                                            var row = recipients.rows[x];
+                                            logger.debug("Sending email notification to " + row.item + ". BODY: " + body);
                                     
-                                    // result: INFOTABLE
-                                    var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                            try {
+                                                var params = {
+                                                    cc: undefined /* STRING */,
+                                                    bcc: undefined /* STRING */,
+                                                    subject: body /* STRING */,
+                                                    from: me.smsSenderAddress /* STRING */,
+                                                    to: row.item /* STRING */,
+                                                    body: "" /* HTML */
+                                                };
                                     
-                                    var tableLength = issues.rows.length;
-                                    
-                                    if (tableLength>0) {
-                                    	body += " Issues: ";
+                                                // no return
+                                                Things["BayerMailServer"].SendMessage(params);
+                                            }
+                                            catch (ex) {
+                                                logger.error(me.name + ".SendChangeoverComingMessage error sending email to " + row.item + ". " + ex);
+                                            }
+                                        }
                                     }
-                                    
-                                    for (var x = 0; x < tableLength; x++) {
-                                    	var row = issues.rows[x];
-                                    	
-                                        body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
-                                    
+                                    else {
+                                        logger.warn(me.name + ".SendChangeoverComingMessage - no sender/recipient provided");
                                     }
-                                    
-                                    logger.debug("Sending email notification to " + to + ". BODY: " + body);
-                                    
-                                    var params = {
-                                    	cc: undefined /* STRING */,
-                                    	bcc: undefined /* STRING */,
-                                    	subject: body /* STRING */,
-                                    	from: me.smsSenderAddress /* STRING */,
-                                    	to: to /* STRING */,
-                                    	body: "" /* HTML */
-                                    };
-                                    
-                                    // no return
-                                    Things["BayerMailServer"].SendMessage(params);
                                     ]]>
                                     </code>
                                 </Row>
@@ -388,161 +541,73 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var to = "";
-                                    var body = "Alert for " + me.name + ". ";
-                                    var startDate = new Date();
+                                    var body = "No production at " + me.name + ". ";
+                                    var recipients;
                                     
                                     if (level == 3) {
-                                        to = me.smsNotificationTarget_HOP;
-                                        body += "No production recorded for last 30 minutes.";
-                                        startDate = dateAddMinutes(startDate, -30);
+                                        recipients = me.notificationTargetGroupB;
+                                        body += "No production recorded for last 60 minutes.";
+                                        //startDate = dateAddMinutes(startDate, -30);
                                     }
                                     else if (level == 2) {
-                                        to = me.smsNotificationTarget_supervisor;
-                                        body += "No production recorded for last 10 minutes.";
-                                        startDate = dateAddMinutes(startDate, -10);
+                                        recipients = me.notificationTargetGroupA;
+                                        body += "No production recorded for last 30 minutes.";
+                                        //startDate = dateAddMinutes(startDate, -10);
                                     }
                                     
-                                    var params = {
-                                    	oldestFirst: true /* BOOLEAN */,
-                                    	maxItems: undefined /* NUMBER */,
-                                    	sourceTags: undefined /* TAGS */,
-                                    	endDate: undefined /* DATETIME */,
-                                    	query: undefined /* QUERY */,
-                                    	source: me.name /* STRING */,
-                                    	startDate: startDate /* DATETIME */,
-                                    	tags: undefined /* TAGS */
-                                    };
+                                    if (me.smsSenderAddress && recipients && recipients.getRowCount() > 0) {
+                                    //    var params = {
+                                    //        oldestFirst: true /* BOOLEAN */,
+                                    //        maxItems: undefined /* NUMBER */,
+                                    //        sourceTags: undefined /* TAGS */,
+                                    //        endDate: undefined /* DATETIME */,
+                                    //        query: undefined /* QUERY */,
+                                    //        source: me.name /* STRING */,
+                                    //        startDate: startDate /* DATETIME */,
+                                    //        tags: undefined /* TAGS */
+                                    //    };
+                                    //
+                                    //    // result: INFOTABLE
+                                    //    var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                    //
+                                    //    var tableLength = issues.rows.length;
+                                    //
+                                    //    if (tableLength>0) {
+                                    //        body += " Issues: ";
+                                    //    }
+                                    //
+                                    //    for (var x = 0; x < tableLength; x++) {
+                                    //        var row = issues.rows[x];
+                                    //
+                                    //        body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
+                                    //
+                                    //    }
+                                    //
+                                        var tableLength = recipients.rows.length;
+                                        for (var x=0; x < tableLength; x++) {
+                                            var row = recipients.rows[x];
+                                            logger.debug("Sending email notification to " + row.item + ". BODY: " + body);
                                     
-                                    // result: INFOTABLE
-                                    var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                            try {
+                                                var params = {
+                                                    cc: undefined /* STRING */,
+                                                    bcc: undefined /* STRING */,
+                                                    subject: body /* STRING */,
+                                                    from: me.smsSenderAddress /* STRING */,
+                                                    to: row.item /* STRING */,
+                                                    body: "" /* HTML */
+                                                };
                                     
-                                    var tableLength = issues.rows.length;
-                                    
-                                    if (tableLength>0) {
-                                    	body += " Issues: ";
-                                    }
-                                    
-                                    for (var x = 0; x < tableLength; x++) {
-                                    	var row = issues.rows[x];
-                                    	
-                                        body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
-                                    
-                                    }
-                                    
-                                    logger.debug("Sending email notification to " + to + ". BODY: " + body);
-                                    
-                                    var params = {
-                                    	cc: undefined /* STRING */,
-                                    	bcc: undefined /* STRING */,
-                                    	subject: body /* STRING */,
-                                    	from: me.smsSenderAddress /* STRING */,
-                                    	to: to /* STRING */,
-                                    	body: "" /* HTML */
-                                    };
-                                    
-                                    // no return
-                                    Things["BayerMailServer"].SendMessage(params);
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation
-                 description=""
-                 handlerName="Script"
-                 name="TestChangeover">
-                    <ConfigurationTables>
-                        <ConfigurationTable
-                         description="Script"
-                         isMultiRow="false"
-                         name="Script"
-                         ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition
-                                     baseType="STRING"
-                                     description="code"
-                                     name="code"
-                                     ordinal="0"></FieldDefinition>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    // result: INFOTABLE dataShape: BayerProgressDisplayDataShape
-                                    var time = me.GetChangeoverTime();
-                                    
-                                    var ratio = time.value / time.max;
-                                    
-                                    if (ratio > 1.2) {
-                                        me.changeoverAlertLevel = 3;
-                                    }
-                                    else if (ratio > 1.1) {
-                                        me.changeoverAlertLevel = 2;
-                                    }
-                                    else {
-                                        me.changeoverAlertLevel = 0;
-                                    }
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation
-                 description=""
-                 handlerName="Script"
-                 name="TestProduction">
-                    <ConfigurationTables>
-                        <ConfigurationTable
-                         description="Script"
-                         isMultiRow="false"
-                         name="Script"
-                         ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition
-                                     baseType="STRING"
-                                     description="code"
-                                     name="code"
-                                     ordinal="0"></FieldDefinition>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
-                                    var currentProduct = me.GetCurrentProduct();
-                                    
-                                    if (currentProduct.productId != "Cambio") {
-                                        // result: DATETIME
-                                        var counterTimestamp = me.GetPropertyTime({propertyName: "counter"});
-                                        
-                                        // dateDifference(date1:DATETIME,date2:DATETIME):NUMBER
-                                        var productionTime = dateDifference(eventData.timestamp, currentProduct.startTime) / 1000 / 60;
-                                        var counterUpdateTime = dateDifference(eventData.timestamp, counterTimestamp) / 1000 / 60;
-                                        
-                                        if (productionTime >= 30 && counterUpdateTime >= 30) {
-                                            me.productionAlertLevel = 3;
-                                        }
-                                        else if (productionTime >= 10 && counterUpdateTime >= 10) {
-                                            me.productionAlertLevel = 2;
-                                        }
-                                        else if (productionTime >= 5 && counterUpdateTime >= 5) {
-                                            me.productionAlertLevel = 1;
-                                        }
-                                        else {
-                                            me.productionAlertLevel = 0;
+                                                // no return
+                                                Things["BayerMailServer"].SendMessage(params);
+                                            }
+                                            catch (ex) {
+                                                logger.error(me.name + ".SendProductionAlertMessage error sending email to " + row.item + ". " + ex);
+                                            }
                                         }
                                     }
                                     else {
-                                        me.productionAlertLevel = 0;
+                                        logger.warn(me.name + ".SendProductionAlertMessage - no sender/recipient provided");
                                     }
                                     ]]>
                                     </code>
@@ -554,15 +619,17 @@
             </ServiceImplementations>
             <Subscriptions>
                 <Subscription
+                 description=""
                  enabled="true"
                  eventName="DataChange"
+                 name="OnChangeoverAlertLevelChange"
                  source=""
                  sourceProperty="changeoverAlertLevel"
                  sourceType="Thing">
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="Event.DataChange:Property.changeoverAlertLevel">
+                     name="OnChangeoverAlertLevelChange">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description=""
@@ -582,15 +649,14 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        if (eventData.newValue.value > 0) {
+                                        if (eventData.newValue.value > 1) {
+                                            logger.debug(me.name + ".ChangeoverAlertRaisedNotification fired");
                                             
                                             var params = {
                                                 level: eventData.newValue.value /* INTEGER */
                                             };
                                         
                                             me.SendChangeoverAlertMessage(params);
-                                        
-                                        
                                         }
                                         ]]>
                                         </code>
@@ -601,15 +667,106 @@
                     </ServiceImplementation>
                 </Subscription>
                 <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="ChangeoverComing"
+                 name="OnChangeoverComing"
+                 source=""
+                 sourceProperty=""
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnChangeoverComing">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        me.SendChangeoverComingMessage({
+                                        	changeoverData: eventData /* INFOTABLE */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+                <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="Timer"
+                 name="OnNotificationTimerTick"
+                 source="BayerNotificationSystemTimer"
+                 sourceProperty=""
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnNotificationTimerTick">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        try {
+                                            me.ProcessNotificationRules({
+                                                eventData: eventData /* INFOTABLE */
+                                            });
+                                        }
+                                        catch (ex) {
+                                            logger.error(me.name + ".NotificationTimerTick subscription. Error: " + ex);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+                <Subscription
+                 description=""
                  enabled="true"
                  eventName="DataChange"
+                 name="OnProductionAlertLevelChanged"
                  source=""
                  sourceProperty="productionAlertLevel"
                  sourceType="Thing">
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="Event.DataChange:Property.productionAlertLevel">
+                     name="OnProductionAlertLevelChanged">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description=""
@@ -630,14 +787,11 @@
                                         <code>
                                         <![CDATA[
                                         if (eventData.newValue.value > 0) {
-                                            
                                             var params = {
                                                 level: eventData.newValue.value /* INTEGER */
                                             };
                                         
                                             me.SendProductionAlertMessage(params);
-                                        
-                                        
                                         }
                                         ]]>
                                         </code>
@@ -658,8 +812,14 @@
             </DesignTimePermissions>
             <RunTimePermissions></RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
             <PropertyBindings></PropertyBindings>
             <RemotePropertyBindings></RemotePropertyBindings>
@@ -669,15 +829,154 @@
                 <AlertDefinitions
                  name="changeoverAlertLevel"></AlertDefinitions>
                 <AlertDefinitions
+                 name="changeoverComingNotificationSent"></AlertDefinitions>
+                <AlertDefinitions
+                 name="notificationTargetGroupA"></AlertDefinitions>
+                <AlertDefinitions
+                 name="notificationTargetGroupB"></AlertDefinitions>
+                <AlertDefinitions
                  name="productionAlertLevel"></AlertDefinitions>
-                <AlertDefinitions
-                 name="smsNotificationTarget_HOP"></AlertDefinitions>
-                <AlertDefinitions
-                 name="smsNotificationTarget_supervisor"></AlertDefinitions>
                 <AlertDefinitions
                  name="smsSenderAddress"></AlertDefinitions>
             </AlertConfigurations>
-            <InstanceRunTimePermissions></InstanceRunTimePermissions>
+            <InstanceRunTimePermissions>
+                <Permissions
+                 resourceName="changeoverComingNotificationSent">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="ProcessNotificationRules">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="SendChangeoverComingMessage">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="ResetNotifications">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="SendChangeoverAlertMessage">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="productionAlertLevel">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="changeoverAlertLevel">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="SendProductionAlertMessage">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+            </InstanceRunTimePermissions>
         </ThingShape>
     </ThingShapes>
 </Entities>

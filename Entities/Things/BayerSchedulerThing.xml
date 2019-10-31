@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b2319"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
- revision="1"
- schemaVersion="1020"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <Things>
         <Thing
@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-12-05T02:54:20.683-08:00"
+         lastModifiedDate="2019-10-03T14:39:10.868Z"
          name="BayerSchedulerThing"
          projectName="BayerIoT"
          published="false"
@@ -34,6 +34,7 @@
             <VisibilityPermissions>
                 <Visibility></Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables>
                 <ConfigurationTable
                  description="General Settings"
@@ -66,7 +67,7 @@
                             <enabled>true</enabled>
                             <runAsUser>
                             <![CDATA[
-                            Administrator
+                            BayerSchedulerUser
                             ]]>
                             </runAsUser>
                             <schedule>
@@ -84,46 +85,7 @@
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations></ServiceImplementations>
-                <Subscriptions>
-                    <Subscription
-                     enabled="true"
-                     eventName="ScheduledEvent"
-                     source=""
-                     sourceProperty=""
-                     sourceType="Thing">
-                        <ServiceImplementation
-                         description=""
-                         handlerName="Script"
-                         name="Event.ScheduledEvent">
-                            <ConfigurationTables>
-                                <ConfigurationTable
-                                 description=""
-                                 isMultiRow="false"
-                                 name="Script"
-                                 ordinal="0">
-                                    <DataShape>
-                                        <FieldDefinitions>
-                                            <FieldDefinition
-                                             baseType="STRING"
-                                             description="code"
-                                             name="code"
-                                             ordinal="0"></FieldDefinition>
-                                        </FieldDefinitions>
-                                    </DataShape>
-                                    <Rows>
-                                        <Row>
-                                            <code>
-                                            <![CDATA[
-                                            logger.trace("Event fired: " + eventData.timestamp);
-                                            ]]>
-                                            </code>
-                                        </Row>
-                                    </Rows>
-                                </ConfigurationTable>
-                            </ConfigurationTables>
-                        </ServiceImplementation>
-                    </Subscription>
-                </Subscriptions>
+                <Subscriptions></Subscriptions>
             </ThingShape>
             <PropertyBindings></PropertyBindings>
             <RemotePropertyBindings></RemotePropertyBindings>

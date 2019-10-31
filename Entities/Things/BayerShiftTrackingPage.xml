@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b2319"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
- revision="1"
- schemaVersion="1020"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <Things>
         <Thing
@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2018-12-05T02:54:20.674-08:00"
+         lastModifiedDate="2019-09-27T15:04:37.852Z"
          name="BayerShiftTrackingPage"
          projectName="BayerIoT"
          published="false"
@@ -30,10 +30,82 @@
                 <Delete></Delete>
                 <Metadata></Metadata>
             </DesignTimePermissions>
-            <RunTimePermissions></RunTimePermissions>
+            <RunTimePermissions>
+                <Permissions
+                 resourceName="GetDistinctProducts">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetShiftPlan">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetLineStopReasonCodes">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetDailyPerformanceWithAxisMinMax">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetFakeLineStoppageDetails">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
@@ -240,13 +312,18 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var params = {
-                                        	t: shiftSchedule /* INFOTABLE */,
-                                        	columns: "productId,productDescription" /* STRING */
-                                        };
-                                        
-                                        // result: INFOTABLE
-                                        var result = Resources["InfoTableFunctions"].Distinct(params);
+                                        var result;
+                                        if (shiftSchedule) {
+                                            // result: INFOTABLE
+                                            result = Resources["InfoTableFunctions"].Distinct({
+                                                t: shiftSchedule /* INFOTABLE */,
+                                                columns: "productId,productDescription" /* STRING */
+                                            });
+                                        }
+                                        else {
+                                            // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerScheduleDataShape)
+                                            result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerScheduleDataShape" });
+                                        }
                                         
                                         var newField = new Object();
                                         newField.name = "sectionColorState";
@@ -438,20 +515,25 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var newField = new Object();
-                                        newField.name = "sectionColorState";
-                                        newField.baseType = 'STRING';
-                                        shiftSchedule.AddField(newField);
+                                        if (shiftSchedule) {
+                                            var newField = new Object();
+                                            newField.name = "sectionColorState";
+                                            newField.baseType = 'STRING';
+                                            shiftSchedule.AddField(newField);
                                         
-                                        var tableLength = shiftSchedule.rows.length;
+                                            var tableLength = shiftSchedule.rows.length;
                                         
-                                        for (var x = 0; x < tableLength; x++) {
-                                        	var row = shiftSchedule.rows[x];
-                                        	
-                                            row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
+                                            for (var x = 0; x < tableLength; x++) {
+                                                var row = shiftSchedule.rows[x];
+                                        
+                                                row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
+                                            }
+                                        
+                                            var result = shiftSchedule;
                                         }
-                                        
-                                        var result = shiftSchedule;
+                                        else {
+                                            var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerShiftPlanDataShape" });
+                                        }
                                         ]]>
                                         </code>
                                     </Row>

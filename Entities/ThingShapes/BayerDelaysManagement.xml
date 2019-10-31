@@ -1,0 +1,1474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b2319"
+ majorVersion="8"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
+ universal="">
+    <ThingShapes>
+        <ThingShape
+         className=""
+         description=""
+         documentationContent=""
+         homeMashup=""
+         lastModifiedDate="2019-10-31T08:47:52.378Z"
+         name="BayerDelaysManagement"
+         projectName="BayerIoT"
+         tags="Applications:Bayer">
+            <PropertyDefinitions>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="INTEGER"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="activeShiftId"
+                 ordinal="13"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="DATETIME"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="changeoverDelayStartTime"
+                 ordinal="11"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="DATETIME"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="changeoverStartTime"
+                 ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 aspect.minimumValue="0.0"
+                 aspect.units="min"
+                 baseType="NUMBER"
+                 category=""
+                 description="Red indicates when there was an active production order with a target greater than zero (&gt;0), but the machine stopped (based on “State” tag) for more than Y minutes"
+                 isLocalOnly="false"
+                 name="delayBreakDownTimeMoreThan"
+                 ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 aspect.minimumValue="0"
+                 baseType="INTEGER"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="delayMicrostopCount"
+                 ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 aspect.minimumValue="0"
+                 baseType="INTEGER"
+                 category=""
+                 description="Customise maximum count of micro stops after witch delay will trigger."
+                 isLocalOnly="false"
+                 name="delayMicrostopCountMax"
+                 ordinal="13"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 aspect.units="min"
+                 baseType="NUMBER"
+                 category=""
+                 description="Total duration of micro-stops after with delay will trigger"
+                 isLocalOnly="false"
+                 name="delayMicrostopTime"
+                 ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 aspect.minimumValue="0.0"
+                 aspect.units="min"
+                 baseType="NUMBER"
+                 category=""
+                 description="Orange indicating when there was an active production order with a target greater than zero (&gt;0), but the machine stopped (based on “State” tag) for less than X minutes"
+                 isLocalOnly="false"
+                 name="delayMicrostopTimeLessThan"
+                 ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 aspect.minimumValue="0.0"
+                 aspect.units="min"
+                 baseType="NUMBER"
+                 category=""
+                 description="Total duration of micro-stops after with delay will trigger"
+                 isLocalOnly="false"
+                 name="delayMicrostopTimeMax"
+                 ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="DATETIME"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="delayMicrostopTimeStart"
+                 ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="false"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 baseType="BOOLEAN"
+                 category=""
+                 description="simulate production"
+                 isLocalOnly="false"
+                 name="productionRunning"
+                 ordinal="7"></PropertyDefinition>
+            </PropertyDefinitions>
+            <ServiceDefinitions>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetDelayShiftDetails">
+                    <ResultType
+                     aspect.dataShape="GetDelayShiftDetailsDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="INTEGER"
+                         description=""
+                         name="shiftScheduleId"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetDelaysSummary">
+                    <ResultType
+                     aspect.dataShape="BayerDelaysSummaryDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="INTEGER"
+                         description=""
+                         name="shiftScheduleId"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="InsertDelayEntry">
+                    <ResultType
+                     aspect.dataShape="BayerDelayDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="category"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="endTime"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="startTime"
+                         ordinal="2"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="InsertShiftEventEntry">
+                    <ResultType
+                     aspect.dataShape="BayerDelayDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="category"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="endTime"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="startTime"
+                         ordinal="2"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ProcessChangeoverDelayRules">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="TimerEvent"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="eventData"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ProcessProductionDelayRules">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="DataChangeEvent"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="eventData"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ProcessSwitchShift">
+                    <ResultType
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description="executed after entry microstop and change shift"
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ResetMicrostopDelayProperties">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+            </ServiceDefinitions>
+            <EventDefinitions>
+                <EventDefinition
+                 category=""
+                 dataShape="BayerDelayEventDataShape"
+                 description=""
+                 name="ProductionDelayed"></EventDefinition>
+            </EventDefinitions>
+            <ServiceMappings></ServiceMappings>
+            <ServiceImplementations>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetDelayShiftDetails">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = Things['BayerDBDataProvider'].GetDelayShiftDetails({
+                                        shiftScheduleId: shiftScheduleId
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetDelaysSummary">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = Things['BayerDBDataProvider'].GetDelaysSummary({
+                                    	line: me.name,
+                                        shiftScheduleId: shiftScheduleId
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="InsertDelayEntry">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var currentShift = Things["BayerUtilities"].GetCurrentShift({
+                                    	lineName: me.name /* THINGNAME */
+                                    });
+                                    var shiftScheduleId = currentShift.id;
+                                    
+                                    var delayEntry = {
+                                        source: me.name,
+                                        category: category,
+                                        shiftScheduleId: shiftScheduleId,
+                                        startTime: startTime,
+                                        endTime: endTime
+                                    };
+                                    
+                                    var result = Things["BayerDBDataProvider"].InsertDelayEntry(delayEntry);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="InsertShiftEventEntry">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var currentShift = Things["BayerUtilities"].GetCurrentShift({
+                                    	lineName: me.name /* THINGNAME */
+                                    });
+                                    var shiftScheduleId = currentShift.id;
+                                    
+                                    var delayEntry = {
+                                        source: me.name,
+                                        category: category,
+                                        shiftScheduleId: shiftScheduleId,
+                                        startTime: startTime,
+                                        endTime: endTime
+                                    };
+                                    
+                                    var result = Things["BayerDBDataProvider"].InsertShiftEventEntry(delayEntry);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ProcessChangeoverDelayRules">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
+                                    var currentProduct = me.GetCurrentProduct();
+                                    
+                                    if (currentProduct && currentProduct.getRowCount() > 0) {
+                                        // track active shift
+                                        var currentShift = Things["BayerUtilities"].GetCurrentShift({
+                                    		lineName: me.name /* THINGNAME */
+                                    	});
+                                        //logger.debug('currentShift:' + currentShiftId.ToJSON());
+                                    	if (currentShift.id && me.activeShiftId !== currentShift.id) {
+                                            me.activeShiftId = currentShift.id;
+                                            // @todo WTF
+                                            // ^^^ [message: Execution error in service script [OnProductionDelayTimerTickChanged]
+                                            // :: Wrapped java.lang.NullPointerException (ProcessChangeoverDelayRules#11)]
+                                        }
+                                       
+                                        //logger.debug('S:ProcessChangeoverDelayRules');
+                                        var isChangeover = (currentProduct.productId === 'Cambio');
+                                        var isChangeoverExeedTarget = (currentProduct.workedHours * 60) >
+                                            (currentProduct.targetHours * 60) + (currentProduct.targetHours * 60 * 0.1);
+                                        
+                                        /* Requirments
+                                        	- All changeovers which exceed the target by more than 10% generate entries.
+                                        */
+                                        
+                                        if (isChangeover === true && 
+                                            isChangeoverExeedTarget === true &&
+                                            me.changeoverDelayStartTime.getTime() === (new Date(0).getTime())
+                                           ) {
+                                            me.changeoverDelayStartTime = new Date();
+                                        } else if (
+                                            isChangeover === false &&
+                                            me.changeoverDelayStartTime.getTime() !== (new Date(0).getTime())
+                                        ) {
+                                            //logger.debug('S:ChangeoverDelayedOver:ChangeoverDelayed');
+                                            me.ProductionDelayed({
+                                                category: 'changeover', /* STRING */
+                                                startTime: me.changeoverDelayStartTime,
+                                                endTime: new Date(), /* DATETIME */
+                                            });
+                                            //logger.debug('S:ChangeoverDelayedOver.ResetTimer');
+                                            me.changeoverDelayStartTime = new Date(0);
+                                        }
+                                        
+                                        // Grey indicates when there was a changeover active 
+                                        // or the target of the line is zero (0).
+                                        if ((isChangeover === true || isProductionTargetZero === true) && 
+                                            me.changeoverStartTime.getTime() === (new Date(0).getTime())
+                                           ) {
+                                            me.changeoverStartTime = new Date();
+                                        } else if (
+                                            isChangeover === false &&
+                                            me.changeoverStartTime.getTime() !== (new Date(0).getTime())
+                                        ) {
+                                            me.InsertShiftEventEntry({
+                                                category: 'changeover', /* STRING */
+                                                startTime: me.changeoverStartTime,
+                                                endTime: new Date(), /* DATETIME */
+                                            });
+                                            me.changeoverStartTime = new Date(0);
+                                        }
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ProcessProductionDelayRules">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
+                                    var currentProduct = me.GetCurrentProduct();
+                                    
+                                    var delayCategory = {
+                                        microstop: 'microstop',
+                                        breakdown: 'breakdown',
+                                    };
+                                    
+                                    var oldProductionRunning = {
+                                        value: eventData.oldValue.value,
+                                        time: eventData.oldValue.time,
+                                    };
+                                    var newProductionRunning = {
+                                        value: eventData.newValue.value,
+                                        time: eventData.newValue.time,
+                                    };
+                                    
+                                    var now = new Date();
+                                    var diffTime = dateDifference(newProductionRunning.time, oldProductionRunning.time) / 1000 / 60;
+                                    
+                                    // - Green indicating when the machine was running
+                                    if (newProductionRunning.value === false) {
+                                        me.InsertShiftEventEntry({
+                                            category: 'running' /* STRING */,
+                                            startTime: oldProductionRunning.time /* DATETIME */,
+                                            endTime: now /* DATETIME */
+                                        });
+                                    }
+                                    
+                                    // comeback from not runing production
+                                    if (newProductionRunning.value === true) {
+                                        if (diffTime <= me.delayMicrostopTimeLessThan) {
+                                            //logger.debug('ProcessProductionDelayRules:microstopProcess:diffTime:'+ diffTime);
+                                    
+                                            // Orange indicating when there was an active production order with a
+                                            // target greater than zero (>0), but the machine stopped (based on “State” tag)
+                                            // for less than X minutes – value is configurable.
+                                            me.InsertShiftEventEntry({
+                                                category: 'microstop' /* STRING */,
+                                                startTime: oldProductionRunning.time /* DATETIME */,
+                                                endTime: now /* DATETIME */
+                                            });
+                                            
+                                            //count microstop
+                                            //me.delayMicrostopCount = me.delayMicrostopCount + 1;
+                                            me.delayMicrostopCount += 1;
+                                            //logger.debug('ProcessProductionDelayRules:me.delayMicrostopCount:' + me.delayMicrostopCount);
+                                            //sum time of microstop
+                                            if (me.delayMicrostopTime === 0) {
+                                                // init counters
+                                                me.delayMicrostopTimeStart = oldProductionRunning.time; //m
+                                                me.delayMicrostopTime = diffTime;
+                                            } else {
+                                                me.delayMicrostopTime += me.delayMicrostopTime; //m
+                                            }
+                                            //logger.debug('ProcessProductionDelayRules:me.delayMicrostopTime:' + me.delayMicrostopTime);
+                                            
+                                            //counter exeed
+                                            if (me.delayMicrostopCount >= me.delayMicrostopCountMax ||
+                                                me.delayMicrostopTime > me.delayMicrostopTimeMax
+                                               ) {
+                                                me.ProductionDelayed({
+                                                    startTime: me.delayMicrostopTimeStart/* DATETIME */ ,
+                                                    endTime:  now /* DATETIME */ ,
+                                                    category: delayCategory.microstop /* STRING */
+                                                });
+                                                me.ResetMicrostopDelayProperties();
+                                            }
+                                        } else if (diffTime >= me.delayBreakDownTimeMoreThan) {
+                                            me.ProductionDelayed({
+                                                startTime: oldProductionRunning.time /* DATETIME */ ,
+                                                endTime: newProductionRunning.time /* DATETIME */ ,
+                                                category: delayCategory.breakdown /* STRING */
+                                            });
+                                            
+                                            // Red indicates when there was an active production order with a target
+                                            // greater than zero (>0), but the machine stopped (based on “State” tag) for
+                                            // more than Y minutes – value is configurable.
+                                             me.InsertShiftEventEntry({
+                                                category: 'breakdown' /* STRING */,
+                                                startTime: oldProductionRunning.time /* DATETIME */,
+                                                endTime: now /* DATETIME */
+                                            });
+                                        }
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ProcessSwitchShift">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    /* @DRAFT @DEPRACATED @todo delete if no need */
+                                    
+                                    // result: INFOTABLE dataShape: BayerShiftTimeDataShape
+                                    var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
+                                    
+                                    var startTime = shiftTime.startTime;
+                                    
+                                    // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
+                                    var prevShift =  Things["BayerDBDataProvider"].GetSingleShiftByTime({
+                                    	productionLine: 'BayerIMA90C1' /* THINGNAME */,
+                                    	shiftTime: dateAddHours(shiftTime.startTime, 1*-8) /* DATETIME */,
+                                    });
+                                    
+                                    var isProduced = (prevShift.totalQuantityProduced > 0);
+                                    //var isEventsExist = ;
+                                    
+                                    
+                                    if (isEventsExist === false && isProduced === true) {
+                                        me.InsertShiftEventEntry({
+                                            category: 'running' /* STRING */,
+                                            startTime: dateAddHours(shiftTime.startTime, 1*-8) /* DATETIME */,
+                                            endTime: shiftTime.startTime /* DATETIME */
+                                        });
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ResetMicrostopDelayProperties">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // executed after entry microstop and change shift
+                                    logger.warn('!!! RESET MISCROSTOP COUNTERS !!!');
+                                    me.delayMicrostopCount = 0;
+                                    me.delayMicrostopTime = 0;
+                                    me.delayMicrostopTimeStart = new Date(0);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+            </ServiceImplementations>
+            <Subscriptions>
+                <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="DataChange"
+                 name="OnActiveProductionShift"
+                 source=""
+                 sourceProperty="activeShiftId"
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnActiveProductionShift">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        logger.warn('OnActiveProductionShift:isShiftCHanged');
+                                        if (eventData.oldValue.value !== eventData.newValue.value) {
+                                        	me.ResetMicrostopDelayProperties();
+                                            // me.ChangeoverDelayedOver();
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+                <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="ProductionDelayed"
+                 name="OnProductionDelayed"
+                 source=""
+                 sourceProperty=""
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnProductionDelayed">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        me.InsertDelayEntry({
+                                            category: eventData.category, /* STRING */
+                                            startTime: eventData.startTime,
+                                            endTime: eventData.endTime, /* DATETIME */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+                <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="Timer"
+                 name="OnProductionDelayTimerTickChanged"
+                 source="BayerDelayManagamentTimer"
+                 sourceProperty=""
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnProductionDelayTimerTickChanged">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        me.ProcessChangeoverDelayRules({
+                                        	eventData: eventData
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+                <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="DataChange"
+                 name="OnProductionRunningChanged"
+                 source=""
+                 sourceProperty="productionRunning"
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnProductionRunningChanged">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        me.ProcessProductionDelayRules({eventData: eventData});
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+            </Subscriptions>
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations>
+                <AlertDefinitions
+                 name="activeShiftId"></AlertDefinitions>
+                <AlertDefinitions
+                 name="changeoverDelayStartTime"></AlertDefinitions>
+                <AlertDefinitions
+                 name="changeoverStartTime"></AlertDefinitions>
+                <AlertDefinitions
+                 name="delayBreakDownTimeMoreThan"></AlertDefinitions>
+                <AlertDefinitions
+                 name="delayMicrostopCount"></AlertDefinitions>
+                <AlertDefinitions
+                 name="delayMicrostopCountMax"></AlertDefinitions>
+                <AlertDefinitions
+                 name="delayMicrostopTime"></AlertDefinitions>
+                <AlertDefinitions
+                 name="delayMicrostopTimeLessThan"></AlertDefinitions>
+                <AlertDefinitions
+                 name="delayMicrostopTimeMax"></AlertDefinitions>
+                <AlertDefinitions
+                 name="delayMicrostopTimeStart"></AlertDefinitions>
+                <AlertDefinitions
+                 name="productionRunning"></AlertDefinitions>
+            </AlertConfigurations>
+            <InstanceRunTimePermissions>
+                <Permissions
+                 resourceName="GetPcsPerShift">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="ChangeoverDelayedOver">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetDelayShiftDetails">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="changeoverDelayStartTime">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="ProcessChangeoverDelayRules">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="InsertDelayEntry">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="countMicrostop">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="UpdateShift">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetDelaysSummary">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="activeShiftId">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="maxCountMicrostops">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetDailyPerformanceForTimeframe">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="ScheduleShifts">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetDailyPerformance">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="ResetMicrostopDelayProperties">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetAvailability">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="periodMicrostop">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="CalculateShiftsFromNow">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetNearestChangeoverFromSchedule">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="delayMicrostopTimeStart">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="InsertShiftEventEntry">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="overloadDelayStartTime">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetShiftsFromNow">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="maxPeriodMicrostops">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="delayMicrostopCount">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="delayMicrostopTime">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+            </InstanceRunTimePermissions>
+        </ThingShape>
+    </ThingShapes>
+</Entities>
