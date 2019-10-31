@@ -1,0 +1,1871 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b2319"
+ majorVersion="8"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
+ universal="">
+    <Mashups>
+        <Mashup
+         aspect.isFlex="true"
+         aspect.isResponsive="true"
+         aspect.mashupType="mashup"
+         columns="0.0"
+         description=""
+         documentationContent=""
+         homeMashup=""
+         lastModifiedDate="2019-10-31T09:45:28.281Z"
+         name="BayerDelaysDetailsMashup"
+         projectName="BayerIoT"
+         rows="0.0"
+         tags="Applications:Bayer">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <ParameterDefinitions>
+                <FieldDefinition
+                 aspect.bindingDirection="IN"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="0"
+                 baseType="THINGNAME"
+                 description=""
+                 name="line"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="IN"
+                 aspect.dataShape="BayerScheduleDataShape"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="1"
+                 baseType="INFOTABLE"
+                 description=""
+                 name="schedule"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="IN"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="2"
+                 baseType="INTEGER"
+                 description=""
+                 name="shiftId"
+                 ordinal="0"></FieldDefinition>
+            </ParameterDefinitions>
+            <Things>
+                <Thing>BayerDelaysDetailsPage</Thing>
+            </Things>
+            <ThingShapes></ThingShapes>
+            <ThingTemplates>
+                <ThingTemplate>BayerProductionLine</ThingTemplate>
+            </ThingTemplates>
+            <mashupContent>
+            <![CDATA[
+            {
+              "CustomMashupCss" : "#root_mashupcontainer-7_mashupcontainer-309_navigation-73-popup_flexcontainer-127-bounding-box {\n    margin-bottom: 5px;\n    /*  */\n    /* border-radius: 3px; */\n    border-bottom: 1px solid #c5c3c8;\n}\n#root_mashupcontainer-7_mashupcontainer-309_navigation-73-popup_flexcontainer-142-bounding-box {\n\twidth: calc(100% - 40px);\n}",
+              "Data" : {
+                "DynamicThingTemplates_BayerProductionLine" : {
+                  "DataName" : "DynamicThingTemplates_BayerProductionLine",
+                  "EntityName" : "BayerProductionLine",
+                  "EntityType" : "DynamicThingTemplates",
+                  "Id" : "a4fbc63b-b720-4202-8d50-5c4709c10fcf",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "69a0d5d8-8e0b-4653-9b4a-76e9d14bbeb9",
+                    "Name" : "GetShiftsFromNow",
+                    "Parameters" : {
+                      "interval" : 30,
+                      "nrOfNextShifts" : "0",
+                      "nrOfPrevShifts" : "7"
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetShiftsFromNow"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "efa8a6ab-adc4-41fd-87b2-72af8f221031",
+                    "Name" : "GetDelayShiftDetails",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetDelayShiftDetails"
+                  } ]
+                },
+                "Session" : {
+                  "DataName" : "Session",
+                  "EntityName" : "",
+                  "EntityType" : "Session",
+                  "Id" : "session",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "SessionInterface",
+                    "Name" : "GetGlobalSessionValues",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerDelaysDetailsPage" : {
+                  "DataName" : "Things_BayerDelaysDetailsPage",
+                  "EntityName" : "BayerDelaysDetailsPage",
+                  "EntityType" : "Things",
+                  "Id" : "41332dde-527c-4585-8126-bfb7b5721645",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "958b028a-8a3e-4039-969d-95f995adcba6",
+                    "Name" : "GetRowNumById",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetRowNumById"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "b5d0788b-7b00-4d22-bcb8-3517f14a18af",
+                    "Name" : "GetMachineState",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetMachineState"
+                  } ]
+                },
+                "UserExtensions" : {
+                  "DataName" : "UserExtensions",
+                  "EntityName" : "",
+                  "EntityType" : "UserExtensions",
+                  "Id" : "UserExtensions",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "UserExtensionInterface",
+                    "Name" : "GetCurrentUserExtensionProperties",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetCurrentUserExtensionProperties"
+                  } ]
+                }
+              },
+              "DataBindings" : [ {
+                "Id" : "2066a4b9-d94b-41cc-8a7c-6d9c1637c11b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "value",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Entity"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "EntityName",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "0a0c885b-cc6d-4524-88f4-0ab8baaacf54",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "infotableselector-147",
+                "TargetSection" : ""
+              }, {
+                "Id" : "932844a3-508b-42b3-90da-36ff445252e3",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "totalQuantityProduced",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "label-145",
+                "TargetSection" : ""
+              }, {
+                "Id" : "403abfbe-5109-44b8-b4b0-8beb7717f20f",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "totalTargetQuantity",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "label-146",
+                "TargetSection" : ""
+              }, {
+                "Id" : "95354e07-7ebc-4d86-a04b-fe3fea51b80f",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timestamp",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "label-150",
+                "TargetSection" : ""
+              }, {
+                "Id" : "93a8e44f-de75-4090-91ad-9361bef3b9d4",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "shiftId",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "TargetProperty" : "shiftId",
+                  "TargetPropertyBaseType" : "INTEGER",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetRowNumById",
+                "TargetSection" : "Things_BayerDelaysDetailsPage"
+              }, {
+                "Id" : "c0d255d2-2106-4324-8f41-bfc90a4b9339",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "SelectRowNumber",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetRowNumById",
+                "SourceSection" : "Things_BayerDelaysDetailsPage",
+                "TargetArea" : "UI",
+                "TargetId" : "infotableselector-147",
+                "TargetSection" : ""
+              }, {
+                "Id" : "acf4c132-0238-4a5d-b1f1-c6677e310ff7",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "TargetProperty" : "shiftSchedules",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetRowNumById",
+                "TargetSection" : "Things_BayerDelaysDetailsPage"
+              }, {
+                "Id" : "78d14d91-2305-4b3b-9683-ddcb4823d490",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "shiftSchedule",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "labelchart-151",
+                "TargetSection" : ""
+              }, {
+                "Id" : "c0bba139-017d-41d9-afee-904fe8056d13",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "id",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "TargetProperty" : "shiftScheduleId",
+                  "TargetPropertyBaseType" : "INTEGER",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetDelayShiftDetails",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "bf22adcd-f251-4bc4-99eb-e2f968012658",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "id",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "TargetProperty" : "shiftId",
+                  "TargetPropertyBaseType" : "INTEGER",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetMachineState",
+                "TargetSection" : "Things_BayerDelaysDetailsPage"
+              }, {
+                "Id" : "4d019d3f-79c5-4208-a31e-b62fe9aa2a13",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "TargetProperty" : "shiftSchedules",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetMachineState",
+                "TargetSection" : "Things_BayerDelaysDetailsPage"
+              }, {
+                "Id" : "c4eb8793-2100-438f-af4b-1e67b26cdab3",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "TimelineData",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetMachineState",
+                "SourceSection" : "Things_BayerDelaysDetailsPage",
+                "TargetArea" : "UI",
+                "TargetId" : "D3Timeline-143",
+                "TargetSection" : ""
+              }, {
+                "Id" : "7491109f-aaca-499b-90ea-1c84cdf8c86c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetDelayShiftDetails",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxgrid-155",
+                "TargetSection" : ""
+              } ],
+              "DesignTimePermissions" : {
+                "Create" : [ ],
+                "Delete" : [ ],
+                "Metadata" : [ ],
+                "Read" : [ ],
+                "Update" : [ ]
+              },
+              "Events" : [ {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "infotableselector-147",
+                "EventHandlerService" : "SelectNextRow",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-110",
+                "EventTriggerSection" : "",
+                "Id" : "491e94ff-8253-4a63-ab7b-43f954a326cc"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "infotableselector-147",
+                "EventHandlerService" : "SelectPreviousRow",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-108",
+                "EventTriggerSection" : "",
+                "Id" : "17429503-44d0-4b00-ab29-ff6fa8e6ef87"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetShiftsFromNow",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "lineChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "b3c78280-f4c6-483e-b078-dcb0b34b8c9d"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerDelaysDetailsPage",
+                "EventHandlerService" : "GetRowNumById",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-109",
+                "EventTriggerSection" : "",
+                "Id" : "cbb6abd7-f36f-416c-b3a7-88ca791554c5"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerDelaysDetailsPage",
+                "EventHandlerService" : "GetRowNumById",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "GetShiftsFromNow",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "2100670e-3392-439c-b5f6-0083c04b7c5b"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetDelayShiftDetails",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "SelectedRowsChanged",
+                "EventTriggerId" : "GetShiftsFromNow",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "5569187c-bc04-42fe-a0fc-0af54d19dc85"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerDelaysDetailsPage",
+                "EventHandlerService" : "GetMachineState",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "SelectedRowsChanged",
+                "EventTriggerId" : "GetShiftsFromNow",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "62587bfc-da8a-4537-91b3-1c3cca062f64"
+              } ],
+              "RunTimePermissions" : {
+                "permissions" : [ ]
+              },
+              "UI" : {
+                "Properties" : {
+                  "AddToDashboardButton" : "SimplePlus",
+                  "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
+                  "Area" : "Mashup",
+                  "BGImage" : "",
+                  "BGImageRepeat" : "no-repeat",
+                  "BGImageSize" : "auto",
+                  "Columns" : 0,
+                  "ConfigureGadgetButton" : "SimpleGear",
+                  "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
+                  "DisplayName" : "Mashup",
+                  "EnableParameterEditing" : false,
+                  "Height" : 618,
+                  "Id" : "mashup-root",
+                  "IgnoreWarningsInViewMashup" : false,
+                  "IsPrintLayout" : false,
+                  "Left" : 0,
+                  "MashupToEditGadget" : "DefaultMashupToEditGadget",
+                  "MinHeight" : 0,
+                  "MinWidth" : 0,
+                  "ResponsiveLayout" : true,
+                  "Rows" : 0,
+                  "ShowDataLoading" : true,
+                  "Style" : "DefaultMashupStyle",
+                  "StyleTheme" : "Base Theme",
+                  "Title" : "",
+                  "TitleBar" : false,
+                  "TitleBarStyle" : "DefaultTitleBarStyle",
+                  "TitleBarText" : "Gadget Title Here",
+                  "Top" : 0,
+                  "Type" : "mashup",
+                  "UseTheme" : false,
+                  "UseThemeForHybrids" : false,
+                  "Visible" : true,
+                  "Width" : 1024,
+                  "Z-index" : 10,
+                  "__TypeDisplayName" : "Mashup",
+                  "_currentParameterDefs" : [ {
+                    "Aspects" : {
+                      "bindingDirection" : "IN",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "THINGNAME",
+                    "Description" : "",
+                    "ParameterName" : "line"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "IN",
+                      "dataShape" : "BayerScheduleDataShape",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "INFOTABLE",
+                    "Description" : "",
+                    "ParameterName" : "schedule"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "IN",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "INTEGER",
+                    "Description" : "",
+                    "ParameterName" : "shiftId"
+                  } ],
+                  "id_index" : 155,
+                  "supportsAutoResize" : true
+                },
+                "Widgets" : [ {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "DisplayName" : "container-2",
+                    "Id" : "flexcontainer-2",
+                    "ResponsiveLayout" : true,
+                    "ShowDataLoading" : true,
+                    "Style" : "DefaultContainerStyle",
+                    "Type" : "flexcontainer",
+                    "UseTheme" : false,
+                    "Visible" : true,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Responsive Container",
+                    "align-content" : "flex-start",
+                    "align-items" : "flex-start",
+                    "flex-basis" : "auto",
+                    "flex-direction" : "column",
+                    "flex-grow" : 1,
+                    "flex-height" : 0,
+                    "flex-shrink" : 1,
+                    "flex-width" : 0,
+                    "flex-wrap" : "nowrap",
+                    "iconClass" : "widgets-flexcontainer",
+                    "justify-content" : "flex-start",
+                    "userCannotRemove" : true
+                  },
+                  "Widgets" : [ {
+                    "Properties" : {
+                      "Area" : "UI",
+                      "DisplayName" : "container-127",
+                      "Id" : "flexcontainer-127",
+                      "ResponsiveLayout" : true,
+                      "ShowDataLoading" : true,
+                      "Style" : "DefaultContainerStyle",
+                      "Type" : "flexcontainer",
+                      "UseTheme" : false,
+                      "Visible" : true,
+                      "Z-index" : 10,
+                      "__TypeDisplayName" : "Responsive Container",
+                      "align-content" : "flex-start",
+                      "align-items" : "flex-start",
+                      "flex-basis" : "auto",
+                      "flex-direction" : "row",
+                      "flex-grow" : 0,
+                      "flex-height" : 85,
+                      "flex-shrink" : 1,
+                      "flex-width" : 0,
+                      "flex-wrap" : "nowrap",
+                      "iconClass" : "widgets-flexcontainer-fixed",
+                      "isLocked" : false,
+                      "justify-content" : "flex-start",
+                      "userCannotRemove" : false
+                    },
+                    "Widgets" : [ {
+                      "Properties" : {
+                        "Area" : "UI",
+                        "DisplayName" : "container-130",
+                        "Id" : "flexcontainer-130",
+                        "ResponsiveLayout" : true,
+                        "ShowDataLoading" : true,
+                        "Style" : "DefaultContainerStyle",
+                        "Type" : "flexcontainer",
+                        "UseTheme" : false,
+                        "Visible" : true,
+                        "Z-index" : 10,
+                        "__TypeDisplayName" : "Responsive Container",
+                        "align-content" : "flex-start",
+                        "align-items" : "flex-start",
+                        "flex-basis" : "auto",
+                        "flex-direction" : "column",
+                        "flex-grow" : 1,
+                        "flex-height" : 0,
+                        "flex-shrink" : 1,
+                        "flex-width" : 0,
+                        "flex-wrap" : "nowrap",
+                        "iconClass" : "widgets-flexcontainer",
+                        "isLocked" : true,
+                        "justify-content" : "flex-start",
+                        "userCannotRemove" : false
+                      },
+                      "Widgets" : [ {
+                        "Properties" : {
+                          "Area" : "UI",
+                          "DisplayName" : "container-135",
+                          "Id" : "flexcontainer-135",
+                          "ResponsiveLayout" : true,
+                          "ShowDataLoading" : true,
+                          "Style" : "DefaultContainerStyle",
+                          "Type" : "flexcontainer",
+                          "UseTheme" : false,
+                          "Visible" : true,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Responsive Container",
+                          "align-content" : "flex-start",
+                          "align-items" : "flex-start",
+                          "flex-basis" : "auto",
+                          "flex-direction" : "row",
+                          "flex-grow" : 0,
+                          "flex-height" : 40,
+                          "flex-shrink" : 0,
+                          "flex-width" : 0,
+                          "flex-wrap" : "nowrap",
+                          "iconClass" : "widgets-flexcontainer-fixed",
+                          "isLocked" : false,
+                          "justify-content" : "flex-start",
+                          "userCannotRemove" : false
+                        },
+                        "Widgets" : [ {
+                          "Properties" : {
+                            "Alignment" : "left",
+                            "AllowEllipsis" : false,
+                            "Area" : "UI",
+                            "CustomClass" : "",
+                            "DisplayName" : "label-128",
+                            "Height" : 22,
+                            "Id" : "label-128",
+                            "Left" : 65,
+                            "Margin" : "5",
+                            "ResponsiveLayout" : false,
+                            "ShowDataLoading" : false,
+                            "Style" : "Bayer_PanelTitle",
+                            "Text" : "[[Bayer.ShiftInformation]]",
+                            "ToolTipField" : "",
+                            "ToolTipStyle" : "DefaultTooltipStyle",
+                            "Top" : 55,
+                            "Type" : "label",
+                            "Visible" : true,
+                            "Width" : 145,
+                            "Z-index" : 10,
+                            "__TypeDisplayName" : "Label",
+                            "__supportsTooltip" : true,
+                            "isLocked" : false
+                          },
+                          "Widgets" : [ ]
+                        } ]
+                      }, {
+                        "Properties" : {
+                          "Area" : "UI",
+                          "DisplayName" : "container-134",
+                          "Id" : "flexcontainer-134",
+                          "ResponsiveLayout" : true,
+                          "ShowDataLoading" : true,
+                          "Style" : "DefaultContainerStyle",
+                          "Type" : "flexcontainer",
+                          "UseTheme" : false,
+                          "Visible" : true,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Responsive Container",
+                          "align-content" : "flex-start",
+                          "align-items" : "flex-start",
+                          "flex-basis" : "auto",
+                          "flex-direction" : "row",
+                          "flex-grow" : 1,
+                          "flex-height" : 0,
+                          "flex-shrink" : 1,
+                          "flex-width" : 0,
+                          "flex-wrap" : "nowrap",
+                          "iconClass" : "widgets-flexcontainer",
+                          "isLocked" : true,
+                          "justify-content" : "flex-start",
+                          "userCannotRemove" : false
+                        },
+                        "Widgets" : [ {
+                          "Properties" : {
+                            "Alignment" : "left",
+                            "AllowEllipsis" : false,
+                            "Area" : "UI",
+                            "Description" : "",
+                            "DisplayName" : "label-138",
+                            "Height" : 22,
+                            "Id" : "label-138",
+                            "Left" : 95,
+                            "Margin" : "5",
+                            "ResponsiveLayout" : false,
+                            "ShowDataLoading" : true,
+                            "Style" : "Bayer_GreyValue",
+                            "Text" : "[[Bayer.Actual]]",
+                            "ToolTipField" : "",
+                            "ToolTipStyle" : "DefaultTooltipStyle",
+                            "Top" : 30,
+                            "Type" : "label",
+                            "Visible" : true,
+                            "Width" : 75,
+                            "Z-index" : 10,
+                            "__TypeDisplayName" : "Label",
+                            "__supportsTooltip" : true
+                          },
+                          "Widgets" : [ ]
+                        }, {
+                          "Properties" : {
+                            "Alignment" : "left",
+                            "AllowEllipsis" : false,
+                            "Area" : "UI",
+                            "CustomClass" : "",
+                            "DisplayName" : "label-145",
+                            "Height" : 22,
+                            "Id" : "label-145",
+                            "Left" : 65,
+                            "Margin" : "5",
+                            "ResponsiveLayout" : false,
+                            "ShowDataLoading" : false,
+                            "Style" : "Bayer_GreenValue",
+                            "Text" : "0",
+                            "ToolTipField" : "",
+                            "ToolTipStyle" : "DefaultTooltipStyle",
+                            "Top" : 55,
+                            "Type" : "label",
+                            "Visible" : true,
+                            "Width" : 125,
+                            "Z-index" : 10,
+                            "__TypeDisplayName" : "Label",
+                            "__supportsTooltip" : true
+                          },
+                          "Widgets" : [ ]
+                        } ]
+                      } ]
+                    }, {
+                      "Properties" : {
+                        "Area" : "UI",
+                        "DisplayName" : "container-131",
+                        "Id" : "flexcontainer-131",
+                        "ResponsiveLayout" : true,
+                        "ShowDataLoading" : true,
+                        "Style" : "DefaultContainerStyle",
+                        "Type" : "flexcontainer",
+                        "UseTheme" : false,
+                        "Visible" : true,
+                        "Z-index" : 10,
+                        "__TypeDisplayName" : "Responsive Container",
+                        "align-content" : "flex-start",
+                        "align-items" : "flex-start",
+                        "flex-basis" : "auto",
+                        "flex-direction" : "column",
+                        "flex-grow" : 1,
+                        "flex-height" : 0,
+                        "flex-shrink" : 1,
+                        "flex-width" : 350,
+                        "flex-wrap" : "nowrap",
+                        "iconClass" : "widgets-flexcontainer-fixed",
+                        "isLocked" : false,
+                        "justify-content" : "flex-start",
+                        "userCannotRemove" : false
+                      },
+                      "Widgets" : [ {
+                        "Properties" : {
+                          "Area" : "UI",
+                          "DisplayName" : "container-137",
+                          "Id" : "flexcontainer-137",
+                          "ResponsiveLayout" : true,
+                          "ShowDataLoading" : true,
+                          "Style" : "DefaultContainerStyle",
+                          "Type" : "flexcontainer",
+                          "UseTheme" : false,
+                          "Visible" : true,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Responsive Container",
+                          "align-content" : "flex-start",
+                          "align-items" : "flex-start",
+                          "flex-basis" : "auto",
+                          "flex-direction" : "row",
+                          "flex-grow" : 0,
+                          "flex-height" : 40,
+                          "flex-shrink" : 0,
+                          "flex-width" : 0,
+                          "flex-wrap" : "nowrap",
+                          "iconClass" : "widgets-flexcontainer-fixed",
+                          "isLocked" : false,
+                          "justify-content" : "flex-start",
+                          "userCannotRemove" : false
+                        },
+                        "Widgets" : [ {
+                          "Properties" : {
+                            "AnyRowsSelected" : false,
+                            "Area" : "UI",
+                            "DisplayName" : "infotableselector-147",
+                            "Height" : 28,
+                            "Id" : "infotableselector-147",
+                            "Left" : 135,
+                            "NoRowsSelected" : false,
+                            "ResponsiveLayout" : true,
+                            "ShowDataLoading" : true,
+                            "Top" : 20,
+                            "Type" : "infotableselector",
+                            "Visible" : true,
+                            "Width" : 200,
+                            "Z-index" : 10,
+                            "__TypeDisplayName" : "Infotable Selector"
+                          },
+                          "Widgets" : [ ]
+                        } ]
+                      }, {
+                        "Properties" : {
+                          "Area" : "UI",
+                          "DisplayName" : "container-136",
+                          "Id" : "flexcontainer-136",
+                          "ResponsiveLayout" : true,
+                          "ShowDataLoading" : true,
+                          "Style" : "DefaultContainerStyle",
+                          "Type" : "flexcontainer",
+                          "UseTheme" : false,
+                          "Visible" : true,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Responsive Container",
+                          "align-content" : "flex-start",
+                          "align-items" : "flex-start",
+                          "flex-basis" : "auto",
+                          "flex-direction" : "row",
+                          "flex-grow" : 1,
+                          "flex-height" : 0,
+                          "flex-shrink" : 1,
+                          "flex-width" : 0,
+                          "flex-wrap" : "nowrap",
+                          "iconClass" : "widgets-flexcontainer",
+                          "isLocked" : true,
+                          "justify-content" : "flex-start",
+                          "userCannotRemove" : false
+                        },
+                        "Widgets" : [ {
+                          "Properties" : {
+                            "Alignment" : "left",
+                            "AllowEllipsis" : false,
+                            "Area" : "UI",
+                            "Description" : "",
+                            "DisplayName" : "label-139",
+                            "Height" : 22,
+                            "Id" : "label-139",
+                            "Left" : 95,
+                            "Margin" : "5",
+                            "ResponsiveLayout" : false,
+                            "ShowDataLoading" : true,
+                            "Style" : "Bayer_GreyValue",
+                            "Text" : "[[Bayer.Target]]",
+                            "ToolTipField" : "",
+                            "ToolTipStyle" : "DefaultTooltipStyle",
+                            "Top" : 30,
+                            "Type" : "label",
+                            "Visible" : true,
+                            "Width" : 75,
+                            "Z-index" : 10,
+                            "__TypeDisplayName" : "Label",
+                            "__supportsTooltip" : true
+                          },
+                          "Widgets" : [ ]
+                        }, {
+                          "Properties" : {
+                            "Alignment" : "left",
+                            "AllowEllipsis" : false,
+                            "Area" : "UI",
+                            "CustomClass" : "",
+                            "DisplayName" : "label-146",
+                            "Height" : 22,
+                            "Id" : "label-146",
+                            "Left" : 65,
+                            "Margin" : "5",
+                            "ResponsiveLayout" : false,
+                            "ShowDataLoading" : false,
+                            "Style" : "Bayer_GreenValue",
+                            "Text" : "0",
+                            "ToolTipField" : "",
+                            "ToolTipStyle" : "DefaultTooltipStyle",
+                            "Top" : 55,
+                            "Type" : "label",
+                            "Visible" : true,
+                            "Width" : 125,
+                            "Z-index" : 10,
+                            "__TypeDisplayName" : "Label",
+                            "__supportsTooltip" : true
+                          },
+                          "Widgets" : [ ]
+                        } ]
+                      } ]
+                    } ]
+                  }, {
+                    "Properties" : {
+                      "Area" : "UI",
+                      "CustomClass" : "panel-shadow",
+                      "DisplayName" : "container-4",
+                      "Id" : "flexcontainer-4",
+                      "ResponsiveLayout" : true,
+                      "ShowDataLoading" : true,
+                      "Style" : "DefaultContainerStyle",
+                      "Type" : "flexcontainer",
+                      "UseTheme" : false,
+                      "Visible" : true,
+                      "Z-index" : 10,
+                      "__TypeDisplayName" : "Responsive Container",
+                      "align-content" : "flex-start",
+                      "align-items" : "center",
+                      "flex-basis" : "auto",
+                      "flex-direction" : "row",
+                      "flex-grow" : 1,
+                      "flex-height" : 50,
+                      "flex-shrink" : 1,
+                      "flex-width" : 0,
+                      "flex-wrap" : "nowrap",
+                      "iconClass" : "widgets-flexcontainer-fixed",
+                      "isLocked" : false,
+                      "justify-content" : "flex-start",
+                      "userCannotRemove" : false
+                    },
+                    "Widgets" : [ {
+                      "Properties" : {
+                        "Area" : "UI",
+                        "DisplayName" : "container-113",
+                        "Id" : "flexcontainer-113",
+                        "ResponsiveLayout" : true,
+                        "ShowDataLoading" : true,
+                        "Style" : "DefaultContainerStyle",
+                        "Type" : "flexcontainer",
+                        "UseTheme" : false,
+                        "Visible" : true,
+                        "Z-index" : 10,
+                        "__TypeDisplayName" : "Responsive Container",
+                        "align-content" : "flex-start",
+                        "align-items" : "flex-start",
+                        "flex-basis" : "auto",
+                        "flex-direction" : "row",
+                        "flex-grow" : 1,
+                        "flex-height" : 0,
+                        "flex-shrink" : 1,
+                        "flex-width" : 0,
+                        "flex-wrap" : "nowrap",
+                        "iconClass" : "widgets-flexcontainer",
+                        "isLocked" : true,
+                        "justify-content" : "flex-start",
+                        "userCannotRemove" : false
+                      },
+                      "Widgets" : [ {
+                        "Properties" : {
+                          "Alignment" : "left",
+                          "AllowEllipsis" : false,
+                          "Area" : "UI",
+                          "CustomClass" : "",
+                          "DisplayName" : "label-67",
+                          "Height" : 22,
+                          "Id" : "label-67",
+                          "Left" : 65,
+                          "Margin" : "5",
+                          "ResponsiveLayout" : false,
+                          "ShowDataLoading" : false,
+                          "Style" : "Bayer_PanelTitle",
+                          "Text" : "[[Bayer.LineStatus]]",
+                          "ToolTipField" : "",
+                          "ToolTipStyle" : "DefaultTooltipStyle",
+                          "Top" : 55,
+                          "Type" : "label",
+                          "Visible" : true,
+                          "Width" : 115,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Label",
+                          "__supportsTooltip" : true
+                        },
+                        "Widgets" : [ ]
+                      }, {
+                        "Properties" : {
+                          "Alignment" : "left",
+                          "AllowEllipsis" : false,
+                          "Area" : "UI",
+                          "CustomClass" : "",
+                          "DisplayName" : "label-150",
+                          "Height" : 22,
+                          "Id" : "label-150",
+                          "Left" : 65,
+                          "Margin" : "5",
+                          "ResponsiveLayout" : false,
+                          "ShowDataLoading" : false,
+                          "Style" : "Bayer_GreenValue",
+                          "Text" : "0",
+                          "ToolTipField" : "",
+                          "ToolTipStyle" : "DefaultTooltipStyle",
+                          "Top" : 55,
+                          "Type" : "label",
+                          "Visible" : true,
+                          "Width" : 185,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Label",
+                          "__supportsTooltip" : true
+                        },
+                        "Widgets" : [ ]
+                      } ]
+                    }, {
+                      "Properties" : {
+                        "Area" : "UI",
+                        "DisplayName" : "container-114",
+                        "Id" : "flexcontainer-114",
+                        "ResponsiveLayout" : true,
+                        "ShowDataLoading" : true,
+                        "Style" : "DefaultContainerStyle",
+                        "Type" : "flexcontainer",
+                        "UseTheme" : false,
+                        "Visible" : true,
+                        "Z-index" : 10,
+                        "__TypeDisplayName" : "Responsive Container",
+                        "align-content" : "flex-start",
+                        "align-items" : "flex-start",
+                        "flex-basis" : "auto",
+                        "flex-direction" : "row",
+                        "flex-grow" : 1,
+                        "flex-height" : 0,
+                        "flex-shrink" : 1,
+                        "flex-width" : 350,
+                        "flex-wrap" : "nowrap",
+                        "iconClass" : "widgets-flexcontainer-fixed",
+                        "isLocked" : false,
+                        "justify-content" : "flex-end",
+                        "userCannotRemove" : false
+                      },
+                      "Widgets" : [ {
+                        "Properties" : {
+                          "ActiveStyle" : "Bayer_Prev_Style",
+                          "Area" : "UI",
+                          "CancelConfirmationButton" : "button2",
+                          "ConfirmationButton1Label" : "Yes",
+                          "ConfirmationButton2Label" : "No",
+                          "ConfirmationPrompt" : "Do Action?",
+                          "ConfirmationRequired" : false,
+                          "ConfirmationTitle" : "Confirm Action",
+                          "ContextId" : "",
+                          "DefaultConfirmationButton" : "button1",
+                          "Disabled" : false,
+                          "DisabledStyle" : "Bayer_Prev_Style",
+                          "DisplayName" : "button-108",
+                          "FocusStyle" : "Bayer_Prev_Style",
+                          "Height" : 30,
+                          "HoverStyle" : "Bayer_Prev_Style_h",
+                          "IconAlignment" : "left",
+                          "Id" : "button-108",
+                          "Label" : "[[Bayer.Previous]]",
+                          "Left" : 2,
+                          "Margin" : "5",
+                          "ResponsiveLayout" : false,
+                          "RoundedCorners" : true,
+                          "ShowDataLoading" : true,
+                          "SingleClickSelectOnTablets" : true,
+                          "Style" : "Bayer_Prev_Style",
+                          "TabSequence" : 0,
+                          "ToolTipField" : "",
+                          "ToolTipStyle" : "DefaultTooltipStyle",
+                          "Top" : 2,
+                          "Type" : "button",
+                          "Visible" : true,
+                          "Width" : 100,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Button",
+                          "__supportsTooltip" : true
+                        },
+                        "Widgets" : [ ]
+                      }, {
+                        "Properties" : {
+                          "Area" : "UI",
+                          "DisplayName" : "divider-115",
+                          "Height" : 30,
+                          "Id" : "divider-115",
+                          "Left" : 30,
+                          "Margin" : "5",
+                          "ResponsiveLayout" : false,
+                          "ShowDataLoading" : true,
+                          "Style" : "Bayer_Bar_Grey",
+                          "Top" : 30,
+                          "Type" : "divider",
+                          "Visible" : true,
+                          "Width" : 1,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Divider"
+                        },
+                        "Widgets" : [ ]
+                      }, {
+                        "Properties" : {
+                          "ActiveStyle" : "Bayer_Current_Style",
+                          "Area" : "UI",
+                          "CancelConfirmationButton" : "button2",
+                          "ConfirmationButton1Label" : "Yes",
+                          "ConfirmationButton2Label" : "No",
+                          "ConfirmationPrompt" : "Do Action?",
+                          "ConfirmationRequired" : false,
+                          "ConfirmationTitle" : "Confirm Action",
+                          "ContextId" : "",
+                          "DefaultConfirmationButton" : "button1",
+                          "Disabled" : false,
+                          "DisabledStyle" : "Bayer_Current_Style",
+                          "DisplayName" : "button-109",
+                          "FocusStyle" : "Bayer_Current_Style",
+                          "Height" : 30,
+                          "HoverStyle" : "Bayer_Current_Style2",
+                          "IconAlignment" : "right",
+                          "Id" : "button-109",
+                          "Label" : "[[Bayer.Current]]",
+                          "Left" : 209,
+                          "Margin" : "5",
+                          "ResponsiveLayout" : false,
+                          "RoundedCorners" : true,
+                          "ShowDataLoading" : true,
+                          "SingleClickSelectOnTablets" : true,
+                          "Style" : "Bayer_Current_Style",
+                          "TabSequence" : 0,
+                          "ToolTipField" : "",
+                          "ToolTipStyle" : "DefaultTooltipStyle",
+                          "Top" : 2,
+                          "Type" : "button",
+                          "Visible" : true,
+                          "Width" : 90,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Button",
+                          "__supportsTooltip" : true
+                        },
+                        "Widgets" : [ ]
+                      }, {
+                        "Properties" : {
+                          "Area" : "UI",
+                          "DisplayName" : "divider-116",
+                          "Height" : 30,
+                          "Id" : "divider-116",
+                          "Left" : 30,
+                          "Margin" : "5",
+                          "ResponsiveLayout" : false,
+                          "ShowDataLoading" : true,
+                          "Style" : "Bayer_Bar_Grey",
+                          "Top" : 30,
+                          "Type" : "divider",
+                          "Visible" : true,
+                          "Width" : 1,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Divider"
+                        },
+                        "Widgets" : [ ]
+                      }, {
+                        "Properties" : {
+                          "ActiveStyle" : "Bayer_Next_Style",
+                          "Area" : "UI",
+                          "CancelConfirmationButton" : "button2",
+                          "ConfirmationButton1Label" : "Yes",
+                          "ConfirmationButton2Label" : "No",
+                          "ConfirmationPrompt" : "Do Action?",
+                          "ConfirmationRequired" : false,
+                          "ConfirmationTitle" : "Confirm Action",
+                          "ContextId" : "",
+                          "DefaultConfirmationButton" : "button1",
+                          "Disabled" : false,
+                          "DisabledStyle" : "Bayer_Next_Style",
+                          "DisplayName" : "button-110",
+                          "FocusStyle" : "Bayer_Next_Style",
+                          "Height" : 30,
+                          "HoverStyle" : "Bayer_Next_Style_h",
+                          "IconAlignment" : "right",
+                          "Id" : "button-110",
+                          "Label" : "[[Bayer.Next]]",
+                          "Left" : 209,
+                          "Margin" : "5",
+                          "ResponsiveLayout" : false,
+                          "RoundedCorners" : true,
+                          "ShowDataLoading" : true,
+                          "SingleClickSelectOnTablets" : true,
+                          "Style" : "Bayer_Next_Style",
+                          "TabSequence" : 0,
+                          "ToolTipField" : "",
+                          "ToolTipStyle" : "DefaultTooltipStyle",
+                          "Top" : 2,
+                          "Type" : "button",
+                          "Visible" : true,
+                          "Width" : 90,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Button",
+                          "__supportsTooltip" : true
+                        },
+                        "Widgets" : [ ]
+                      } ]
+                    } ]
+                  }, {
+                    "Properties" : {
+                      "Area" : "UI",
+                      "DisplayName" : "container-142",
+                      "Id" : "flexcontainer-142",
+                      "ResponsiveLayout" : true,
+                      "ShowDataLoading" : true,
+                      "Style" : "DefaultContainerStyle",
+                      "Type" : "flexcontainer",
+                      "UseTheme" : false,
+                      "Visible" : true,
+                      "Z-index" : 10,
+                      "__TypeDisplayName" : "Responsive Container",
+                      "align-content" : "flex-start",
+                      "align-items" : "flex-start",
+                      "flex-basis" : "auto",
+                      "flex-direction" : "row",
+                      "flex-grow" : 1,
+                      "flex-height" : 60,
+                      "flex-shrink" : 1,
+                      "flex-width" : 0,
+                      "flex-wrap" : "nowrap",
+                      "iconClass" : "widgets-flexcontainer-fixed",
+                      "isLocked" : false,
+                      "justify-content" : "flex-start",
+                      "userCannotRemove" : false
+                    },
+                    "Widgets" : [ {
+                      "Properties" : {
+                        "AnimationDuration" : 300,
+                        "AnimationsEnabled" : true,
+                        "Area" : "UI",
+                        "Bordered" : true,
+                        "DisplayName" : "D3Timeline-143",
+                        "DragToZoom" : false,
+                        "EnableTouchGestures" : true,
+                        "EnableTrackGesturesPadAndWheel" : true,
+                        "ExportFilename" : "export.png",
+                        "Height" : 200,
+                        "Id" : "D3Timeline-143",
+                        "Left" : 615,
+                        "RangeUpdateType" : "break",
+                        "ResponsiveLayout" : true,
+                        "SelectorHeight" : 20,
+                        "ShowDataLoading" : true,
+                        "ShowsSelector" : false,
+                        "TimelineColorMap" : "{\"chnageover\":\"#c5c5c5\",\"microstop\":\"#f27f00\",\"running\":\"#6bc200\",\"breakdown\":\"#d90000\",\"gap\":\"#ffffff\"}",
+                        "TimelineDurationField" : "duration",
+                        "TimelineShowsXAxis" : true,
+                        "TimelineStateField" : "sectionColorState",
+                        "TimelineXField" : "time",
+                        "TooltipMashupGravity" : "above",
+                        "TooltipMashupHeight" : 50,
+                        "TooltipMashupName" : "BayerPlanForShiftTooltip",
+                        "TooltipMashupPropertyBinding" : "{\"sectionColorState\":\"sectionColorState\",\"category\":\"category\"}",
+                        "TooltipMashupWidth" : 170,
+                        "Top" : 190,
+                        "Type" : "D3Timeline",
+                        "Visible" : true,
+                        "Width" : 500,
+                        "Z-index" : 10,
+                        "__TypeDisplayName" : "D3 Timeline"
+                      },
+                      "Widgets" : [ ]
+                    } ]
+                  }, {
+                    "Properties" : {
+                      "Area" : "UI",
+                      "CustomClass" : "panel-shadow",
+                      "DisplayName" : "container-40",
+                      "Id" : "flexcontainer-40",
+                      "ResponsiveLayout" : true,
+                      "ShowDataLoading" : true,
+                      "Style" : "DefaultContainerStyle",
+                      "Type" : "flexcontainer",
+                      "UseTheme" : false,
+                      "Visible" : true,
+                      "Z-index" : 10,
+                      "__TypeDisplayName" : "Responsive Container",
+                      "align-content" : "flex-start",
+                      "align-items" : "flex-start",
+                      "flex-basis" : "auto",
+                      "flex-direction" : "row",
+                      "flex-grow" : 1,
+                      "flex-height" : 0,
+                      "flex-shrink" : 1,
+                      "flex-width" : 0,
+                      "flex-wrap" : "nowrap",
+                      "iconClass" : "widgets-flexcontainer",
+                      "isLocked" : false,
+                      "justify-content" : "flex-start",
+                      "userCannotRemove" : false
+                    },
+                    "Widgets" : [ {
+                      "Properties" : {
+                        "AllowSelection" : true,
+                        "AllowYAxisZoom" : false,
+                        "Area" : "UI",
+                        "AxisAutoscale1" : true,
+                        "AxisAutoscale10" : true,
+                        "AxisAutoscale11" : true,
+                        "AxisAutoscale12" : true,
+                        "AxisAutoscale13" : true,
+                        "AxisAutoscale14" : true,
+                        "AxisAutoscale15" : true,
+                        "AxisAutoscale16" : true,
+                        "AxisAutoscale17" : true,
+                        "AxisAutoscale18" : true,
+                        "AxisAutoscale19" : true,
+                        "AxisAutoscale2" : true,
+                        "AxisAutoscale20" : true,
+                        "AxisAutoscale21" : true,
+                        "AxisAutoscale22" : true,
+                        "AxisAutoscale23" : true,
+                        "AxisAutoscale24" : true,
+                        "AxisAutoscale3" : true,
+                        "AxisAutoscale4" : true,
+                        "AxisAutoscale5" : true,
+                        "AxisAutoscale6" : true,
+                        "AxisAutoscale7" : true,
+                        "AxisAutoscale8" : true,
+                        "AxisAutoscale9" : true,
+                        "AxisFormat1" : "0000.0",
+                        "AxisFormat10" : "0000.0",
+                        "AxisFormat11" : "0000.0",
+                        "AxisFormat12" : "0000.0",
+                        "AxisFormat13" : "0000.0",
+                        "AxisFormat14" : "0000.0",
+                        "AxisFormat15" : "0000.0",
+                        "AxisFormat16" : "0000.0",
+                        "AxisFormat17" : "0000.0",
+                        "AxisFormat18" : "0000.0",
+                        "AxisFormat19" : "0000.0",
+                        "AxisFormat2" : "0000.0",
+                        "AxisFormat20" : "0000.0",
+                        "AxisFormat21" : "0000.0",
+                        "AxisFormat22" : "0000.0",
+                        "AxisFormat23" : "0000.0",
+                        "AxisFormat24" : "0000.0",
+                        "AxisFormat3" : "0000.0",
+                        "AxisFormat4" : "0000.0",
+                        "AxisFormat5" : "0000.0",
+                        "AxisFormat6" : "0000.0",
+                        "AxisFormat7" : "0000.0",
+                        "AxisFormat8" : "0000.0",
+                        "AxisFormat9" : "0000.0",
+                        "AxisMaximum1" : 100,
+                        "AxisMaximum10" : 100,
+                        "AxisMaximum11" : 100,
+                        "AxisMaximum12" : 100,
+                        "AxisMaximum13" : 100,
+                        "AxisMaximum14" : 100,
+                        "AxisMaximum15" : 100,
+                        "AxisMaximum16" : 100,
+                        "AxisMaximum17" : 100,
+                        "AxisMaximum18" : 100,
+                        "AxisMaximum19" : 100,
+                        "AxisMaximum2" : 100,
+                        "AxisMaximum20" : 100,
+                        "AxisMaximum21" : 100,
+                        "AxisMaximum22" : 100,
+                        "AxisMaximum23" : 100,
+                        "AxisMaximum24" : 100,
+                        "AxisMaximum3" : 100,
+                        "AxisMaximum4" : 100,
+                        "AxisMaximum5" : 100,
+                        "AxisMaximum6" : 100,
+                        "AxisMaximum7" : 100,
+                        "AxisMaximum8" : 100,
+                        "AxisMaximum9" : 100,
+                        "AxisMinimum1" : 0,
+                        "AxisMinimum10" : 0,
+                        "AxisMinimum11" : 0,
+                        "AxisMinimum12" : 0,
+                        "AxisMinimum13" : 0,
+                        "AxisMinimum14" : 0,
+                        "AxisMinimum15" : 0,
+                        "AxisMinimum16" : 0,
+                        "AxisMinimum17" : 0,
+                        "AxisMinimum18" : 0,
+                        "AxisMinimum19" : 0,
+                        "AxisMinimum2" : 0,
+                        "AxisMinimum20" : 0,
+                        "AxisMinimum21" : 0,
+                        "AxisMinimum22" : 0,
+                        "AxisMinimum23" : 0,
+                        "AxisMinimum24" : 0,
+                        "AxisMinimum3" : 0,
+                        "AxisMinimum4" : 0,
+                        "AxisMinimum5" : 0,
+                        "AxisMinimum6" : 0,
+                        "AxisMinimum7" : 0,
+                        "AxisMinimum8" : 0,
+                        "AxisMinimum9" : 0,
+                        "AxisZeroscale1" : false,
+                        "AxisZeroscale10" : false,
+                        "AxisZeroscale11" : false,
+                        "AxisZeroscale12" : false,
+                        "AxisZeroscale13" : false,
+                        "AxisZeroscale14" : false,
+                        "AxisZeroscale15" : false,
+                        "AxisZeroscale16" : false,
+                        "AxisZeroscale17" : false,
+                        "AxisZeroscale18" : false,
+                        "AxisZeroscale19" : false,
+                        "AxisZeroscale2" : false,
+                        "AxisZeroscale20" : false,
+                        "AxisZeroscale21" : false,
+                        "AxisZeroscale22" : false,
+                        "AxisZeroscale23" : false,
+                        "AxisZeroscale24" : false,
+                        "AxisZeroscale3" : false,
+                        "AxisZeroscale4" : false,
+                        "AxisZeroscale5" : false,
+                        "AxisZeroscale6" : false,
+                        "AxisZeroscale7" : false,
+                        "AxisZeroscale8" : false,
+                        "AxisZeroscale9" : false,
+                        "ChartAreaStyle" : "DefaultChartAreaStyle",
+                        "ChartLegendStyle" : "DefaultChartLegendStyle",
+                        "ChartOrientation" : "vertical",
+                        "ChartStyle" : "DefaultChartStyle",
+                        "ChartTitle" : "",
+                        "ChartTitleStyle" : "DefaultChartTitleStyle",
+                        "ChartType" : "bar",
+                        "DataField1" : "quantityProduced",
+                        "DataField2" : "targetQuantity",
+                        "DataLabel1" : "Actual",
+                        "DataLabel2" : "Target",
+                        "DisplayName" : "labelchart-151",
+                        "EnableHover" : true,
+                        "GridStyle" : "DefaultChartGridStyle",
+                        "Height" : 240,
+                        "Id" : "labelchart-151",
+                        "Left" : 400,
+                        "LegendLocation" : "right",
+                        "LegendOrientation" : "vertical",
+                        "LegendWidth" : 0,
+                        "MarkerSize" : 7,
+                        "MarkerType" : "circle",
+                        "NumberOfSeries" : 2,
+                        "ResponsiveLayout" : true,
+                        "SecondaryYAxisAutoscale" : true,
+                        "SecondaryYAxisFormat" : "0000.0",
+                        "SecondaryYAxisMaximum" : 100,
+                        "SecondaryYAxisMinimum" : 0,
+                        "SecondaryYAxisTitle" : "",
+                        "SecondaryYAxisZeroscale" : false,
+                        "SelectedItemStyle" : "DefaultChartSelectionStyle",
+                        "SeriesDataStyle1" : {
+                          "FieldName" : "quantityTargetOk",
+                          "StateDefinition" : "BayerBarChartStateFormatting",
+                          "StateDefinitionType" : "string",
+                          "StateFormats" : [ {
+                            "comparator" : "==",
+                            "state" : "Bayer_Bar_Green",
+                            "stateName" : "",
+                            "value" : "true"
+                          }, {
+                            "state" : "Bayer_Bar_Red",
+                            "stateName" : ""
+                          } ]
+                        },
+                        "SeriesDataStyle10_StateParameters" : [ ],
+                        "SeriesDataStyle11_StateParameters" : [ ],
+                        "SeriesDataStyle12_StateParameters" : [ ],
+                        "SeriesDataStyle13_StateParameters" : [ ],
+                        "SeriesDataStyle14_StateParameters" : [ ],
+                        "SeriesDataStyle15_StateParameters" : [ ],
+                        "SeriesDataStyle16_StateParameters" : [ ],
+                        "SeriesDataStyle17_StateParameters" : [ ],
+                        "SeriesDataStyle18_StateParameters" : [ ],
+                        "SeriesDataStyle19_StateParameters" : [ ],
+                        "SeriesDataStyle1_StateParameters" : [ ],
+                        "SeriesDataStyle2" : {
+                          "FieldName" : "quantityTargetOk",
+                          "StateDefinition" : "BayerBarChartStateFormatting",
+                          "StateDefinitionType" : "string",
+                          "StateFormats" : [ {
+                            "comparator" : "==",
+                            "state" : "Bayer_Bar_Green",
+                            "stateName" : "",
+                            "value" : "true"
+                          }, {
+                            "state" : "Bayer_Bar_Red",
+                            "stateName" : ""
+                          } ]
+                        },
+                        "SeriesDataStyle20_StateParameters" : [ ],
+                        "SeriesDataStyle21_StateParameters" : [ ],
+                        "SeriesDataStyle22_StateParameters" : [ ],
+                        "SeriesDataStyle23_StateParameters" : [ ],
+                        "SeriesDataStyle24_StateParameters" : [ ],
+                        "SeriesDataStyle2_StateParameters" : [ ],
+                        "SeriesDataStyle3_StateParameters" : [ ],
+                        "SeriesDataStyle4_StateParameters" : [ ],
+                        "SeriesDataStyle5_StateParameters" : [ ],
+                        "SeriesDataStyle6_StateParameters" : [ ],
+                        "SeriesDataStyle7_StateParameters" : [ ],
+                        "SeriesDataStyle8_StateParameters" : [ ],
+                        "SeriesDataStyle9_StateParameters" : [ ],
+                        "SeriesMarkerType1" : "chart",
+                        "SeriesMarkerType10" : "chart",
+                        "SeriesMarkerType11" : "chart",
+                        "SeriesMarkerType12" : "chart",
+                        "SeriesMarkerType13" : "chart",
+                        "SeriesMarkerType14" : "chart",
+                        "SeriesMarkerType15" : "chart",
+                        "SeriesMarkerType16" : "chart",
+                        "SeriesMarkerType17" : "chart",
+                        "SeriesMarkerType18" : "chart",
+                        "SeriesMarkerType19" : "chart",
+                        "SeriesMarkerType2" : "circle",
+                        "SeriesMarkerType20" : "chart",
+                        "SeriesMarkerType21" : "chart",
+                        "SeriesMarkerType22" : "chart",
+                        "SeriesMarkerType23" : "chart",
+                        "SeriesMarkerType24" : "chart",
+                        "SeriesMarkerType3" : "chart",
+                        "SeriesMarkerType4" : "chart",
+                        "SeriesMarkerType5" : "chart",
+                        "SeriesMarkerType6" : "chart",
+                        "SeriesMarkerType7" : "chart",
+                        "SeriesMarkerType8" : "chart",
+                        "SeriesMarkerType9" : "chart",
+                        "SeriesStyle1" : "Bayer_Bar_Grey",
+                        "SeriesStyle10" : "DefaultChartStyle10",
+                        "SeriesStyle11" : "DefaultChartStyle11",
+                        "SeriesStyle12" : "DefaultChartStyle12",
+                        "SeriesStyle13" : "DefaultChartStyle13",
+                        "SeriesStyle14" : "DefaultChartStyle14",
+                        "SeriesStyle15" : "DefaultChartStyle15",
+                        "SeriesStyle16" : "DefaultChartStyle16",
+                        "SeriesStyle17" : "DefaultChartStyle17",
+                        "SeriesStyle18" : "DefaultChartStyle18",
+                        "SeriesStyle19" : "DefaultChartStyle19",
+                        "SeriesStyle2" : "Bayer_BlueLine",
+                        "SeriesStyle20" : "DefaultChartStyle20",
+                        "SeriesStyle21" : "DefaultChartStyle21",
+                        "SeriesStyle22" : "DefaultChartStyle22",
+                        "SeriesStyle23" : "DefaultChartStyle23",
+                        "SeriesStyle24" : "DefaultChartStyle24",
+                        "SeriesStyle3" : "DefaultChartStyle3",
+                        "SeriesStyle4" : "DefaultChartStyle4",
+                        "SeriesStyle5" : "DefaultChartStyle5",
+                        "SeriesStyle6" : "DefaultChartStyle6",
+                        "SeriesStyle7" : "DefaultChartStyle7",
+                        "SeriesStyle8" : "DefaultChartStyle8",
+                        "SeriesStyle9" : "DefaultChartStyle9",
+                        "SeriesType1" : "bar",
+                        "SeriesType10" : "chart",
+                        "SeriesType11" : "chart",
+                        "SeriesType12" : "chart",
+                        "SeriesType13" : "chart",
+                        "SeriesType14" : "chart",
+                        "SeriesType15" : "chart",
+                        "SeriesType16" : "chart",
+                        "SeriesType17" : "chart",
+                        "SeriesType18" : "chart",
+                        "SeriesType19" : "chart",
+                        "SeriesType2" : "line",
+                        "SeriesType20" : "chart",
+                        "SeriesType21" : "chart",
+                        "SeriesType22" : "chart",
+                        "SeriesType23" : "chart",
+                        "SeriesType24" : "chart",
+                        "SeriesType3" : "chart",
+                        "SeriesType4" : "chart",
+                        "SeriesType5" : "chart",
+                        "SeriesType6" : "chart",
+                        "SeriesType7" : "chart",
+                        "SeriesType8" : "chart",
+                        "SeriesType9" : "chart",
+                        "ShowDataLoading" : true,
+                        "ShowLegend" : false,
+                        "ShowXAxis" : true,
+                        "ShowXAxisGrid" : true,
+                        "ShowXAxisLabels" : true,
+                        "ShowXAxisTicks" : true,
+                        "ShowYAxis" : true,
+                        "ShowYAxisGrid" : true,
+                        "ShowYAxisLabels" : true,
+                        "ShowYAxisSmartLabels" : false,
+                        "ShowYAxisTicks" : true,
+                        "SingleDataSource" : true,
+                        "Smoothing" : false,
+                        "StackSeries" : false,
+                        "ToolTipStyle" : "DefaultTooltipStyle",
+                        "Top" : 150,
+                        "TruncateX-AxisLabels" : 0,
+                        "TruncateY-AxisLabels" : 0,
+                        "Type" : "labelchart",
+                        "UseSecondaryAxis1" : false,
+                        "UseSecondaryAxis10" : false,
+                        "UseSecondaryAxis11" : false,
+                        "UseSecondaryAxis12" : false,
+                        "UseSecondaryAxis13" : false,
+                        "UseSecondaryAxis14" : false,
+                        "UseSecondaryAxis15" : false,
+                        "UseSecondaryAxis16" : false,
+                        "UseSecondaryAxis17" : false,
+                        "UseSecondaryAxis18" : false,
+                        "UseSecondaryAxis19" : false,
+                        "UseSecondaryAxis2" : false,
+                        "UseSecondaryAxis20" : false,
+                        "UseSecondaryAxis21" : false,
+                        "UseSecondaryAxis22" : false,
+                        "UseSecondaryAxis23" : false,
+                        "UseSecondaryAxis24" : false,
+                        "UseSecondaryAxis3" : false,
+                        "UseSecondaryAxis4" : false,
+                        "UseSecondaryAxis5" : false,
+                        "UseSecondaryAxis6" : false,
+                        "UseSecondaryAxis7" : false,
+                        "UseSecondaryAxis8" : false,
+                        "UseSecondaryAxis9" : false,
+                        "Visible" : true,
+                        "Width" : 640,
+                        "XAxisField" : "time",
+                        "XAxisFormat" : "HH:mm",
+                        "XAxisLabelRotation" : 0,
+                        "XAxisLabelType" : "DATETIME",
+                        "XAxisStyle" : "DefaultChartAxisStyle",
+                        "XAxisTitle" : "",
+                        "YAxisAutoscale" : true,
+                        "YAxisFormat" : "0000.0",
+                        "YAxisIntervals" : 10,
+                        "YAxisLabels" : 2,
+                        "YAxisMaximum" : 100,
+                        "YAxisMinimum" : 0,
+                        "YAxisMinorTicks" : 1,
+                        "YAxisMode" : "single",
+                        "YAxisStyle" : "DefaultChartAxisStyle",
+                        "YAxisTitle" : "",
+                        "YAxisZeroscale" : false,
+                        "Z-index" : 10,
+                        "__TypeDisplayName" : "Label Chart",
+                        "__supportsTooltip" : true
+                      },
+                      "Widgets" : [ ]
+                    } ]
+                  }, {
+                    "Properties" : {
+                      "Area" : "UI",
+                      "DisplayName" : "container-154",
+                      "Id" : "flexcontainer-154",
+                      "ResponsiveLayout" : true,
+                      "ShowDataLoading" : true,
+                      "Style" : "DefaultContainerStyle",
+                      "Type" : "flexcontainer",
+                      "UseTheme" : false,
+                      "Visible" : true,
+                      "Z-index" : 10,
+                      "__TypeDisplayName" : "Responsive Container",
+                      "align-content" : "flex-start",
+                      "align-items" : "flex-start",
+                      "flex-basis" : "auto",
+                      "flex-direction" : "row",
+                      "flex-grow" : 1,
+                      "flex-height" : 0,
+                      "flex-shrink" : 1,
+                      "flex-width" : 0,
+                      "flex-wrap" : "nowrap",
+                      "iconClass" : "widgets-flexcontainer",
+                      "isLocked" : false,
+                      "justify-content" : "flex-start",
+                      "userCannotRemove" : false
+                    },
+                    "Widgets" : [ {
+                      "Properties" : {
+                        "AlignHeader" : false,
+                        "Area" : "UI",
+                        "AutoSelectFirstRow" : false,
+                        "CellTextWrapping" : false,
+                        "ColumnFormat" : {
+                          "formatInfo" : [ {
+                            "Align" : "right",
+                            "AllowEdit" : false,
+                            "FieldName" : "id",
+                            "FormatOptions" : {
+                              "FormatString" : "0",
+                              "formatInfo" : {
+                                "FieldName" : "",
+                                "StateDefinition" : "",
+                                "StateDefinitionType" : "fixed",
+                                "StateFormats" : [ {
+                                  "state" : "",
+                                  "stateName" : "fixed"
+                                } ]
+                              },
+                              "renderer" : "INTEGER",
+                              "roundingEnabled" : true
+                            },
+                            "Title" : "id",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          }, {
+                            "Align" : "left",
+                            "AllowEdit" : false,
+                            "FieldName" : "category",
+                            "FormatOptions" : {
+                              "FormatString" : "full",
+                              "formatInfo" : {
+                                "FieldName" : "",
+                                "StateDefinition" : "",
+                                "StateDefinitionType" : "fixed",
+                                "StateFormats" : [ {
+                                  "state" : "",
+                                  "stateName" : "fixed"
+                                } ]
+                              },
+                              "renderer" : "STRING",
+                              "roundingEnabled" : true
+                            },
+                            "Title" : "category",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          }, {
+                            "Align" : "left",
+                            "AllowEdit" : false,
+                            "FieldName" : "startTime",
+                            "FormatOptions" : {
+                              "FormatString" : "[[dateTimeFormat_Default]]",
+                              "renderer" : "DATETIME"
+                            },
+                            "Title" : "startTime",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          }, {
+                            "Align" : "left",
+                            "AllowEdit" : false,
+                            "FieldName" : "endTime",
+                            "FormatOptions" : {
+                              "FormatString" : "[[dateTimeFormat_Default]]",
+                              "renderer" : "DATETIME"
+                            },
+                            "Title" : "endTime",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          }, {
+                            "Align" : "right",
+                            "AllowEdit" : false,
+                            "FieldName" : "durationSec",
+                            "FormatOptions" : {
+                              "FormatString" : "0.00",
+                              "renderer" : "NUMBER"
+                            },
+                            "Title" : "durationSec",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          }, {
+                            "Align" : "right",
+                            "AllowEdit" : false,
+                            "FieldName" : "durationMs",
+                            "FormatOptions" : {
+                              "FormatString" : "0.00",
+                              "renderer" : "NUMBER"
+                            },
+                            "Title" : "durationMs",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          }, {
+                            "Align" : "left",
+                            "AllowEdit" : false,
+                            "FieldName" : "reasonCode",
+                            "FormatOptions" : {
+                              "FormatString" : "full",
+                              "formatInfo" : {
+                                "FieldName" : "",
+                                "StateDefinition" : "",
+                                "StateDefinitionType" : "fixed",
+                                "StateFormats" : [ {
+                                  "state" : "",
+                                  "stateName" : "fixed"
+                                } ]
+                              },
+                              "renderer" : "STRING",
+                              "roundingEnabled" : true
+                            },
+                            "Title" : "reasonCode",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          }, {
+                            "Align" : "left",
+                            "AllowEdit" : false,
+                            "FieldName" : "description",
+                            "FormatOptions" : {
+                              "FormatString" : "",
+                              "formatInfo" : {
+                                "FieldName" : "",
+                                "StateDefinition" : "",
+                                "StateDefinitionType" : "fixed",
+                                "StateFormats" : [ {
+                                  "state" : "",
+                                  "stateName" : "fixed"
+                                } ]
+                              },
+                              "renderer" : "DEFAULT",
+                              "roundingEnabled" : true
+                            },
+                            "Title" : "description",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          }, {
+                            "Align" : "right",
+                            "AllowEdit" : false,
+                            "FieldName" : "shiftScheduleId",
+                            "FormatOptions" : {
+                              "FormatString" : "0",
+                              "renderer" : "INTEGER"
+                            },
+                            "Title" : "shiftScheduleId",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "auto"
+                          } ]
+                        },
+                        "CurrentScrollTop" : 0,
+                        "DisplayName" : "dhxgrid-155",
+                        "FocusStyle" : "DefaultFocusStyle",
+                        "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
+                        "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
+                        "GridHeaderStyle" : "DefaultGridHeaderStyle",
+                        "GridHeaderTextCase" : "capitalize",
+                        "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
+                        "Height" : 200,
+                        "Id" : "dhxgrid-155",
+                        "IsEditable" : false,
+                        "IsPrintLayout" : false,
+                        "Left" : 225,
+                        "MultiSelect" : false,
+                        "ResponsiveLayout" : true,
+                        "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
+                        "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
+                        "RowFormat_StateParameters" : [ ],
+                        "RowHeight" : 30,
+                        "RowHoverStyle" : "DefaultRowHoverStyle",
+                        "RowSelectedStyle" : "DefaultRowSelectedStyle",
+                        "ScrollTop" : 0,
+                        "ShowAllColumns" : false,
+                        "ShowDataLoading" : true,
+                        "TabSequence" : 0,
+                        "Top" : 35,
+                        "Type" : "dhxgrid",
+                        "Visible" : true,
+                        "Width" : 400,
+                        "Z-index" : 10,
+                        "__TypeDisplayName" : "Grid"
+                      },
+                      "Widgets" : [ ]
+                    } ]
+                  } ]
+                } ]
+              },
+              "mashupType" : "mashup"
+            }
+            ]]>
+            </mashupContent>
+            <preview></preview>
+        </Mashup>
+    </Mashups>
+</Entities>

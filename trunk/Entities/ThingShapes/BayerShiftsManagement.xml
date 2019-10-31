@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b441"
+ build="b2319"
  majorVersion="8"
- minorVersion="3"
+ minorVersion="4"
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
- revision="1"
- schemaVersion="1030"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <ThingShapes>
         <ThingShape
@@ -13,11 +13,25 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-12-14T16:52:44.551+01:00"
+         lastModifiedDate="2019-10-30T08:31:27.436Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
             <PropertyDefinitions>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.dataShape="NumberArrayElement"
+                 aspect.defaultValue="{&quot;rows&quot;:[{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:50},{&quot;element&quot;:50},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:50},{&quot;element&quot;:50},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100}],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;element&quot;:{&quot;name&quot;:&quot;element&quot;,&quot;aspects&quot;:{},&quot;description&quot;:&quot;&quot;,&quot;baseType&quot;:&quot;NUMBER&quot;,&quot;ordinal&quot;:0}}}}"
+                 aspect.isLogged="false"
+                 aspect.isPersistent="true"
+                 aspect.isReadOnly="false"
+                 baseType="INFOTABLE"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="availability"
+                 ordinal="1"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeThreshold="0.0"
@@ -32,20 +46,6 @@
                  isLocalOnly="false"
                  name="previousCycleCounter"
                  ordinal="2"></PropertyDefinition>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.dataShape="NumberArrayElement"
-                 aspect.defaultValue="{&quot;rows&quot;:[{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:50.0},{&quot;element&quot;:50.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:50.0},{&quot;element&quot;:50.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0},{&quot;element&quot;:100.0}],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;element&quot;:{&quot;name&quot;:&quot;element&quot;,&quot;aspects&quot;:{},&quot;description&quot;:&quot;&quot;,&quot;baseType&quot;:&quot;NUMBER&quot;,&quot;ordinal&quot;:0}}}}"
-                 aspect.isLogged="false"
-                 aspect.isPersistent="true"
-                 aspect.isReadOnly="false"
-                 baseType="INFOTABLE"
-                 category=""
-                 description=""
-                 isLocalOnly="false"
-                 name="availability"
-                 ordinal="1"></PropertyDefinition>
             </PropertyDefinitions>
             <ServiceDefinitions>
                 <ServiceDefinition
@@ -160,9 +160,34 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="GetNearestChangeoverFromSchedule">
+                    <ResultType
+                     aspect.dataShape="BayerScheduleItemDbDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="fromTime"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="GetPcsPerShift">
                     <ResultType
-                     baseType="NUMBER"
+                     aspect.dataShape="PcsPerShiftDataShape"
+                     baseType="INFOTABLE"
                      description=""
                      name="result"
                      ordinal="0"></ResultType>
@@ -183,10 +208,33 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="GetShiftEvents">
+                    <ResultType
+                     aspect.dataShape="ShiftEventsDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="INTEGER"
+                         description=""
+                         name="shiftScheduleId"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="GetShiftsFromNow">
                     <ResultType
                      aspect.dataShape="BayerShiftSchedulesDataShape"
-                     aspect.isStreamEntry="true"
                      baseType="INFOTABLE"
                      description=""
                      name="result"
@@ -285,7 +333,7 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var getRemainingHours = function (prodItem) {
+                                    function getRemainingHours (prodItem) {
                                         if (prodItem.status == "INPROGRESS") {
                                             if (prodItem.productId == "Cambio") {
                                                 return product.remainingHours > 0 ? product.remainingHours : 1;
@@ -309,48 +357,13 @@
                                     var startTime = shiftTime.startTime;
                                     var endTime = shiftTime.endTime;
                                     
-                                    var params = {
-                                    	infoTableName : "InfoTable",
-                                    	dataShapeName : "BayerShiftSchedulesDataShape"
-                                    };
-                                    
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerShiftSchedulesDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerShiftSchedulesDataShape" });
                                     
-                                    var query = {
-                                        "sorts": [
-                                            {
-                                                "fieldName": "id",
-                                                "isAscending": true
-                                            }
-                                        ],
-                                      "filters": {
-                                        "type": "AND",
-                                        "filters": [
-                                          {
-                                            "fieldName": "productionLine",
-                                            "type": "EQ",
-                                            "value": me.name
-                                          },
-                                          {
-                                            "fieldName": "status",
-                                            "type": "NOTLIKE",
-                                            "value": "COMPLETED"
-                                          }
-                                        ]
-                                      }
-                                    };
-                                    
-                                    var params = {
-                                    	maxItems: undefined /* NUMBER */,
-                                    	values: undefined /* INFOTABLE*/,
-                                    	query: query /* QUERY */,
-                                    	source: undefined /* STRING */,
-                                    	tags: undefined /* TAGS */
-                                    };
-                                    
-                                    // result: INFOTABLE
-                                    var unfinishedProducts = Things["BayerProductionPlan"].QueryDataTableEntries(params);
+                                    // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
+                                    var unfinishedProducts =  Things["BayerDBDataProvider"].GetUnfinishedProducts({
+                                    	productionLine: me.name /* THINGNAME */
+                                    });
                                     
                                     var x = 0;
                                     var product = unfinishedProducts.rows[x];
@@ -361,13 +374,11 @@
                                         var newEntry = new Object();
                                         newEntry.totalQuantityProduced = 0; // NUMBER
                                         newEntry.totalTargetQuantity = 0; // NUMBER
+                                        newEntry.source = me.name;
+                                        newEntry.timestamp = startTime;
                                         
-                                        var params = {
-                                            infoTableName : "InfoTable",
-                                            dataShapeName : "BayerScheduleDataShape"
-                                        };
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerScheduleDataShape)
-                                        newEntry.shiftSchedule = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        newEntry.shiftSchedule = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerScheduleDataShape" });
                                         
                                         // BUILD SHIFT SCHEDULE WITH 0.1h=6min RESOLUTION
                                         for (var i = 0; i < 480; i+=6) {
@@ -379,10 +390,10 @@
                                             var new6minEntry = new Object();
                                             new6minEntry.duration = 360000; // INTEGER
                                             new6minEntry.hour = Math.floor(i/60) + 1; // INTEGER
-                                            new6minEntry.productionPlanKey_actual = undefined; // STRING
+                                            new6minEntry.productionPlanId_actual = undefined;
                                             new6minEntry.productId = product.productId; // STRING
                                             new6minEntry.time = dateAddMinutes(startTime, i); // DATETIME
-                                            new6minEntry.productionPlanKey = product.key; // STRING
+                                            new6minEntry.productionPlanId = product.id; // STRING
                                             new6minEntry.quantityProduced = 0; // NUMBER
                                             new6minEntry.productDescription = product.productDescription; // STRING
                                             
@@ -400,7 +411,7 @@
                                             }
                                         }
                                         
-                                        newEntry.totalTargetQuantity = Math.round(newEntry.totalTargetQuantity)
+                                        newEntry.totalTargetQuantity = Math.round(newEntry.totalTargetQuantity);
                                     
                                         result.AddRow(newEntry);
                                     
@@ -517,45 +528,26 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var params = {
-                                    	oldestFirst: true /* BOOLEAN */,
-                                    	maxItems: 99999 /* NUMBER */,
-                                    	sourceTags: undefined /* TAGS */,
-                                    	endDate: endTime /* DATETIME */,
-                                    	query: undefined /* QUERY */,
-                                    	source: me.name /* STRING */,
-                                    	startDate: startTime /* DATETIME */,
-                                    	tags: undefined /* TAGS */
-                                    };
-                                    
-                                    // result: INFOTABLE
-                                    var shifts = Things["BayerShiftSchedules"].QueryStreamEntriesWithData(params);
-                                    
-                                    var params = {
-                                    	infoTableName : "InfoTable",
-                                    	dataShapeName : "BayerDailyPerformanceDataShape"
-                                    };
+                                    // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
+                                    var shifts =  Things["BayerDBDataProvider"].GetShiftSchedules({
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	startTime: startTime /* DATETIME */,
+                                    	endTime: endTime /* DATETIME */
+                                    });
                                     
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerDailyPerformanceDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerDailyPerformanceDataShape" });
                                     
                                     var tableLength = shifts.rows.length;
-                                    
                                     for (var x = 0; x < tableLength;) {	
                                         // BayerDailyPerformanceDataShape entry object
                                         var newResultEntry = new Object();
                                         newResultEntry.timestamp = shifts.rows[x].timestamp; // DATETIME
-                                            
-                                        var params = {
-                                            infoTableName : "InfoTable",
-                                            dataShapeName : "BayerPerformancePerShiftDataShape"
-                                        };
                                     
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerPerformancePerShiftDataShape)
-                                        newResultEntry.dailyPerformance = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        newResultEntry.dailyPerformance = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerPerformancePerShiftDataShape" });
                                     
                                         for (var i = 0; i < 3 && x < tableLength; i++) {
-                                            
                                             var shift = shifts.rows[x];
                                                 
                                             // BayerPerformancePerShiftDataShape entry object
@@ -572,7 +564,7 @@
                                                 newEntry.status = newEntry.quantityProduced >= newEntry.targetQuantity; // BOOLEAN
                                             }
                                             else {
-                                                logger.warn("[" + me.name + ".GetDailyPerformance] Skipping shift");
+                                                //logger.debug("[" + me.name + ".GetDailyPerformance] Skipping shift");
                                                 newEntry.quantityProduced = 0; // NUMBER
                                                 newEntry.targetQuantity = 0; // NUMBER
                                                 newEntry.performance = 0;
@@ -586,6 +578,41 @@
                                         
                                         result.AddRow(newResultEntry);
                                     }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetNearestChangeoverFromSchedule">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
+                                    var result =  Things["BayerDBDataProvider"].GetNearestChangeoverFromSchedule({
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	fromTime: fromTime /* DATETIME */
+                                    });
                                     ]]>
                                     </code>
                                 </Row>
@@ -616,31 +643,56 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    //// result: STRING
-                                    //var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId();
-                                    //
-                                    //var params = {
-                                    //	streamEntryId: shiftId /* STRING */
-                                    //};
-                                    //
-                                    //// result: INFOTABLE
-                                    //var shift = Things["BayerShiftSchedules"].GetStreamEntry(params);
-                                    
-                                    var params = {
-                                    	oldestFirst: undefined /* BOOLEAN */,
-                                    	maxItems: 1 /* NUMBER */,
-                                    	sourceTags: undefined /* TAGS */,
-                                    	endDate: shiftStartTime /* DATETIME */,
-                                    	query: undefined /* QUERY */,
-                                    	source: me.name /* STRING */,
-                                    	startDate: shiftStartTime /* DATETIME */,
-                                    	tags: undefined /* TAGS */
-                                    };
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var shift =  Things["BayerDBDataProvider"].GetSingleShiftByTimeWithTargetDiff({
+                                    	shiftTime: shiftStartTime /* DATETIME */,
+                                    	productionLine: me.name /* THINGNAME */
+                                    });
+                                    // shift = 8h, result = shift / 8
                                     
                                     // result: INFOTABLE
-                                    var shift = Things["BayerShiftSchedules"].QueryStreamEntriesWithData(params);
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                    	infoTableName: 'InfoTable' /* STRING */,
+                                    	dataShapeName: 'PcsPerShiftDataShape' /* DATASHAPENAME */
+                                    });
                                     
-                                    var result = shift.totalQuantityProduced / shift.totalTargetQuantity * 100;
+                                    result.AddRow({
+                                        shiftTargetPercent: shift.shiftTargetPercent,
+                                        actualDiffPerMinute: shift.actualDiffPerMinute,
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetShiftEvents">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things["BayerDBDataProvider"].GetShiftEvents({
+                                    	shiftScheduleId: shiftScheduleId,
+                                    });
                                     ]]>
                                     </code>
                                 </Row>
@@ -683,19 +735,12 @@
                                     var startTime = shiftTime.startTime;
                                     var endTime = shiftTime.endTime;
                                     
-                                    var params = {
-                                    	oldestFirst: true /* BOOLEAN */,
-                                    	maxItems: 999999 /* NUMBER */,
-                                    	sourceTags: undefined /* TAGS */,
-                                    	endDate: dateAddHours(shiftTime.endTime, nrOfNextShifts*8 - 1) /* DATETIME */,
-                                    	query: undefined /* QUERY */,
-                                    	source: me.name /* STRING */,
-                                    	startDate: dateAddHours(shiftTime.startTime, nrOfPrevShifts*-8) /* DATETIME */,
-                                    	tags: undefined /* TAGS */
-                                    };
-                                    
-                                    // result: INFOTABLE
-                                    var result = Things["BayerShiftSchedules"].QueryStreamEntriesWithData(params);
+                                    // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
+                                    var result =  Things["BayerDBDataProvider"].GetShiftSchedules({
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	startTime: dateAddHours(shiftTime.startTime, nrOfPrevShifts*-8) /* DATETIME */,
+                                    	endTime: dateAddHours(shiftTime.endTime, nrOfNextShifts*8) /* DATETIME */
+                                    });
                                     
                                     if (interval > 6) {
                                         var groupingFactor = Math.floor(interval/6); // how many rows from schedule to group together
@@ -708,7 +753,7 @@
                                     
                                             // keep every [groupingFactor] row and merge others into those
                                             for (var y = 0; y < scheduleTableLength; y++) {        
-                                                if (y%groupingFactor == 0) {
+                                                if (y%groupingFactor === 0) {
                                                     continue;
                                                 }
                                     
@@ -721,13 +766,34 @@
                                             }
                                     
                                             for (var y = scheduleTableLength-1; y >= 0; y--) {
-                                                if (y%groupingFactor != 0) {
+                                                if (y%groupingFactor !== 0) {
                                                     shift.shiftSchedule.RemoveRow(y);
                                                 }
                                                 else {
                                                     var row = shift.shiftSchedule.rows[y];
                                                     row.targetQuantity = Math.round(row.targetQuantity);
-                                                    row.quantityTargetOk = row.quantityProduced >= row.targetQuantity;
+                                                    
+                                                    var intervalInMs = 1000*60*interval;
+                                                    var nowWithIntervalMin = new Date(new Date().getTime() - intervalInMs);
+                                                    var nowWithIntervalMax = new Date(new Date().getTime() + intervalInMs);
+                                                    var processingPeriod = row.time;
+                                                    var isActualPeriod = false;
+                                                   
+                                                    if (processingPeriod >= nowWithIntervalMin && 
+                                                        	processingPeriod <= nowWithIntervalMax &&
+                                                        	row.productionPlanId_actual) {
+                                                        isActualPeriod = true;
+                                                    }
+                                                    
+                                    				if (isActualPeriod) {
+                                                        // @todo: test, remove it, update ds
+                                                        row.isActualPeriod = 'yes! minutes diff' + (row.quantityProduced / ((new Date().getTime() - row.time.getTime()) / 1000 / 60)) + '>=' + row.targetQuantity / interval;
+                                                        row.quantityTargetOk = (row.quantityProduced / ((new Date().getTime() - row.time.getTime()) / 1000 / 60)) >= (row.targetQuantity / interval);
+                                                    } else {
+                                                        // @todo: test, remove it, update ds
+                                                        row.isActualPeriod = 'NO' +  processingPeriod.toString() + '>=' + nowWithIntervalMin.toString();
+                                    	                row.quantityTargetOk = row.quantityProduced >= row.targetQuantity;
+                                                    }
                                                 }
                                             }
                                         }
@@ -767,32 +833,9 @@
                                     
                                     // REMOVE EXISTING SCHEDULES
                                     
-                                    var params = {
-                                    	oldestFirst: true /* BOOLEAN */,
-                                    	maxItems: 999999 /* NUMBER */,
-                                    	sourceTags: undefined /* TAGS */,
-                                    	endDate: undefined /* DATETIME */,
-                                    	query: undefined /* QUERY */,
-                                    	source: me.name /* STRING */,
-                                    	startDate: shiftTime.startTime /* DATETIME */,
-                                    	tags: undefined /* TAGS */
-                                    };
-                                    
-                                    // result: INFOTABLE
-                                    var entriesToRemove = Things["BayerShiftSchedules"].QueryStreamEntries(params);
-                                    
-                                    var tableLength = entriesToRemove.rows.length;
-                                    
-                                    for (var x = 0; x < tableLength; x++) {
-                                    	var row = entriesToRemove.rows[x];
-                                    	
-                                        var params = {
-                                            streamEntryId: row.id /* STRING */
-                                        };
-                                    
-                                        // no return
-                                        Things["BayerShiftSchedules"].DeleteStreamEntry(params);
-                                    }
+                                    Things["BayerDBDataProvider"].DeleteShiftsAfter({
+                                    	startTime: shiftTime.startTime /* DATETIME */
+                                    });
                                     
                                     // CREATE NEW SCHEDULES
                                     
@@ -807,24 +850,12 @@
                                     
                                     for (var x = 0; x < tableLength; x++) {
                                     	var row = result.rows[x];
-                                    	
-                                        var values = Things["BayerShiftSchedules"].CreateValues();
-                                    
-                                        values.shiftSchedule = row.shiftSchedule; //INFOTABLE
-                                        values.totalQuantityProduced = row.totalQuantityProduced; //NUMBER
-                                        values.totalTargetQuantity = row.totalTargetQuantity; //NUMBER
-                                    
-                                        var params = {
-                                            sourceType: "Thing" /* STRING */,
-                                            values: values /* INFOTABLE*/,
-                                            location: undefined /* LOCATION */,
-                                            source: me.name /* STRING */,
-                                            timestamp: row.shiftSchedule.rows[0].time /* DATETIME */,
-                                            tags: undefined /* TAGS */
-                                        };
-                                    
-                                        // no return
-                                        Things["BayerShiftSchedules"].AddStreamEntry(params);
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerShiftSchedulesDataShape)
+                                        var data = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerShiftSchedulesDataShape" });
+                                        data.AddRow(row);
+                                        
+                                        Things["BayerDBDataProvider"].AddShiftSchedule({ data: data /* INFOTABLE */ });
                                     }
                                     ]]>
                                     </code>
@@ -856,46 +887,72 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // result: STRING
-                                    var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId({ lineName: me.name });
+                                    var qProd = me.counter - me.previousCycleCounter;
+                                    me.previousCycleCounter = me.counter;
                                     
-                                    var params = {
-                                    	streamEntryId: shiftId /* STRING */
-                                    };
+                                    // result: BOOLEAN
+                                    var shiftItemUpdated =  Things["BayerDBDataProvider"].UpdateShiftProduction({
+                                    	productionPlanId_actual: me.currentProductKey /* INTEGER */,
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	quantityProduced: qProd /* NUMBER */,
+                                    	timestamp: eventData.timestamp /* DATETIME */
+                                    });
                                     
-                                    // result: INFOTABLE
-                                    var shift = Things["BayerShiftSchedules"].GetStreamEntry(params);
-                                    shift.totalQuantityProduced = 0;
-                                    
-                                    var tableLength = shift.shiftSchedule.rows.length;
-                                    
-                                    for (var x = 0; x < tableLength; x++) {
-                                    	var row = shift.shiftSchedule.rows[x];
-                                        var nextRow = x < tableLength-1 ? shift.shiftSchedule.rows[x+1] : undefined;
-                                    	
-                                        if (eventData.timestamp >= row.time && (!nextRow || eventData.timestamp < nextRow.time)) {
-                                            if (me.previousCycleCounter > me.counter) {
-                                                me.previousCycleCounter = 0;
-                                            }
-                                            row.quantityProduced = me.counter - me.previousCycleCounter;
-                                            me.previousCycleCounter = me.counter;
-                                            row.productionPlanKey_actual = me.currentProductKey;
-                                            row.quantityTargetOk = row.quantityProduced >= row.targetQuantity;
-                                        }
-                                        
-                                        shift.totalQuantityProduced += row.quantityProduced;
+                                    if (!shiftItemUpdated) {
+                                        logger.warn(me.name + ".UpdateShift - unable to update shift production");
                                     }
                                     
-                                    var params = {
-                                    	values: shift /* INFOTABLE*/,
-                                    	streamEntryId: shiftId /* STRING */,
-                                    	location: undefined /* LOCATION */,
-                                    	source: me.name /* STRING */,
-                                    	tags: undefined /* TAGS */
-                                    };
+                                    // result: BOOLEAN
+                                    var shiftTotalUpdated =  Things["BayerDBDataProvider"].UpdateShiftTotalProduction({
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	quantityProduced: qProd /* NUMBER */,
+                                    	timestamp: eventData.timestamp /* DATETIME */
+                                    });
                                     
-                                    // no return
-                                    Things["BayerShiftSchedules"].UpdateStreamEntry(params);
+                                    if (!shiftTotalUpdated) {
+                                        logger.warn(me.name + ".UpdateShift - unable to update shift total production");
+                                    }
+                                    //
+                                    //// result: STRING
+                                    //var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId({ lineName: me.name });
+                                    //
+                                    //var params = {
+                                    //	streamEntryId: shiftId /* STRING */
+                                    //};
+                                    //
+                                    //// result: INFOTABLE
+                                    //var shift = Things["BayerShiftSchedules"].GetStreamEntry(params);
+                                    //shift.totalQuantityProduced = 0;
+                                    //
+                                    //var tableLength = shift.shiftSchedule.rows.length;
+                                    //
+                                    //for (var x = 0; x < tableLength; x++) {
+                                    //	var row = shift.shiftSchedule.rows[x];
+                                    //    var nextRow = x < tableLength-1 ? shift.shiftSchedule.rows[x+1] : undefined;
+                                    //	
+                                    //    if (eventData.timestamp >= row.time && (!nextRow || eventData.timestamp < nextRow.time)) {
+                                    //        if (me.previousCycleCounter > me.counter) {
+                                    //            me.previousCycleCounter = 0;
+                                    //        }
+                                    //        row.quantityProduced = me.counter - me.previousCycleCounter;
+                                    //        me.previousCycleCounter = me.counter;
+                                    //        row.productionPlanKey_actual = me.currentProductKey;
+                                    //        row.quantityTargetOk = row.quantityProduced >= row.targetQuantity;
+                                    //    }
+                                    //    
+                                    //    shift.totalQuantityProduced += row.quantityProduced;
+                                    //}
+                                    //
+                                    //var params = {
+                                    //	values: shift /* INFOTABLE*/,
+                                    //	streamEntryId: shiftId /* STRING */,
+                                    //	location: undefined /* LOCATION */,
+                                    //	source: me.name /* STRING */,
+                                    //	tags: undefined /* TAGS */
+                                    //};
+                                    //
+                                    //// no return
+                                    //Things["BayerShiftSchedules"].UpdateStreamEntry(params);
                                     ]]>
                                     </code>
                                 </Row>
@@ -915,7 +972,12 @@
             </DesignTimePermissions>
             <RunTimePermissions></RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
             <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
@@ -929,7 +991,142 @@
                 <AlertDefinitions
                  name="previousCycleCounter"></AlertDefinitions>
             </AlertConfigurations>
-            <InstanceRunTimePermissions></InstanceRunTimePermissions>
+            <InstanceRunTimePermissions>
+                <Permissions
+                 resourceName="GetDailyPerformance">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetPcsPerShift">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetAvailability">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="UpdateShift">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetShiftsFromNow">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="CalculateShiftsFromNow">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetDailyPerformanceForTimeframe">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="ScheduleShifts">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetNearestChangeoverFromSchedule">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+            </InstanceRunTimePermissions>
         </ThingShape>
     </ThingShapes>
 </Entities>

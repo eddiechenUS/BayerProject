@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b140"
+ build="b2319"
  majorVersion="8"
- minorVersion="2"
- modelPersistenceProviderPackage="H2PersistenceProviderPackage"
- revision="1"
- schemaVersion="1020"
+ minorVersion="4"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1041"
  universal="">
     <MediaEntities>
         <MediaEntity
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2018-12-05T02:54:20.660-08:00"
+         lastModifiedDate="2019-09-27T11:09:48.906Z"
          name="Bayer_Data"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -26,25 +26,15 @@
             </DesignTimePermissions>
             <RunTimePermissions></RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables>
-                <ConfigurationTable
-                 description="List of authorization server scopes"
-                 isMultiRow="true"
-                 name="AuthorizationServerScopesSettings"
-                 ordinal="1">
-                    <DataShape>
-                        <FieldDefinitions>
-                            <FieldDefinition
-                             baseType="STRING"
-                             description="A single scope for the authorization server."
-                             name="scope"
-                             ordinal="0"></FieldDefinition>
-                        </FieldDefinitions>
-                    </DataShape>
-                    <Rows></Rows>
-                </ConfigurationTable>
                 <ConfigurationTable
                  description="Content Source Connection information"
                  isMultiRow="false"
@@ -85,6 +75,12 @@
                              name="password"
                              ordinal="6"></FieldDefinition>
                             <FieldDefinition
+                             aspect.friendlyName="TestConnectionURL"
+                             baseType="STRING"
+                             description="The URL to test the connection"
+                             name="testUrl"
+                             ordinal="8"></FieldDefinition>
+                            <FieldDefinition
                              aspect.defaultValue="60.0"
                              aspect.friendlyName="Timeout"
                              baseType="NUMBER"
@@ -116,6 +112,7 @@
                             <dynamicContent>false</dynamicContent>
                             <ignoreSSLErrors>false</ignoreSSLErrors>
                             <password></password>
+                            <testUrl></testUrl>
                             <timeout>60.0</timeout>
                             <url></url>
                             <userId></userId>
@@ -123,25 +120,20 @@
                     </Rows>
                 </ConfigurationTable>
                 <ConfigurationTable
-                 description="Session User Configuration"
-                 isMultiRow="false"
-                 name="SessionUserConfigurationTable"
-                 ordinal="3">
+                 description="List of authorization server scopes"
+                 isMultiRow="true"
+                 name="AuthorizationServerScopesSettings"
+                 ordinal="1">
                     <DataShape>
                         <FieldDefinitions>
                             <FieldDefinition
-                             aspect.friendlyName="SessionUserQueryParameter"
                              baseType="STRING"
-                             description="Session User Query Parameter"
-                             name="SessionUserQueryParameter"
-                             ordinal="1"></FieldDefinition>
+                             description="A single scope for the authorization server."
+                             name="scope"
+                             ordinal="0"></FieldDefinition>
                         </FieldDefinitions>
                     </DataShape>
-                    <Rows>
-                        <Row>
-                            <SessionUserQueryParameter></SessionUserQueryParameter>
-                        </Row>
-                    </Rows>
+                    <Rows></Rows>
                 </ConfigurationTable>
                 <ConfigurationTable
                  description="SSL Connection Configuration"
@@ -182,6 +174,27 @@
                             <SSLKeyStorePath></SSLKeyStorePath>
                             <SSLTrustStorePassword></SSLTrustStorePassword>
                             <SSLTrustStorePath></SSLTrustStorePath>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+                <ConfigurationTable
+                 description="Session User Configuration"
+                 isMultiRow="false"
+                 name="SessionUserConfigurationTable"
+                 ordinal="3">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.friendlyName="SessionUserQueryParameter"
+                             baseType="STRING"
+                             description="Session User Query Parameter"
+                             name="SessionUserQueryParameter"
+                             ordinal="1"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <SessionUserQueryParameter></SessionUserQueryParameter>
                         </Row>
                     </Rows>
                 </ConfigurationTable>
