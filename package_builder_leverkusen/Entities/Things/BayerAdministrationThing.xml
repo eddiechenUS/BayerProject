@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <Things>
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-09-27T16:57:26.191Z" name="BayerAdministrationThing" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility/>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SetRuntimePermissions">
+                        <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SetVisibilityPermissions">
+                        <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="SetRuntimePermissions">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        ThingTemplates["BrowserGateway"].AddInstanceRunTimePermission({
+                                        	principal: 'System' /* STRING */,
+                                        	allow: true /* BOOLEAN */,
+                                        	resource: '*' /* STRING */,
+                                        	type: 'ServiceInvoke' /* STRING */,
+                                        	principalType: 'User' /* STRING */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="SetVisibilityPermissions">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var entityTypes = ['StyleTheme', 'Thing', 'Mashup', 'MediaEntity', 'StyleDefinition', 'DataShape', 'Resource', 'LocalizationTable', 'Subsystem', 'StateDefinition', 'ThingTemplate', 'ThingShape'];
+                                        
+                                        var paramsForVisibility = {
+                                            principal: 'Bayer:PerformanceDashboard' /* STRING */,
+                                            principalType: 'OrganizationalUnit' /* STRING */
+                                        };
+                                        
+                                        for (var x = 0; x < entityTypes.length; x++) {
+                                            var type = entityTypes[x];
+                                            
+                                        	var params = {
+                                                maxItems: 999999999 /* NUMBER */,
+                                                nameMask: undefined /* STRING */,
+                                                type: type /* STRING */,
+                                                tags: undefined /* TAGS */
+                                            };
+                                        
+                                            // result: INFOTABLE dataShape: RootEntityList
+                                            var entities = Resources["EntityServices"].GetEntityList(params);
+                                        
+                                            for (var y = 0; y < entities.rows.length; y++) {
+                                                var row = entities.rows[y];
+                                                if (row.isSystemObject || type == 'Subsystem') {
+                                                    var entity;
+                                                    
+                                                    if (type == 'Thing') {
+                                                        entity = Things[row.name];
+                                                    }
+                                                    else if (type == 'Mashup') {
+                                                        entity = Mashups[row.name];
+                                                    }
+                                                    else if (type == 'MediaEntity') {
+                                                        entity = MediaEntities[row.name];
+                                                    }
+                                                    else if (type == 'StyleDefinition') {
+                                                        entity = StyleDefinitions[row.name];
+                                                    }
+                                                    else if (type == 'DataShape') {
+                                                        entity = DataShapes[row.name];
+                                                    }
+                                                    else if (type == 'Resource') {
+                                                        entity = Resources[row.name];                
+                                                    }
+                                                    else if (type == 'LocalizationTable') {
+                                                        entity = LocalizationTables[row.name];
+                                                    }
+                                                    else if (type == 'Subsystem') {
+                                                        entity = Subsystems[row.name];
+                                                    }
+                                                    else if (type == 'StateDefinition') {
+                                                        entity = StateDefinitions[row.name];
+                                                    }
+                                                    else if (type == 'ThingTemplate') {
+                                                        entity = ThingTemplates[row.name];
+                                                    }
+                                                    else if (type == 'ThingShape') {
+                                                        entity = ThingShapes[row.name];
+                                                    }
+                                        
+                                                    try {
+                                                        // no return
+                                                        entity.AddVisibilityPermission(paramsForVisibility);
+                                                    }
+                                                    catch (ex) {
+                                                        logger.error("AddVisibilityToSystemObjects [" + row.name + "] " + ex);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                        
+                                        /////////////// ADVANCED TREE GRID ////////////////////
+                                        //MediaEntities["GridRowIcon"].AddVisibilityPermission(paramsForVisibility);
+                                        //MediaEntities["GridRowExpansionIcon"].AddVisibilityPermission(paramsForVisibility);
+                                        //MediaEntities["GridSortDescendingArrow"].AddVisibilityPermission(paramsForVisibility);
+                                        //MediaEntities["GridRowCollapseIcon"].AddVisibilityPermission(paramsForVisibility);
+                                        //MediaEntities["GridSortAscendingArrow"].AddVisibilityPermission(paramsForVisibility);
+                                        //MediaEntities["GridRowExpansionIconNav"].AddVisibilityPermission(paramsForVisibility);
+                                        //MediaEntities["GridSortDescendingArrowNav"].AddVisibilityPermission(paramsForVisibility);
+                                        //MediaEntities["GridRowCollapseIconNav"].AddVisibilityPermission(paramsForVisibility);
+                                        //MediaEntities["GridSortAscendingArrowNav"].AddVisibilityPermission(paramsForVisibility);
+                                        Resources["TTPSC.Utilities.UtilityServices"].AddVisibilityPermission(paramsForVisibility);
+                                        PersistenceProviders["ThingworxPersistenceProvider"].AddVisibilityPermission(paramsForVisibility);
+                                        Resources["PDFExport"].AddVisibilityPermission(paramsForVisibility);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ImplementedShapes/>
+            <ThingProperties/>
+        </Thing>
+    </Things>
+</Entities>
