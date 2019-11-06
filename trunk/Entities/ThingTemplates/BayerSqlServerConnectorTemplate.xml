@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2019-10-30T11:03:18.544Z"
+         lastModifiedDate="2019-11-06T09:38:28.839Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -107,7 +107,7 @@
                             <maxConnections>5.0</maxConnections>
                             <password>
                             <![CDATA[
-                            2L/5ci6/qpNIESVsRdbnPA==:0lQ6T75sQ/tYW2hKfTlG1A==
+                            j/XwOF7NsRGudNnfedRt+w==:gpp0fNa5JoI5kCTmm7llgA==
                             ]]>
                             </password>
                             <userName>
@@ -474,11 +474,6 @@
                          name="result"
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
-                            <FieldDefinition
-                             baseType="THINGNAME"
-                             description=""
-                             name="line"
-                             ordinal="1"></FieldDefinition>
                             <FieldDefinition
                              baseType="INTEGER"
                              description=""
@@ -1181,12 +1176,6 @@
                              name="shiftScheduleId"
                              ordinal="7"></FieldDefinition>
                             <FieldDefinition
-                             aspect.thingTemplate="BayerProductionLine"
-                             baseType="THINGNAME"
-                             description=""
-                             name="source"
-                             ordinal="2"></FieldDefinition>
-                            <FieldDefinition
                              baseType="DATETIME"
                              description=""
                              name="startTime"
@@ -1336,6 +1325,46 @@
                              description=""
                              name="status"
                              ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateDelayShift">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="TEXT"
+                             description="is a `problem` in ui"
+                             name="description"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="false"
+                             baseType="STRING"
+                             description=""
+                             name="reasonCode"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="STRING"
+                             description=""
+                             name="source"
+                             ordinal="4"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -2043,7 +2072,6 @@
                                         <sql>
                                         <![CDATA[
                                         SET DATEFIRST 1;
-                                        DECLARE @productionLine AS VARCHAR(MAX) = [[productionLine]];
                                         DECLARE @shiftScheduleId AS INT = [[shiftScheduleId]];  
                                         
                                         SELECT [id]
@@ -2051,8 +2079,7 @@
                                               ,[source]
                                               ,[startTime]
                                               ,[endTime]
-                                        	  ,DATEDIFF(SECOND, [startTime], [endTime]) as [durationSec]
-                                        	  ,DATEDIFF(SECOND, [startTime], [endTime])*1000 as [durationMs]
+                                              ,FORMAT([endTime] - [startTime], 'mm:ss') as [duration]
                                               ,[reasonCode]
                                               ,[description]
                                               ,[shiftScheduleId]
@@ -2103,14 +2130,14 @@
                                         <sql>
                                         <![CDATA[
                                         SET DATEFIRST 1;
-                                        DECLARE @line AS VARCHAR(MAX) = [[line]];  
                                         DECLARE @shiftScheduleId AS INT = [[shiftScheduleId]];  
                                         
-                                        SELECT *,
-                                        	(SELECT TOP(1) [description] 
+                                        SELECT *
+                                        	,FORMAT([grouped].[durationDiff],'mm:ss') AS [duration]
+                                        	,(SELECT TOP(1) [description] 
                                         		FROM [dbo].[Delay] AS [parent] 
-                                        		WHERE [source] = @line 
-                                        			AND [shiftScheduleId] = @shiftScheduleId 
+                                        		WHERE 
+                                        			[shiftScheduleId] = @shiftScheduleId 
                                         			AND [category] = [grouped].[category] 
                                         			ORDER BY DATEDIFF(SECOND, [startTime], [endTime]) DESC
                                         		) as [majorProblem]
@@ -2120,12 +2147,12 @@
                                         		[category]
                                         		  ,COUNT(*) as [frequency]
                                         		  ,MAX(DATEDIFF(SECOND, [startTime], [endTime])) as [durationMax]
-                                        		  ,SUM(DATEDIFF(MINUTE, [startTime], [endTime])) as [duration]
+                                        		  -- ,SUM((CAST((DATEDIFF(SECOND,[startTime], [endTime]) / 60.0) AS DECIMAL(6,2)))) AS [duration]
+                                        		  ,CAST(SUM(CAST([endTime] - [startTime] AS FLOAT)) AS DATETIME) AS [durationDiff]
                                         		  ,SUM(DATEDIFF(SECOND, [startTime], [endTime])) as [durationSec]
                                         	  FROM [dbo].[Delay]
                                         	  WHERE 
-                                        		[source] = @line 
-                                        		AND [shiftScheduleId] = @shiftScheduleId
+                                        		[shiftScheduleId] = @shiftScheduleId
                                         	  GROUP BY [category]
                                         ) as [grouped]
                                         ]]>
@@ -2631,7 +2658,6 @@
                                               ,[endTime]
                                         	  ,DATEDIFF(SECOND, [startTime], [endTime]) as [durationSec]
                                         	  ,DATEDIFF(SECOND, [startTime], [endTime])*1000 as [durationMs]
-                                              ,[source]
                                               ,[shiftScheduleId]
                                           FROM 
                                           	[dbo].[ShiftEvent]
@@ -3228,13 +3254,11 @@
                                         <![CDATA[
                                         INSERT INTO [dbo].[ShiftEvent]
                                                    ([category]
-                                                   ,[source]
                                                    ,[startTime]
                                                    ,[endTime]
                                                    ,[shiftScheduleId])
                                              VALUES
                                                    ([[category]]
-                                                   ,[[source]]
                                                    ,[[startTime]]
                                                    ,[[endTime]]
                                                    ,[[shiftScheduleId]]);
@@ -3399,6 +3423,54 @@
                                               ,[dueDate] = [[dueDate]]
                                               ,[assignedTo] = [[assignedTo]]
                                          WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
+                     name="UpdateDelayShift">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[Delay]
+                                           SET [reasonCode] = [[reasonCode]]
+                                              ,[description] = [[description]]
+                                              ,[source] = [[source]]
+                                         WHERE [id] = [[id]];
+                                        SELECT * FROM [dbo].[Delay] WHERE [id] = SCOPE_IDENTITY();
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
