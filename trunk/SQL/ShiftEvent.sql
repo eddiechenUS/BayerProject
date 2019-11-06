@@ -1,7 +1,4 @@
-USE [BayerDevDb]
-GO
-
-/****** Object:  Table [dbo].[ShiftEvent]    Script Date: 9/10/2019 1:38:08 PM ******/
+/****** Object:  Table [dbo].[ShiftEvent]    Script Date: 11/6/2019 8:58:33 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -10,8 +7,9 @@ GO
 
 CREATE TABLE [dbo].[ShiftEvent](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[timestamp] [datetime] NOT NULL,
-	[status] [varchar](20) NOT NULL,
+	[category] [varchar](20) NOT NULL,
+	[startTime] [datetime] NULL,
+	[endTime] [datetime] NULL,
 	[shiftScheduleId] [int] NULL,
  CONSTRAINT [PK_ShiftEvent] PRIMARY KEY CLUSTERED 
 (
@@ -26,4 +24,3 @@ GO
 
 ALTER TABLE [dbo].[ShiftEvent] CHECK CONSTRAINT [FK_ShiftEvent_ShiftSchedule]
 GO
-

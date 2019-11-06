@@ -1,6 +1,3 @@
-USE [BayerDevDb]
-GO
-
 /****** Object:  Table [dbo].[ShiftSchedule]    Script Date: 9/10/2019 1:38:13 PM ******/
 SET ANSI_NULLS ON
 GO

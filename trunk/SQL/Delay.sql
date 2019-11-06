@@ -1,6 +1,3 @@
-USE [BayerDevDb]
-GO
-
 /****** Object:  Table [dbo].[Delay]    Script Date: 9/10/2019 1:37:43 PM ******/
 SET ANSI_NULLS ON
 GO

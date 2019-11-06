@@ -1,6 +1,3 @@
-USE [BayerDevDb]
-GO
-
 /****** Object:  Table [dbo].[MaintenanceTicket]    Script Date: 9/10/2019 1:37:50 PM ******/
 SET ANSI_NULLS ON
 GO
