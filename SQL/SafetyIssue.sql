@@ -1,6 +1,3 @@
-USE [BayerDevDb]
-GO
-
 /****** Object:  Table [dbo].[SafetyIssue]    Script Date: 9/10/2019 1:38:01 PM ******/
 SET ANSI_NULLS ON
 GO
