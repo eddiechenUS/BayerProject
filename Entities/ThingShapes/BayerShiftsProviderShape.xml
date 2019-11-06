@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-10-30T08:40:34.811Z"
+         lastModifiedDate="2019-11-05T19:13:29.875Z"
          name="BayerShiftsProviderShape"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -187,12 +187,6 @@
                      name="result"
                      ordinal="0"></ResultType>
                     <ParameterDefinitions>
-                        <FieldDefinition
-                         aspect.thingTemplate="BayerProductionLine"
-                         baseType="THINGNAME"
-                         description=""
-                         name="line"
-                         ordinal="1"></FieldDefinition>
                         <FieldDefinition
                          baseType="INTEGER"
                          description=""
@@ -476,6 +470,37 @@
                          description=""
                          name="startTime"
                          ordinal="4"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="UpdateDelayShift">
+                    <ResultType
+                     aspect.dataShape="BayerDelayDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="GetDelayShiftDetailsDataShape"
+                         aspect.isRequired="true"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="delayShift"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="INTEGER"
+                         description=""
+                         name="id"
+                         ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -787,7 +812,6 @@
                                     <code>
                                     <![CDATA[
                                     var result = Things[me.GetConnector()].GetDelaysSummary({
-                                        line: line,
                                         shiftScheduleId: shiftScheduleId,
                                     });
                                     ]]>
@@ -1127,6 +1151,42 @@
                                         shiftScheduleId: shiftScheduleId,
                                         startTime: startTime,
                                         endTime: endTime
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="UpdateDelayShift">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].UpdateDelayShift({
+                                        id: id, 
+                                        source: delayShift.source,
+                                        reasonCode: delayShift.reasonCode,
+                                        description: delayShift.description,
                                     });
                                     ]]>
                                     </code>

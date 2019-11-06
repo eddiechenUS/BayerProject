@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2019-09-20T11:26:20.063Z"
+         lastModifiedDate="2019-11-06T09:58:56.887Z"
          name="BayerProductionPlansParserTemplate"
          projectName="BayerIoT"
          tags="Applications:BayerProductionPlans;Applications:Bayer"
@@ -35,6 +35,15 @@
             <ConfigurationTableDefinitions>
                 <ConfigurationTableDefinition
                  category=""
+                 dataShapeName="BayerProductionPlansParserColumnsMappingDataShape"
+                 description=""
+                 isHidden="false"
+                 isMultiRow="true"
+                 name="ColumnMappings"
+                 ordinal="0"
+                 source="IMPORT"></ConfigurationTableDefinition>
+                <ConfigurationTableDefinition
+                 category=""
                  dataShapeName="BayerProductionPlansParserSettingsDataShape"
                  description=""
                  isHidden="false"
@@ -46,13 +55,36 @@
             <ConfigurationTables>
                 <ConfigurationTable
                  description=""
+                 isMultiRow="true"
+                 name="ColumnMappings"
+                 ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="false"
+                             baseType="STRING"
+                             description=""
+                             name="csvColumnName"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="true"
+                             baseType="STRING"
+                             description=""
+                             name="targetFieldName"
+                             ordinal="2"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows></Rows>
+                </ConfigurationTable>
+                <ConfigurationTable
+                 description=""
                  isMultiRow="false"
                  name="ParserSettings"
                  ordinal="0">
                     <DataShape>
                         <FieldDefinitions>
                             <FieldDefinition
-                             aspect.friendlyName="Bayer.ParserSettingsAppKey"
+                             aspect.friendlyName=""
                              aspect.isPrimaryKey="false"
                              baseType="PASSWORD"
                              description=""
@@ -67,7 +99,7 @@
                              ordinal="5"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="/"
-                             aspect.friendlyName="Bayer.ParserSettingsPath"
+                             aspect.friendlyName=""
                              aspect.isPrimaryKey="true"
                              baseType="STRING"
                              description=""
@@ -75,7 +107,7 @@
                              ordinal="2"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="BayerCSVRepository"
-                             aspect.friendlyName="Bayer.ParserSettingsRepository"
+                             aspect.friendlyName=""
                              aspect.isPrimaryKey="true"
                              aspect.thingTemplate="FileRepository"
                              baseType="THINGNAME"
@@ -84,7 +116,7 @@
                              ordinal="1"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="http://localhost:8080/Thingworx/Things/BayerProductionPlansParser/Services/ProcessData"
-                             aspect.friendlyName="Bayer.ParserSettingsTargetServiceUrl"
+                             aspect.friendlyName=""
                              aspect.isPrimaryKey="false"
                              baseType="STRING"
                              description=""
@@ -115,6 +147,29 @@
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
                 <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetCsvColumnName">
+                        <ResultType
+                         baseType="STRING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="STRING"
+                             description=""
+                             name="fieldName"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition
                      aspect.isAsync="false"
                      category=""
@@ -182,6 +237,47 @@
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetCsvColumnName">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = '';
+                                        
+                                        try {
+                                            result =  me.GetConfigurationTableRow({
+                                                key: fieldName /* STRING */,
+                                                tableName: "ColumnMappings" /* STRING */
+                                            }).csvColumnName;
+                                        }
+                                        catch (ex) {
+                                            logger.error(me.name + ".GetCsvColumnName " + ex);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
