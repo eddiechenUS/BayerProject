@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <ThingShapes>
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-09-27T14:48:35.190Z" name="BayerSafetyManagement" projectName="BayerIoT" tags="Applications:Bayer">
+            <PropertyDefinitions>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="accident" baseType="NUMBER" category="" description="" isLocalOnly="false" name="accidentsCount" ordinal="2"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="accidentsLastModified" ordinal="4"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="near misses" baseType="NUMBER" category="" description="" isLocalOnly="false" name="nearMissesCount" ordinal="3"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="nearMissesLastModified" ordinal="5"/>
+            </PropertyDefinitions>
+            <ServiceDefinitions>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddSafetyIssue">
+                    <ResultType baseType="BOOLEAN" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="TEXT" description="" name="comment" ordinal="2"/>
+                        <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="type" ordinal="3"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetSafetyIssues">
+                    <ResultType aspect.dataShape="SafetyIssuesShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateSafetyIssuesCounters">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions/>
+                </ServiceDefinition>
+            </ServiceDefinitions>
+            <EventDefinitions/>
+            <ServiceMappings/>
+            <ServiceImplementations>
+                <ServiceImplementation description="" handlerName="Script" name="AddSafetyIssue">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = false;
+                                    var date = new Date();
+                                    
+                                    var data = {
+                                        type: type,
+                                        comment: comment,
+                                        productionLine: productionLine
+                                    };
+                                    
+                                    var accidentAdded = Things['BayerDBDataProvider'].InsertSafetyIssue(data);
+                                    
+                                    if (type === 'accident') {
+                                    	me.accidentsLastModified = date;
+                                        me.accidentsCount+=1;
+                                    } else {
+                                    	me.nearMissesLastModified = date;
+                                        me.nearMissesCount+=1;
+                                    }
+                                    
+                                    result = true;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetSafetyIssues">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things["BayerDBDataProvider"].GetSafetyIssues({
+                                        productionLine: productionLine,
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="UpdateSafetyIssuesCounters">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    me.accidentsCount = Things['BayerDBDataProvider'].CountSafetyIssues({
+                                    	productionLine: me.name,
+                                    	type: 'accident'
+                                    });
+                                    me.nearMissesCount = Things['BayerDBDataProvider'].CountSafetyIssues({
+                                    	productionLine: me.name,
+                                    	type: 'nearMiss'
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+            </ServiceImplementations>
+            <Subscriptions/>
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations>
+                <AlertDefinitions name="accidentsCount"/>
+                <AlertDefinitions name="accidentsLastModified"/>
+                <AlertDefinitions name="nearMissesCount"/>
+                <AlertDefinitions name="nearMissesLastModified"/>
+            </AlertConfigurations>
+            <InstanceRunTimePermissions>
+                <Permissions resourceName="nearMissesLastModified">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="accidentsCount">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetSafetyIssues">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="nearMissesCount">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="UpdateSafetyIssuesCounters">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="AddSafetyIssue">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="accidentsLastModified">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </InstanceRunTimePermissions>
+        </ThingShape>
+    </ThingShapes>
+</Entities>

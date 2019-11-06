@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <ThingTemplates>
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2019-10-17T13:29:42.504Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="BayerProductionLineValueStream">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions resourceName="GetImplementingThingsWithData">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="*">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations>
+                <AlertDefinitions name="displayName"/>
+            </AlertConfigurations>
+            <ThingShape>
+                <PropertyDefinitions>
+                    <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="STRING" category="" description="" isLocalOnly="false" name="displayName" ordinal="1"/>
+                </PropertyDefinitions>
+                <ServiceDefinitions/>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations/>
+                <Subscriptions>
+                    <Subscription description="" enabled="true" eventName="ScheduledEvent" name="Type.Thing:Entity.BayerSchedulerThing:Event.ScheduledEvent" source="BayerSchedulerThing" sourceProperty="">
+                        <ServiceImplementation description="" handlerName="Script" name="Type.Thing:Entity.BayerSchedulerThing:Event.ScheduledEvent">
+                            <ConfigurationTables>
+                                <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                    <DataShape>
+                                        <FieldDefinitions>
+                                            <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                        </FieldDefinitions>
+                                    </DataShape>
+                                    <Rows>
+                                        <Row>
+                                            <code>
+                                            <![CDATA[
+                                            var minutesMod6 = eventData.timestamp.getMinutes() % 6;
+                                            
+                                            if (minutesMod6 == 5) {
+                                                // UPDATE PRODUCT AND SHIFT AT THE 5th MINUTE OF EACH 6 MINUTES CYCLE (e.g. 1:05:02|1:11:02|1:17:02 etc)
+                                                logger.debug(me.name + " Update shift and product event");
+                                            
+                                                me.UpdateShift({eventData: eventData});
+                                                me.UpdateProduct({eventData: eventData});
+                                            }
+                                            
+                                            if (eventData.timestamp.getMinutes() == 0) {
+                                                // SCHEDULE SHIFTS AT 6:00:02|14:00:02|22:00:02
+                                                
+                                                if (eventData.timestamp.getHours() == 6 || eventData.timestamp.getHours() == 14 || eventData.timestamp.getHours() == 22) {
+                                                    logger.debug(me.name + " Schedule shifts event");
+                                                    me.nearMisses = 0;
+                                                           
+                                                    // no return
+                                                    me.ScheduleShifts();
+                                                }
+                                            }
+                                            ]]>
+                                            </code>
+                                        </Row>
+                                    </Rows>
+                                </ConfigurationTable>
+                            </ConfigurationTables>
+                        </ServiceImplementation>
+                    </Subscription>
+                </Subscriptions>
+            </ThingShape>
+            <ImplementedShapes>
+                <ImplementedShape name="BayerShiftsManagement" type="ThingShape"/>
+                <ImplementedShape name="BayerProductionManagement" type="ThingShape"/>
+                <ImplementedShape name="BayerDelaysManagement" type="ThingShape"/>
+                <ImplementedShape name="BayerSafetyManagement" type="ThingShape"/>
+                <ImplementedShape name="BayerNotificationsManagement" type="ThingShape"/>
+                <ImplementedShape name="BayerReportsGenerator" type="ThingShape"/>
+                <ImplementedShape name="BayerActionListManagement" type="ThingShape"/>
+            </ImplementedShapes>
+            <SharedConfigurationTables/>
+            <InstanceDesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </InstanceDesignTimePermissions>
+            <InstanceRunTimePermissions>
+                <Permissions resourceName="GetPropertyTime">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </EventSubscribe>
+                </Permissions>
+            </InstanceRunTimePermissions>
+            <InstanceVisibilityPermissions>
+                <Visibility/>
+            </InstanceVisibilityPermissions>
+        </ThingTemplate>
+    </ThingTemplates>
+</Entities>
