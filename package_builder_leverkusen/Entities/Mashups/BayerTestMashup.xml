@@ -16,8 +16,8 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-18T13:50:07.348Z"
-         name="BayerProductionPlanMashup"
+         lastModifiedDate="2019-11-14T12:46:52.371Z"
+         name="BayerTestMashup"
          projectName="BayerIoT"
          rows="0.0"
          tags="Applications:Bayer">
@@ -52,6 +52,7 @@
             </ParameterDefinitions>
             <Things>
                 <Thing>BayerProductionPlanPage</Thing>
+                <Thing>BayerUtilities</Thing>
             </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates></ThingTemplates>
@@ -88,6 +89,21 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetProductionPlanStatusFormatted"
+                  } ]
+                },
+                "Things_BayerUtilities" : {
+                  "DataName" : "Things_BayerUtilities",
+                  "EntityName" : "BayerUtilities",
+                  "EntityType" : "Things",
+                  "Id" : "5e0d03d7-7f0b-4946-90e1-7b647446c3f7",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "41bcc49d-cb6f-44db-a037-9984398ece89",
+                    "Name" : "GetLineName",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetLineName"
                   } ]
                 },
                 "UserExtensions" : {
@@ -139,18 +155,34 @@
                 "TargetId" : "GetProductionPlanStatusFormatted",
                 "TargetSection" : "Things_BayerProductionPlanPage"
               }, {
-                "Id" : "540e6a63-bb44-4823-a1f6-41e273c26d19",
+                "Id" : "e8133fe5-61d3-4945-af9c-e31fd2b475ad",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "line",
                   "SourcePropertyBaseType" : "THINGNAME",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "Text",
+                  "TargetProperty" : "line",
                   "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "property"
+                  "TargetPropertyType" : "Parameter"
                 } ],
                 "SourceArea" : "Mashup",
                 "SourceId" : "mashup-root",
                 "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetLineName",
+                "TargetSection" : "Things_BayerUtilities"
+              }, {
+                "Id" : "d9b1587b-c802-4dab-a9b2-da53274b5997",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetLineName",
+                "SourceSection" : "Things_BayerUtilities",
                 "TargetArea" : "UI",
                 "TargetId" : "label-19",
                 "TargetSection" : ""
@@ -180,6 +212,15 @@
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
                 "Id" : "c3d6aa29-c0a7-48cc-b5d1-4992b99b4729"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerUtilities",
+                "EventHandlerService" : "GetLineName",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "95fdfdf7-7634-4b47-9331-30b3884d1778"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]

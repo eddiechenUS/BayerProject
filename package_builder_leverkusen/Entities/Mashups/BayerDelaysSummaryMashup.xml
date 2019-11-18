@@ -16,7 +16,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-04T18:46:01.580Z"
+         lastModifiedDate="2019-11-15T10:57:46.970Z"
          name="BayerDelaysSummaryMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -50,13 +50,12 @@
                  name="line"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
-                 aspect.bindingDirection="IN"
-                 aspect.dataShape="BayerScheduleDataShape"
+                 aspect.bindingDirection="BOTH"
                  aspect.isMandatory="false"
                  aspect.ordinal="2"
-                 baseType="INFOTABLE"
+                 baseType="MASHUPNAME"
                  description=""
-                 name="schedule"
+                 name="navigateToMashup"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
                  aspect.bindingDirection="IN"
@@ -256,54 +255,6 @@
                 "TargetId" : "valuedisplay-140",
                 "TargetSection" : ""
               }, {
-                "Id" : "faf4434b-270d-442b-a4ac-426362d49654",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "line",
-                  "SourcePropertyBaseType" : "THINGNAME",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "line",
-                  "TargetPropertyBaseType" : "THINGNAME",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "navigation-143",
-                "TargetSection" : ""
-              }, {
-                "Id" : "ab56a284-78e0-43a0-8dba-78ab913a7cc7",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "shiftId",
-                  "SourcePropertyBaseType" : "INTEGER",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "shiftId",
-                  "TargetPropertyBaseType" : "INTEGER",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "navigation-143",
-                "TargetSection" : ""
-              }, {
-                "Id" : "b50f6064-c579-4f99-8e03-fecb96ba6d04",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "schedule",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "schedule",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "navigation-143",
-                "TargetSection" : ""
-              }, {
                 "Id" : "176e8535-ef53-4581-93d6-34e1f953ea89",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "changeoverDuration",
@@ -354,6 +305,22 @@
                 "TargetArea" : "UI",
                 "TargetId" : "valuedisplay-136",
                 "TargetSection" : ""
+              }, {
+                "Id" : "4eeb7002-6603-4af6-aab8-4114cd420662",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "navigateToMashup",
+                  "TargetPropertyBaseType" : "MASHUPNAME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-145",
+                "SourceSection" : "",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -382,13 +349,13 @@
                 "Id" : "511b53d7-385e-48ed-8b86-66633eea036a"
               }, {
                 "EventHandlerArea" : "UI",
-                "EventHandlerId" : "navigation-143",
-                "EventHandlerService" : "Navigate",
+                "EventHandlerId" : "expression-145",
+                "EventHandlerService" : "Evaluate",
                 "EventTriggerArea" : "UI",
                 "EventTriggerEvent" : "Clicked",
-                "EventTriggerId" : "button-142",
+                "EventTriggerId" : "button-144",
                 "EventTriggerSection" : "",
-                "Id" : "62e907b5-bf27-4b00-9e7e-c365f757d018"
+                "Id" : "87fc1c22-b223-49bb-b333-da033e9d7303"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -449,17 +416,16 @@
                     "ParameterName" : "shiftId"
                   }, {
                     "Aspects" : {
-                      "bindingDirection" : "IN",
-                      "dataShape" : "BayerScheduleDataShape",
+                      "bindingDirection" : "BOTH",
                       "isMandatory" : false
                     },
-                    "BaseType" : "INFOTABLE",
+                    "BaseType" : "MASHUPNAME",
                     "Description" : "",
-                    "ParameterName" : "schedule"
+                    "ParameterName" : "navigateToMashup"
                   } ],
                   "flex-grow" : 0,
                   "flex-shrink" : 0,
-                  "id_index" : 143,
+                  "id_index" : 145,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -620,12 +586,12 @@
                           "DefaultConfirmationButton" : "button1",
                           "Disabled" : false,
                           "DisabledStyle" : "BayerButtonStyle",
-                          "DisplayName" : "button-142",
+                          "DisplayName" : "button-144",
                           "FocusStyle" : "BayerButtonStyle",
                           "Height" : 20,
                           "HoverStyle" : "BayerButtonHoverStyle",
                           "IconAlignment" : "right",
-                          "Id" : "button-142",
+                          "Id" : "button-144",
                           "Label" : "[[Bayer.Details]]",
                           "Left" : 5,
                           "Margin" : "5",
@@ -643,100 +609,6 @@
                           "Width" : 90,
                           "Z-index" : 10,
                           "__TypeDisplayName" : "Button",
-                          "__supportsTooltip" : true
-                        },
-                        "Widgets" : [ ]
-                      }, {
-                        "Properties" : {
-                          "Alignment" : "left",
-                          "Area" : "UI",
-                          "ClickOutsideToClose" : false,
-                          "DisplayName" : "navigation-143",
-                          "FixedPopupHeight" : 0,
-                          "FixedPopupWidth" : 0,
-                          "Height" : 20,
-                          "Icon" : "",
-                          "IconAlignment" : "left",
-                          "Id" : "navigation-143",
-                          "Left" : 65,
-                          "Margin" : "5",
-                          "MashupName" : "BayerDelaysDetailsMashup",
-                          "MashupParameters" : [ {
-                            "BaseType" : "INFOTABLE",
-                            "Description" : "",
-                            "ParameterName" : "schedule",
-                            "ParmDef" : {
-                              "aspects" : {
-                                "bindingDirection" : "IN",
-                                "dataShape" : "BayerScheduleDataShape",
-                                "isMandatory" : "false",
-                                "ordinal" : "1"
-                              },
-                              "baseType" : "INFOTABLE",
-                              "description" : "",
-                              "name" : "schedule",
-                              "ordinal" : 0
-                            }
-                          }, {
-                            "BaseType" : "INTEGER",
-                            "Description" : "",
-                            "ParameterName" : "shiftId",
-                            "ParmDef" : {
-                              "aspects" : {
-                                "bindingDirection" : "IN",
-                                "isMandatory" : "false",
-                                "ordinal" : "2"
-                              },
-                              "baseType" : "INTEGER",
-                              "description" : "",
-                              "name" : "shiftId",
-                              "ordinal" : 0
-                            }
-                          }, {
-                            "BaseType" : "THINGNAME",
-                            "Description" : "",
-                            "ParameterName" : "line",
-                            "ParmDef" : {
-                              "aspects" : {
-                                "bindingDirection" : "IN",
-                                "isMandatory" : "false",
-                                "ordinal" : "0"
-                              },
-                              "baseType" : "THINGNAME",
-                              "description" : "",
-                              "name" : "line",
-                              "ordinal" : 0
-                            }
-                          } ],
-                          "MessageToShow" : "Mashup must be selected",
-                          "ModalPopupOpacity" : 0.5,
-                          "NavigationActiveStyle" : "DefaultNavigationActiveStyle",
-                          "NavigationFocusStyle" : "DefaultNavigationFocusStyle",
-                          "NavigationHoverStyle" : "DefaultNavigationHoverStyle",
-                          "PopupScrolling" : "auto",
-                          "PopupTitle" : "",
-                          "PopupTitleStyle" : "DefaultPopupTitleStyle",
-                          "ReloadOnReplace" : false,
-                          "ResponsiveLayout" : false,
-                          "RoundedCorners" : false,
-                          "ShowCloseButton" : true,
-                          "ShowDataLoading" : true,
-                          "ShowMessageIfNoMashup" : false,
-                          "SingleClickSelectOnTablets" : true,
-                          "Style" : "DefaultNavigationStyle",
-                          "TabSequence" : 0,
-                          "TargetWindow" : "popup",
-                          "Text" : "o-details",
-                          "ToolTipField" : "",
-                          "ToolTipStyle" : "DefaultTooltipStyle",
-                          "Top" : 15,
-                          "Transparent" : false,
-                          "Type" : "navigation",
-                          "UseTheme" : false,
-                          "Visible" : false,
-                          "Width" : 90,
-                          "Z-index" : 10,
-                          "__TypeDisplayName" : "Navigation",
                           "__supportsTooltip" : true
                         },
                         "Widgets" : [ ]
@@ -1144,7 +1016,7 @@
                           "Alignment" : "center",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-130",
+                          "DisplayName" : "valuedisplay-breakdownsFreq",
                           "Height" : 22,
                           "Id" : "valuedisplay-130",
                           "ImageScaling" : "Width",
@@ -1211,7 +1083,7 @@
                           "Alignment" : "center",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-135",
+                          "DisplayName" : "valuedisplay-breakdownsDur",
                           "Height" : 22,
                           "Id" : "valuedisplay-135",
                           "ImageScaling" : "Width",
@@ -1279,7 +1151,7 @@
                           "Alignment" : "left",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-139",
+                          "DisplayName" : "valuedisplay-breakdownsMP",
                           "Height" : 22,
                           "Id" : "valuedisplay-139",
                           "ImageScaling" : "Width",
@@ -1438,7 +1310,7 @@
                           "Alignment" : "center",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-131",
+                          "DisplayName" : "valuedisplay-microStopFreq",
                           "Height" : 22,
                           "Id" : "valuedisplay-131",
                           "ImageScaling" : "Width",
@@ -1505,7 +1377,7 @@
                           "Alignment" : "center",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-136",
+                          "DisplayName" : "valuedisplay-microStopsDur",
                           "Height" : 22,
                           "Id" : "valuedisplay-136",
                           "ImageScaling" : "Width",
@@ -1573,7 +1445,7 @@
                           "Alignment" : "left",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-140",
+                          "DisplayName" : "valuedisplay-microStopsMP",
                           "Height" : 22,
                           "Id" : "valuedisplay-140",
                           "ImageScaling" : "Width",
@@ -1732,7 +1604,7 @@
                           "Alignment" : "center",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-132",
+                          "DisplayName" : "valuedisplay-changeoverFreq",
                           "Height" : 22,
                           "Id" : "valuedisplay-132",
                           "ImageScaling" : "Width",
@@ -1799,7 +1671,7 @@
                           "Alignment" : "center",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-137",
+                          "DisplayName" : "valuedisplay-changeoversDur",
                           "Height" : 22,
                           "Id" : "valuedisplay-137",
                           "ImageScaling" : "Width",
@@ -1867,7 +1739,7 @@
                           "Alignment" : "left",
                           "Area" : "UI",
                           "BackgroundFill" : "content",
-                          "DisplayName" : "valuedisplay-141",
+                          "DisplayName" : "valuedisplay-changeoverMP",
                           "Height" : 22,
                           "Id" : "valuedisplay-141",
                           "ImageScaling" : "Width",
@@ -1905,6 +1777,32 @@
                       } ]
                     } ]
                   } ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "VALUE",
+                    "DisplayName" : "navigateToDetails",
+                    "Expression" : "Output = \"BayerDelaysMashup\"",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-145",
+                    "Left" : 0,
+                    "OutputBaseType" : "STRING",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ ],
+                    "editMode" : "edit",
+                    "helperType" : "expression",
+                    "parameters" : [ ],
+                    "parametersToDelete" : [ ]
+                  },
+                  "Widgets" : [ ]
                 } ]
               },
               "mashupType" : "mashupTemplate"

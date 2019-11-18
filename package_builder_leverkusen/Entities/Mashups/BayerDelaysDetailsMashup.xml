@@ -16,7 +16,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-05T19:36:22.608Z"
+         lastModifiedDate="2019-11-14T16:58:49.044Z"
          name="BayerDelaysDetailsMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -50,6 +50,14 @@
                  name="line"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="3"
+                 baseType="MASHUPNAME"
+                 description=""
+                 name="navigateToMashup"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
                  aspect.bindingDirection="IN"
                  aspect.dataShape="BayerScheduleDataShape"
                  aspect.isMandatory="false"
@@ -59,7 +67,7 @@
                  name="schedule"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
-                 aspect.bindingDirection="IN"
+                 aspect.bindingDirection="BOTH"
                  aspect.isMandatory="false"
                  aspect.ordinal="2"
                  baseType="INTEGER"
@@ -554,6 +562,39 @@
                 "TargetArea" : "Data",
                 "TargetId" : "UpdateDelayShift",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "87138790-842c-473c-aaff-15c6c5bebbf0",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "navigateToMashup",
+                  "TargetPropertyBaseType" : "MASHUPNAME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-199",
+                "SourceSection" : "",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
+                "TargetSection" : ""
+              }, {
+                "Id" : "563d8507-58d4-4650-9170-8ee6eb9a94b5",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "selectedShiftId",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "shiftId",
+                  "TargetPropertyBaseType" : "INTEGER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Session",
+                "SourceDetails" : "AllData",
+                "SourceId" : "Session",
+                "SourceSection" : "Session",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -652,6 +693,15 @@
                 "EventTriggerId" : "button-183",
                 "EventTriggerSection" : "",
                 "Id" : "d937ab70-b75f-4a9d-94f1-bc75d0c299e5"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-199",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "fec5b6e0-af6b-4d45-b0e8-632a1aeb0eaa"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -713,14 +763,22 @@
                     "ParameterName" : "schedule"
                   }, {
                     "Aspects" : {
-                      "bindingDirection" : "IN",
+                      "bindingDirection" : "BOTH",
                       "isMandatory" : false
                     },
                     "BaseType" : "INTEGER",
                     "Description" : "",
                     "ParameterName" : "shiftId"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "MASHUPNAME",
+                    "Description" : "",
+                    "ParameterName" : "navigateToMashup"
                   } ],
-                  "id_index" : 198,
+                  "id_index" : 201,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -746,12 +804,14 @@
                     "flex-width" : 0,
                     "flex-wrap" : "nowrap",
                     "iconClass" : "widgets-flexcontainer",
+                    "isLocked" : true,
                     "justify-content" : "flex-start",
                     "userCannotRemove" : true
                   },
                   "Widgets" : [ {
                     "Properties" : {
                       "Area" : "UI",
+                      "CustomClass" : "panelShadow",
                       "DisplayName" : "container-127",
                       "Id" : "flexcontainer-127",
                       "ResponsiveLayout" : true,
@@ -1098,7 +1158,7 @@
                   }, {
                     "Properties" : {
                       "Area" : "UI",
-                      "CustomClass" : "panel-shadow",
+                      "CustomClass" : "panelShadow",
                       "DisplayName" : "container-4",
                       "Id" : "flexcontainer-4",
                       "ResponsiveLayout" : true,
@@ -1393,6 +1453,7 @@
                   }, {
                     "Properties" : {
                       "Area" : "UI",
+                      "CustomClass" : "panelShadow",
                       "DisplayName" : "container-142",
                       "Id" : "flexcontainer-142",
                       "ResponsiveLayout" : true,
@@ -1458,7 +1519,7 @@
                   }, {
                     "Properties" : {
                       "Area" : "UI",
-                      "CustomClass" : "panel-shadow",
+                      "CustomClass" : "panelShadow",
                       "DisplayName" : "container-40",
                       "Id" : "flexcontainer-40",
                       "ResponsiveLayout" : true,
@@ -1834,6 +1895,7 @@
                   }, {
                     "Properties" : {
                       "Area" : "UI",
+                      "CustomClass" : "panelShadow",
                       "DisplayName" : "container-154",
                       "Id" : "flexcontainer-154",
                       "ResponsiveLayout" : true,
@@ -2789,6 +2851,29 @@
                       } ]
                     } ]
                   } ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "VALUE",
+                    "DisplayName" : "getEmptyMashupName",
+                    "Expression" : "Output = \"\";",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-199",
+                    "Left" : 0,
+                    "OutputBaseType" : "STRING",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ ],
+                    "parameters" : [ ]
+                  },
+                  "Widgets" : [ ]
                 } ]
               },
               "mashupType" : "mashup"

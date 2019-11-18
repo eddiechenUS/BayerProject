@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-11-05T18:57:23.324Z" name="BayerDelaysDetailsPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-11-15T15:44:22.138Z" name="BayerDelaysDetailsPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -63,8 +63,9 @@
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMachineState">
                         <ResultType aspect.dataShape="DelaysDetailsMaschineStateDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
-                            <FieldDefinition aspect.defaultValue="0" aspect.isRequired="true" baseType="INTEGER" description="" name="shiftId" ordinal="1"/>
-                            <FieldDefinition aspect.dataShape="BayerShiftSchedulesDataShape" aspect.isRequired="true" baseType="INFOTABLE" description="" name="shiftSchedules" ordinal="2"/>
+                            <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="3"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="shiftId" ordinal="1"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="shiftStartTime" ordinal="2"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetRowNumById">
@@ -94,15 +95,9 @@
                                         	shiftScheduleId: shiftId /* INTEGER */
                                         });
                                         
-                                        var isProduced = false;
                                         var shift = 28800000; //ms = 8h
                                         var now = new Date();
-                                        var shiftStartTime = new Date(0);
                                         var shiftLeft = shift;
-                                        
-                                        
-                                        isProduced = (shiftSchedules.totalQuantityProduced > 0);
-                                        shiftStartTime = shiftSchedules.timestamp;
                                         
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(DelaysDetailsMaschineStateDataShape)
                                         var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
@@ -110,10 +105,11 @@
                                             dataShapeName : "DelaysDetailsMaschineStateDataShape"
                                         });
                                         
+                                        var lastEventTime = new Date(shiftStartTime);
+                                        var lastEventCategory = '';
+                                        
                                         if (events.getRowCount() > 0) {
                                             var tableLength = events.rows.length;
-                                            var lastEventTime = new Date();
-                                            var lastEventCategory = '';
                                             for (var x=0; x < tableLength; x++) {
                                                 var event = events.rows[x];
                                                 var time = event.startTime;
@@ -123,7 +119,7 @@
                                                     time = shiftStartTime;
                                                     duration = dateDifference(event.endTime, shiftStartTime);
                                                 } else {
-                                                	if (x === 0 && event.category !== 'runing') {
+                                                	if (x === 0 && event.category !== 'running') {
                                                         duration = dateDifference(event.startTime, shiftStartTime); 
                                                         var startShift = new Object();
                                                         startShift.duration = duration;
@@ -144,32 +140,31 @@
                                                 lastEventTime = event.endTime;
                                                 lastEventCategory = event.category;
                                             }
+                                        }
+                                        
+                                        var isCurrentShift = now.getTime() < dateAddHours(shiftStartTime,8).getTime() && now.getTime() >= shiftStartTime.getTime();
+                                        if (shiftLeft > 0 && isCurrentShift) {
+                                            // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
+                                            var currentProduct = Things[line].GetCurrentProduct();
+                                        	var isChangeover =  currentProduct.productId == "Cambio" || !currentProduct.targetQuantity;
+                                            
+                                            var lastEventTillNow = new Object();
+                                            lastEventTillNow.time = lastEventTime; // DATETIME
+                                            lastEventTillNow.duration = dateDifference(now, lastEventTime);
+                                            lastEventTillNow.sectionColorState = isChangeover ? "changeover" : Things[line].productionRunning ? 'running' : 'breakdown';
+                                            result.AddRow(lastEventTillNow);
+                                            
+                                            shiftLeft-= lastEventTillNow.duration;
+                                            lastEventTime = dateAddMilliseconds(lastEventTillNow.time, lastEventTillNow.duration);
+                                            lastEventCategory = lastEventTillNow.sectionColorState;
+                                        }
                                            	
-                                           
-                                            var endShift = new Object();
-                                            endShift.time = lastEventTime; // DATETIME
-                                            if (lastEventCategory === 'running') {
-                                                endShift.sectionColorState = 'gap';
-                                            } else {
-                                                if (lastEventTime.getTime() + shiftLeft <= now.getTime()) {
-                                                	endShift.sectionColorState = 'running'; // STRING
-                                                } else {
-                                                    endShift.sectionColorState = 'gap';
-                                                }
-                                            }
-                                            endShift.duration = shiftLeft;
-                                            result.AddRow(endShift);
-                                        } else if (isProduced === true) {
-                                        	var shiftDuration = shift;
-                                            var diff = dateDifference(new Date(), shiftStartTime); 
-                                            if (diff <= shift) {
-                                                shiftDuration = diff;
-                                            }
-                                            var day = new Object();
-                                            day.duration = shiftDuration; 
-                                            day.sectionColorState = 'running'; // STRING
-                                            day.time = shiftStartTime; // DATETIME
-                                            result.AddRow(day);
+                                        if (shiftLeft > 0) {
+                                           var endShift = new Object();
+                                           endShift.time = lastEventTime; // DATETIME
+                                           endShift.sectionColorState = 'gap';
+                                           endShift.duration = shiftLeft;
+                                           result.AddRow(endShift);
                                         }
                                         ]]>
                                         </code>
@@ -190,7 +185,7 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var tableLength = shiftSchedules.rows.length;
+                                        var tableLength = shiftSchedules ? shiftSchedules.rows.length : 0;
                                         
                                         var result = -1;
                                         for (var x = 0; x < tableLength; x++) {
