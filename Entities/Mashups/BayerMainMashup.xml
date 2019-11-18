@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-10-02T09:51:40.712Z"
+         lastModifiedDate="2019-11-14T16:57:10.516Z"
          name="BayerMainMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -41,17 +41,9 @@
             <ConfigurationTables></ConfigurationTables>
             <ParameterDefinitions>
                 <FieldDefinition
-                 aspect.bindingDirection="BOTH"
-                 aspect.isMandatory="false"
-                 aspect.ordinal="0"
-                 baseType="STRING"
-                 description=""
-                 name="demo"
-                 ordinal="0"></FieldDefinition>
-                <FieldDefinition
                  aspect.bindingDirection="IN"
                  aspect.isMandatory="false"
-                 aspect.ordinal="1"
+                 aspect.ordinal="0"
                  baseType="THINGNAME"
                  description=""
                  name="line"
@@ -146,21 +138,6 @@
                 "TargetId" : "collection-12",
                 "TargetSection" : ""
               }, {
-                "Id" : "a89b37af-8427-4144-ac42-9cc4ffa28e83",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "demo",
-                  "SourcePropertyBaseType" : "STRING",
-                  "TargetProperty" : "demo",
-                  "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "Parameter"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "Data",
-                "TargetId" : "GetMenuContent",
-                "TargetSection" : "Things_BayerMainPage"
-              }, {
                 "Id" : "eb268e3f-99ef-416a-9a54-7cd57a85f8a0",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "mashup",
@@ -225,6 +202,39 @@
                 "SourceSection" : "",
                 "TargetArea" : "UI",
                 "TargetId" : "navigation-46",
+                "TargetSection" : ""
+              }, {
+                "Id" : "cf729762-bc05-4b05-a2b5-e4179c17e505",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetMenuContent",
+                "SourceSection" : "Things_BayerMainPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-64",
+                "TargetSection" : ""
+              }, {
+                "Id" : "f6db0db4-3bdf-4b86-8e2e-9665052c6c31",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "navigateToMashup",
+                  "SourcePropertyBaseType" : "MASHUPNAME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "SelectedText",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "mashupcontainer-7",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-64",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
@@ -314,14 +324,6 @@
                   "__TypeDisplayName" : "Mashup",
                   "_currentParameterDefs" : [ {
                     "Aspects" : {
-                      "bindingDirection" : "BOTH",
-                      "isMandatory" : false
-                    },
-                    "BaseType" : "STRING",
-                    "Description" : "",
-                    "ParameterName" : "demo"
-                  }, {
-                    "Aspects" : {
                       "bindingDirection" : "IN",
                       "isMandatory" : false
                     },
@@ -331,7 +333,7 @@
                   } ],
                   "flex-grow" : 0,
                   "flex-shrink" : 0,
-                  "id_index" : 63,
+                  "id_index" : 69,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -797,7 +799,7 @@
                                 "ShowDataLoading" : true,
                                 "ShowFooters" : false,
                                 "ShowHeaders" : false,
-                                "SortAscending" : false,
+                                "SortAscending" : true,
                                 "SortField" : "order",
                                 "Top" : 0,
                                 "TopPadding" : 22,
@@ -856,7 +858,7 @@
                     "Widgets" : [ {
                       "Properties" : {
                         "Area" : "UI",
-                        "DisplayName" : "mashupcontainer-7",
+                        "DisplayName" : "mashupcontainer-selectedPage",
                         "Height" : 300,
                         "Id" : "mashupcontainer-7",
                         "Left" : 10,
@@ -873,6 +875,21 @@
                             "baseType" : "THINGNAME",
                             "description" : "",
                             "name" : "line",
+                            "ordinal" : 0
+                          }
+                        }, {
+                          "BaseType" : "MASHUPNAME",
+                          "Description" : "",
+                          "ParameterName" : "navigateToMashup",
+                          "ParmDef" : {
+                            "aspects" : {
+                              "bindingDirection" : "BOTH",
+                              "isMandatory" : "false",
+                              "ordinal" : "1"
+                            },
+                            "baseType" : "MASHUPNAME",
+                            "description" : "",
+                            "name" : "navigateToMashup",
                             "ordinal" : 0
                           }
                         } ],
@@ -1076,6 +1093,61 @@
                               "Width" : 200,
                               "Z-index" : 10,
                               "__TypeDisplayName" : "Navigation",
+                              "__supportsTooltip" : true
+                            },
+                            "Widgets" : [ ]
+                          }, {
+                            "Properties" : {
+                              "Alignment" : "left",
+                              "Area" : "UI",
+                              "AutoSelectFirstRow" : false,
+                              "ClearIfNoSelection" : false,
+                              "ComboDropdownButtonStyle" : "DefaultComboDropdownButtonStyle",
+                              "ComboEnableCheckbox" : false,
+                              "ComboItemHighlightedStyle" : "DefaultComboItemHighlightedStyle",
+                              "ComboTextboxStyle" : "DefaultComboTextboxStyle",
+                              "DisableSelectedStyle" : false,
+                              "DisplayField" : "mashup",
+                              "DisplayName" : "dhxlist-64",
+                              "DropdownButtonStyle" : "DefaultDropdownButtonStyle",
+                              "DropdownSelectedStyle" : "DefaultDropdownSelectedStyle",
+                              "DropdownStyle" : "DefaultDropdownStyle",
+                              "EnableKeyboardSelections" : true,
+                              "EnableToolTips" : true,
+                              "Height" : 28,
+                              "HeightOfDropdownView" : 170,
+                              "Id" : "dhxlist-64",
+                              "Label" : "",
+                              "LabelAlignment" : "left",
+                              "Left" : 20,
+                              "ListBackgroundStyle" : "DefaultListBackgroundStyle",
+                              "ListFocusStyle" : "DefaultFocusStyle",
+                              "ListItemAlternateStyle" : "DefaultListItemAlternateStyle",
+                              "ListItemHoverStyle" : "DefaultListItemHoverStyle",
+                              "ListItemSelectedStyle" : "DefaultListItemSelectedStyle",
+                              "ListItemStyle" : "DefaultListItemStyle",
+                              "ListLabelStyle" : "DefaultWidgetLabelStyle",
+                              "MultiSelect" : false,
+                              "NumberOfItemsInDropdownView" : 6,
+                              "NumberOfItemsPerPage" : 500,
+                              "ResponsiveLayout" : false,
+                              "RowHeight" : 28,
+                              "ShowDataLoading" : true,
+                              "SingleClickSelectOnTablets" : false,
+                              "TabSequence" : -1,
+                              "TextIfNoSelectionType" : "editable",
+                              "TextVerticalAlignment" : 28,
+                              "ToolTipStyle" : "DefaultTooltipStyle",
+                              "Top" : 90,
+                              "Type" : "dhxlist",
+                              "ValueField" : "mashup",
+                              "View" : "dropdown",
+                              "Visible" : true,
+                              "Width" : 110,
+                              "WidthOfDropdownView" : 110,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "List",
+                              "__supportsLabel" : true,
                               "__supportsTooltip" : true
                             },
                             "Widgets" : [ ]
