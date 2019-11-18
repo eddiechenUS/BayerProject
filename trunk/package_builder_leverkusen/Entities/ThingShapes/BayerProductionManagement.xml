@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-10-17T17:58:03.868Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-11-18T16:58:51.115Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="90" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" aspect.units="min" baseType="INTEGER" category="" description="" isLocalOnly="false" name="additionalChangeoverTime" ordinal="7"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="counter" ordinal="2"/>
@@ -97,6 +97,7 @@
                                         if (current.rows.length > 0) {
                                             current.producedQuantity = me.counter;
                                             me.previousProductCounter += me.counter;
+                                            me.previousCycleCounter -= me.counter;
                                             me.counter = 0;
                                     
                                             current.status = "COMPLETED";
