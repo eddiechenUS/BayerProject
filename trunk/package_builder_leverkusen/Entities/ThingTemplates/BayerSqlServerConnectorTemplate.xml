@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2019-11-06T09:38:28.839Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2019-11-15T15:58:36.324Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -36,11 +36,7 @@
                             SELECT GETDATE()
                             ]]>
                             </connectionValidationString>
-                            <jDBCConnectionURL>
-                            <![CDATA[
-                            jdbc:sqlserver://localhost\SQLEXPRESS:1433;databaseName=BayerDevDb;
-                            ]]>
-                            </jDBCConnectionURL>
+                            <jDBCConnectionURL/>
                             <jDBCDriverClass>
                             <![CDATA[
                             com.microsoft.sqlserver.jdbc.SQLServerDriver
@@ -49,14 +45,10 @@
                             <maxConnections>5.0</maxConnections>
                             <password>
                             <![CDATA[
-                            j/XwOF7NsRGudNnfedRt+w==:gpp0fNa5JoI5kCTmm7llgA==
+                            1w+zIDK2/ElxnvFIrVQ4mg==:x72uBcNZ/ivl9i1yL7835g==
                             ]]>
                             </password>
-                            <userName>
-                            <![CDATA[
-                            ThingworxUser
-                            ]]>
-                            </userName>
+                            <userName/>
                         </Row>
                     </Rows>
                 </ConfigurationTable>
@@ -206,6 +198,13 @@
                         <ResultType aspect.dataShape="SafetyIssuesShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
                             <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftActual">
+                        <ResultType aspect.dataShape="BayerShiftScheduleDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="time" ordinal="2"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftEvents">
@@ -913,7 +912,7 @@
                                         			[id] AS [toId],
                                         			[orderNr] AS [toOrderNr],
                                         			[ProductDescription] AS [toProductName]
-                                        		FROM [BayerDevDb].[dbo].[ProductionPlan]
+                                        		FROM [dbo].[ProductionPlan]
                                         		WHERE [productionLine] = [[productionLine]] AND [orderNr] != '' AND [id] > @shiftIdMax) AS [to];
                                         ]]>
                                         </sql>
@@ -1110,6 +1109,36 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetShiftActual">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>9.99999999E8</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT [id]
+                                              ,[totalQuantityProduced]
+                                              ,[totalTargetQuantity]
+                                              ,[timestamp]
+                                              ,[productionLine]
+                                          FROM [dbo].[ShiftSchedule]
+                                          WHERE [productionLine] = [[productionLine]] AND [timestamp] <= [[time]] AND DATEDIFF(hour,[timestamp],[[time]]) < 8
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="SQLQuery" name="GetShiftEvents">
                         <ConfigurationTables>
                             <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
@@ -1122,7 +1151,7 @@
                                 </DataShape>
                                 <Rows>
                                     <Row>
-                                        <maxItems>500.0</maxItems>
+                                        <maxItems>9.999999999E9</maxItems>
                                         <sql>
                                         <![CDATA[
                                         SET DATEFIRST 1;

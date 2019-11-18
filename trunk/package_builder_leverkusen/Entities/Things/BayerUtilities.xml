@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-10-15T23:35:47.659Z" name="BayerUtilities" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-11-14T09:15:21.390Z" name="BayerUtilities" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -78,6 +78,15 @@
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
+                <Permissions resourceName="GetTranslation">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
             </RunTimePermissions>
             <VisibilityPermissions>
                 <Visibility>
@@ -98,6 +107,12 @@
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetCurrentShiftTime">
                         <ResultType aspect.dataShape="BayerShiftTimeDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetLineName">
+                        <ResultType baseType="STRING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="STRING" description="" name="line" ordinal="1"/>
+                        </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetPastDayStartEndTime">
                         <ResultType aspect.dataShape="BayerShiftTimeDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
@@ -221,6 +236,26 @@
                                         newEntry.endTime = endTime; // DATETIME
                                         
                                         result.AddRow(newEntry);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetLineName">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = Things[line].displayName;
                                         ]]>
                                         </code>
                                     </Row>

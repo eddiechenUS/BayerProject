@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-10-30T08:31:27.436Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-11-18T14:01:02.672Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.dataShape="NumberArrayElement" aspect.defaultValue="{&quot;rows&quot;:[{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:50},{&quot;element&quot;:50},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:50},{&quot;element&quot;:50},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100}],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;element&quot;:{&quot;name&quot;:&quot;element&quot;,&quot;aspects&quot;:{},&quot;description&quot;:&quot;&quot;,&quot;baseType&quot;:&quot;NUMBER&quot;,&quot;ordinal&quot;:0}}}}" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INFOTABLE" category="" description="" isLocalOnly="false" name="availability" ordinal="1"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="previousCycleCounter" ordinal="2"/>
             </PropertyDefinitions>
             <ServiceDefinitions>
@@ -59,6 +60,10 @@
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="true" category="" description="Executed at the beginning of each shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ScheduleShifts">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions/>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateCurrentShiftId">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
@@ -270,7 +275,7 @@
                                                 
                                             // BayerPerformancePerShiftDataShape entry object
                                             var newEntry = new Object();
-                                            newEntry.shift = "Shift " + (i+1); // STRING
+                                            newEntry.shift = "" + (i+1); // STRING
                                             
                                             if (shift.timestamp.getHours() == 6 + (i*8)) {
                                                 newEntry.quantityProduced = shift.totalQuantityProduced; // NUMBER
@@ -500,6 +505,8 @@
                                     	startTime: shiftTime.startTime /* DATETIME */
                                     });
                                     
+                                    me.previousCycleCounter = 0;
+                                    
                                     // CREATE NEW SCHEDULES
                                     
                                     var params = {
@@ -519,6 +526,37 @@
                                         data.AddRow(row);
                                         
                                         Things["BayerDBDataProvider"].AddShiftSchedule({ data: data /* INFOTABLE */ });
+                                    }
+                                    
+                                     me.UpdateCurrentShiftId();
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="UpdateCurrentShiftId">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
+                                    var currentShift =  me.GetShiftsFromNow({
+                                    	nrOfPrevShifts: 0 /* STRING */,
+                                    	interval: 6 /* INTEGER */,
+                                    	nrOfNextShifts: 0 /* STRING */
+                                    });
+                                    
+                                    if (currentShift && currentShift.rows.length > 0) {
+                                    	me.currentShiftId = currentShift.id;
                                     }
                                     ]]>
                                     </code>
@@ -636,6 +674,7 @@
             <RemoteEventBindings/>
             <AlertConfigurations>
                 <AlertDefinitions name="availability"/>
+                <AlertDefinitions name="currentShiftId"/>
                 <AlertDefinitions name="previousCycleCounter"/>
             </AlertConfigurations>
             <InstanceRunTimePermissions>
@@ -675,12 +714,30 @@
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
+                <Permissions resourceName="UpdateCurrentShiftId">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
                 <Permissions resourceName="GetShiftsFromNow">
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="previousCycleCounter">
+                    <PropertyRead/>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="BayerSchedulerUser" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke/>
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
