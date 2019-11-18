@@ -1,4 +1,7 @@
-/****** Object:  Table [dbo].[ShiftEvent]    Script Date: 11/6/2019 8:58:33 AM ******/
+USE [BayerDevDb]
+GO
+
+/****** Object:  Table [dbo].[ShiftEvent]    Script Date: 11/18/2019 4:17:04 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -20,6 +23,7 @@ GO
 
 ALTER TABLE [dbo].[ShiftEvent]  WITH CHECK ADD  CONSTRAINT [FK_ShiftEvent_ShiftSchedule] FOREIGN KEY([shiftScheduleId])
 REFERENCES [dbo].[ShiftSchedule] ([id])
+ON DELETE SET NULL
 GO
 
 ALTER TABLE [dbo].[ShiftEvent] CHECK CONSTRAINT [FK_ShiftEvent_ShiftSchedule]
