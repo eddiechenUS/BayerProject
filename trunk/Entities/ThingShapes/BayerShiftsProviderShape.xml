@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-05T19:13:29.875Z"
+         lastModifiedDate="2019-11-15T16:06:34.955Z"
          name="BayerShiftsProviderShape"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -222,6 +222,37 @@
                          baseType="THINGNAME"
                          description=""
                          name="productionLine"
+                         ordinal="2"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetShiftActual">
+                    <ResultType
+                     aspect.dataShape="BayerShiftScheduleDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         aspect.thingTemplate="BayerProductionLine"
+                         baseType="THINGNAME"
+                         description=""
+                         name="productionLine"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="time"
                          ordinal="2"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
@@ -848,6 +879,41 @@
                                     var result =  Things[me.GetConnector()].GetNearestChangeoverFromSchedule({
                                     	fromTime: fromTime /* DATETIME */,
                                         productionLine: productionLine
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetShiftActual">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var result =  Things[me.GetConnector()].GetShiftActual({
+                                    	productionLine: productionLine /* THINGNAME */,
+                                    	time: time /* DATETIME */
                                     });
                                     ]]>
                                     </code>

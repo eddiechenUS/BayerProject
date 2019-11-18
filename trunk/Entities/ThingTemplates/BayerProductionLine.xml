@@ -14,12 +14,12 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2019-10-17T13:29:42.504Z"
+         lastModifiedDate="2019-11-15T15:47:54.116Z"
          name="BayerProductionLine"
          projectName="BayerIoT"
          tags="Applications:Bayer"
          thingPackage=""
-         valueStream="BayerProductionLineValueStream">
+         valueStream="">
             <avatar></avatar>
             <DesignTimePermissions>
                 <Create></Create>
@@ -102,15 +102,51 @@
                     <Subscription
                      description=""
                      enabled="true"
+                     eventName="DataChange"
+                     name="OnCurrentProductKeyChangedGlobal"
+                     source=""
+                     sourceProperty="currentProductKey"
+                     sourceType="Thing">
+                        <ServiceImplementation
+                         description=""
+                         handlerName="Script"
+                         name="OnCurrentProductKeyChangedGlobal">
+                            <ConfigurationTables>
+                                <ConfigurationTable
+                                 description=""
+                                 isMultiRow="false"
+                                 name="Script"
+                                 ordinal="0">
+                                    <DataShape>
+                                        <FieldDefinitions>
+                                            <FieldDefinition
+                                             baseType="STRING"
+                                             description="code"
+                                             name="code"
+                                             ordinal="0"></FieldDefinition>
+                                        </FieldDefinitions>
+                                    </DataShape>
+                                    <Rows>
+                                        <Row>
+                                            <code></code>
+                                        </Row>
+                                    </Rows>
+                                </ConfigurationTable>
+                            </ConfigurationTables>
+                        </ServiceImplementation>
+                    </Subscription>
+                    <Subscription
+                     description=""
+                     enabled="true"
                      eventName="ScheduledEvent"
-                     name="Type.Thing:Entity.BayerSchedulerThing:Event.ScheduledEvent"
+                     name="OnSchedulerTickGlobal"
                      source="BayerSchedulerThing"
                      sourceProperty=""
                      sourceType="Thing">
                         <ServiceImplementation
                          description=""
                          handlerName="Script"
-                         name="Type.Thing:Entity.BayerSchedulerThing:Event.ScheduledEvent">
+                         name="OnSchedulerTickGlobal">
                             <ConfigurationTables>
                                 <ConfigurationTable
                                  description=""
@@ -145,12 +181,51 @@
                                                 
                                                 if (eventData.timestamp.getHours() == 6 || eventData.timestamp.getHours() == 14 || eventData.timestamp.getHours() == 22) {
                                                     logger.debug(me.name + " Schedule shifts event");
-                                                    me.nearMisses = 0;
                                                            
                                                     // no return
                                                     me.ScheduleShifts();
                                                 }
                                             }
+                                            ]]>
+                                            </code>
+                                        </Row>
+                                    </Rows>
+                                </ConfigurationTable>
+                            </ConfigurationTables>
+                        </ServiceImplementation>
+                    </Subscription>
+                    <Subscription
+                     description=""
+                     enabled="true"
+                     eventName="DataChange"
+                     name="OnShiftChanged"
+                     source=""
+                     sourceProperty="currentShiftId"
+                     sourceType="Thing">
+                        <ServiceImplementation
+                         description=""
+                         handlerName="Script"
+                         name="OnShiftChanged">
+                            <ConfigurationTables>
+                                <ConfigurationTable
+                                 description=""
+                                 isMultiRow="false"
+                                 name="Script"
+                                 ordinal="0">
+                                    <DataShape>
+                                        <FieldDefinitions>
+                                            <FieldDefinition
+                                             baseType="STRING"
+                                             description="code"
+                                             name="code"
+                                             ordinal="0"></FieldDefinition>
+                                        </FieldDefinitions>
+                                    </DataShape>
+                                    <Rows>
+                                        <Row>
+                                            <code>
+                                            <![CDATA[
+                                            me.ResetMicrostopDelayProperties();
                                             ]]>
                                             </code>
                                         </Row>

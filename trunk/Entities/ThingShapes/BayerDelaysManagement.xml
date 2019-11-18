@@ -13,21 +13,11 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-05T18:42:41.143Z"
+         lastModifiedDate="2019-11-15T16:10:06.760Z"
          name="BayerDelaysManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
             <PropertyDefinitions>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.isPersistent="true"
-                 baseType="INTEGER"
-                 category=""
-                 description=""
-                 isLocalOnly="false"
-                 name="activeShiftId"
-                 ordinal="13"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
@@ -56,7 +46,7 @@
                  aspect.units="min"
                  baseType="NUMBER"
                  category=""
-                 description="Red indicates when there was an active production order with a target greater than zero (&gt;0), but the machine stopped (based on “State” tag) for more than Y minutes"
+                 description="Threshold time - if a delay was longer, we register a breakdown"
                  isLocalOnly="false"
                  name="delayBreakDownTimeMoreThan"
                  ordinal="12"></PropertyDefinition>
@@ -78,7 +68,7 @@
                  aspect.minimumValue="0"
                  baseType="INTEGER"
                  category=""
-                 description="Customise maximum count of micro stops after witch delay will trigger."
+                 description="Threshold count - nr of micro stops allowed. After that a delay will be recorded in DB."
                  isLocalOnly="false"
                  name="delayMicrostopCountMax"
                  ordinal="13"></PropertyDefinition>
@@ -101,7 +91,7 @@
                  aspect.units="min"
                  baseType="NUMBER"
                  category=""
-                 description="Orange indicating when there was an active production order with a target greater than zero (&gt;0), but the machine stopped (based on “State” tag) for less than X minutes"
+                 description="Threshold time - if a delay was shorter, we register a microstop"
                  isLocalOnly="false"
                  name="delayMicrostopTimeLessThan"
                  ordinal="12"></PropertyDefinition>
@@ -113,7 +103,7 @@
                  aspect.units="min"
                  baseType="NUMBER"
                  category=""
-                 description="Total duration of micro-stops after with delay will trigger"
+                 description="Threshold time - total duration of micro-stops allowed. After that delay will be recorded in DB"
                  isLocalOnly="false"
                  name="delayMicrostopTimeMax"
                  ordinal="12"></PropertyDefinition>
@@ -130,7 +120,7 @@
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
-                 aspect.defaultValue="false"
+                 aspect.defaultValue="true"
                  aspect.isLogged="false"
                  aspect.isPersistent="true"
                  baseType="BOOLEAN"
@@ -473,7 +463,7 @@
                                     var shiftScheduleId = currentShift.id;
                                     
                                     var delayEntry = {
-                                        source: me.name,
+                                        source: "",
                                         category: category,
                                         shiftScheduleId: shiftScheduleId,
                                         startTime: startTime,
@@ -511,6 +501,25 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var startTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	time: startTime /* DATETIME */
+                                    });
+                                    
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var endTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	time: endTime /* DATETIME */
+                                    });
+                                    
+                                    
+                                    
+                                    if (startTimeShift.id == endTimeShift.id) {   
+                                    }
+                                    else {
+                                    }
+                                    
                                     // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
                                     var currentShift = Things["BayerUtilities"].GetCurrentShift({
                                     	lineName: me.name /* THINGNAME */
@@ -560,18 +569,6 @@
                                     var currentProduct = me.GetCurrentProduct();
                                     
                                     if (currentProduct && currentProduct.getRowCount() > 0) {
-                                        // track active shift
-                                        var currentShift = Things["BayerUtilities"].GetCurrentShift({
-                                    		lineName: me.name /* THINGNAME */
-                                    	});
-                                        //logger.debug('currentShift:' + currentShiftId.ToJSON());
-                                    	if (currentShift.id && me.activeShiftId !== currentShift.id) {
-                                            me.activeShiftId = currentShift.id;
-                                            // @todo WTF
-                                            // ^^^ [message: Execution error in service script [OnProductionDelayTimerTickChanged]
-                                            // :: Wrapped java.lang.NullPointerException (ProcessChangeoverDelayRules#11)]
-                                        }
-                                       
                                         //logger.debug('S:ProcessChangeoverDelayRules');
                                         var isChangeover = (currentProduct.productId === 'Cambio');
                                         var isChangeoverExeedTarget = (currentProduct.workedHours * 60) >
@@ -601,23 +598,23 @@
                                             me.changeoverDelayStartTime = new Date(0);
                                         }
                                         
-                                        // Grey indicates when there was a changeover active 
-                                        // or the target of the line is zero (0).
-                                        if ((isChangeover === true || isProductionTargetZero === true) && 
-                                            me.changeoverStartTime.getTime() === (new Date(0).getTime())
-                                           ) {
-                                            me.changeoverStartTime = new Date();
-                                        } else if (
-                                            isChangeover === false &&
-                                            me.changeoverStartTime.getTime() !== (new Date(0).getTime())
-                                        ) {
-                                            me.InsertShiftEventEntry({
-                                                category: 'changeover', /* STRING */
-                                                startTime: me.changeoverStartTime,
-                                                endTime: new Date(), /* DATETIME */
-                                            });
-                                            me.changeoverStartTime = new Date(0);
-                                        }
+                                    //    // Grey indicates when there was a changeover active 
+                                    //    // or the target of the line is zero (0).
+                                    //    if ((isChangeover === true || isProductionTargetZero === true) && 
+                                    //        me.changeoverStartTime.getTime() === (new Date(0).getTime())
+                                    //       ) {
+                                    //        me.changeoverStartTime = new Date();
+                                    //    } else if (
+                                    //        isChangeover === false &&
+                                    //        me.changeoverStartTime.getTime() !== (new Date(0).getTime())
+                                    //    ) {
+                                    //        me.InsertShiftEventEntry({
+                                    //            category: 'changeover', /* STRING */
+                                    //            startTime: me.changeoverStartTime,
+                                    //            endTime: new Date(), /* DATETIME */
+                                    //        });
+                                    //        me.changeoverStartTime = new Date(0);
+                                    //    }
                                     }
                                     ]]>
                                     </code>
@@ -819,7 +816,7 @@
                                     <code>
                                     <![CDATA[
                                     // executed after entry microstop and change shift
-                                    logger.warn('!!! RESET MISCROSTOP COUNTERS !!!');
+                                    logger.debug(me.name + '!!! RESET MISCROSTOP COUNTERS !!!');
                                     me.delayMicrostopCount = 0;
                                     me.delayMicrostopTime = 0;
                                     me.delayMicrostopTimeStart = new Date(0);
@@ -863,50 +860,6 @@
                 </ServiceImplementation>
             </ServiceImplementations>
             <Subscriptions>
-                <Subscription
-                 description=""
-                 enabled="true"
-                 eventName="DataChange"
-                 name="OnActiveProductionShift"
-                 source=""
-                 sourceProperty="activeShiftId"
-                 sourceType="Thing">
-                    <ServiceImplementation
-                     description=""
-                     handlerName="Script"
-                     name="OnActiveProductionShift">
-                        <ConfigurationTables>
-                            <ConfigurationTable
-                             description=""
-                             isMultiRow="false"
-                             name="Script"
-                             ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition
-                                         baseType="STRING"
-                                         description="code"
-                                         name="code"
-                                         ordinal="0"></FieldDefinition>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        logger.warn('OnActiveProductionShift:isShiftCHanged');
-                                        if (eventData.oldValue.value !== eventData.newValue.value) {
-                                        	me.ResetMicrostopDelayProperties();
-                                            // me.ChangeoverDelayedOver();
-                                        }
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                </Subscription>
                 <Subscription
                  description=""
                  enabled="true"
@@ -1092,8 +1045,6 @@
             <RemoteServiceBindings></RemoteServiceBindings>
             <RemoteEventBindings></RemoteEventBindings>
             <AlertConfigurations>
-                <AlertDefinitions
-                 name="activeShiftId"></AlertDefinitions>
                 <AlertDefinitions
                  name="changeoverDelayStartTime"></AlertDefinitions>
                 <AlertDefinitions
