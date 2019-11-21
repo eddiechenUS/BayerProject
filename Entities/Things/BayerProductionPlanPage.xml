@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2019-11-19T09:49:47.677Z"
+         lastModifiedDate="2019-11-19T11:15:42.234Z"
          name="BayerProductionPlanPage"
          projectName="BayerIoT"
          published="false"
@@ -109,23 +109,41 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var cambioTransl = Resources["RuntimeLocalizationFunctions"].GetEffectiveToken({token: "Bayer.Cambio"});
+                                        var cambioTransl = Resources["RuntimeLocalizationFunctions"].GetEffectiveToken({token:"Bayer.Cambio"});
                                         
                                         var result =  Things["BayerDBDataProvider"].GetProductionPlanForLine({line: productionLine});
                                         
+                                        //var params = {
+                                        //	types: "STRING,STRING,STRING,STRING" /* STRING */,
+                                        //	t: result /* INFOTABLE */,
+                                        //	columns: "statusFormatted,statusState,productDescriptionTranslated,productIdTranslated",
+                                        //	expressions:
+                                        //    "status === 'COMPLETED' ? 'Completed' :" +
+                                        //    	"status === 'INPROGRESS' ? 'Running' : " +
+                                        //    	"status === 'PENDING' ? 'Scheduled' : ''," + /* 2nd column */
+                                        //    "productId === 'Cambio' ? 'Cambio' : status === 'COMPLETED' ? 'Completed' :" +
+                                        //    	"status === 'INPROGRESS' ? 'Running' : " +
+                                        //    	"status === 'PENDING' ? 'Scheduled' : ''," + /* 3rd column */
+                                        //    "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," +
+                                        //    "productId === 'Cambio' ? '' : productId"
+                                        //};
+                                        
                                         var params = {
-                                        	types: "STRING,STRING,STRING,STRING" /* STRING */,
+                                        	types: "STRING,STRING,STRING,STRING,STRING" /* STRING */,
                                         	t: result /* INFOTABLE */,
-                                        	columns: "statusFormatted,statusState,productDescriptionTranslated,productIdTranslated" /* STRING */,
+                                        	columns: "statusFormatted,statusState,productDescriptionTranslated,productIdTranslated,statusForColoring" /* STRING */,
                                         	expressions:
                                             "status === 'COMPLETED' ? 'Completed' :" +
                                             	"status === 'INPROGRESS' ? 'Running' : " +
-                                            	"status === 'PENDING' ? 'Scheduled' : ''," + /* 2nd col */
+                                            	"status === 'PENDING' ? 'Scheduled' : ''," + /* 2nd column */
                                             "productId === 'Cambio' ? 'Cambio' : status === 'COMPLETED' ? 'Completed' :" +
                                             	"status === 'INPROGRESS' ? 'Running' : " +
-                                            	"status === 'PENDING' ? 'Scheduled' : ''," +
+                                            	"status === 'PENDING' ? 'Scheduled' : ''," + /* 3rd column */
                                             "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," +
-                                            "productId === 'Cambio' ? '' : productId"
+                                            "productId === 'Cambio' ? '' : productId," +
+                                            "status === 'COMPLETED' && productId === 'Cambio' ? 'CompletedChangeover' :" +
+                                            	"status === 'PENDING' ? 'ScheduledChangeover' :" +
+                                            	"status === 'INPROGRESS' ? 'Running' : 'Completed'"
                                         };
                                         
                                         result = Resources["InfoTableFunctions"].DeriveFields(params);

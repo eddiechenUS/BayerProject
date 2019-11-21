@@ -13,26 +13,11 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-18T16:58:51.115Z"
+         lastModifiedDate="2019-11-21T19:29:06.181Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
             <PropertyDefinitions>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
-                 aspect.dataChangeThreshold="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.defaultValue="90"
-                 aspect.isLogged="false"
-                 aspect.isPersistent="true"
-                 aspect.isReadOnly="false"
-                 aspect.units="min"
-                 baseType="INTEGER"
-                 category=""
-                 description=""
-                 isLocalOnly="false"
-                 name="additionalChangeoverTime"
-                 ordinal="7"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeThreshold="0.0"
@@ -75,18 +60,14 @@
                  ordinal="1"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
-                 aspect.dataChangeThreshold="0.0"
                  aspect.dataChangeType="VALUE"
-                 aspect.defaultValue="0.6"
-                 aspect.isLogged="false"
                  aspect.isPersistent="true"
-                 aspect.isReadOnly="false"
-                 baseType="NUMBER"
+                 baseType="DATETIME"
                  category=""
                  description=""
                  isLocalOnly="false"
-                 name="nominalRateCorrection"
-                 ordinal="5"></PropertyDefinition>
+                 name="lastProductionPlanUpdate"
+                 ordinal="7"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeThreshold="0.0"
@@ -299,6 +280,30 @@
                          baseType="STRING"
                          description=""
                          name="path"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="LoadProductionPlan">
+                    <ResultType
+                     aspect.dataShape="BayerProductionPlanDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="data"
                          ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
@@ -763,48 +768,7 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    function getChangeover(prevItem, newItem) {
-                                        // BayerProductionPlanDataShape entry object
-                                        var newEntry = new Object();
-                                        newEntry.productId = "Cambio"; // STRING
-                                        newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
-                                        newEntry.producedQuantity = 0; // NUMBER
-                                        newEntry.startTime = undefined; // DATETIME
-                                        newEntry.endTime = undefined; // DATETIME
-                                        newEntry.workedHours = 0; // NUMBER
-                                        newEntry.orderNr = ""; // STRING
-                                        newEntry.productDescription = "Cambio"; // STRING
-                                        newEntry.targetQuantity = 0; // NUMBER
-                                        newEntry.targetQuantityPerHour = 0; // NUMBER
-                                        newEntry.status = "PENDING"; // STRING
-                                    
-                                        // result: INTEGER
-                                        var activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
-                                            sourceCode: prevItem.activeMaterialNumber /* STRING */,
-                                            productionLine: me.name /* THINGNAME */,
-                                            targetCode: newItem.activeMaterialNumber /* STRING */
-                                        });
-                                    
-                                        // result: INTEGER
-                                        var blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
-                                            sourceCode: prevItem.blisterType /* STRING */,
-                                            productionLine: me.name /* THINGNAME */,
-                                            targetCode: newItem.blisterType /* STRING */
-                                        });
-                                    
-                                        // result: INTEGER
-                                        var fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({ 
-                                            sourceCode: prevItem.foldedBoxFormat /* STRING */,
-                                            productionLine: me.name /* THINGNAME */,
-                                            targetCode: newItem.foldedBoxFormat /* STRING */
-                                        });
-                                    
-                                        newEntry.targetHours = (Math.max(activeMaterialTime, blisterTime, fbTime) + me.additionalChangeoverTime) / 60;
-                                        newEntry.targetHours = Math.round(newEntry.targetHours * 100) / 100;
-                                        newEntry.remainingHours = newEntry.targetHours; // NUMBER
-                                        
-                                        return newEntry;
-                                    }
+                                    var lineConfig = me.GetLineConfiguration();
                                     
                                     // result: INFOTABLE
                                     var data = Things["BayerUtilities"].LoadCSVGeneric({ delimiter: ";" /* STRING */, filePath: path /* STRING */, repository: "BayerCSVRepository" /* THINGNAME */ });
@@ -859,7 +823,7 @@
                                             newEntry.tabletsPerBlister = parseInt(row["Tablets per Blister"]);
                                             newEntry.manufProcess = row["Manufact. Process"];
                                     
-                                            newEntry.targetQuantityPerHour = Things["BayerMaterialPerformanceTable"].GetNominalRate({code: newEntry.productId, productionLine: me.name}) * me.nominalRateCorrection; // NUMBER
+                                            newEntry.targetQuantityPerHour = Things["BayerMaterialPerformanceTable"].GetNominalRate({code: newEntry.productId, productionLine: me.name}) * lineConfig.nominalRateCorrection; // NUMBER
                                             if (!newEntry.targetQuantityPerHour) {
                                                 logger.warn(me.name + ": no NominalRate for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
                                                 newEntry.targetQuantityPerHour = 60;
@@ -891,6 +855,227 @@
                                     Things["BayerDBDataProvider"].AddProductionPlanItems({
                                     	items: result /* INFOTABLE */
                                     });
+                                    
+                                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                    
+                                    function getChangeover(prevItem, newItem) {
+                                        // BayerProductionPlanDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.productId = "Cambio"; // STRING
+                                        newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                        newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.startTime = undefined; // DATETIME
+                                        newEntry.endTime = undefined; // DATETIME
+                                        newEntry.workedHours = 0; // NUMBER
+                                        newEntry.orderNr = ""; // STRING
+                                        newEntry.productDescription = "Cambio"; // STRING
+                                        newEntry.targetQuantity = 0; // NUMBER
+                                        newEntry.targetQuantityPerHour = 0; // NUMBER
+                                        newEntry.status = "PENDING"; // STRING
+                                    
+                                        // result: INTEGER
+                                        var activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
+                                            sourceCode: prevItem.activeMaterialNumber /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.activeMaterialNumber /* STRING */
+                                        });
+                                    
+                                        // result: INTEGER
+                                        var blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
+                                            sourceCode: prevItem.blisterType /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.blisterType /* STRING */
+                                        });
+                                    
+                                        // result: INTEGER
+                                        var fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({ 
+                                            sourceCode: prevItem.foldedBoxFormat /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.foldedBoxFormat /* STRING */
+                                        });
+                                    
+                                        newEntry.targetHours = (Math.max(activeMaterialTime, blisterTime, fbTime) + lineConfig.additionalChangeoverTime) / 60;
+                                        newEntry.targetHours = Math.round(newEntry.targetHours * 100) / 100;
+                                        newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                        
+                                        return newEntry;
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="LoadProductionPlan">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var lineConfig = me.GetLineConfiguration();
+                                    
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerProductionPlanDataShape" });
+                                    
+                                    Things["BayerDBDataProvider"].DeleteScheduledProduction({
+                                    	productionLine: me.name /* THINGNAME */
+                                    });
+                                    
+                                    // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
+                                    var lastItem =  Things["BayerDBDataProvider"].GetLastProductionPlanItem({
+                                    	line: me.name /* THINGNAME */
+                                    });
+                                    var prev = lastItem.rows.length > 0 ? lastItem.rows[0] : undefined;
+                                    
+                                    var tableLength = data.rows.length;
+                                    for (var x = 0; x < tableLength; x++) {
+                                    	var row = data.rows[x];
+                                        
+                                        try {
+                                            // BayerProductionPlanDataShape entry object
+                                            var newEntry = new Object();
+                                            newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                            newEntry.status = "PENDING"; // STRING
+                                            
+                                            //////////////// FROM FILE ///////////////////////
+                                            
+                                            newEntry.productId = row.productId; // STRING
+                                            if(isNaN(parseInt(newEntry.productId))) {
+                                                logger.debug(me.name + ".LoadProductionPlan: Skipping row " + x + "; product id " + newEntry.productId);
+                                                continue;
+                                            }
+                                            
+                                            newEntry.orderNr = row.orderNr; // STRING
+                                            newEntry.productDescription = row.productDescription; // STRING
+                                            newEntry.version = row.version; // STRING
+                                            newEntry.targetQuantity = parseFloat(row.targetQuantity.replace(',', '.').replace(' ', '')); // NUMBER
+                                            newEntry.uom = row.uom;
+                                            newEntry.activeMaterialNumber = row.activeMaterialNumber;
+                                            newEntry.commentFirstLine = row.commentFirstLine;
+                                            newEntry.blisterType = row.blisterType;
+                                            newEntry.foldedBoxFormat = row.foldedBoxFormat;
+                                            newEntry.blistersPerFoldedBox = parseInt(row.blistersPerFoldedBox);
+                                            
+                                            try {
+                                            	newEntry.mdatSaf = parseDate(row.mdatSaf, "yyyy-MM-dd");
+                                            }
+                                            catch (dateParseEx) {
+                                                logger.warn(me.name + ".LoadProductionPlan error parsing MDAT-SAF date. Value: " + row.mdatSaf);
+                                            }
+                                            
+                                            try {
+                                            	newEntry.mdatOos = parseDate(row.mdatOos, "yyyy-MM-dd");
+                                            }
+                                            catch (dateParseEx) {
+                                                logger.warn(me.name + ".LoadProductionPlan error parsing MDAT-OOS date. Value: " + row.mdatOos);
+                                            }
+                                            
+                                            newEntry.tabletsPerBlister = parseInt(row.tabletsPerBlister);
+                                            newEntry.manufProcess = row.manufProcess;
+                                    
+                                            ///////////// CALCULATED //////////////////
+                                            
+                                            if (lineConfig.divideTargetByBPP) {
+                                                if (!newEntry.blistersPerFoldedBox) {
+                                                    logger.warn(me.name + ".LoadProductionPlan - incorrect value of blistersPerFoldedBox: " + newEntry.blistersPerFoldedBox);
+                                                }
+                                                newEntry.targetQuantity /= newEntry.blistersPerFoldedBox;
+                                            }
+                                            
+                                            newEntry.targetQuantityPerHour = Things["BayerMaterialPerformanceTable"].GetNominalRate({code: newEntry.productId, productionLine: me.name}) * lineConfig.nominalRateCorrection; // NUMBER
+                                            if (!newEntry.targetQuantityPerHour) {
+                                                logger.warn(me.name + ".LoadProductionPlan - no NominalRate for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
+                                                newEntry.targetQuantityPerHour = 60;
+                                            }
+                                            newEntry.targetQuantityPerHour = Math.round(newEntry.targetQuantityPerHour);
+                                    
+                                            newEntry.targetHours = Math.round(newEntry.targetQuantity / newEntry.targetQuantityPerHour * 100) / 100; // NUMBER
+                                            newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                            newEntry.producedQuantity = 0; // NUMBER
+                                            newEntry.startTime = undefined; // DATETIME
+                                            newEntry.endTime = undefined; // DATETIME
+                                            newEntry.workedHours = 0; // NUMBER
+                                    
+                                            if (prev) {
+                                                result.AddRow(getChangeover(prev, newEntry));
+                                            }
+                                    
+                                            prev = newEntry;
+                                    
+                                            result.AddRow(newEntry);
+                                        }
+                                        catch (ex) {
+                                            logger.error(me.name + ".LoadProductionPlan error parsing row " + x + ": " + ex);
+                                        }
+                                    }
+                                    
+                                    Things["BayerDBDataProvider"].AddProductionPlanItems({
+                                    	items: result /* INFOTABLE */
+                                    });
+                                    
+                                    
+                                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                    
+                                    function getChangeover(prevItem, newItem) {
+                                        // BayerProductionPlanDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.productId = "Cambio"; // STRING
+                                        newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                        newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.startTime = undefined; // DATETIME
+                                        newEntry.endTime = undefined; // DATETIME
+                                        newEntry.workedHours = 0; // NUMBER
+                                        newEntry.orderNr = ""; // STRING
+                                        newEntry.productDescription = "Cambio"; // STRING
+                                        newEntry.targetQuantity = 0; // NUMBER
+                                        newEntry.targetQuantityPerHour = 0; // NUMBER
+                                        newEntry.status = "PENDING"; // STRING
+                                    
+                                        // result: INTEGER
+                                        var activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
+                                            sourceCode: prevItem.activeMaterialNumber /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.activeMaterialNumber /* STRING */
+                                        });
+                                    
+                                        // result: INTEGER
+                                        var blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
+                                            sourceCode: prevItem.blisterType /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.blisterType /* STRING */
+                                        });
+                                    
+                                        // result: INTEGER
+                                        var fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({ 
+                                            sourceCode: prevItem.foldedBoxFormat /* STRING */,
+                                            productionLine: me.name /* THINGNAME */,
+                                            targetCode: newItem.foldedBoxFormat /* STRING */
+                                        });
+                                    
+                                        newEntry.targetHours = (Math.max(activeMaterialTime, blisterTime, fbTime) + lineConfig.additionalChangeoverTime) / 60;
+                                        newEntry.targetHours = Math.round(newEntry.targetHours * 100) / 100;
+                                        newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                        
+                                        return newEntry;
+                                    }
                                     ]]>
                                     </code>
                                 </Row>
@@ -990,46 +1175,6 @@
                  description=""
                  enabled="true"
                  eventName="DataChange"
-                 name="OnCurrentProductKeyChanged"
-                 source=""
-                 sourceProperty="currentProductKey"
-                 sourceType="Thing">
-                    <ServiceImplementation
-                     description=""
-                     handlerName="Script"
-                     name="OnCurrentProductKeyChanged">
-                        <ConfigurationTables>
-                            <ConfigurationTable
-                             description=""
-                             isMultiRow="false"
-                             name="Script"
-                             ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition
-                                         baseType="STRING"
-                                         description="code"
-                                         name="code"
-                                         ordinal="0"></FieldDefinition>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        me.ResetNotifications();
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                </Subscription>
-                <Subscription
-                 description=""
-                 enabled="true"
-                 eventName="DataChange"
                  name="OnKepwareCounterChanged"
                  source=""
                  sourceProperty="kepwareCounter"
@@ -1096,15 +1241,13 @@
             <RemoteEventBindings></RemoteEventBindings>
             <AlertConfigurations>
                 <AlertDefinitions
-                 name="additionalChangeoverTime"></AlertDefinitions>
-                <AlertDefinitions
                  name="counter"></AlertDefinitions>
                 <AlertDefinitions
                  name="currentProductKey"></AlertDefinitions>
                 <AlertDefinitions
                  name="kepwareCounter"></AlertDefinitions>
                 <AlertDefinitions
-                 name="nominalRateCorrection"></AlertDefinitions>
+                 name="lastProductionPlanUpdate"></AlertDefinitions>
                 <AlertDefinitions
                  name="previousProductCounter"></AlertDefinitions>
                 <AlertDefinitions
@@ -1285,6 +1428,19 @@
                          isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="LoadProductionPlan">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionPlansProcessingUser"
+                         type="User"></Principal>
                     </ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>

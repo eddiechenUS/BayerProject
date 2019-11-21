@@ -13,25 +13,11 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-18T15:53:09.328Z"
+         lastModifiedDate="2019-11-21T19:19:40.543Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
             <PropertyDefinitions>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.dataShape="NumberArrayElement"
-                 aspect.defaultValue="{&quot;rows&quot;:[{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:50},{&quot;element&quot;:50},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:50},{&quot;element&quot;:50},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100},{&quot;element&quot;:100}],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;element&quot;:{&quot;name&quot;:&quot;element&quot;,&quot;aspects&quot;:{},&quot;description&quot;:&quot;&quot;,&quot;baseType&quot;:&quot;NUMBER&quot;,&quot;ordinal&quot;:0}}}}"
-                 aspect.isLogged="false"
-                 aspect.isPersistent="true"
-                 aspect.isReadOnly="false"
-                 baseType="INFOTABLE"
-                 category=""
-                 description=""
-                 isLocalOnly="false"
-                 name="availability"
-                 ordinal="1"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
@@ -41,6 +27,16 @@
                  description=""
                  isLocalOnly="false"
                  name="currentShiftId"
+                 ordinal="4"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="DATETIME"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="lastShiftsUpdate"
                  ordinal="4"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
@@ -359,23 +355,7 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    function getRemainingHours (prodItem) {
-                                        if (prodItem.status == "INPROGRESS") {
-                                            if (prodItem.productId == "Cambio") {
-                                                return product.remainingHours > 0 ? product.remainingHours : 1;
-                                            }
-                                            else if (me.counter >= prodItem.targetQuantity) {
-                                                return 1;
-                                            }
-                                            else {
-                                                var remainingQ = prodItem.targetQuantity - me.counter;
-                                                return remainingQ / prodItem.targetQuantityPerHour;
-                                            }
-                                        }
-                                        else {
-                                            return product.remainingHours;
-                                        }
-                                    }
+                                    var lineConfig = me.GetLineConfiguration();
                                     
                                     // result: INFOTABLE dataShape: BayerShiftTimeDataShape
                                     var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
@@ -445,6 +425,26 @@
                                         startTime = dateAddHours(startTime, 8);
                                         endTime = dateAddHours(endTime, 8);
                                     }
+                                    
+                                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                    
+                                    function getRemainingHours (prodItem) {
+                                        if (prodItem.status == "INPROGRESS") {
+                                            if (prodItem.productId == "Cambio") {
+                                                return product.remainingHours > 0 ? product.remainingHours : 1;
+                                            }
+                                            else if (me.counter >= prodItem.targetQuantity) {
+                                                return 1;
+                                            }
+                                            else {
+                                                var remainingQ = prodItem.targetQuantity - me.counter;
+                                                return remainingQ / prodItem.targetQuantityPerHour;
+                                            }
+                                        }
+                                        else {
+                                            return product.remainingHours;
+                                        }
+                                    }
                                     ]]>
                                     </code>
                                 </Row>
@@ -475,7 +475,12 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var result = me.availability.rows[hour].element;
+                                    //var result = me.availability.rows[hour].element;
+                                    
+                                    var result = me.GetConfigurationTableRow({
+                                    	key: hour /* STRING */,
+                                    	tableName: "Availability" /* STRING */
+                                    }).availability;
                                     ]]>
                                     </code>
                                 </Row>
@@ -886,7 +891,11 @@
                                         Things["BayerDBDataProvider"].AddShiftSchedule({ data: data /* INFOTABLE */ });
                                     }
                                     
-                                     me.UpdateCurrentShiftId();
+                                    me.lastShiftsUpdate = new Date();
+                                    
+                                    me.UpdateCurrentShiftId();
+                                    
+                                    logger.info(me.name + " SHIFTS SCHEDULED");
                                     ]]>
                                     </code>
                                 </Row>
@@ -1031,7 +1040,54 @@
                     </ConfigurationTables>
                 </ServiceImplementation>
             </ServiceImplementations>
-            <Subscriptions></Subscriptions>
+            <Subscriptions>
+                <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="ThingStart"
+                 name="OnThingStart_ShiftsManagement"
+                 source=""
+                 sourceProperty=""
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnThingStart_ShiftsManagement">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // dateDifference(date1:DATETIME, date2:DATETIME):NUMBER
+                                        var difference = dateDifference(new Date(), me.lastShiftsUpdate);
+                                        
+                                        if (difference > 28800000) {
+                                            // if there was no update for over 8h
+                                            me.ScheduleShifts();
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
+            </Subscriptions>
             <avatar></avatar>
             <DesignTimePermissions>
                 <Create></Create>
@@ -1057,9 +1113,9 @@
             <RemoteEventBindings></RemoteEventBindings>
             <AlertConfigurations>
                 <AlertDefinitions
-                 name="availability"></AlertDefinitions>
-                <AlertDefinitions
                  name="currentShiftId"></AlertDefinitions>
+                <AlertDefinitions
+                 name="lastShiftsUpdate"></AlertDefinitions>
                 <AlertDefinitions
                  name="previousCycleCounter"></AlertDefinitions>
             </AlertConfigurations>
@@ -1104,7 +1160,7 @@
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
                 <Permissions
-                 resourceName="UpdateShift">
+                 resourceName="UpdateCurrentShiftId">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
@@ -1117,7 +1173,50 @@
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
                 <Permissions
-                 resourceName="UpdateCurrentShiftId">
+                 resourceName="CalculateShiftsFromNow">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetNearestChangeoverFromSchedule">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="UpdateShift">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
@@ -1160,19 +1259,6 @@
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
                 <Permissions
-                 resourceName="CalculateShiftsFromNow">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="System"
-                         type="User"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
                  resourceName="GetDailyPerformanceForTimeframe">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
@@ -1199,31 +1285,19 @@
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
                 <Permissions
-                 resourceName="GetNearestChangeoverFromSchedule">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerNotificationSystemUser"
-                         type="User"></Principal>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="*">
+                 resourceName="lastShiftsUpdate">
                     <PropertyRead>
                         <Principal
                          isPermitted="true"
                          name="System"
                          type="User"></Principal>
                     </PropertyRead>
-                    <PropertyWrite></PropertyWrite>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyWrite>
                     <ServiceInvoke></ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>

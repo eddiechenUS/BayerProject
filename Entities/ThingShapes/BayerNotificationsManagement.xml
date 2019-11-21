@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-18T16:09:43.750Z"
+         lastModifiedDate="2019-11-21T18:45:47.180Z"
          name="BayerNotificationsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -46,30 +46,6 @@
                  ordinal="7"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.dataShape="GenericStringList"
-                 aspect.defaultValue="{&quot;rows&quot;:[],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;item&quot;:{&quot;name&quot;:&quot;item&quot;,&quot;aspects&quot;:{&quot;isPrimaryKey&quot;:true},&quot;description&quot;:&quot;Item&quot;,&quot;baseType&quot;:&quot;STRING&quot;,&quot;ordinal&quot;:0}}}}"
-                 aspect.isPersistent="true"
-                 baseType="INFOTABLE"
-                 category=""
-                 description=""
-                 isLocalOnly="false"
-                 name="notificationTargetGroupA"
-                 ordinal="8"></PropertyDefinition>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.dataShape="GenericStringList"
-                 aspect.defaultValue="{&quot;rows&quot;:[],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;item&quot;:{&quot;name&quot;:&quot;item&quot;,&quot;aspects&quot;:{&quot;isPrimaryKey&quot;:true},&quot;description&quot;:&quot;Item&quot;,&quot;baseType&quot;:&quot;STRING&quot;,&quot;ordinal&quot;:0}}}}"
-                 aspect.isPersistent="true"
-                 baseType="INFOTABLE"
-                 category=""
-                 description=""
-                 isLocalOnly="false"
-                 name="notificationTargetGroupB"
-                 ordinal="9"></PropertyDefinition>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
                  aspect.dataChangeThreshold="0.0"
                  aspect.dataChangeType="VALUE"
                  aspect.defaultValue="0"
@@ -84,20 +60,42 @@
                  isLocalOnly="false"
                  name="productionAlertLevel"
                  ordinal="4"></PropertyDefinition>
-                <PropertyDefinition
-                 aspect.cacheTime="0.0"
-                 aspect.dataChangeType="VALUE"
-                 aspect.isLogged="false"
-                 aspect.isPersistent="true"
-                 aspect.isReadOnly="false"
-                 baseType="STRING"
-                 category=""
-                 description=""
-                 isLocalOnly="false"
-                 name="smsSenderAddress"
-                 ordinal="1"></PropertyDefinition>
             </PropertyDefinitions>
             <ServiceDefinitions>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetNotificationTargetGroupA">
+                    <ResultType
+                     aspect.dataShape="GenericStringList"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetNotificationTargetGroupB">
+                    <ResultType
+                     aspect.dataShape="GenericStringList"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
                  category=""
@@ -218,6 +216,72 @@
             </EventDefinitions>
             <ServiceMappings></ServiceMappings>
             <ServiceImplementations>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetNotificationTargetGroupA">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = me.GetConfigurationTable({
+                                    	tableName: "NotificationTargetGroupA" /* STRING */
+                                    })
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetNotificationTargetGroupB">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = me.GetConfigurationTable({
+                                    	tableName: "NotificationTargetGroupB" /* STRING */
+                                    })
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
@@ -387,11 +451,14 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    var lineConfig = me.GetLineConfiguration();
+                                    var sender = lineConfig.notificationSender;
+                                    
                                     var body = "Changeover target exceeded for " + me.name + ". ";
                                     
-                                    var recipients = me.notificationTargetGroupB;
+                                    var recipients = me.GetNotificationTargetGroupB();
                                     
-                                    if (me.smsSenderAddress && recipients && recipients.getRowCount() > 0) {
+                                    if (sender && recipients && recipients.getRowCount() > 0) {
                                         // result: INFOTABLE dataShape: BayerProductionPlanDataShape
                                         var current = me.GetCurrentProduct();
                                         
@@ -433,7 +500,7 @@
                                                         cc: undefined /* STRING */,
                                                         bcc: undefined /* STRING */,
                                                         subject: body /* STRING */,
-                                                        from: me.smsSenderAddress /* STRING */,
+                                                        from: sender /* STRING */,
                                                         to: row.item /* STRING */,
                                                         body: "" /* HTML */
                                                     };
@@ -480,11 +547,14 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    var lineConfig = me.GetLineConfiguration();
+                                    var sender = lineConfig.notificationSender;
+                                    
                                     var body = "Changeover in 30 minutes at " + me.name + ". ";
                                     
-                                    var recipients = me.notificationTargetGroupA;
+                                    var recipients = me.GetNotificationTargetGroupA();
                                     
-                                    if (me.smsSenderAddress && recipients && recipients.getRowCount() > 0) {
+                                    if (sender && recipients && recipients.getRowCount() > 0) {
                                         var tableLength = recipients.rows.length;
                                         for (var x=0; x < tableLength; x++) {
                                             var row = recipients.rows[x];
@@ -495,7 +565,7 @@
                                                     cc: undefined /* STRING */,
                                                     bcc: undefined /* STRING */,
                                                     subject: body /* STRING */,
-                                                    from: me.smsSenderAddress /* STRING */,
+                                                    from: sender /* STRING */,
                                                     to: row.item /* STRING */,
                                                     body: "" /* HTML */
                                                 };
@@ -541,21 +611,24 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    var lineConfig = me.GetLineConfiguration();
+                                    var sender = lineConfig.notificationSender;
+                                    
                                     var body = "No production at " + me.name + ". ";
                                     var recipients;
                                     
                                     if (level == 3) {
-                                        recipients = me.notificationTargetGroupB;
+                                        recipients = me.GetNotificationTargetGroupB();
                                         body += "No production recorded for last 60 minutes.";
                                         //startDate = dateAddMinutes(startDate, -30);
                                     }
                                     else if (level == 2) {
-                                        recipients = me.notificationTargetGroupA;
+                                        recipients = me.GetNotificationTargetGroupA();
                                         body += "No production recorded for last 30 minutes.";
                                         //startDate = dateAddMinutes(startDate, -10);
                                     }
                                     
-                                    if (me.smsSenderAddress && recipients && recipients.getRowCount() > 0) {
+                                    if (sender && recipients && recipients.getRowCount() > 0) {
                                     //    var params = {
                                     //        oldestFirst: true /* BOOLEAN */,
                                     //        maxItems: undefined /* NUMBER */,
@@ -593,7 +666,7 @@
                                                     cc: undefined /* STRING */,
                                                     bcc: undefined /* STRING */,
                                                     subject: body /* STRING */,
-                                                    from: me.smsSenderAddress /* STRING */,
+                                                    from: sender /* STRING */,
                                                     to: row.item /* STRING */,
                                                     body: "" /* HTML */
                                                 };
@@ -831,13 +904,7 @@
                 <AlertDefinitions
                  name="changeoverComingNotificationSent"></AlertDefinitions>
                 <AlertDefinitions
-                 name="notificationTargetGroupA"></AlertDefinitions>
-                <AlertDefinitions
-                 name="notificationTargetGroupB"></AlertDefinitions>
-                <AlertDefinitions
                  name="productionAlertLevel"></AlertDefinitions>
-                <AlertDefinitions
-                 name="smsSenderAddress"></AlertDefinitions>
             </AlertConfigurations>
             <InstanceRunTimePermissions>
                 <Permissions
@@ -979,6 +1046,32 @@
                         <Principal
                          isPermitted="true"
                          name="BayerNotificationSystemUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetNotificationTargetGroupB">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetNotificationTargetGroupA">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
                          type="User"></Principal>
                     </ServiceInvoke>
                     <EventInvoke></EventInvoke>
