@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-18T16:11:41.419Z"
+         lastModifiedDate="2019-11-21T19:20:44.450Z"
          name="BayerDelaysManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -502,23 +502,23 @@
                                     <code>
                                     <![CDATA[
                                     // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    var startTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
-                                    	productionLine: me.name /* THINGNAME */,
-                                    	time: startTime /* DATETIME */
-                                    });
+                                    //var startTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
+                                    //	productionLine: me.name /* THINGNAME */,
+                                    //	time: startTime /* DATETIME */
+                                    //});
                                     
                                     // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    var endTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
-                                    	productionLine: me.name /* THINGNAME */,
-                                    	time: endTime /* DATETIME */
-                                    });
+                                    //var endTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
+                                    //	productionLine: me.name /* THINGNAME */,
+                                    //	time: endTime /* DATETIME */
+                                    //});
                                     
                                     
                                     
-                                    if (startTimeShift.id == endTimeShift.id) {   
-                                    }
-                                    else {
-                                    }
+                                    //if (startTimeShift.id == endTimeShift.id) {   
+                                    //}
+                                    //else {
+                                    //}
                                     
                                     // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
                                     var currentShift = Things["BayerUtilities"].GetCurrentShift({
@@ -565,12 +565,22 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
                                     var currentProduct = me.GetCurrentProduct();
+                                    var isChangeover = (currentProduct.productId === 'Cambio');
+                                    if(me.productionRunning || isChangeover){
+                                    	var shiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
+                                    		shiftScheduleId: me.shiftScheduleId 
+                                    	});
+                                        if(shiftEvents.length !== 0){
+                                    		var lastEvent = shiftEvents.rows[shiftEvents.length-1];
+                                        }
+                                    }
+                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
+                                    //var currentProduct = me.GetCurrentProduct();
                                     
                                     if (currentProduct && currentProduct.getRowCount() > 0) {
                                         //logger.debug('S:ProcessChangeoverDelayRules');
-                                        var isChangeover = (currentProduct.productId === 'Cambio');
+                                       // var isChangeover = (currentProduct.productId === 'Cambio');
                                         var isChangeoverExeedTarget = (currentProduct.workedHours * 60) >
                                             (currentProduct.targetHours * 60) + (currentProduct.targetHours * 60 * 0.1);
                                         var isProductionTargetZero = (currentProduct.targetQuantity === 0);
@@ -816,7 +826,7 @@
                                     <code>
                                     <![CDATA[
                                     // executed after entry microstop and change shift
-                                    logger.debug(me.name + '!!! RESET MISCROSTOP COUNTERS !!!');
+                                    logger.debug(me.name + ' !!! RESET MISCROSTOP COUNTERS !!!');
                                     me.delayMicrostopCount = 0;
                                     me.delayMicrostopTime = 0;
                                     me.delayMicrostopTimeStart = new Date(0);

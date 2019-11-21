@@ -16,7 +16,7 @@
          description="showing in popup BayerShiftTrackingMashup, triggered by clicking &quot;Near Misses/Accidents&quot; container"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-10-01T11:45:11.966Z"
+         lastModifiedDate="2019-11-19T12:11:22.833Z"
          name="BayerSafetyAddIssueMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -597,8 +597,8 @@
                             "ValueField" : "value",
                             "View" : "dropdown",
                             "Visible" : true,
-                            "Width" : 110,
-                            "WidthOfDropdownView" : 110,
+                            "Width" : 310,
+                            "WidthOfDropdownView" : 300,
                             "Z-index" : 10,
                             "__TypeDisplayName" : "List",
                             "__supportsLabel" : true,
@@ -853,16 +853,59 @@
                           "formatInfo" : [ {
                             "Align" : "left",
                             "AllowEdit" : false,
+                            "FieldName" : "type",
+                            "FormatOptions" : {
+                              "FormatString" : "full",
+                              "formatInfo" : {
+                                "FieldName" : "type",
+                                "StateDefinition" : "BayerSafetyIssueEntryState",
+                                "StateDefinitionType" : "string",
+                                "StateFormats" : [ {
+                                  "comparator" : "==",
+                                  "state" : "BayerSafetyIssueAccidentStyle",
+                                  "stateName" : "Accident",
+                                  "value" : "accident"
+                                }, {
+                                  "comparator" : "==",
+                                  "state" : "BayerSafetyIssueNearMissStyle",
+                                  "stateName" : "Near miss",
+                                  "value" : "nearMiss"
+                                }, {
+                                  "state" : "Bayer_AddStyle",
+                                  "stateName" : ""
+                                } ]
+                              },
+                              "renderer" : "STRING",
+                              "roundingEnabled" : true
+                            },
+                            "Title" : "[[Bayer.Type]]",
+                            "ValidationExpression" : "",
+                            "ValidationMessage" : "",
+                            "Width" : "80"
+                          }, {
+                            "Align" : "center",
+                            "AllowEdit" : false,
                             "FieldName" : "comment",
                             "FormatOptions" : {
-                              "renderer" : "DEFAULT"
+                              "FormatString" : "",
+                              "formatInfo" : {
+                                "FieldName" : "",
+                                "StateDefinition" : "",
+                                "StateDefinitionType" : "fixed",
+                                "StateFormats" : [ {
+                                  "state" : "",
+                                  "stateName" : "fixed"
+                                } ]
+                              },
+                              "renderer" : "DEFAULT",
+                              "roundingEnabled" : true
                             },
                             "Title" : "comment",
                             "ValidationExpression" : "",
                             "ValidationMessage" : "",
-                            "Width" : "auto"
+                            "Width" : "810"
                           }, {
-                            "Align" : "left",
+                            "Align" : "right",
                             "AllowEdit" : false,
                             "FieldName" : "timestamp",
                             "FormatOptions" : {
@@ -882,7 +925,7 @@
                             "Title" : "timestamp",
                             "ValidationExpression" : "",
                             "ValidationMessage" : "",
-                            "Width" : "auto"
+                            "Width" : "60"
                           } ]
                         },
                         "CurrentScrollTop" : 0,
@@ -903,36 +946,7 @@
                         "ResponsiveLayout" : true,
                         "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
                         "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
-                        "RowFormat" : {
-                          "FieldName" : "type",
-                          "StateDefinition" : "BayerSafetyIssueEntryState",
-                          "StateDefinitionType" : "string",
-                          "StateFormats" : [ {
-                            "comparator" : "==",
-                            "state" : "Bayer_Bar_Red_Contrast",
-                            "stateName" : "Accident",
-                            "value" : "accident"
-                          }, {
-                            "comparator" : "==",
-                            "state" : "Bayer_Bar_Yellow",
-                            "stateName" : "Near miss",
-                            "value" : "nearMiss"
-                          }, {
-                            "state" : "Bayer_AddStyle",
-                            "stateName" : ""
-                          } ]
-                        },
-                        "RowFormat_StateParameters" : [ {
-                          "BaseType" : "STRING",
-                          "DefaultValue" : "accident",
-                          "Description" : "Accident",
-                          "ParameterName" : "RowFormat_Accident"
-                        }, {
-                          "BaseType" : "STRING",
-                          "DefaultValue" : "nearMiss",
-                          "Description" : "Near miss",
-                          "ParameterName" : "RowFormat_Near miss"
-                        } ],
+                        "RowFormat_StateParameters" : [ ],
                         "RowHeight" : 30,
                         "RowHoverStyle" : "DefaultRowHoverStyle",
                         "RowSelectedStyle" : "DefaultRowSelectedStyle",
