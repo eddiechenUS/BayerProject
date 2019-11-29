@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2019-11-21T19:28:38.807Z"
+         lastModifiedDate="2019-11-29T13:32:31.186Z"
          name="BayerProductionPlansParserTemplate"
          projectName="BayerIoT"
          tags="Applications:BayerProductionPlans;Applications:Bayer"
@@ -442,6 +442,7 @@
                                         
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
                                         var settings =  me.GetParserSettings();
+                                        var result = null;
                                         
                                         /////////////// PARSE FILE //////////////////
                                         
@@ -464,22 +465,33 @@
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserColumnMappingDataShape"
                                         var mapping =  me.GetColumnMapping();
                                         
-                                        // infotable datashape iteration
-                                        var dataShapeFields = mapping.dataShape.fields;
-                                        for (var fieldName in dataShapeFields) {
-                                            //logger.warn('field name is ' + dataShapeFields[fieldName].name);
-                                            //logger.warn('field basetype is ' + dataShapeFields[fieldName].baseType);
-                                            
-                                            var sourceName = mapping.rows[0][fieldName];
-                                            
-                                            if (sourceName) {
-                                            	data = Resources["InfoTableFunctions"].RenameField({
-                                                    t: data /* INFOTABLE */,
-                                                    from: mapping.rows[0][fieldName] /* STRING */,
-                                                    to: fieldName /* STRING */
-                                                });
-                                            }
+                                        function getCsvColumnName(fName) {
+                                            return mapping.rows[0][fName];
                                         }
+                                        
+                                        // result: INFOTABLE
+                                        var mappedData = Resources["InfoTableFunctions"].Clone({ t1: mapping });
+                                        mappedData.RemoveAllRows();
+                                        var dataShapeFields = mappedData.dataShape.fields;
+                                        
+                                        var tableLength = data.rows.length;
+                                        for (var x=0; x < tableLength; x++) {
+                                            var row = data.rows[x];
+                                            
+                                            var newEntry = new Object();
+                                            for (var fieldName in dataShapeFields) {
+                                                var csvColumnName = getCsvColumnName(fieldName);
+                                                if (csvColumnName) {
+                                                	newEntry[fieldName] = row[csvColumnName];
+                                                }
+                                            }
+                                            
+                                            if (!newEntry.productId || !newEntry.productionLine)
+                                                continue;
+                                            
+                                            mappedData.AddRow(newEntry);
+                                        }
+                                        
                                         
                                         
                                         /////////////// PUSH DATA ////////////////
@@ -492,7 +504,7 @@
                                             };
                                             
                                             var postParams = {
-                                                "data": data.ToJSON()
+                                                "data": mappedData.ToJSON()
                                             };
                                             
                                             try {
@@ -515,7 +527,7 @@
                                                 };
                                         
                                                 // result: JSON
-                                                var result = Resources["ContentLoaderFunctions"].PostJSON(params);
+                                                result = Resources["ContentLoaderFunctions"].PostJSON(params);
                                             }
                                             catch (ex) {
                                                 logger.error(me.name + ".ParseFileAndPushData error pushing data from file " + path + " | " + ex);
@@ -523,7 +535,9 @@
                                             }
                                         }
                                         
-                                        logger.info(me.name + ".ParseFileAndPushData - file " + path + " processed successfully");
+                                        //var result = mappedData;
+                                        
+                                        logger.info(me.name + ".ParseFileAndPushData - file " + path + " processed. Response from target: " + result);
                                         ]]>
                                         </code>
                                     </Row>
@@ -555,6 +569,7 @@
                                         <code>
                                         <![CDATA[
                                         // receive data pushed by the other instance of TWX and process it
+                                        logger.info(me.name + ".ProcessData received " + data.getRowCount() + " rows");
                                         
                                         var aggregatedData = {};
                                         
@@ -582,7 +597,7 @@
                                         for (var line in aggregatedData) {
                                             try {
                                                 // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
-                                                var result =  Things["BayerIMA90C1"].LoadProductionPlan({
+                                                var result =  Things[line].LoadProductionPlan({
                                                     data: aggregatedData[line] /* INFOTABLE */
                                                 });
                                             }
@@ -642,6 +657,7 @@
                                             if (x > 0) {
                                                 // we take only one, latest file, others are ignored because when processing data, we remove all scheduled orders
                                                 targetPath = "/ignored/" + file.name;
+                                                logger.warn(me.name + ".ScanFiles file ignored: " + file.path);
                                             }
                                             else {
                                                 try {
@@ -652,6 +668,7 @@
                                                 }
                                                 catch (ex) {
                                                     targetPath = "/failed/" + file.name;
+                                                    logger.error(me.name + ".ScanFiles file processing failed " + file.path + " Reason: " + ex);
                                                 }
                                         
                                                 // pause():INTEGER
@@ -731,6 +748,19 @@
             </InstanceDesignTimePermissions>
             <InstanceRunTimePermissions>
                 <Permissions
+                 resourceName="GetConfigurationTable">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
                  resourceName="GetParserSettings">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
@@ -753,6 +783,19 @@
                          name="System"
                          type="User"></Principal>
                     </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
