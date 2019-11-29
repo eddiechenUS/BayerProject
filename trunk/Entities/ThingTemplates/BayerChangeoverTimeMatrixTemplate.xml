@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DataTableThing"
          homeMashup="DataTableEditor"
-         lastModifiedDate="2019-09-06T11:18:50.533Z"
+         lastModifiedDate="2019-11-29T13:36:17.528Z"
          name="BayerChangeoverTimeMatrixTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -460,7 +460,7 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var getActiveMaterialTime = function() {
+                                        function getActiveMaterialTime() {
                                             
                                             // FROM -> TO
                                             var values = me.CreateValues();
@@ -469,12 +469,8 @@
                                             values.productionLine = productionLine; //THINGNAME [Primary Key]
                                             values.targetCode = targetCode; //STRING [Primary Key]
                                         
-                                            var params = {
-                                                values: values /* INFOTABLE*/
-                                            };
-                                        
                                             // result: INFOTABLE dataShape: "undefined"
-                                            var data = me.FindDataTableEntries(params);
+                                            var data = me.FindDataTableEntries({ values: values });
                                             
                                             if (data.rows.length > 0) {
                                                 return data.time;
@@ -492,12 +488,8 @@
                                             values.productionLine = productionLine; //THINGNAME [Primary Key]
                                             values.targetCode = "*"; //STRING [Primary Key]
                                         
-                                            var params = {
-                                                values: values /* INFOTABLE*/
-                                            };
-                                        
                                             // result: INFOTABLE dataShape: "undefined"
-                                            var data = me.FindDataTableEntries(params);
+                                            var data = me.FindDataTableEntries({ values: values });
                                             
                                             if (data.rows.length > 0) {
                                                 return data.time;
@@ -510,12 +502,8 @@
                                             values.productionLine = productionLine; //THINGNAME [Primary Key]
                                             values.targetCode = targetCode; //STRING [Primary Key]
                                         
-                                            var params = {
-                                                values: values /* INFOTABLE*/
-                                            };
-                                        
                                             // result: INFOTABLE dataShape: "undefined"
-                                            var data = me.FindDataTableEntries(params);
+                                            var data = me.FindDataTableEntries({ values: values });
                                             
                                             if (data.rows.length > 0) {
                                                 return data.time;

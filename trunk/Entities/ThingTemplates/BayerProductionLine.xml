@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2019-11-21T19:24:21.434Z"
+         lastModifiedDate="2019-11-27T12:08:18.060Z"
          name="BayerProductionLine"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -275,13 +275,6 @@
                              name="delayMicrostopTimeMax"
                              ordinal="4"></FieldDefinition>
                             <FieldDefinition
-                             aspect.defaultValue="false"
-                             aspect.isPrimaryKey="true"
-                             baseType="BOOLEAN"
-                             description="Should the app divide target by &quot;blisters per box&quot;?&#xA;Used when machine counts boxes, but imported production plan contains nr of blisters."
-                             name="divideTargetByBPP"
-                             ordinal="7"></FieldDefinition>
-                            <FieldDefinition
                              aspect.defaultValue="0.6"
                              aspect.isPrimaryKey="true"
                              aspect.units="multiplier"
@@ -289,6 +282,13 @@
                              description=""
                              name="nominalRateCorrection"
                              ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.defaultValue="false"
+                             aspect.isPrimaryKey="true"
+                             baseType="BOOLEAN"
+                             description="Select &quot;true&quot; if Material Performance Table contains value of blisters per hour (instead of boxes per hour)"
+                             name="nominalRateInBlisters"
+                             ordinal="7"></FieldDefinition>
                             <FieldDefinition
                              aspect.isPrimaryKey="true"
                              baseType="STRING"
@@ -303,8 +303,8 @@
                             <delayMicrostopBreakdownThreshold>5.0</delayMicrostopBreakdownThreshold>
                             <delayMicrostopCountMax>3.0</delayMicrostopCountMax>
                             <delayMicrostopTimeMax>5.0</delayMicrostopTimeMax>
-                            <divideTargetByBPP>false</divideTargetByBPP>
                             <nominalRateCorrection>0.6</nominalRateCorrection>
+                            <nominalRateInBlisters>false</nominalRateInBlisters>
                             <notificationSender></notificationSender>
                         </Row>
                     </Rows>
@@ -557,8 +557,9 @@
                                         <Row>
                                             <code>
                                             <![CDATA[
+                                            me.ProcessEventsOnShiftChange({eventData : eventData});
                                             if (eventData.newValue.value  != eventData.oldValue.value) {
-                                            	me.ResetMicrostopDelayProperties();
+                                            	me.ResetMicrostopDelayProperties();   
                                             }
                                             ]]>
                                             </code>
@@ -573,6 +574,9 @@
             <ImplementedShapes>
                 <ImplementedShape
                  name="BayerShiftsManagement"
+                 type="ThingShape"></ImplementedShape>
+                <ImplementedShape
+                 name="BayerMaintenanceTicketsManagement"
                  type="ThingShape"></ImplementedShape>
                 <ImplementedShape
                  name="BayerProductionManagement"
@@ -604,6 +608,19 @@
             <InstanceRunTimePermissions>
                 <Permissions
                  resourceName="GetPropertyTime">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetShiftsFromNow">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>

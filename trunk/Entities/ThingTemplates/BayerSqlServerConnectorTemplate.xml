@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2019-11-21T17:12:16.015Z"
+         lastModifiedDate="2019-11-28T16:08:40.826Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -774,6 +774,29 @@
                              baseType="DATETIME"
                              description=""
                              name="startTime"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetShiftScheduleById">
+                        <ResultType
+                         aspect.dataShape="BayerShiftScheduleDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
                              ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
@@ -1554,11 +1577,6 @@
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
                             <FieldDefinition
-                             baseType="STRING"
-                             description=""
-                             name="category"
-                             ordinal="1"></FieldDefinition>
-                            <FieldDefinition
                              baseType="DATETIME"
                              description=""
                              name="endTime"
@@ -1573,11 +1591,6 @@
                              description=""
                              name="shiftScheduleId"
                              ordinal="4"></FieldDefinition>
-                            <FieldDefinition
-                             baseType="DATETIME"
-                             description=""
-                             name="startTime"
-                             ordinal="2"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -2907,6 +2920,55 @@
                     <ServiceImplementation
                      description=""
                      handlerName="SQLQuery"
+                     name="GetShiftScheduleById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT [id]
+                                              ,[totalQuantityProduced]
+                                              ,[totalTargetQuantity]
+                                              ,[timestamp]
+                                              ,[productionLine]
+                                          FROM [dbo].[ShiftSchedule]
+                                          WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
                      name="GetShiftsScheduleByTime">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -2949,7 +3011,9 @@
                                               ,i.[duration]
                                               ,i.[productionPlanId]
                                               ,i.[quantityProduced]
+                                              ,i.[quantityProduced] * pa.[blistersPerFoldedBox] AS quantityProducedBlisters
                                               ,i.[targetQuantity]
+                                              ,i.[targetQuantity] * p.[blistersPerFoldedBox] AS targetQuantityBlisters
                                               ,i.[quantityTargetOk]
                                               ,i.[productionPlanId_actual]
                                         	  ,p.[productId]
@@ -2957,6 +3021,7 @@
                                           FROM [dbo].[ShiftSchedule] AS s
                                           JOIN [dbo].[ShiftScheduleItem] AS i ON (i.[scheduleId] = s.[id])
                                           JOIN [dbo].[ProductionPlan] AS p ON (p.[id] = i.[productionPlanId])
+                                          LEFT JOIN [dbo].[ProductionPlan] AS pa ON (pa.[id] = i.[productionPlanId_actual])
                                           WHERE s.[productionLine] = [[productionLine]] AND s.[timestamp] >= [[startTime]] AND s.[timestamp] < [[endTime]]
                                           ORDER BY s.[timestamp] ASC, i.[time] ASC
                                         ]]>
@@ -3839,11 +3904,8 @@
                                         <sql>
                                         <![CDATA[
                                         UPDATE [dbo].[ShiftEvent]
-                                           SET [category] = [[category]]
-                                              ,[startTime] = [[startTime]]
-                                              ,[endTime] = [[endTime]]
+                                           SET [endTime] = [[endTime]]
                                          WHERE [id] = [[id]] AND [shiftScheduleId] = [[shiftScheduleId]];
-                                        SELECT * FROM [dbo].[shiftScheduleId] WHERE [id] = SCOPE_IDENTITY();
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>

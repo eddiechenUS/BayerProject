@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-21T18:45:47.180Z"
+         lastModifiedDate="2019-11-22T12:32:39.994Z"
          name="BayerNotificationsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -773,6 +773,8 @@
                                         me.SendChangeoverComingMessage({
                                         	changeoverData: eventData /* INFOTABLE */
                                         });
+                                        
+                                        me.CreateMaintenanceTicket();
                                         ]]>
                                         </code>
                                     </Row>
@@ -832,14 +834,14 @@
                  description=""
                  enabled="true"
                  eventName="DataChange"
-                 name="OnProductionAlertLevelChanged"
+                 name="OnProductionAlertLeverChanged"
                  source=""
                  sourceProperty="productionAlertLevel"
                  sourceType="Thing">
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="OnProductionAlertLevelChanged">
+                     name="OnProductionAlertLeverChanged">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description=""
@@ -865,6 +867,10 @@
                                             };
                                         
                                             me.SendProductionAlertMessage(params);
+                                        }
+                                        
+                                        if (eventData.newValue.value >= 2) {
+                                            me.CreateMaintenanceTicket();
                                         }
                                         ]]>
                                         </code>
