@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-27T16:27:33.976Z"
+         lastModifiedDate="2019-12-04T09:46:39.173Z"
          name="BayerReportsGenerator"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -61,12 +61,10 @@
                      ordinal="0"></ResultType>
                     <ParameterDefinitions>
                         <FieldDefinition
-                         aspect.dataShape="BayerScheduleDataShape"
-                         aspect.isRequired="true"
-                         baseType="INFOTABLE"
-                         description=""
-                         name="shiftSchedule"
-                         ordinal="1"></FieldDefinition>
+                         baseType="INTEGER"
+                         description="id of shift that their schedule will be exported "
+                         name="id"
+                         ordinal="2"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -166,6 +164,26 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    var shifts =  Things[me.name].GetShiftsFromNow({
+                                    	nrOfPrevShifts: 7 ,
+                                    	interval: 6 ,
+                                    	nrOfNextShifts: 3
+                                    });
+                                    var query = 
+                                    {
+                                        "filters": {
+                                            "type": "EQ",
+                                            "fieldName": "id",
+                                            "value": id
+                                        }
+                                    };
+                                    
+                                    var shift = Resources["InfoTableFunctions"].Query({
+                                    	t: shifts,
+                                    	query: query
+                                    });
+                                    var schedule = shift.rows[0].shiftSchedule;
+                                    
                                     var separator = ';';
                                     
                                     var fields = {
@@ -173,7 +191,9 @@
                                         productId: "product ID (scheduled)",
                                         productDescription: "product (scheduled)",
                                         targetQuantity: "target",
-                                        quantityProduced: "actual"
+                                        quantityProduced: "actual",
+                                        targetQuantityBlisters :"target blisters",
+                                    	quantityProducedBlisters: "actual blisters"
                                     };
                                     
                                     var header = '';
@@ -183,12 +203,17 @@
                                     
                                     var content = '';
                                     
-                                    var tableLength = shiftSchedule.rows.length;
+                                    var tableLength = schedule.rows.length;
                                     for (var x=0; x < tableLength; x++) {
-                                        var row = shiftSchedule.rows[x];
+                                        var row = schedule.rows[x];
                                         
                                         for (var field in fields) {
-                                            content += row[field] + separator;
+                                            if(row[field]&& row[field] !== "undefined" || row[field] === 0){
+                                            	content += row[field] + separator;
+                                            }
+                                            else{
+                                            	content += "" + separator;
+                                            }
                                         }
                                         content += '\n';
                                     }

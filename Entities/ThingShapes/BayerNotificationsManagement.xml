@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-22T12:32:39.994Z"
+         lastModifiedDate="2019-12-04T11:16:29.330Z"
          name="BayerNotificationsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -205,6 +205,22 @@
                          name="level"
                          ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="TriggerChangeoverComingEvent">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
                 </ServiceDefinition>
             </ServiceDefinitions>
             <EventDefinitions>
@@ -618,70 +634,105 @@
                                     var recipients;
                                     
                                     if (level == 3) {
-                                        recipients = me.GetNotificationTargetGroupB();
-                                        body += "No production recorded for last 60 minutes.";
-                                        //startDate = dateAddMinutes(startDate, -30);
-                                    }
-                                    else if (level == 2) {
-                                        recipients = me.GetNotificationTargetGroupA();
-                                        body += "No production recorded for last 30 minutes.";
-                                        //startDate = dateAddMinutes(startDate, -10);
+                                    	recipients = me.GetNotificationTargetGroupB();
+                                    	body += "No production recorded for last 60 minutes.";
+                                    	//startDate = dateAddMinutes(startDate, -30);
+                                    } else if (level == 2) {
+                                    	recipients = me.GetNotificationTargetGroupA();
+                                    	body += "No production recorded for last 30 minutes.";
+                                    	//startDate = dateAddMinutes(startDate, -10);
                                     }
                                     
                                     if (sender && recipients && recipients.getRowCount() > 0) {
-                                    //    var params = {
-                                    //        oldestFirst: true /* BOOLEAN */,
-                                    //        maxItems: undefined /* NUMBER */,
-                                    //        sourceTags: undefined /* TAGS */,
-                                    //        endDate: undefined /* DATETIME */,
-                                    //        query: undefined /* QUERY */,
-                                    //        source: me.name /* STRING */,
-                                    //        startDate: startDate /* DATETIME */,
-                                    //        tags: undefined /* TAGS */
-                                    //    };
-                                    //
-                                    //    // result: INFOTABLE
-                                    //    var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
-                                    //
-                                    //    var tableLength = issues.rows.length;
-                                    //
-                                    //    if (tableLength>0) {
-                                    //        body += " Issues: ";
-                                    //    }
-                                    //
-                                    //    for (var x = 0; x < tableLength; x++) {
-                                    //        var row = issues.rows[x];
-                                    //
-                                    //        body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
-                                    //
-                                    //    }
-                                    //
-                                        var tableLength = recipients.rows.length;
-                                        for (var x=0; x < tableLength; x++) {
-                                            var row = recipients.rows[x];
-                                            logger.debug("Sending email notification to " + row.item + ". BODY: " + body);
+                                    	var delays = Things["BayerDBDataProvider"].GetDelayShiftDetails({
+                                    		productionLine: me.name,
+                                    		shiftScheduleId: me.currentShiftId
+                                    	});
+                                    	var delaysTableLength = delays.getRowCount();
+                                    	var message = "";
+                                        var areDelays  = (delaysTableLength > 0);
+                                    	if (areDelays) {
+                                    		message += " Current shift delays: ";
+                                    		message += unescape('%3Ctable style="width:100%"%3E');
+                                    		message += unescape('%3Ctr%3E %3Cth%3E id %3C/th%3E %3Cth%3E Category %3C/th%3E %3Cth%3E Start Time%3C/th%3E %3Cth%3E End Time%3C/th%3E %3Cth%3E Duration %3C/th%3E %3C/tr%3E');
+                                    	} else {
+                                    		message += "No delays occured during current shift.";
+                                    	}
                                     
-                                            try {
-                                                var params = {
-                                                    cc: undefined /* STRING */,
-                                                    bcc: undefined /* STRING */,
-                                                    subject: body /* STRING */,
-                                                    from: sender /* STRING */,
-                                                    to: row.item /* STRING */,
-                                                    body: "" /* HTML */
-                                                };
-                                    
-                                                // no return
-                                                Things["BayerMailServer"].SendMessage(params);
-                                            }
-                                            catch (ex) {
-                                                logger.error(me.name + ".SendProductionAlertMessage error sending email to " + row.item + ". " + ex);
-                                            }
+                                    	for (var i = 0; i < delaysTableLength; i++) {
+                                    		var row = delays.rows[i];
+                                    		message += unescape('%3Ctr%3E %3Ctd align="center"%3E' + (i + 1) + '%3C/td%3E %3Ctd align="center"%3E' + row.category + '%3C/td%3E %3Ctd align="center"%3E' + row.startTime + '%3C/td %3E %3Ctd align="center"%3E' + row.endTime + '%3C/td%3E %3Ctd align="center"%3E' + row.duration +'%3C/td%3E %3C/tr%3E');
+                                    	}
+                                    	if(areDelays){
+                                        	message +=unescape("%3C/table%3E");
                                         }
+                                    
+                                    	var tableLength = recipients.rows.length;
+                                    	for (var x = 0; x < tableLength; x++) {
+                                    		var row = recipients.rows[x];
+                                    		logger.debug("Sending email notification to " + row.item + ". BODY: " + body);
+                                    
+                                    		try {
+                                    			var params = {
+                                    				cc: undefined /* STRING */ ,
+                                    				bcc: undefined /* STRING */ ,
+                                    				subject: body /* STRING */ ,
+                                    				from: sender /* STRING */ ,
+                                    				to: row.item /* STRING */ ,
+                                    				body: message /* HTML */
+                                    			};
+                                    
+                                    			// no return
+                                    			Things["BayerMailServer"].SendMessage(params);
+                                    		} catch (ex) {
+                                    			logger.error(me.name + ".SendProductionAlertMessage error sending email to " + row.item + ". " + ex);
+                                    		}
+                                    	}
+                                    } else {
+                                    	logger.warn(me.name + ".SendProductionAlertMessage - no sender/recipient provided");
                                     }
-                                    else {
-                                        logger.warn(me.name + ".SendProductionAlertMessage - no sender/recipient provided");
-                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="TriggerChangeoverComingEvent">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    me.ChangeoverComing({
+                                    	duration: undefined /* INTEGER */,
+                                    	productionPlanId: undefined /* INTEGER */,
+                                    	productionPlanId_actual: undefined /* INTEGER */,
+                                    	hour: undefined /* INTEGER */,
+                                    	quantityTargetOk: undefined /* BOOLEAN */,
+                                    	id: undefined /* LONG */,
+                                    	time: undefined /* DATETIME */,
+                                    	quantityProduced: undefined /* NUMBER */,
+                                    	scheduleId: undefined /* INTEGER */,
+                                    	targetQuantity: undefined /* NUMBER */
+                                    });
                                     ]]>
                                     </code>
                                 </Row>
@@ -695,14 +746,14 @@
                  description=""
                  enabled="true"
                  eventName="DataChange"
-                 name="OnChangeoverAlertLevelChange"
+                 name="OnChangeoverAlertLevelDataChange"
                  source=""
                  sourceProperty="changeoverAlertLevel"
                  sourceType="Thing">
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="OnChangeoverAlertLevelChange">
+                     name="OnChangeoverAlertLevelDataChange">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description=""
@@ -773,8 +824,8 @@
                                         me.SendChangeoverComingMessage({
                                         	changeoverData: eventData /* INFOTABLE */
                                         });
-                                        
-                                        me.CreateMaintenanceTicket();
+                                        logger.debug('Changeover is coming');
+                                        me.CreateMaintenanceTicket({typeDescription: me.type2Description});
                                         ]]>
                                         </code>
                                     </Row>
@@ -834,14 +885,14 @@
                  description=""
                  enabled="true"
                  eventName="DataChange"
-                 name="OnProductionAlertLeverChanged"
+                 name="OnProductionAlertLevelDataChange"
                  source=""
                  sourceProperty="productionAlertLevel"
                  sourceType="Thing">
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="OnProductionAlertLeverChanged">
+                     name="OnProductionAlertLevelDataChange">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description=""
@@ -865,12 +916,11 @@
                                             var params = {
                                                 level: eventData.newValue.value /* INTEGER */
                                             };
-                                        
                                             me.SendProductionAlertMessage(params);
                                         }
                                         
                                         if (eventData.newValue.value >= 2) {
-                                            me.CreateMaintenanceTicket();
+                                            me.CreateMaintenanceTicket({typeDescription: me.type1Description});
                                         }
                                         ]]>
                                         </code>

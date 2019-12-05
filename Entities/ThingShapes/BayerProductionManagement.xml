@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-29T13:47:55.505Z"
+         lastModifiedDate="2019-12-02T15:35:17.098Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -945,109 +945,137 @@
                                     	productionLine: me.name /* THINGNAME */
                                     });
                                     
-                                    // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
-                                    var lastItem =  Things["BayerDBDataProvider"].GetLastProductionPlanItem({
-                                    	line: me.name /* THINGNAME */
-                                    });
-                                    var prev = lastItem.rows.length > 0 ? lastItem.rows[0] : undefined;
-                                    
-                                    var tableLength = data.rows.length;
-                                    for (var x = 0; x < tableLength; x++) {
-                                    	var row = data.rows[x];
-                                        
-                                        try {
-                                            // BayerProductionPlanDataShape entry object
-                                            var newEntry = new Object();
-                                            newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
-                                            newEntry.status = "PENDING"; // STRING
-                                            
-                                            //////////////// FROM FILE ///////////////////////
-                                            
-                                            newEntry.productId = row.productId; // STRING
-                                            if(isNaN(parseInt(newEntry.productId))) {
-                                                logger.debug(me.name + ".LoadProductionPlan: Skipping row " + x + "; product id " + newEntry.productId);
-                                                continue;
-                                            }
-                                            
-                                            newEntry.orderNr = row.orderNr; // STRING
-                                            newEntry.productDescription = row.productDescription; // STRING
-                                            newEntry.version = row.version; // STRING
-                                            newEntry.targetQuantity = parseFloat(row.targetQuantity.replace(',', '.').replace(' ', '')); // NUMBER
-                                            newEntry.uom = row.uom;
-                                            newEntry.activeMaterialNumber = row.activeMaterialNumber;
-                                            newEntry.commentFirstLine = row.commentFirstLine;
-                                            newEntry.blisterType = row.blisterType;
-                                            newEntry.foldedBoxFormat = row.foldedBoxFormat;
-                                            newEntry.blistersPerFoldedBox = parseIntSafe(row.blistersPerFoldedBox);
-                                            
-                                            try {
-                                            	newEntry.mdatSaf = parseDate(row.mdatSaf, "yyyy-MM-dd");
-                                            }
-                                            catch (dateParseEx) {
-                                                logger.warn(me.name + ".LoadProductionPlan error parsing MDAT-SAF date. Value: " + row.mdatSaf);
-                                            }
-                                            
-                                            try {
-                                            	newEntry.mdatOos = parseDate(row.mdatOos, "yyyy-MM-dd");
-                                            }
-                                            catch (dateParseEx) {
-                                                logger.warn(me.name + ".LoadProductionPlan error parsing MDAT-OOS date. Value: " + row.mdatOos);
-                                            }
-                                            
-                                            newEntry.tabletsPerBlister = parseIntSafe(row.tabletsPerBlister);
-                                            newEntry.manufProcess = row.manufProcess;
-                                    
-                                            ///////////// CALCULATED //////////////////
-                                            
-                                            var blitersPerBoxCorrection = 1;
-                                            if (lineConfig.nominalRateInBlisters) {
-                                                if (newEntry.blistersPerFoldedBox) {
-                                                	blitersPerBoxCorrection = newEntry.blistersPerFoldedBox;
-                                                }
-                                                else {
-                                                    logger.error(me.name + ".LoadProductionPlan error: nominalRateInBlisters but no blistersPerFoldedBox provided");
-                                                }
-                                            }
-                                            
-                                            newEntry.targetQuantityPerHour = (Things["BayerMaterialPerformanceTable"].GetNominalRate({code: newEntry.productId, productionLine: me.name}) / blitersPerBoxCorrection) * lineConfig.nominalRateCorrection; // NUMBER
-                                            if (!newEntry.targetQuantityPerHour) {
-                                                logger.warn(me.name + ".LoadProductionPlan - no NominalRate for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
-                                                newEntry.targetQuantityPerHour = 60;
-                                            }
-                                            newEntry.targetQuantityPerHour = Math.round(newEntry.targetQuantityPerHour);
-                                    
-                                            newEntry.targetHours = Math.round(newEntry.targetQuantity / newEntry.targetQuantityPerHour * 100) / 100; // NUMBER
-                                            newEntry.remainingHours = newEntry.targetHours; // NUMBER
-                                            newEntry.producedQuantity = 0; // NUMBER
-                                            newEntry.startTime = undefined; // DATETIME
-                                            newEntry.endTime = undefined; // DATETIME
-                                            newEntry.workedHours = 0; // NUMBER
-                                    
-                                            if (prev) {
-                                                result.AddRow(getChangeover(prev, newEntry));
-                                            }
-                                    
-                                            prev = newEntry;
-                                    
-                                            logger.debug(me.name + ".LoadProductionPlan row nr: " + x + ": " + JSON.stringify(newEntry));
-                                            
-                                            result.AddRow(newEntry);
-                                        }
-                                        catch (ex) {
-                                            logger.error(me.name + ".LoadProductionPlan error parsing row " + x + ": " + ex);
-                                        }
+                                    if (data.rows.length === 1 && data.productId === 'standby') {
+                                        addStandby();
+                                    }
+                                    else {
+                                        processInputData();
                                     }
                                     
-                                    logger.debug(me.name + ".LoadProductionPlan content: " + JSON.stringify(result.ToJSON()));
-                                    
                                     Things["BayerDBDataProvider"].AddProductionPlanItems({
-                                    	items: result /* INFOTABLE */
+                                        items: result /* INFOTABLE */
                                     });
                                     
                                     me.lastProductionPlanUpdate = new Date();
                                     logger.info(me.name + " PRODUCTION PLAN UPLOADED");
                                     
                                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                    
+                                    function addStandby() {
+                                        // BayerProductionPlanDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.productId = "standby"; // STRING
+                                        newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                        newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.startTime = undefined; // DATETIME
+                                        newEntry.endTime = undefined; // DATETIME
+                                        newEntry.workedHours = 0; // NUMBER
+                                        newEntry.orderNr = ""; // STRING
+                                        newEntry.productDescription = "No scheduled production"; // STRING
+                                        newEntry.targetQuantity = 0; // NUMBER
+                                        newEntry.targetQuantityPerHour = 0; // NUMBER
+                                        newEntry.status = "PENDING"; // STRING
+                                        newEntry.targetHours = 168; // 7 days
+                                        newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                        result.AddRow(newEntry);
+                                    }
+                                    
+                                    function processInputData() {
+                                        // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
+                                        var lastItem =  Things["BayerDBDataProvider"].GetLastProductionPlanItem({
+                                            line: me.name /* THINGNAME */
+                                        });
+                                        var prev = lastItem.rows.length > 0 ? lastItem.rows[0] : undefined;
+                                    
+                                        var tableLength = data.rows.length;
+                                        for (var x = 0; x < tableLength; x++) {
+                                            var row = data.rows[x];
+                                    
+                                            try {
+                                                // BayerProductionPlanDataShape entry object
+                                                var newEntry = new Object();
+                                                newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                                newEntry.status = "PENDING"; // STRING
+                                    
+                                                //////////////// FROM FILE ///////////////////////
+                                    
+                                                newEntry.productId = row.productId; // STRING
+                                                if(isNaN(parseInt(newEntry.productId))) {
+                                                    logger.debug(me.name + ".LoadProductionPlan: Skipping row " + x + "; product id " + newEntry.productId);
+                                                    continue;
+                                                }
+                                    
+                                                newEntry.orderNr = row.orderNr; // STRING
+                                                newEntry.productDescription = row.productDescription; // STRING
+                                                newEntry.version = row.version; // STRING
+                                                newEntry.targetQuantity = parseFloat(row.targetQuantity.replace(',', '.').replace(' ', '')); // NUMBER
+                                                newEntry.uom = row.uom;
+                                                newEntry.activeMaterialNumber = row.activeMaterialNumber;
+                                                newEntry.commentFirstLine = row.commentFirstLine;
+                                                newEntry.blisterType = row.blisterType;
+                                                newEntry.foldedBoxFormat = row.foldedBoxFormat;
+                                                newEntry.blistersPerFoldedBox = parseIntSafe(row.blistersPerFoldedBox);
+                                    
+                                                try {
+                                                    newEntry.mdatSaf = parseDate(row.mdatSaf, "yyyy-MM-dd");
+                                                }
+                                                catch (dateParseEx) {
+                                                    logger.warn(me.name + ".LoadProductionPlan error parsing MDAT-SAF date. Value: " + row.mdatSaf);
+                                                }
+                                    
+                                                try {
+                                                    newEntry.mdatOos = parseDate(row.mdatOos, "yyyy-MM-dd");
+                                                }
+                                                catch (dateParseEx) {
+                                                    logger.warn(me.name + ".LoadProductionPlan error parsing MDAT-OOS date. Value: " + row.mdatOos);
+                                                }
+                                    
+                                                newEntry.tabletsPerBlister = parseIntSafe(row.tabletsPerBlister);
+                                                newEntry.manufProcess = row.manufProcess;
+                                    
+                                                ///////////// CALCULATED //////////////////
+                                    
+                                                var blitersPerBoxCorrection = 1;
+                                                if (lineConfig.nominalRateInBlisters) {
+                                                    if (newEntry.blistersPerFoldedBox) {
+                                                        blitersPerBoxCorrection = newEntry.blistersPerFoldedBox;
+                                                    }
+                                                    else {
+                                                        logger.error(me.name + ".LoadProductionPlan error: nominalRateInBlisters but no blistersPerFoldedBox provided");
+                                                    }
+                                                }
+                                    
+                                                newEntry.targetQuantityPerHour = (Things["BayerMaterialPerformanceTable"].GetNominalRate({code: newEntry.productId, productionLine: me.name}) / blitersPerBoxCorrection) * lineConfig.nominalRateCorrection; // NUMBER
+                                                if (!newEntry.targetQuantityPerHour) {
+                                                    logger.warn(me.name + ".LoadProductionPlan - no NominalRate for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
+                                                    newEntry.targetQuantityPerHour = 60;
+                                                }
+                                                newEntry.targetQuantityPerHour = Math.round(newEntry.targetQuantityPerHour);
+                                    
+                                                newEntry.targetHours = Math.round(newEntry.targetQuantity / newEntry.targetQuantityPerHour * 100) / 100; // NUMBER
+                                                newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                                newEntry.producedQuantity = 0; // NUMBER
+                                                newEntry.startTime = undefined; // DATETIME
+                                                newEntry.endTime = undefined; // DATETIME
+                                                newEntry.workedHours = 0; // NUMBER
+                                    
+                                                if (prev) {
+                                                    result.AddRow(getChangeover(prev, newEntry));
+                                                }
+                                    
+                                                prev = newEntry;
+                                    
+                                                logger.debug(me.name + ".LoadProductionPlan row nr: " + x + ": " + JSON.stringify(newEntry));
+                                    
+                                                result.AddRow(newEntry);
+                                            }
+                                            catch (ex) {
+                                                logger.error(me.name + ".LoadProductionPlan error parsing row " + x + ": " + ex);
+                                            }
+                                        }
+                                    
+                                        logger.debug(me.name + ".LoadProductionPlan content: " + JSON.stringify(result.ToJSON()));
+                                    }
                                     
                                     function getChangeover(prevItem, newItem) {
                                         // BayerProductionPlanDataShape entry object

@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-09-27T11:08:06.001Z"
+         lastModifiedDate="2019-12-03T10:37:53.019Z"
          name="BayerConfigurationPopup"
          projectName="BayerIoT"
          rows="0.0"
@@ -47,7 +47,9 @@
                  name="lineName"
                  ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
-            <Things></Things>
+            <Things>
+                <Thing>BayerConfigurationPage</Thing>
+            </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates>
                 <ThingTemplate>BayerProductionLine</ThingTemplate>
@@ -78,6 +80,21 @@
                     "Target" : "ScheduleShifts"
                   } ]
                 },
+                "Resources_RuntimeLocalizationFunctions" : {
+                  "DataName" : "Resources_RuntimeLocalizationFunctions",
+                  "EntityName" : "RuntimeLocalizationFunctions",
+                  "EntityType" : "Resources",
+                  "Id" : "47c6e4f0-5a59-42c3-8e0f-809bff9d69d8",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "b670caca-1e59-4989-a22f-1daaa106c62f",
+                    "Name" : "GetLanguages",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetLanguages"
+                  } ]
+                },
                 "Session" : {
                   "DataName" : "Session",
                   "EntityName" : "",
@@ -91,6 +108,21 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerConfigurationPage" : {
+                  "DataName" : "Things_BayerConfigurationPage",
+                  "EntityName" : "BayerConfigurationPage",
+                  "EntityType" : "Things",
+                  "Id" : "14f507f3-d3fe-4b50-8cee-ce9fd1c60d20",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "9148350f-fe90-4519-8422-eafb6df22b3a",
+                    "Name" : "SetLanguage",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "SetLanguage"
                   } ]
                 },
                 "UserExtensions" : {
@@ -124,8 +156,63 @@
                 "TargetArea" : "Data",
                 "TargetId" : "EntityName",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "c5a7d047-1420-44ee-8f56-7baa5da34aa6",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetLanguages",
+                "SourceSection" : "Resources_RuntimeLocalizationFunctions",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-2",
+                "TargetSection" : ""
+              }, {
+                "Id" : "d2f1db27-67e1-4100-865b-24cec9b52102",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "name",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "username",
+                  "TargetPropertyBaseType" : "USERNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UserExtensions",
+                "SourceDetails" : "AllData",
+                "SourceId" : "UserExtensions",
+                "SourceSection" : "UserExtensions",
+                "TargetArea" : "Data",
+                "TargetId" : "SetLanguage",
+                "TargetSection" : "Things_BayerConfigurationPage"
+              }, {
+                "Id" : "d949b2b0-b85d-42d8-bf11-3b3c77c8b5e6",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "name",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "language",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetLanguages",
+                "SourceSection" : "Resources_RuntimeLocalizationFunctions",
+                "TargetArea" : "Data",
+                "TargetId" : "SetLanguage",
+                "TargetSection" : "Things_BayerConfigurationPage"
               } ],
-              "DesignTimePermissions" : { },
+              "DesignTimePermissions" : {
+                "Create" : [ ],
+                "Delete" : [ ],
+                "Metadata" : [ ],
+                "Read" : [ ],
+                "Update" : [ ]
+              },
               "Events" : [ {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
@@ -144,15 +231,56 @@
                 "EventTriggerId" : "ScheduleShifts",
                 "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
                 "Id" : "0a39eea6-a4ae-4ecf-921b-a60edd5f9375"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Resources_RuntimeLocalizationFunctions",
+                "EventHandlerService" : "GetLanguages",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "a196272d-6908-4150-911e-1cf4aff7b356"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Resources_RuntimeLocalizationFunctions",
+                "EventHandlerService" : "GetLanguages",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-3",
+                "EventTriggerSection" : "",
+                "Id" : "4e2f58e6-f5eb-49ad-b989-3a9ca7e80a2a"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerConfigurationPage",
+                "EventHandlerService" : "SetLanguage",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-3",
+                "EventTriggerSection" : "",
+                "Id" : "4a00c691-dcfc-47df-9ca7-00d72400323f"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "validator-4",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "SetLanguage",
+                "EventTriggerSection" : "Things_BayerConfigurationPage",
+                "Id" : "f43a529c-c4fa-43dc-a029-3b8bbbd4243c"
               } ],
-              "RunTimePermissions" : { },
+              "RunTimePermissions" : {
+                "permissions" : [ ]
+              },
               "UI" : {
                 "Properties" : {
+                  "AddToDashboardButton" : "SimplePlus",
                   "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
                   "Area" : "Mashup",
+                  "BGImage" : "",
                   "BGImageRepeat" : "repeat",
                   "BGImageSize" : "auto",
                   "Columns" : 0,
+                  "ConfigureGadgetButton" : "SimpleGear",
                   "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
                   "DisplayName" : "Mashup",
                   "EnableParameterEditing" : false,
@@ -168,12 +296,15 @@
                   "Rows" : 0,
                   "ShowDataLoading" : true,
                   "Style" : "Bayer_PopupBgStyle",
+                  "StyleTheme" : "Base Theme",
                   "Title" : "",
                   "TitleBar" : false,
                   "TitleBarStyle" : "DefaultTitleBarStyle",
                   "TitleBarText" : "Gadget Title Here",
                   "Top" : 0,
                   "Type" : "mashup",
+                  "UseTheme" : false,
+                  "UseThemeForHybrids" : false,
                   "Visible" : true,
                   "Width" : 324,
                   "Z-index" : 10,
@@ -183,7 +314,7 @@
                     "Description" : "",
                     "ParameterName" : "lineName"
                   } ],
-                  "id_index" : 1,
+                  "id_index" : 4,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -211,6 +342,7 @@
                     "ResponsiveLayout" : false,
                     "RoundedCorners" : true,
                     "ShowDataLoading" : true,
+                    "SingleClickSelectOnTablets" : true,
                     "Style" : "Bayer_ButtonRed",
                     "TabSequence" : 0,
                     "ToolTipField" : "",
@@ -222,6 +354,121 @@
                     "Z-index" : 10,
                     "__TypeDisplayName" : "Button",
                     "__supportsTooltip" : true
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Alignment" : "left",
+                    "Area" : "UI",
+                    "AutoSelectFirstRow" : false,
+                    "ClearIfNoSelection" : false,
+                    "ComboDropdownButtonStyle" : "DefaultComboDropdownButtonStyle",
+                    "ComboEnableCheckbox" : false,
+                    "ComboItemHighlightedStyle" : "DefaultComboItemHighlightedStyle",
+                    "ComboTextboxStyle" : "DefaultComboTextboxStyle",
+                    "DisableSelectedStyle" : false,
+                    "DisplayField" : "languageNative",
+                    "DisplayName" : "dhxlist-2",
+                    "DropdownButtonStyle" : "DefaultDropdownButtonStyle",
+                    "DropdownSelectedStyle" : "DefaultDropdownSelectedStyle",
+                    "DropdownStyle" : "DefaultDropdownStyle",
+                    "EnableKeyboardSelections" : true,
+                    "EnableToolTips" : true,
+                    "Height" : 28,
+                    "HeightOfDropdownView" : 170,
+                    "Id" : "dhxlist-2",
+                    "Label" : "",
+                    "LabelAlignment" : "left",
+                    "Left" : 90,
+                    "ListBackgroundStyle" : "DefaultListBackgroundStyle",
+                    "ListFocusStyle" : "DefaultFocusStyle",
+                    "ListItemAlternateStyle" : "DefaultListItemAlternateStyle",
+                    "ListItemHoverStyle" : "DefaultListItemHoverStyle",
+                    "ListItemSelectedStyle" : "DefaultListItemSelectedStyle",
+                    "ListItemStyle" : "DefaultListItemStyle",
+                    "ListLabelStyle" : "DefaultWidgetLabelStyle",
+                    "MultiSelect" : false,
+                    "NumberOfItemsInDropdownView" : 6,
+                    "NumberOfItemsPerPage" : 500,
+                    "ResponsiveLayout" : false,
+                    "RowHeight" : 28,
+                    "ShowDataLoading" : true,
+                    "SingleClickSelectOnTablets" : false,
+                    "TabSequence" : -1,
+                    "TextIfNoSelectionType" : "editable",
+                    "TextVerticalAlignment" : 28,
+                    "ToolTipStyle" : "DefaultTooltipStyle",
+                    "Top" : 170,
+                    "Type" : "dhxlist",
+                    "ValueField" : "languageNative",
+                    "View" : "dropdown",
+                    "Visible" : false,
+                    "Width" : 110,
+                    "WidthOfDropdownView" : 110,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "List",
+                    "__supportsLabel" : true,
+                    "__supportsTooltip" : true
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "ActiveStyle" : "DefaultButtonActiveStyle",
+                    "Area" : "UI",
+                    "CancelConfirmationButton" : "button2",
+                    "ConfirmationButton1Label" : "Yes",
+                    "ConfirmationButton2Label" : "No",
+                    "ConfirmationPrompt" : "Do Action?",
+                    "ConfirmationRequired" : false,
+                    "ConfirmationTitle" : "Confirm Action",
+                    "ContextId" : "",
+                    "DefaultConfirmationButton" : "button1",
+                    "Disabled" : false,
+                    "DisabledStyle" : "DefaultButtonDisabledStyle",
+                    "DisplayName" : "button-3",
+                    "FocusStyle" : "DefaultButtonFocusStyle",
+                    "Height" : 30,
+                    "HoverStyle" : "DefaultButtonHoverStyle",
+                    "IconAlignment" : "left",
+                    "Id" : "button-3",
+                    "Label" : "Button",
+                    "Left" : 10,
+                    "ResponsiveLayout" : false,
+                    "RoundedCorners" : true,
+                    "ShowDataLoading" : true,
+                    "SingleClickSelectOnTablets" : true,
+                    "Style" : "DefaultButtonStyle",
+                    "TabSequence" : 0,
+                    "ToolTipField" : "",
+                    "ToolTipStyle" : "DefaultTooltipStyle",
+                    "Top" : 165,
+                    "Type" : "button",
+                    "Visible" : false,
+                    "Width" : 75,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Button",
+                    "__supportsTooltip" : true
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DisplayName" : "SetLanguage",
+                    "Expression" : "location.reload();",
+                    "Height" : 28,
+                    "Id" : "validator-4",
+                    "Left" : 0,
+                    "Output" : true,
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "validator",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Validator",
+                    "_currentParameterDefs" : [ ],
+                    "parameters" : [ ]
                   },
                   "Widgets" : [ ]
                 } ]
