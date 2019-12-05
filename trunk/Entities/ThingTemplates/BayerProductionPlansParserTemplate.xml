@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2019-11-29T13:32:31.186Z"
+         lastModifiedDate="2019-12-02T15:44:03.558Z"
          name="BayerProductionPlansParserTemplate"
          projectName="BayerIoT"
          tags="Applications:BayerProductionPlans;Applications:Bayer"
@@ -186,21 +186,21 @@
                         <FieldDefinitions>
                             <FieldDefinition
                              aspect.friendlyName=""
-                             aspect.isPrimaryKey="false"
+                             aspect.isPrimaryKey="true"
                              baseType="PASSWORD"
                              description=""
                              name="appKey"
                              ordinal="4"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue=";"
-                             aspect.isPrimaryKey="false"
+                             aspect.isPrimaryKey="true"
                              baseType="STRING"
                              description=""
                              name="csvDelimiter"
                              ordinal="5"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="false"
-                             aspect.isPrimaryKey="false"
+                             aspect.isPrimaryKey="true"
                              baseType="BOOLEAN"
                              description=""
                              name="isSource"
@@ -217,11 +217,18 @@
                             <FieldDefinition
                              aspect.defaultValue="http://localhost:8080/Thingworx/Things/BayerProductionPlansParser/Services/ProcessData"
                              aspect.friendlyName=""
-                             aspect.isPrimaryKey="false"
+                             aspect.isPrimaryKey="true"
                              baseType="STRING"
                              description=""
                              name="targetServiceUrl"
                              ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.defaultValue="false"
+                             aspect.isPrimaryKey="true"
+                             baseType="BOOLEAN"
+                             description="If selected, will add a blank production item in case no production plan update is provided for line (line is standing-by)"
+                             name="useBlankItemIfNoDataForLine"
+                             ordinal="7"></FieldDefinition>
                         </FieldDefinitions>
                     </DataShape>
                     <Rows>
@@ -235,6 +242,7 @@
                             <isSource>false</isSource>
                             <repository></repository>
                             <targetServiceUrl></targetServiceUrl>
+                            <useBlankItemIfNoDataForLine>false</useBlankItemIfNoDataForLine>
                         </Row>
                     </Rows>
                 </ConfigurationTable>
@@ -568,6 +576,9 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
+                                        var parserSettings =  me.GetParserSettings();
+                                        
                                         // receive data pushed by the other instance of TWX and process it
                                         logger.info(me.name + ".ProcessData received " + data.getRowCount() + " rows");
                                         
@@ -594,15 +605,43 @@
                                             aggregatedData[lineThing].AddRow(row);
                                         }
                                         
-                                        for (var line in aggregatedData) {
-                                            try {
-                                                // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
-                                                var result =  Things[line].LoadProductionPlan({
-                                                    data: aggregatedData[line] /* INFOTABLE */
-                                                });
+                                        // result: INFOTABLE dataShape: "RootEntityList"
+                                        var lines =  ThingTemplates["BayerProductionLine"].GetImplementingThings();
+                                        
+                                        var tableLength = lines.rows.length;
+                                        for (var x=0; x < tableLength; x++) {
+                                            var line = lines.rows[x];
+                                            var plan = null;
+                                            
+                                            try {    
+                                                if (aggregatedData[line.name] === undefined) {
+                                                    // no data for line was provided
+                                                    if (parserSettings.useBlankItemIfNoDataForLine) {
+                                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlansParserColumnMappingDataShape)
+                                                        plan = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerProductionPlansParserColumnMappingDataShape" });
+                                                        // BayerProductionPlansParserColumnMappingDataShape entry object
+                                                        var newEntry = new Object();
+                                                        newEntry.productionLine = line.name; // STRING [Primary Key]
+                                                        newEntry.productId = 'standby'; // STRING
+                                                        plan.AddRow(newEntry);
+                                                        logger.debug(me.name + ".ProcessData - standby added for line " + line.name);
+                                                    }
+                                                }
+                                                else {
+                                                    plan = aggregatedData[line.name];
+                                                }
+                                        
+                                                if (plan) {
+                                                    var result =  Things[line.name].LoadProductionPlan({
+                                                        data: plan /* INFOTABLE */
+                                                    });
+                                                }
+                                                else {
+                                                    logger.info(me.name + ".ProcessData - no production plan provided for line " + line.name);
+                                                }
                                             }
                                             catch (ex) {
-                                                logger.error(me.name + ".ProcessData - error loading plan for " + line + " | " + ex);
+                                                logger.error(me.name + ".ProcessData - error loading plan for " + line.name + " | " + ex);
                                             }
                                         }
                                         ]]>

@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-29T10:27:26.620Z"
+         lastModifiedDate="2019-12-02T14:09:02.524Z"
          name="BayerDelaysManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -730,16 +730,19 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    logger.warn("old shift id "+ eventData.oldValue.value);
-                                    logger.warn("new shift id "+ eventData.newValue.value);
-                                    if(me.productionRunning){
-                                            var prevShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
+                                    var prevShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
                                             	shiftScheduleId: eventData.oldValue.value
                                             });
-                                            var lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
-                                            var prevShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
+                                    var prevShift= Things["BayerDBDataProvider"].GetShiftScheduleById({
                                             	id: eventData.oldValue.value
                                             });
+                                    var lastEvent;
+                                    var currentShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
+                                            	id: eventData.newValue.value
+                                            });
+                                    
+                                    if(me.productionRunning){
+                                            lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
                                             //finish last event from previous shift
                                             Things["BayerDBDataProvider"].UpdateShiftEvent({
                                             	endTime: dateAddHours(prevShift.timestamp, 8),
@@ -747,9 +750,6 @@
                                             	shiftScheduleId: eventData.oldValue.value
                                             });
                                             //add first event to new shift
-                                            var currentShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
-                                            	id: eventData.newValue.value
-                                            });
                                                 var category;
                                             	var currentProduct = me.GetCurrentProduct();
                                                 var isProductionTargetZero = (currentProduct.targetQuantity === 0);
@@ -766,6 +766,43 @@
                                             	shiftScheduleId: eventData.newValue.value,
                                             	source: me.name,
                                             	category: category
+                                            });
+                                    }
+                                    else{
+                                        if(prevShiftEvents.getRowCount() !== 0){
+                                        	lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
+                                            if(lastEvent.category === "breakdown"){
+                                                Things["BayerDBDataProvider"].UpdateShiftEvent({
+                                            	endTime: dateAddHours(prevShift.timestamp, 8),
+                                            	id: lastEvent.id,
+                                            	shiftScheduleId: eventData.oldValue.value
+                                            });
+                                            }
+                                            else{
+                                            	Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                            	startTime: lastEvent.endTime,
+                                            	endTime: dateAddHours(prevShift.timestamp, 8) ,
+                                            	shiftScheduleId: eventData.oldValue.value,
+                                            	source: me.name,
+                                            	category: 'breakdown'
+                                            });
+                                            }
+                                        }
+                                        else{
+                                        	Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                            	startTime: prevShift.timestamp,
+                                            	endTime: dateAddHours(prevShift.timestamp, 8) ,
+                                            	shiftScheduleId: eventData.oldValue.value,
+                                            	source: me.name,
+                                            	category: 'breakdown'
+                                            });
+                                        }
+                                        Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                            	startTime: currentShift.timestamp,
+                                            	endTime: Date.now() ,
+                                            	shiftScheduleId: eventData.newValue.value,
+                                            	source: me.name,
+                                            	category: 'breakdown'
                                             });
                                     }
                                     ]]>
@@ -891,58 +928,23 @@
                                     				startTime: Things["BayerUtilities"].GetCurrentShiftTime().startTime /* DATETIME */ ,
                                     				endTime: Date.now()
                                     			});
-                                    			var shouldStop = false;
-                                    			var j = 1;
-                                    			//go to previous shifts
-                                    			for (var i = 1; i < 2; i++) {
-                                    				var shiftsFromPast = Things["BayerDBDataProvider"].GetShiftsByTime({
-                                    					productionLine: me.name,
-                                    					startTime: dateAddHours(Date.now() - (72 * (i - 1)), -72 * i),
-                                    					endTime: dateAddHours(Date.now(), -8)
-                                    				});
-                                    				var tableLength = shiftsFromPast.rows.length;
-                                    				for (var x = tableLength; x > 0; x--) {
-                                    					if (!shouldStop) {
-                                    						var row = shiftsFromPast.rows[x - 1];
-                                    						var prevShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
-                                    							shiftScheduleId: row.id
-                                    						});
-                                    						if (prevShiftEvents.getRowCount() === 0) {
-                                    							Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                    								startTime: row.timestamp,
-                                    								endTime: dateAddHours(row.timestamp, 8),
-                                    								shiftScheduleId: row.id,
-                                    								source: me.name,
-                                    								category: 'breakdown'
-                                    							});
-                                    						} else {
-                                    							shouldStop = true;
-                                    							Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                    								startTime: prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1].endTime,
-                                    								endTime: dateAddHours(row.timestamp, 8),
-                                    								shiftScheduleId: row.id,
-                                    								source: me.name,
-                                    								category: 'breakdown'
-                                    							});
                                     
-                                    						}
-                                    					}
-                                    				}
-                                    			}
                                     		} else {
-                                    			//check if 30 sec timer hasn't create new task after breakdown
-                                    			//if(currentShiftEvents.rows[currentShiftEvents.getRowCount()-1].startTime > Date.now())
-                                    			//{
-                                    			//	finishTime = currentShiftEvents.rows[currentShiftEvents.getRowCount()-1].startTime;
-                                    			//}
-                                    			//else{
-                                    			//  	finishTime = Date.now(); 
-                                    			//}
-                                    			me.InsertShiftEventEntry({
-                                    				category: 'breakdown',
-                                    				startTime: currentShiftEvents.rows[currentShiftEvents.getRowCount() - 1].endTime,
-                                    				endTime: Date.now()
-                                    			});
+                                    			var lastEvent = currentShiftEvents.rows[currentShiftEvents.getRowCount() - 1];
+                                    			if (lastEvent.category === 'breakdown') {
+                                    				Things["BayerDBDataProvider"].UpdateShiftEvent({
+                                    					endTime: Date.now(),
+                                    					id: lastEvent.id,
+                                    					shiftScheduleId: me.currentShiftId
+                                    				});
+                                    			} else {
+                                    				me.InsertShiftEventEntry({
+                                    					category: 'breakdown',
+                                    					startTime: lastEvent.endTime,
+                                    					endTime: Date.now()
+                                    				});
+                                    			}
+                                    
                                     		}
                                     	}
                                     }

@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-09-27T11:08:06.032Z"
+         lastModifiedDate="2019-12-02T10:46:48.992Z"
          name="BayerReportsContainedMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -308,7 +308,13 @@
                 "TargetId" : "GetProblemsAndIssues",
                 "TargetSection" : "Things_BayerReportsPage"
               } ],
-              "DesignTimePermissions" : { },
+              "DesignTimePermissions" : {
+                "Create" : [ ],
+                "Delete" : [ ],
+                "Metadata" : [ ],
+                "Read" : [ ],
+                "Update" : [ ]
+              },
               "Events" : [ {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "Things_BayerReportsPage",
@@ -364,14 +370,19 @@
                 "EventTriggerSection" : "",
                 "Id" : "3e149e91-bce1-4768-98fc-2dc630405703"
               } ],
-              "RunTimePermissions" : { },
+              "RunTimePermissions" : {
+                "permissions" : [ ]
+              },
               "UI" : {
                 "Properties" : {
+                  "AddToDashboardButton" : "SimplePlus",
                   "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
                   "Area" : "Mashup",
+                  "BGImage" : "",
                   "BGImageRepeat" : "no-repeat",
                   "BGImageSize" : "auto",
                   "Columns" : 0,
+                  "ConfigureGadgetButton" : "SimpleGear",
                   "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
                   "DisplayName" : "Mashup",
                   "EnableParameterEditing" : false,
@@ -387,12 +398,14 @@
                   "Rows" : 0,
                   "ShowDataLoading" : true,
                   "Style" : "DefaultMashupStyle",
+                  "StyleTheme" : "Base Theme",
                   "Title" : "",
                   "TitleBar" : false,
                   "TitleBarStyle" : "DefaultTitleBarStyle",
                   "TitleBarText" : "Gadget Title Here",
                   "Top" : 0,
                   "Type" : "mashup",
+                  "UseThemeForHybrids" : false,
                   "Visible" : true,
                   "Width" : 1024,
                   "Z-index" : 10,
@@ -486,7 +499,8 @@
                       "Type" : "container",
                       "Visible" : false,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ ]
                   }, {
@@ -516,7 +530,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -592,7 +607,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ ]
                       }, {
@@ -622,7 +638,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -698,7 +715,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -774,7 +792,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -838,7 +857,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -865,7 +885,7 @@
                                           "renderer" : "STRING",
                                           "roundingEnabled" : true
                                         },
-                                        "Title" : "shift",
+                                        "Title" : "[[Bayer.Shift]]",
                                         "ValidationExpression" : "",
                                         "ValidationMessage" : "",
                                         "Width" : "auto"
@@ -887,7 +907,7 @@
                                           "renderer" : "INTEGER",
                                           "roundingEnabled" : true
                                         },
-                                        "Title" : "target  quantity",
+                                        "Title" : "[[Bayer.targetQuantity]]",
                                         "ValidationExpression" : "",
                                         "ValidationMessage" : "",
                                         "Width" : "auto"
@@ -909,7 +929,7 @@
                                           "renderer" : "INTEGER",
                                           "roundingEnabled" : true
                                         },
-                                        "Title" : "actual  quantity",
+                                        "Title" : "[[Bayer.ActualQuantity]]",
                                         "ValidationExpression" : "",
                                         "ValidationMessage" : "",
                                         "Width" : "auto"
@@ -922,26 +942,13 @@
                                           "formatInfo" : {
                                             "FieldName" : "GapPsc",
                                             "StateDefinition" : "BayerProductionPerformance",
-                                            "StateDefinitionType" : "numeric",
-                                            "StateFormats" : [ {
-                                              "comparator" : "<",
-                                              "state" : "Bayer_NegativeCellValueStyle",
-                                              "stateName" : "",
-                                              "value" : "0"
-                                            }, {
-                                              "comparator" : "<",
-                                              "state" : "Bayer_DefaultCellValueStyle",
-                                              "stateName" : "",
-                                              "value" : "1"
-                                            }, {
-                                              "state" : "Bayer_PositiveCellValueStyle",
-                                              "stateName" : ""
-                                            } ]
+                                            "StateDefinitionType" : "string",
+                                            "StateFormats" : [ ]
                                           },
                                           "renderer" : "INTEGER",
                                           "roundingEnabled" : true
                                         },
-                                        "Title" : "difference",
+                                        "Title" : "[[Bayer.Difference]]",
                                         "ValidationExpression" : "",
                                         "ValidationMessage" : "",
                                         "Width" : "auto"
@@ -1010,7 +1017,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -1086,7 +1094,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -1150,7 +1159,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -1177,7 +1187,7 @@
                                           "renderer" : "DATETIME",
                                           "roundingEnabled" : true
                                         },
-                                        "Title" : "Start Time",
+                                        "Title" : "[[Bayer.StartTime]]",
                                         "ValidationExpression" : "",
                                         "ValidationMessage" : "",
                                         "Width" : "auto"
@@ -1248,7 +1258,7 @@
                                           "renderer" : "INTEGER",
                                           "roundingEnabled" : true
                                         },
-                                        "Title" : "Difference",
+                                        "Title" : "[[Bayer.Difference]]",
                                         "ValidationExpression" : "",
                                         "ValidationMessage" : "",
                                         "Width" : "auto"
@@ -1319,7 +1329,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1395,7 +1406,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -1459,7 +1471,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -1486,7 +1499,7 @@
                                       "renderer" : "NUMBER",
                                       "roundingEnabled" : true
                                     },
-                                    "Title" : "Shift",
+                                    "Title" : "[[Bayer.Shift]]",
                                     "ValidationExpression" : "",
                                     "ValidationMessage" : "",
                                     "Width" : "auto"
@@ -1508,7 +1521,7 @@
                                       "renderer" : "NUMBER",
                                       "roundingEnabled" : true
                                     },
-                                    "Title" : "Duration",
+                                    "Title" : "[[Bayer.Duration]]",
                                     "ValidationExpression" : "",
                                     "ValidationMessage" : "",
                                     "Width" : "auto"
@@ -1530,7 +1543,7 @@
                                       "renderer" : "STRING",
                                       "roundingEnabled" : true
                                     },
-                                    "Title" : "Issue Category",
+                                    "Title" : "[[Bayer.IssueCategory]]",
                                     "ValidationExpression" : "",
                                     "ValidationMessage" : "",
                                     "Width" : "auto"
@@ -1552,7 +1565,7 @@
                                       "renderer" : "STRING",
                                       "roundingEnabled" : true
                                     },
-                                    "Title" : "Issue Description",
+                                    "Title" : "[[Bayer.IssueDescription]]",
                                     "ValidationExpression" : "",
                                     "ValidationMessage" : "",
                                     "Width" : "auto"
@@ -1574,7 +1587,7 @@
                                       "renderer" : "STRING",
                                       "roundingEnabled" : true
                                     },
-                                    "Title" : "Issue Solution",
+                                    "Title" : "[[Bayer.IssueSolution]]",
                                     "ValidationExpression" : "",
                                     "ValidationMessage" : "",
                                     "Width" : "auto"
@@ -1643,7 +1656,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ ]
                       } ]
@@ -1675,7 +1689,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {

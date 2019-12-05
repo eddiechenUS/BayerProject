@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2019-10-08T09:22:38.992Z"
+         lastModifiedDate="2019-12-05T09:23:25.938Z"
          name="BayerChangeoverTrendPage"
          projectName="BayerIoT"
          published="false"
@@ -324,29 +324,27 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var now = new Date();
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTrendDetailsDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerChangeoverTrendDetailsDataShape" });
                                         
-                                        var changeoverTrendData =  Things[productionLine].GetChangeoverDetailsTrendForLine({
+                                        var changeoverTrendData = Things[productionLine].GetChangeoverDetailsTrendForLine({
                                             dateTime: dateTime,
                                             week: week,
                                         });
+                                        
                                         var changeoverTrendDataLength = changeoverTrendData.rows.length;
-                                        
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTrendDetailsDataShape)
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
-                                            infoTableName : "InfoTable",
-                                            dataShapeName : "BayerChangeoverTrendDetailsDataShape"
-                                        });
-                                        
                                         for (var x=0; x < changeoverTrendDataLength; x++) {
                                             var row = changeoverTrendData.rows[x];
+                                            
                                             var chnageover = new Object();
                                             chnageover.id = row.id;
+                                            
                                             var prevAndNextOrder =  Things["BayerDBDataProvider"].GetPrevAndNextOrder({
                                                 productionLine: productionLine,
-                                                shiftIdMin: row.id,
-                                                shiftIdMax: row.id,
+                                                shiftIdMin: parseInt(row.id,10),
+                                                shiftIdMax: parseInt(row.id,10),
                                             });
+                                        
                                             chnageover.fromId = prevAndNextOrder.rows[0].fromId;
                                             chnageover.fromOrderNr = prevAndNextOrder.rows[0].fromOrderNr;
                                             chnageover.fromProductName = prevAndNextOrder.rows[0].fromProductName;
@@ -361,7 +359,8 @@
                                             chnageover.target = row.targetHours;
                                             chnageover.actual = row.workedHours;
                                             chnageover.delta = row.delta;
-                                        	result.AddRow(chnageover);
+                                            
+                                            result.AddRow(chnageover);
                                         }
                                         ]]>
                                         </code>

@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-28T16:12:21.026Z"
+         lastModifiedDate="2019-12-05T13:21:24.967Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -388,23 +388,24 @@
                                         
                                         // BUILD SHIFT SCHEDULE WITH 0.1h=6min RESOLUTION
                                         for (var i = 0; i < 480; i+=6) {
-                                            if (x >= unfinishedProducts.rows.length) {
-                                                break;
-                                            }
-                                            
                                             // BayerScheduleDataShape entry object
                                             var new6minEntry = new Object();
                                             new6minEntry.duration = 360000; // INTEGER
                                             new6minEntry.hour = Math.floor(i/60) + 1; // INTEGER
                                             new6minEntry.productionPlanId_actual = undefined;
-                                            new6minEntry.productId = product.productId; // STRING
                                             new6minEntry.time = dateAddMinutes(startTime, i); // DATETIME
-                                            new6minEntry.productionPlanId = product.id; // STRING
                                             new6minEntry.quantityProduced = 0; // NUMBER
-                                            new6minEntry.productDescription = product.productDescription; // STRING
                                             
-                                            var av = me.GetAvailability({hour: new6minEntry.time.getHours()});
-                                            new6minEntry.targetQuantity = (av/100) * product.targetQuantityPerHour * 0.1; // NUMBER
+                                            if (!product) {
+                                                new6minEntry.targetQuantity = 0;
+                                            }
+                                            else {
+                                                new6minEntry.productId = product.productId; // STRING
+                                                new6minEntry.productionPlanId = product.id; // STRING
+                                                new6minEntry.productDescription = product.productDescription; // STRING
+                                                var av = me.GetAvailability({hour: new6minEntry.time.getHours()});
+                                                new6minEntry.targetQuantity = (av/100) * product.targetQuantityPerHour * 0.1; // NUMBER
+                                            }
                                             newEntry.totalTargetQuantity += new6minEntry.targetQuantity;
                                     
                                             newEntry.shiftSchedule.AddRow(new6minEntry);
@@ -412,8 +413,14 @@
                                             unassignedHours -= 0.1;
                                             
                                             if (unassignedHours <= 0) {
-                                                product = unfinishedProducts.rows[++x];
-                                                unassignedHours = getRemainingHours(product);
+                                                if (x < unfinishedProducts.rows.length - 1) {
+                                                    product = unfinishedProducts.rows[++x];
+                                                    unassignedHours = getRemainingHours(product);
+                                                }
+                                                else {
+                                                    product = undefined;
+                                                    unassignedHours = 0;
+                                                }
                                             }
                                         }
                                         
@@ -430,7 +437,7 @@
                                     
                                     function getRemainingHours (prodItem) {
                                         if (prodItem.status == "INPROGRESS") {
-                                            if (prodItem.productId == "Cambio") {
+                                            if (prodItem.productId == "Cambio" || prodItem.productId == "standby") {
                                                 return product.remainingHours > 0 ? product.remainingHours : 1;
                                             }
                                             else if (me.counter >= prodItem.targetQuantity) {
@@ -862,13 +869,16 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    logger.debug(me.name + " SHIFTS SCHEDULE START");
+                                    
                                     // result: INFOTABLE dataShape: BayerShiftTimeDataShape
                                     var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
                                     
                                     // REMOVE EXISTING SCHEDULES
                                     
                                     Things["BayerDBDataProvider"].DeleteShiftsAfter({
-                                    	startTime: shiftTime.startTime /* DATETIME */
+                                    	startTime: shiftTime.startTime, /* DATETIME */
+                                        productionLine: me.name
                                     });
                                     
                                     //me.previousCycleCounter = 0;
