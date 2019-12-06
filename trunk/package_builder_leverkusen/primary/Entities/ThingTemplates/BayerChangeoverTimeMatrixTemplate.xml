@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <ThingTemplates>
+        <ThingTemplate baseThingTemplate="DataTable" description="" documentationContent="" effectiveThingPackage="DataTableThing" homeMashup="DataTableEditor" lastModifiedDate="2019-11-29T13:36:17.528Z" name="BayerChangeoverTimeMatrixTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables>
+                <ConfigurationTable description="Data Thing Configuration" isMultiRow="false" name="DataThingSettings" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition baseType="STRING" description="Persistence Provider Name" name="persistenceProvider" ordinal="0"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <persistenceProvider/>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+                <ConfigurationTable description="Data Shape Configuration" isMultiRow="false" name="Settings" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.friendlyName="Accumulated Data Shape" baseType="JSON" description="Accumulated Data shape" name="accumulatedDataShape" ordinal="1"/>
+                            <FieldDefinition aspect.friendlyName="Data Shape" baseType="DATASHAPENAME" description="Data shape" name="dataShape" ordinal="0"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <accumulatedDataShape>
+                                <json>
+                                <![CDATA[
+                                {}
+                                ]]>
+                                </json>
+                            </accumulatedDataShape>
+                            <dataShape/>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+                <ConfigurationTable description="Index Settings" isMultiRow="true" name="Indexes" ordinal="1">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.friendlyName="Index Field Names" baseType="STRING" description="Index fields" name="fieldNames" ordinal="1"/>
+                            <FieldDefinition aspect.friendlyName="Index Name" baseType="STRING" description="Index name" name="name" ordinal="0"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows/>
+                </ConfigurationTable>
+                <ConfigurationTable description="Configurable options to tune Data Table performance" isMultiRow="false" name="PersistenceProviderCustomSettings" ordinal="2">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.friendlyName="Persistence Provider Custom Settings Table" baseType="INFOTABLE" description="Persistence Provider Custom Config Table" name="customConfigTable" ordinal="0"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <customConfigTable>
+                                <infoTable>
+                                    <DataShape>
+                                        <FieldDefinitions/>
+                                    </DataShape>
+                                    <Rows/>
+                                </infoTable>
+                            </customConfigTable>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+            </ConfigurationTables>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverMatrix">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTable">
+                        <ResultType aspect.dataShape="BayerChangeoverTimeMatrixDataShape" aspect.isDataTableEntry="true" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTime">
+                        <ResultType baseType="INTEGER" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="sourceCode" ordinal="2"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="targetCode" ordinal="3"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="LoadFromCSV">
+                        <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="path" ordinal="1"/>
+                            <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="GetChangeoverMatrix">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = { dataShape: { fieldDefinitions : {} }, rows: [] };
+                                        
+                                        result.dataShape.fieldDefinitions[""] = { name: "", baseType: 'STRING', ordinal: 1 };
+                                        
+                                        var params = {
+                                        	productionLine: productionLine /* THINGNAME */
+                                        };
+                                        
+                                        // result: INFOTABLE dataShape: "BayerChangeoverTimeMatrixDataShape"
+                                        var allEntries = me.GetChangeoverTable(params);
+                                        
+                                        var getTime = function(sc, tc) {
+                                            var query = {
+                                              "filters": {
+                                                "type": "AND",
+                                                "filters": [
+                                                  {
+                                                    "fieldName": "sourceCode",
+                                                    "type": "EQ",
+                                                    "value": sc
+                                                  },
+                                                  {
+                                                    "fieldName": "targetCode",
+                                                    "type": "EQ",
+                                                    "value": tc
+                                                  }
+                                                ]
+                                              }
+                                            };
+                                            
+                                            
+                                            var params = {
+                                                t: allEntries /* INFOTABLE */,
+                                                query: query /* QUERY */
+                                            };
+                                        
+                                            // result: INFOTABLE
+                                            var entry = Resources["InfoTableFunctions"].Query(params);
+                                            
+                                            return entry.time;
+                                        }
+                                        
+                                        var params = {
+                                        	t: allEntries /* INFOTABLE */,
+                                        	columns: "sourceCode" /* STRING */
+                                        };
+                                        
+                                        // result: INFOTABLE
+                                        var distinctSource = Resources["InfoTableFunctions"].Distinct(params);
+                                        
+                                        var sort = new Object();
+                                        sort.name = "sourceCode";
+                                        sort.ascending = true;
+                                        distinctSource.Sort(sort);
+                                        
+                                        var params = {
+                                        	t: allEntries /* INFOTABLE */,
+                                        	columns: "targetCode" /* STRING */
+                                        };
+                                        
+                                        // result: INFOTABLE
+                                        var distinctTarget = Resources["InfoTableFunctions"].Distinct(params);
+                                        
+                                        var sort = new Object();
+                                        sort.name = "targetCode";
+                                        sort.ascending = true;
+                                        distinctTarget.Sort(sort);
+                                        
+                                        var tableLength = distinctSource.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = distinctSource.rows[x];
+                                        	
+                                            result.dataShape.fieldDefinitions[row.sourceCode] = { name: row.sourceCode, baseType: 'NUMBER', ordinal: x+2 };
+                                        }
+                                        
+                                        
+                                        var tableLength = distinctTarget.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = distinctTarget.rows[x];
+                                            
+                                            var newEntry = new Object();
+                                        	
+                                            var tableLength2 = distinctSource.rows.length;
+                                        
+                                            for (var y = 0; y < tableLength2; y++) {
+                                                var row2 = distinctSource.rows[y];
+                                        
+                                                newEntry[""] = row.targetCode;
+                                                newEntry[row2.sourceCode] = getTime(row2.sourceCode, row.targetCode);
+                                            }
+                                            result.rows.push(newEntry);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetChangeoverTable">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var values = me.CreateValues();
+                                        
+                                        values.productionLine = productionLine; //THINGNAME [Primary Key]
+                                        
+                                        var params = {
+                                            values: values /* INFOTABLE*/
+                                        };
+                                        
+                                        // result: INFOTABLE dataShape: "undefined"
+                                        var result = me.FindDataTableEntries(params);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetChangeoverTime">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        function getActiveMaterialTime() {
+                                            
+                                            // FROM -> TO
+                                            var values = me.CreateValues();
+                                        
+                                            values.sourceCode = sourceCode; //STRING [Primary Key]
+                                            values.productionLine = productionLine; //THINGNAME [Primary Key]
+                                            values.targetCode = targetCode; //STRING [Primary Key]
+                                        
+                                            // result: INFOTABLE dataShape: "undefined"
+                                            var data = me.FindDataTableEntries({ values: values });
+                                            
+                                            if (data.rows.length > 0) {
+                                                return data.time;
+                                            }
+                                            
+                                            // FROM == TO
+                                            if (sourceCode == targetCode) {
+                                                return 0;
+                                            }
+                                            
+                                            // FROM -> *
+                                            var values = me.CreateValues();
+                                        
+                                            values.sourceCode = sourceCode; //STRING [Primary Key]
+                                            values.productionLine = productionLine; //THINGNAME [Primary Key]
+                                            values.targetCode = "*"; //STRING [Primary Key]
+                                        
+                                            // result: INFOTABLE dataShape: "undefined"
+                                            var data = me.FindDataTableEntries({ values: values });
+                                            
+                                            if (data.rows.length > 0) {
+                                                return data.time;
+                                            }
+                                            
+                                            // * -> TO
+                                            var values = me.CreateValues();
+                                        
+                                            values.sourceCode = "*"; //STRING [Primary Key]
+                                            values.productionLine = productionLine; //THINGNAME [Primary Key]
+                                            values.targetCode = targetCode; //STRING [Primary Key]
+                                        
+                                            // result: INFOTABLE dataShape: "undefined"
+                                            var data = me.FindDataTableEntries({ values: values });
+                                            
+                                            if (data.rows.length > 0) {
+                                                return data.time;
+                                            }
+                                            
+                                            // * -> *
+                                            var values = me.CreateValues();
+                                        
+                                            values.sourceCode = "*"; //STRING [Primary Key]
+                                            values.productionLine = productionLine; //THINGNAME [Primary Key]
+                                            values.targetCode = "*"; //STRING [Primary Key]
+                                        
+                                            var params = {
+                                                values: values /* INFOTABLE*/
+                                            };
+                                        
+                                            // result: INFOTABLE dataShape: "undefined"
+                                            var data = me.FindDataTableEntries(params);
+                                            
+                                            if (data.rows.length > 0) {
+                                                return data.time;
+                                            }
+                                            
+                                            throw ("No changeover time for active material! Source code " + sourceCode + " target code " + targetCode + " line " + productionLine);
+                                        }
+                                        
+                                        var result = getActiveMaterialTime();
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="LoadFromCSV">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        throw "Service not implemented";
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <ImplementedShapes/>
+            <SharedConfigurationTables/>
+            <InstanceDesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </InstanceDesignTimePermissions>
+            <InstanceRunTimePermissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </InstanceRunTimePermissions>
+            <InstanceVisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </InstanceVisibilityPermissions>
+        </ThingTemplate>
+    </ThingTemplates>
+</Entities>

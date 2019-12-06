@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <Things>
+        <Thing description="" documentationContent="" effectiveThingPackage="DataTableThing" enabled="true" homeMashup="DataTableEditor" identifier="" lastModifiedDate="2019-11-27T12:28:05.985Z" name="BayerChangeoverTimeMatrix_ActiveMaterial" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerChangeoverTimeMatrixTemplate" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility/>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables>
+                <ConfigurationTable description="Data Thing Configuration" isMultiRow="false" name="DataThingSettings" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition baseType="STRING" description="Persistence Provider Name" name="persistenceProvider" ordinal="0"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <persistenceProvider>
+                            <![CDATA[
+                            ThingworxPersistenceProvider
+                            ]]>
+                            </persistenceProvider>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+                <ConfigurationTable description="Data Shape Configuration" isMultiRow="false" name="Settings" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.friendlyName="Data Shape" baseType="DATASHAPENAME" description="Data shape" name="dataShape" ordinal="0"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <accumulatedDataShape>
+                                <json>
+                                <![CDATA[
+                                {"fieldDefinitions":{"sourceCode":{"name":"sourceCode","aspects":{"isPrimaryKey":true},"description":"","baseType":"STRING","ordinal":1},"productionLine":{"name":"productionLine","aspects":{"isPrimaryKey":true,"thingTemplate":"BayerProductionLine"},"description":"","baseType":"THINGNAME","ordinal":0},"targetCode":{"name":"targetCode","aspects":{"isPrimaryKey":true},"description":"","baseType":"STRING","ordinal":2},"time":{"name":"time","aspects":{"units":"minutes"},"description":"","baseType":"INTEGER","ordinal":3}}}
+                                ]]>
+                                </json>
+                            </accumulatedDataShape>
+                            <dataShape>
+                            <![CDATA[
+                            BayerChangeoverTimeMatrixDataShape
+                            ]]>
+                            </dataShape>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+                <ConfigurationTable description="Index Settings" isMultiRow="true" name="Indexes" ordinal="1">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.friendlyName="Index Field Names" baseType="STRING" description="Index fields" name="fieldNames" ordinal="1"/>
+                            <FieldDefinition aspect.friendlyName="Index Name" baseType="STRING" description="Index name" name="name" ordinal="0"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows/>
+                </ConfigurationTable>
+            </ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions/>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="LoadFromCSV">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerChangeoverTimeMatrixDataShape"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTimeMatrixDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        var params = {
+                                        	delimiter: ";" /* STRING */,
+                                        	filePath: path /* STRING */,
+                                        	repository: "BayerCSVRepository" /* THINGNAME */
+                                        };
+                                        
+                                        // result: INFOTABLE
+                                        var content = Things["BayerUtilities"].LoadCSVGeneric(params);
+                                        
+                                        var tableLength = content.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = content.rows[x];
+                                        	
+                                            // BayerChangeoverTimeMatrixDataShape entry object
+                                            var newEntry = new Object();
+                                            newEntry.sourceCode = row["Char. Value: Preceding Order"]; // STRING - isPrimaryKey = true
+                                            newEntry.productionLine = productionLine; // THINGNAME - isPrimaryKey = true
+                                            newEntry.targetCode = row["Char. Value: Succeeding Order"]; // STRING - isPrimaryKey = true
+                                            newEntry.time = row["Setup time"]; // INTEGER
+                                            
+                                            result.AddRow(newEntry);
+                                        }
+                                        
+                                        var params = {
+                                        	sourceType: undefined /* STRING */,
+                                        	values: result /* INFOTABLE*/,
+                                        	location: undefined /* LOCATION */,
+                                        	source: undefined /* STRING */,
+                                        	tags: undefined /* TAGS */
+                                        };
+                                        
+                                        me.AddOrUpdateDataTableEntries(params);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ImplementedShapes/>
+            <ThingProperties/>
+        </Thing>
+    </Things>
+</Entities>

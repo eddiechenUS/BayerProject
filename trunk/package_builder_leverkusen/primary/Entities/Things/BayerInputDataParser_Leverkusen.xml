@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <Things>
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-11-27T15:36:58.352Z" name="BayerInputDataParser_Leverkusen" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerInputDataParserTemplate" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility/>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions/>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="ParseMaterialChangeoverTable">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerChangeoverTimeMatrixDataShape"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTimeMatrixDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        // result: INFOTABLE dataShape: ""
+                                        var data =  Resources["TTPSC.Utilities.UtilityServices"].ParseCSV({
+                                        	path: path /* STRING */,
+                                        	delimiter: ';' /* STRING */,
+                                        	repository: repository /* THINGNAME */
+                                        });
+                                        
+                                        var tableLength = data.rows.length;
+                                        for (var x=0; x < tableLength; x++) {
+                                            var row = data.rows[x];
+                                            
+                                            // BayerChangeoverTimeMatrixDataShape entry object
+                                            var newEntry = new Object();
+                                            newEntry.sourceCode = "*"; // STRING - isPrimaryKey = true
+                                            newEntry.productionLine = productionLine; // THINGNAME - isPrimaryKey = true
+                                            newEntry.targetCode = row["Materialnummer"]; // STRING - isPrimaryKey = true
+                                            newEntry.time = parseInt(row["Changeover time _min_"].trim()); // INTEGER
+                                            
+                                            result.AddRow(newEntry);
+                                        }
+                                        
+                                         Things["BayerChangeoverTimeMatrix_ActiveMaterial"].AddOrUpdateDataTableEntries({
+                                        	sourceType: undefined /* STRING */,
+                                        	values: result /* INFOTABLE */,
+                                        	location: undefined /* LOCATION */,
+                                        	source: undefined /* STRING */,
+                                        	tags: undefined /* TAGS */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="ParseMaterialPerformanceCSV">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: ""
+                                        var data =  Resources["TTPSC.Utilities.UtilityServices"].ParseCSV({
+                                        	path: path /* STRING */,
+                                        	delimiter: ';' /* STRING */,
+                                        	repository: repository /* THINGNAME */
+                                        });
+                                        
+                                        var tableLength = data.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = data.rows[x];
+                                        	
+                                            if (!row["Materialnummer"]) {
+                                                continue;
+                                            }
+                                            
+                                            var values = Things["BayerMaterialPerformanceTable"].CreateValues();
+                                        
+                                            values.code = row["Materialnummer"]; //STRING [Primary Key]
+                                            values.productionLine = productionLine; //THINGNAME [Primary Key]
+                                            values.description = row["Beschreibung"]; //STRING
+                                            values.nominalRate = parseFloat(row["Blisters per minute"]) * 60; //NUMBER
+                                        
+                                            var params = {
+                                                sourceType: undefined /* STRING */,
+                                                values: values /* INFOTABLE*/,
+                                                location: undefined /* LOCATION */,
+                                                source: undefined /* STRING */,
+                                                tags: undefined /* TAGS */
+                                            };
+                                        
+                                            // result: STRING
+                                            Things["BayerMaterialPerformanceTable"].AddOrUpdateDataTableEntry(params);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ImplementedShapes/>
+            <ThingProperties/>
+        </Thing>
+    </Things>
+</Entities>
