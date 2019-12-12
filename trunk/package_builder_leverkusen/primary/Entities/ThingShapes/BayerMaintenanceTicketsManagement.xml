@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-05T13:19:05.333Z" name="BayerMaintenanceTicketsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-05T21:52:10.025Z" name="BayerMaintenanceTicketsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="Open" aspect.isPersistent="true" baseType="STRING" category="" description="" isLocalOnly="false" name="defaultStatus" ordinal="3"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="Production stopped more than 30 minutes" aspect.isPersistent="true" baseType="STRING" category="" description="" isLocalOnly="false" name="type1Description" ordinal="6"/>
@@ -12,6 +12,15 @@
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition baseType="STRING" description="" name="typeDescription" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTickets">
+                    <ResultType aspect.dataShape="BayerMaintenanceTicketsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="STRING" description="" name="assignedTo" ordinal="2"/>
+                        <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
+                        <FieldDefinition baseType="STRING" description="" name="status" ordinal="3"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="timeThreshold" ordinal="4"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsTimeThreshold">
@@ -51,6 +60,32 @@
                                     	type: typeDescription /* STRING */,
                                     	assignedTo: "" /* STRING */,
                                     	status: me.defaultStatus /* STRING */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetMaintenanceTickets">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerMaintenanceTicketsDataShape"
+                                    var result =  Things["BayerDBDataProvider"].GetMaintenanceTickets({
+                                    	productionLine: productionLine /* THINGNAME */,
+                                    	timeThreshold: timeThreshold /* DATETIME */,
+                                    	assignedTo: assignedTo /* STRING */,
+                                    	status: status /* STRING */
                                     });
                                     ]]>
                                     </code>
@@ -135,7 +170,44 @@
                 <AlertDefinitions name="type1Description"/>
                 <AlertDefinitions name="type2Description"/>
             </AlertConfigurations>
-            <InstanceRunTimePermissions/>
+            <InstanceRunTimePermissions>
+                <Permissions resourceName="GetMaintenanceTickets">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="UpdateMaintenanceTicket">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="CreateMaintenanceTicket">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetMaintenanceTicketsTimeThreshold">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </InstanceRunTimePermissions>
         </ThingShape>
     </ThingShapes>
 </Entities>

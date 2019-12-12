@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-11-27T08:37:06.540Z" name="BayerDBDataProvider" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerDBDataProviderTemplate" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-11T09:57:45.567Z" name="BayerDBDataProvider" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerDBDataProviderTemplate" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -35,10 +35,41 @@
             </ConfigurationTables>
             <ThingShape>
                 <PropertyDefinitions/>
-                <ServiceDefinitions/>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetActionById">
+                        <ResultType aspect.dataShape="BayerActionListDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="INTEGER" description="" name="id" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
                 <EventDefinitions/>
                 <ServiceMappings/>
-                <ServiceImplementations/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="GetActionById">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: ""
+                                        var result =  Things[me.GetConnector()].GetActionById({
+                                        	id: id 
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
                 <Subscriptions/>
             </ThingShape>
             <PropertyBindings/>

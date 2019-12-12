@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2019-12-05T11:38:57.782Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2019-12-11T09:28:04.541Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -110,6 +110,12 @@
                             <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetActionById">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="INTEGER" description="" name="id" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetActions">
                         <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -161,6 +167,15 @@
                         <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
                             <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTickets">
+                        <ResultType aspect.dataShape="BayerMaintenanceTicketsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="STRING" description="" name="assignedTo" ordinal="4"/>
+                            <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
+                            <FieldDefinition baseType="STRING" description="" name="status" ordinal="3"/>
+                            <FieldDefinition baseType="DATETIME" description="A DATETIME type value that limits the querying for a period of time. From timeThreshold till now (e.g. during last 7 days)." name="timeThreshold" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsTimeThreshold">
@@ -565,6 +580,39 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetActionById">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT [id]
+                                              ,[productionLine]
+                                              ,[createdTime]
+                                              ,[status]
+                                              ,[problemDescription]
+                                              ,[solutionDescription]
+                                              ,[dueDate]
+                                              ,[assignedTo]
+                                        FROM [dbo].[Action]
+                                        WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="SQLQuery" name="GetActions">
                         <ConfigurationTables>
                             <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
@@ -909,6 +957,41 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetMaintenanceTickets">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT [id]
+                                              ,[status]
+                                              ,[productionLine]
+                                              ,[timestamp]
+                                              ,[assignedTo]
+                                              ,[type]      
+                                        FROM [dbo].[MaintenanceTicket]
+                                        WHERE [productionLine] = [[productionLine]]
+                                        	AND ([timestamp] > [[timeThreshold]])
+                                            AND ([[status]] = '' OR [status] = [[status]])
+                                            AND ([[assignedTo]] = '' OR [assignedTo] = [[assignedTo]])
+                                        ORDER BY [timestamp]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="SQLQuery" name="GetMaintenanceTicketsTimeThreshold">
                         <ConfigurationTables>
                             <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
@@ -934,6 +1017,7 @@
                                               ,[type]
                                         FROM [dbo].[MaintenanceTicket]
                                         WHERE [timestamp] > @declaredTimeThreshold AND [productionLine] = [[productionLine]]
+                                        ORDER BY [timestamp]
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>

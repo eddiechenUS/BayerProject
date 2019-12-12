@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-05T11:12:15.387Z" name="BayerMaintenanceTicketsProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-05T21:18:40.024Z" name="BayerMaintenanceTicketsProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions/>
             <ServiceDefinitions>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CreateMaintenanceTicket">
@@ -11,6 +11,15 @@
                         <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
                         <FieldDefinition baseType="STRING" description="" name="status" ordinal="4"/>
                         <FieldDefinition baseType="STRING" description="" name="type" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTickets">
+                    <ResultType aspect.dataShape="BayerMaintenanceTicketsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="STRING" description="" name="assignedTo" ordinal="2"/>
+                        <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
+                        <FieldDefinition baseType="STRING" description="" name="status" ordinal="4"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="timeThreshold" ordinal="3"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsTimeThreshold">
@@ -49,6 +58,32 @@
                                     var result =  Things[me.GetConnector()].InsertMaintenanceTicket({
                                     	productionLine: productionLine /* THINGNAME */,
                                     	type: type /* STRING */,
+                                    	assignedTo: assignedTo /* STRING */,
+                                    	status: status /* STRING */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetMaintenanceTickets">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: ""
+                                    var result =  Things[me.GetConnector()].GetMaintenanceTickets({
+                                    	productionLine: productionLine /* THINGNAME */,
+                                    	timeThreshold: timeThreshold /* DATETIME */,
                                     	assignedTo: assignedTo /* STRING */,
                                     	status: status /* STRING */
                                     });

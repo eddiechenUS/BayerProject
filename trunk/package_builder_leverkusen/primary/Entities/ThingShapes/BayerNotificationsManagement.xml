@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-04T11:16:29.330Z" name="BayerNotificationsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-11T13:03:52.356Z" name="BayerNotificationsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" aspect.maximumValue="3" aspect.minimumValue="0" baseType="INTEGER" category="" description="0 - no alert&#10;1 - blank&#10;2 - changeover duration more than 110% target&#10;3 - changeover duration more than 120% target" isLocalOnly="false" name="changeoverAlertLevel" ordinal="5"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="BOOLEAN" category="" description="" isLocalOnly="false" name="changeoverComingNotificationSent" ordinal="7"/>
@@ -25,6 +25,14 @@
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ResetNotifications">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendActionAssignmentNotification">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="STRING" description="" name="messageBody" ordinal="3"/>
+                        <FieldDefinition baseType="STRING" description="" name="subject" ordinal="2"/>
+                        <FieldDefinition baseType="STRING" description="" name="to" ordinal="1"/>
+                    </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendChangeoverAlertMessage">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
@@ -215,6 +223,43 @@
                                     me.changeoverAlertLevel = 0;
                                     me.changeoverComingNotificationSent = false;
                                     me.productionAlertLevel = 0;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="SendActionAssignmentNotification">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var lineConfig = me.GetLineConfiguration();
+                                    var sender = lineConfig.notificationSender;
+                                    
+                                    try {
+                                    	var params = {
+                                    		cc: undefined /* STRING */ ,
+                                    		bcc: undefined /* STRING */ ,
+                                    		subject: subject /* STRING */ ,
+                                    		from: sender /* STRING */ ,
+                                    		to: to/* STRING */ ,
+                                    		body: messageBody /* HTML */
+                                    	};
+                                    
+                                    	// no return
+                                    	Things["BayerMailServer"].SendMessage(params);
+                                    } catch (ex) {
+                                    	logger.error(me.name + ".SendActionAssignmentNotification error sending email to " + to + ". " + ex);
+                                    }
                                     ]]>
                                     </code>
                                 </Row>
@@ -476,6 +521,41 @@
                 </ServiceImplementation>
             </ServiceImplementations>
             <Subscriptions>
+                <Subscription description="" enabled="true" eventName="ActionChangeEvent" name="OnActionChange" source="BayerActionListPage" sourceProperty="">
+                    <ServiceImplementation description="" handlerName="Script" name="OnActionChange">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        if (eventData.newValues.assignedTo !== eventData.oldValues.assignedTo && eventData.newValues.assignedTo) {
+                                        	me.SendActionAssignmentNotification({
+                                        		to: Users[eventData.newValues.assignedTo].mailingAddress /* STRING */ ,
+                                        		subject: "Action assigned to you ["+ eventData.newValues.productionLine +"]" /* STRING */ ,
+                                        		messageBody:  '<b>Problem Description:</b>' + '<br> \r\n' +
+                                        			eventData.newValues.problemDescription + '<br> \r\n' +
+                                        			'<b>Solution Description:</b>' + '<br> \r\n' +
+                                        			eventData.newValues.solutionDescription + '<br> \r\n' +
+                                        			'<b>Due Date:</b>' + '<br> \r\n' +
+                                        			eventData.newValues.dueDate + '<br> \r\n' +
+                                        			'<b>Status:</b>' + '<br> \r\n' +
+                                        			eventData.newValues.status/* STRING */
+                                        	});
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
                 <Subscription description="" enabled="true" eventName="DataChange" name="OnChangeoverAlertLevelDataChange" source="" sourceProperty="changeoverAlertLevel">
                     <ServiceImplementation description="" handlerName="Script" name="OnChangeoverAlertLevelDataChange">
                         <ConfigurationTables>
