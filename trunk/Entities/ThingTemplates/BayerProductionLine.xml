@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2019-12-04T08:26:31.550Z"
+         lastModifiedDate="2019-12-12T10:24:42.769Z"
          name="BayerProductionLine"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -442,6 +442,59 @@
                     </ServiceImplementation>
                 </ServiceImplementations>
                 <Subscriptions>
+                    <Subscription
+                     description=""
+                     enabled="true"
+                     eventName="ActionListItemChanged"
+                     name="OnActionListItemChangedGlobal"
+                     source=""
+                     sourceProperty=""
+                     sourceType="Thing">
+                        <ServiceImplementation
+                         description=""
+                         handlerName="Script"
+                         name="OnActionListItemChangedGlobal">
+                            <ConfigurationTables>
+                                <ConfigurationTable
+                                 description=""
+                                 isMultiRow="false"
+                                 name="Script"
+                                 ordinal="0">
+                                    <DataShape>
+                                        <FieldDefinitions>
+                                            <FieldDefinition
+                                             baseType="STRING"
+                                             description="code"
+                                             name="code"
+                                             ordinal="0"></FieldDefinition>
+                                        </FieldDefinitions>
+                                    </DataShape>
+                                    <Rows>
+                                        <Row>
+                                            <code>
+                                            <![CDATA[
+                                            if (eventData.newValues.assignedTo !== eventData.oldValues.assignedTo && eventData.newValues.assignedTo) {
+                                            	me.SendActionAssignmentNotification({
+                                            		to: Users[eventData.newValues.assignedTo].mailingAddress /* STRING */ ,
+                                            		subject: "Action assigned to you ["+ eventData.newValues.productionLine +"]" /* STRING */ ,
+                                            		messageBody:  '<b>Problem Description:</b>' + '<br> \r\n' +
+                                            			eventData.newValues.problemDescription + '<br> \r\n' +
+                                            			'<b>Solution Description:</b>' + '<br> \r\n' +
+                                            			eventData.newValues.solutionDescription + '<br> \r\n' +
+                                            			'<b>Due Date:</b>' + '<br> \r\n' +
+                                            			eventData.newValues.dueDate + '<br> \r\n' +
+                                            			'<b>Status:</b>' + '<br> \r\n' +
+                                            			eventData.newValues.status/* STRING */
+                                            	});
+                                            }
+                                            ]]>
+                                            </code>
+                                        </Row>
+                                    </Rows>
+                                </ConfigurationTable>
+                            </ConfigurationTables>
+                        </ServiceImplementation>
+                    </Subscription>
                     <Subscription
                      description=""
                      enabled="true"
