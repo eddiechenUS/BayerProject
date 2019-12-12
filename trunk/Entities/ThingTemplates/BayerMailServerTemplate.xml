@@ -7,20 +7,18 @@
  revision="4"
  schemaVersion="1041"
  universal="">
-    <Things>
-        <Thing
-         description="Mail server configuration for sending notifications"
+    <ThingTemplates>
+        <ThingTemplate
+         baseThingTemplate="MailServer"
+         description=""
          documentationContent=""
          effectiveThingPackage="MailThing"
-         enabled="true"
          homeMashup=""
-         identifier=""
-         lastModifiedDate="2019-12-12T18:09:12.172Z"
-         name="BayerMailServer"
+         lastModifiedDate="2019-12-12T18:08:15.907Z"
+         name="BayerMailServerTemplate"
          projectName="BayerIoT"
-         published="false"
          tags="Applications:Bayer"
-         thingTemplate="BayerMailServerTemplate"
+         thingPackage=""
          valueStream="">
             <avatar></avatar>
             <DesignTimePermissions>
@@ -32,7 +30,12 @@
             </DesignTimePermissions>
             <RunTimePermissions></RunTimePermissions>
             <VisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </VisibilityPermissions>
             <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables>
@@ -145,21 +148,12 @@
                         <Row>
                             <accountId>
                             <![CDATA[
-                            apikey
+                            account@domain.com
                             ]]>
                             </accountId>
-                            <accountPassword>
-                            <![CDATA[
-                            E5kWlFGp4aR4acCpbQrp9A==:fmLVFdcWbFnJEWKJy841peZdv3vCap+8RSDtcR/vELNZmNgI5nAX65BxAPG1+yVVjQuhypBTHYj5
-                            Yjs+V6M0cIbbzDD3qW4eo/QVPd+Otw4=
-                            ]]>
-                            </accountPassword>
+                            <accountPassword></accountPassword>
                             <connectionTimeout>30000.0</connectionTimeout>
-                            <defaultFrom>
-                            <![CDATA[
-                            lstrzelecki@ptc.com
-                            ]]>
-                            </defaultFrom>
+                            <defaultFrom></defaultFrom>
                             <fileRepository>
                             <![CDATA[
                             SystemRepository
@@ -167,16 +161,20 @@
                             </fileRepository>
                             <operationTimeout>30000.0</operationTimeout>
                             <pop3Port>110.0</pop3Port>
-                            <pop3Server></pop3Server>
-                            <smtpPort>465.0</smtpPort>
+                            <pop3Server>
+                            <![CDATA[
+                            pop3.domain.com
+                            ]]>
+                            </pop3Server>
+                            <smtpPort>80.0</smtpPort>
                             <smtpServer>
                             <![CDATA[
-                            smtp.sendgrid.net
+                            smtp.domain.com
                             ]]>
                             </smtpServer>
                             <socksHost></socksHost>
                             <socksPort>1080.0</socksPort>
-                            <useSSL>true</useSSL>
+                            <useSSL>false</useSSL>
                             <useTLS>false</useTLS>
                         </Row>
                     </Rows>
@@ -241,6 +239,11 @@
                     </Rows>
                 </ConfigurationTable>
             </ConfigurationTables>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
                 <ServiceDefinitions></ServiceDefinitions>
@@ -249,13 +252,90 @@
                 <ServiceImplementations></ServiceImplementations>
                 <Subscriptions></Subscriptions>
             </ThingShape>
-            <PropertyBindings></PropertyBindings>
-            <RemotePropertyBindings></RemotePropertyBindings>
-            <RemoteServiceBindings></RemoteServiceBindings>
-            <RemoteEventBindings></RemoteEventBindings>
-            <AlertConfigurations></AlertConfigurations>
             <ImplementedShapes></ImplementedShapes>
-            <ThingProperties></ThingProperties>
-        </Thing>
-    </Things>
+            <SharedConfigurationTables></SharedConfigurationTables>
+            <InstanceDesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </InstanceDesignTimePermissions>
+            <InstanceRunTimePermissions>
+                <Permissions
+                 resourceName="SendMessageWithImage">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="SendMessageWithAttachments">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="SendMessageWithAttachment">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="SendMessageWithImages">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="SendMessage">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+            </InstanceRunTimePermissions>
+            <InstanceVisibilityPermissions>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
+            </InstanceVisibilityPermissions>
+        </ThingTemplate>
+    </ThingTemplates>
 </Entities>
