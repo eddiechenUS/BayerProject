@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-11T07:30:05.265Z" name="BayerMaintenanceTicketsPage" projectName="BayerIoT" published="false" tags="" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-12T11:18:11.674Z" name="BayerMaintenanceTicketsPage" projectName="BayerIoT" published="false" tags="" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -38,6 +38,24 @@
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
+                <Permissions resourceName="maintenanceTicketStatusFilterList">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="maintenanceTicketStatusList">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
                 <Permissions resourceName="GetMaintenanceStatusList">
                     <PropertyRead/>
                     <PropertyWrite/>
@@ -47,24 +65,16 @@
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
-                <Permissions resourceName="*">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </PropertyWrite>
+                <Permissions resourceName="GetMaintenanceTicketsUsersFilterList">
+                    <PropertyRead/>
+                    <PropertyWrite/>
                     <ServiceInvoke>
-                        <Principal isPermitted="true" name="System" type="User"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
-                    <EventInvoke>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </EventInvoke>
-                    <EventSubscribe>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </EventSubscribe>
+                    <EventInvoke/>
+                    <EventSubscribe/>
                 </Permissions>
-                <Permissions resourceName="GetMaintenanceTickets1">
+                <Permissions resourceName="GetMaintenanceStatusFilterList">
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
@@ -96,17 +106,11 @@
                     <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.dataShape="GenericStringList" aspect.defaultValue="{&quot;rows&quot;:[{&quot;item&quot;:&quot;Open&quot;},{&quot;item&quot;:&quot;Pending&quot;},{&quot;item&quot;:&quot;Closed&quot;}],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;item&quot;:{&quot;name&quot;:&quot;item&quot;,&quot;aspects&quot;:{&quot;isPrimaryKey&quot;:true},&quot;description&quot;:&quot;Item&quot;,&quot;baseType&quot;:&quot;STRING&quot;,&quot;ordinal&quot;:0}}}}" aspect.isPersistent="true" baseType="INFOTABLE" category="" description="" isLocalOnly="false" name="maintenanceTicketStatusList" ordinal="2"/>
                 </PropertyDefinitions>
                 <ServiceDefinitions>
-                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceStatusFilterList">
-                        <ResultType aspect.dataShape="GenericStringList" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                        <ParameterDefinitions/>
-                    </ServiceDefinition>
-                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceStatusList">
-                        <ResultType aspect.dataShape="GenericStringList" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                        <ParameterDefinitions/>
-                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketListUsers">
                         <ResultType aspect.dataShape="GroupMember" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                        <ParameterDefinitions/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="BOOLEAN" description="" name="withEmpty" ordinal="1"/>
+                        </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTickets">
                         <ResultType aspect.dataShape="BayerMaintenanceTicketsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
@@ -122,10 +126,6 @@
                             <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
-                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsUsersFilterList">
-                        <ResultType aspect.dataShape="GroupMember" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                        <ParameterDefinitions/>
-                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateMaintenanceTicket">
                         <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -139,46 +139,6 @@
                 <EventDefinitions/>
                 <ServiceMappings/>
                 <ServiceImplementations>
-                    <ServiceImplementation description="" handlerName="Script" name="GetMaintenanceStatusFilterList">
-                        <ConfigurationTables>
-                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        result = me.maintenanceTicketStatusList;
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                    <ServiceImplementation description="" handlerName="Script" name="GetMaintenanceStatusList">
-                        <ConfigurationTables>
-                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        result = me.maintenanceTicketStatusFilterList;
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="Script" name="GetMaintenanceTicketListUsers">
                         <ConfigurationTables>
                             <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
@@ -191,7 +151,9 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        result = Groups["Role.BayerProductionLine.Operator"].GetGroupMembers();
+                                        var result = Groups["Role.BayerProductionLine.Operator"].GetGroupMembers();
+                                        if (withEmpty)
+                                        	result.AddRow({ name: " ", description: "", type: "User" });
                                         
                                         var sort = new Object();
                                         sort.name = "name";
@@ -260,32 +222,6 @@
                                         	timeThreshold: timeThresholdDate, /* DATETIME */
                                             productionLine: productionLine
                                         });
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                    <ServiceImplementation description="" handlerName="Script" name="GetMaintenanceTicketsUsersFilterList">
-                        <ConfigurationTables>
-                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        result = Groups["Role.BayerProductionLine.Operator"].GetGroupMembers();
-                                        result.AddRow({ name: " ", description: "", type: "User" });
-                                        
-                                        var sort = new Object();
-                                        sort.name = "name";
-                                        sort.ascending = true;
-                                        result.Sort(sort);
                                         ]]>
                                         </code>
                                     </Row>

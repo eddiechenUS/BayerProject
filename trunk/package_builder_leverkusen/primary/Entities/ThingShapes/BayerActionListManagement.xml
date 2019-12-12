@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-11T11:42:46.032Z" name="BayerActionListManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-12T11:42:29.223Z" name="BayerActionListManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions/>
             <ServiceDefinitions>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddAction">
@@ -41,7 +41,9 @@
                     </ParameterDefinitions>
                 </ServiceDefinition>
             </ServiceDefinitions>
-            <EventDefinitions/>
+            <EventDefinitions>
+                <EventDefinition category="" dataShape="BayerActionListItemChangeDataShape" description="" name="ActionListItemChanged"/>
+            </EventDefinitions>
             <ServiceMappings/>
             <ServiceImplementations>
                 <ServiceImplementation description="" handlerName="Script" name="AddAction">
@@ -104,6 +106,24 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    var oldValues = Things["BayerDBDataProvider"].GetActionById({ id: id });
+                                    
+                                    if(oldValues.assignedTo != assignedTo){
+                                        var newValues = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape( { dataShapeName : "BayerActionListDataShape" });
+                                        newValues.productionLine=me.name;
+                                        newValues.assignedTo=assignedTo;
+                                        newValues.status=status;
+                                        newValues.dueDate=dueDate;
+                                        newValues.problemDescription=problemDescription;
+                                        newValues.solutionDescription=solutionDescription;
+                                        newValues.id=id;
+                                    
+                                       me.ActionListItemChanged({
+                                            newValues: newValues,
+                                            oldValues: oldValues
+                                        });
+                                    }
+                                    
                                     Things["BayerDBDataProvider"].UpdateAction({
                                     	solutionDescription: solutionDescription /* STRING */,
                                     	dueDate: dueDate /* DATETIME */,
