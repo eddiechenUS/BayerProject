@@ -16,7 +16,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-05T09:16:43.644Z"
+         lastModifiedDate="2019-12-09T13:50:25.078Z"
          name="BayerChangeoverTrendMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -54,12 +54,31 @@
                 <Thing>BayerChangeoverTrendPage</Thing>
             </Things>
             <ThingShapes></ThingShapes>
-            <ThingTemplates></ThingTemplates>
+            <ThingTemplates>
+                <ThingTemplate>BayerProductionLine</ThingTemplate>
+            </ThingTemplates>
             <mashupContent>
             <![CDATA[
             {
               "CustomMashupCss" : "#root_mashupcontainer-7_flexcontainer-4-bounding-box,\n#root_mashupcontainer-7_flexcontainer-40-bounding-box,\n#root_mashupcontainer-7_flexcontainer-41-bounding-box {\n    margin-top: 10px;\n    width: calc(100% - 20px);\n    border-radius: 3px;\n    box-shadow: 0 0 5px 0 #505a5b;\n}",
               "Data" : {
+                "DynamicThingTemplates_BayerProductionLine" : {
+                  "DataName" : "DynamicThingTemplates_BayerProductionLine",
+                  "EntityName" : "BayerProductionLine",
+                  "EntityType" : "DynamicThingTemplates",
+                  "Id" : "c4844d32-566b-4b92-9348-38129894917a",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "f94672d0-2a06-479b-9220-5ab7b1befada",
+                    "Name" : "GetStringPropertyValue",
+                    "Parameters" : {
+                      "propertyName" : "displayName"
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetStringPropertyValue"
+                  } ]
+                },
                 "Session" : {
                   "DataName" : "Session",
                   "EntityName" : "",
@@ -123,20 +142,6 @@
                 }
               },
               "DataBindings" : [ {
-                "Id" : "03ee8217-aaab-4be6-9ffc-fd15a60083f7",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "line",
-                  "SourcePropertyBaseType" : "THINGNAME",
-                  "TargetProperty" : "Text",
-                  "TargetPropertyBaseType" : "STRING"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "label-19",
-                "TargetSection" : ""
-              }, {
                 "Id" : "f8b127f2-339a-4846-bb5f-cd2ecf245f52",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "start",
@@ -350,6 +355,38 @@
                 "TargetArea" : "UI",
                 "TargetId" : "mashupcontainer-126",
                 "TargetSection" : ""
+              }, {
+                "Id" : "ee28e7dd-8dfe-4ea2-8c67-6aac6716e659",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "value",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Entity"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "EntityName",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "bf6294bd-9604-46ed-aceb-a78aa74f5ceb",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetStringPropertyValue",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "label-19",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -430,6 +467,15 @@
                 "EventTriggerId" : "GetDateRanges",
                 "EventTriggerSection" : "Things_BayerChangeoverTrendPage",
                 "Id" : "17407ef1-8843-41f8-baf0-d444e502caff"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetStringPropertyValue",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "38aa781c-5417-473b-b810-1d8d8b958b15"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -585,7 +631,7 @@
                           "Top" : 40,
                           "Type" : "label",
                           "Visible" : true,
-                          "Width" : 75,
+                          "Width" : 310,
                           "Z-index" : 10,
                           "__TypeDisplayName" : "Label",
                           "__supportsTooltip" : true

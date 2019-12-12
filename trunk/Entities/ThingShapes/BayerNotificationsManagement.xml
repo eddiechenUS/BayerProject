@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-04T11:16:29.330Z"
+         lastModifiedDate="2019-12-11T13:03:52.356Z"
          name="BayerNotificationsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -135,6 +135,38 @@
                      name="result"
                      ordinal="0"></ResultType>
                     <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="SendActionAssignmentNotification">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="messageBody"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="subject"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="to"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
@@ -447,6 +479,54 @@
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
+                 name="SendActionAssignmentNotification">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var lineConfig = me.GetLineConfiguration();
+                                    var sender = lineConfig.notificationSender;
+                                    
+                                    try {
+                                    	var params = {
+                                    		cc: undefined /* STRING */ ,
+                                    		bcc: undefined /* STRING */ ,
+                                    		subject: subject /* STRING */ ,
+                                    		from: sender /* STRING */ ,
+                                    		to: to/* STRING */ ,
+                                    		body: messageBody /* HTML */
+                                    	};
+                                    
+                                    	// no return
+                                    	Things["BayerMailServer"].SendMessage(params);
+                                    } catch (ex) {
+                                    	logger.error(me.name + ".SendActionAssignmentNotification error sending email to " + to + ". " + ex);
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
                  name="SendChangeoverAlertMessage">
                     <ConfigurationTables>
                         <ConfigurationTable
@@ -742,6 +822,59 @@
                 </ServiceImplementation>
             </ServiceImplementations>
             <Subscriptions>
+                <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="ActionChangeEvent"
+                 name="OnActionChange"
+                 source="BayerActionListPage"
+                 sourceProperty=""
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnActionChange">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        if (eventData.newValues.assignedTo !== eventData.oldValues.assignedTo && eventData.newValues.assignedTo) {
+                                        	me.SendActionAssignmentNotification({
+                                        		to: Users[eventData.newValues.assignedTo].mailingAddress /* STRING */ ,
+                                        		subject: "Action assigned to you ["+ eventData.newValues.productionLine +"]" /* STRING */ ,
+                                        		messageBody:  '<b>Problem Description:</b>' + '<br> \r\n' +
+                                        			eventData.newValues.problemDescription + '<br> \r\n' +
+                                        			'<b>Solution Description:</b>' + '<br> \r\n' +
+                                        			eventData.newValues.solutionDescription + '<br> \r\n' +
+                                        			'<b>Due Date:</b>' + '<br> \r\n' +
+                                        			eventData.newValues.dueDate + '<br> \r\n' +
+                                        			'<b>Status:</b>' + '<br> \r\n' +
+                                        			eventData.newValues.status/* STRING */
+                                        	});
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
                 <Subscription
                  description=""
                  enabled="true"

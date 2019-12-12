@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2019-10-02T11:07:30.832Z"
+         lastModifiedDate="2019-12-11T13:49:35.942Z"
          name="BayerActionListPage"
          projectName="BayerIoT"
          published="false"
@@ -192,8 +192,8 @@
                      aspect.dataChangeType="VALUE"
                      aspect.dataShape="GenericStringList"
                      aspect.defaultValue="{&quot;rows&quot;:[{&quot;item&quot;:&quot;&quot;},{&quot;item&quot;:&quot;0&quot;},{&quot;item&quot;:&quot;1&quot;},{&quot;item&quot;:&quot;2&quot;},{&quot;item&quot;:&quot;3&quot;},{&quot;item&quot;:&quot;4&quot;}],&quot;dataShape&quot;:{&quot;fieldDefinitions&quot;:{&quot;item&quot;:{&quot;name&quot;:&quot;item&quot;,&quot;aspects&quot;:{&quot;isPrimaryKey&quot;:true},&quot;description&quot;:&quot;Item&quot;,&quot;baseType&quot;:&quot;STRING&quot;,&quot;ordinal&quot;:1}}}}"
-                     aspect.isPersistent="false"
-                     aspect.isReadOnly="true"
+                     aspect.isPersistent="true"
+                     aspect.isReadOnly="false"
                      baseType="INFOTABLE"
                      category=""
                      description=""
@@ -478,7 +478,13 @@
                         <ParameterDefinitions></ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
-                <EventDefinitions></EventDefinitions>
+                <EventDefinitions>
+                    <EventDefinition
+                     category=""
+                     dataShape="BayerActionListItemChangeDataShape"
+                     description=""
+                     name="ActionChangeEvent"></EventDefinition>
+                </EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
                     <ServiceImplementation
@@ -591,32 +597,39 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        var oldValues = Things["BayerDBDataProvider"].GetActionById({
+                                        	id: id
+                                        });
+                                        if(oldValues.assignedTo != assignedTo){
+                                            var newValues = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape( {
+                                                infoTableName : "InfoTable",
+                                                dataShapeName : "BayerActionListDataShape"
+                                            });
+                                        
+                                            newValues.productionLine=productionLine;
+                                            newValues.assignedTo=assignedTo;
+                                            newValues.status=status;
+                                            newValues.dueDate=dueDate;
+                                            newValues.problemDescription=problemDescription;
+                                            newValues.solutionDescription=solutionDescription;
+                                            newValues.id=id;
+                                        
+                                           me.ActionChangeEvent({
+                                                newValues: newValues,
+                                                oldValues: oldValues
+                                            });
+                                        }
                                         var params = {
-                                        	solutionDescription: solutionDescription /* STRING */,
-                                        	dueDate: dueDate /* DATETIME */,
-                                        	problemDescription: problemDescription /* STRING */,
-                                        	assignedTo: assignedTo /* USERNAME */,
-                                        	status: status /* STRING */,
-                                            id: id
+                                        	solutionDescription: solutionDescription /* STRING */ ,
+                                        	dueDate: dueDate /* DATETIME */ ,
+                                        	problemDescription: problemDescription /* STRING */ ,
+                                        	assignedTo: assignedTo /* USERNAME */ ,
+                                        	status: status /* STRING */ ,
+                                        	id: id
                                         };
                                         
                                         // no return
                                         Things[productionLine].EditAction(params);
-                                        
-                                        if (Users[assignedTo] && Users[assignedTo].mailingAddress) {
-                                            Things["BayerMailServer"].SendMessage({
-                                                subject: 'Bayer Action List: Update assigned action' /* STRING */,
-                                                to: Users[assignedTo].mailingAddress /* STRING */,
-                                                 body: '<b>Problem Description:</b>' + '<br> \r\n' +
-                                                    problemDescription + '<br> \r\n' +
-                                                    '<b>Solution Description:</b>' + '<br> \r\n' +
-                                                    solutionDescription + '<br> \r\n' +
-                                                    '<b>Due Date:</b>' + '<br> \r\n' +
-                                                    dueDate + '<br> \r\n' +
-                                                	'<b>Status:</b>' + '<br> \r\n' +
-                                                    status
-                                            });
-                                        }
                                         ]]>
                                         </code>
                                     </Row>
@@ -901,7 +914,66 @@
                  name="actionListStatusFiltering"></AlertDefinitions>
             </AlertConfigurations>
             <ImplementedShapes></ImplementedShapes>
-            <ThingProperties></ThingProperties>
+            <ThingProperties>
+                <actionListStatusFiltering>
+                    <Value>
+                        <infoTable>
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     aspect.isPrimaryKey="true"
+                                     baseType="STRING"
+                                     description="Item"
+                                     name="item"
+                                     ordinal="1"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <item></item>
+                                </Row>
+                                <Row>
+                                    <item>
+                                    <![CDATA[
+                                    0
+                                    ]]>
+                                    </item>
+                                </Row>
+                                <Row>
+                                    <item>
+                                    <![CDATA[
+                                    1
+                                    ]]>
+                                    </item>
+                                </Row>
+                                <Row>
+                                    <item>
+                                    <![CDATA[
+                                    2
+                                    ]]>
+                                    </item>
+                                </Row>
+                                <Row>
+                                    <item>
+                                    <![CDATA[
+                                    3
+                                    ]]>
+                                    </item>
+                                </Row>
+                                <Row>
+                                    <item>
+                                    <![CDATA[
+                                    4
+                                    ]]>
+                                    </item>
+                                </Row>
+                            </Rows>
+                        </infoTable>
+                    </Value>
+                    <Timestamp>2019-12-11T13:49:49.566Z</Timestamp>
+                    <Quality>GOOD</Quality>
+                </actionListStatusFiltering>
+            </ThingProperties>
         </Thing>
     </Things>
 </Entities>
