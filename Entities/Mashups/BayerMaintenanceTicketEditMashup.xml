@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-05T12:57:37.737Z"
+         lastModifiedDate="2019-12-11T07:44:10.951Z"
          name="BayerMaintenanceTicketEditMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -60,7 +60,7 @@
                  aspect.bindingDirection="BOTH"
                  aspect.isMandatory="false"
                  aspect.ordinal="2"
-                 baseType="INTEGER"
+                 baseType="STRING"
                  description=""
                  name="status"
                  ordinal="0"></FieldDefinition>
@@ -130,19 +130,19 @@
                   }, {
                     "APIMethod" : "post",
                     "Characteristic" : "Services",
-                    "Id" : "5025fabe-c9b0-4e7f-9dc7-0ae8bac5dc53",
-                    "Name" : "GetMaintenanceStatusList",
-                    "Parameters" : { },
-                    "RefreshInterval" : 0,
-                    "Target" : "GetMaintenanceStatusList"
-                  }, {
-                    "APIMethod" : "post",
-                    "Characteristic" : "Services",
                     "Id" : "f24e8bdc-bb43-492a-bf0a-55256c2034c7",
                     "Name" : "GetMaintenanceTicketListUsers",
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetMaintenanceTicketListUsers"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "73a39387-e764-4bea-8fd8-9f25c7dc4892",
+                    "Name" : "GetMaintenanceStatusFilterList",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetMaintenanceStatusFilterList"
                   } ]
                 },
                 "UserExtensions" : {
@@ -162,40 +162,22 @@
                 }
               },
               "DataBindings" : [ {
-                "Id" : "7724c81c-edd3-4aba-bb8b-7f8993f5d7c0",
+                "Id" : "a98a9744-12f6-4d02-8d46-18d612d393be",
                 "PropertyMaps" : [ {
-                  "SourceProperty" : "assginedTo",
-                  "SourcePropertyBaseType" : "USERNAME",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "SelectedText",
-                  "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "property"
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "issuesRefreshTrigger",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Field"
                 } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
+                "SourceArea" : "UI",
+                "SourceId" : "expression-141",
                 "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "dhxlist-119",
-                "TargetSection" : ""
+                "TargetArea" : "Session",
+                "TargetId" : "Session",
+                "TargetSection" : "Session"
               }, {
-                "Id" : "7d267968-0657-4e01-bfc3-3fccacdd0de0",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "InfoTable",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetMaintenanceStatusList",
-                "SourceSection" : "Things_BayerMaintenanceTicketsPage",
-                "TargetArea" : "UI",
-                "TargetId" : "dhxlist-113",
-                "TargetSection" : ""
-              }, {
-                "Id" : "b6e0eb82-1bcf-4f87-9ebe-11409d31452c",
+                "Id" : "d4d1676b-a658-48c4-9c44-cc56fc0e2c50",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "item",
                   "SourcePropertyBaseType" : "STRING",
@@ -205,30 +187,28 @@
                 } ],
                 "SourceArea" : "Data",
                 "SourceDetails" : "SelectedRows",
-                "SourceId" : "GetMaintenanceStatusList",
+                "SourceId" : "GetMaintenanceStatusFilterList",
                 "SourceSection" : "Things_BayerMaintenanceTicketsPage",
                 "TargetArea" : "Data",
                 "TargetId" : "UpdateMaintenanceTicket",
                 "TargetSection" : "Things_BayerMaintenanceTicketsPage"
               }, {
-                "Id" : "39ec8d7b-90e4-4671-8278-1b555a4b90d4",
+                "Id" : "1019efcf-a40b-48ec-8e1a-9c136c281278",
                 "PropertyMaps" : [ {
-                  "SourceProperty" : "",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "InfoTable",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
+                  "SourceProperty" : "ticketId",
+                  "SourcePropertyBaseType" : "LONG",
+                  "TargetProperty" : "ticketId",
+                  "TargetPropertyBaseType" : "LONG",
+                  "TargetPropertyType" : "Parameter"
                 } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetMaintenanceTicketListUsers",
-                "SourceSection" : "Things_BayerMaintenanceTicketsPage",
-                "TargetArea" : "UI",
-                "TargetId" : "dhxlist-119",
-                "TargetSection" : ""
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "UpdateMaintenanceTicket",
+                "TargetSection" : "Things_BayerMaintenanceTicketsPage"
               }, {
-                "Id" : "27cc3198-732a-40f3-8d64-239a10696098",
+                "Id" : "fdbd2ffb-a094-4741-a9b4-077c90826694",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "name",
                   "SourcePropertyBaseType" : "STRING",
@@ -244,7 +224,7 @@
                 "TargetId" : "UpdateMaintenanceTicket",
                 "TargetSection" : "Things_BayerMaintenanceTicketsPage"
               }, {
-                "Id" : "cd7557ea-5148-4359-b6e9-fb4a6d89356e",
+                "Id" : "da7052d7-02c7-4b52-b921-151a86576424",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "productionLine",
                   "SourcePropertyBaseType" : "THINGNAME",
@@ -259,20 +239,39 @@
                 "TargetId" : "UpdateMaintenanceTicket",
                 "TargetSection" : "Things_BayerMaintenanceTicketsPage"
               }, {
-                "Id" : "90b6cb3d-3f4b-4198-abd7-529d31d0dc25",
+                "Id" : "15fa8264-8b37-40b6-b3f5-1d95bb9752d9",
                 "PropertyMaps" : [ {
-                  "SourceProperty" : "ticketId",
-                  "SourcePropertyBaseType" : "LONG",
-                  "TargetProperty" : "ticketId",
-                  "TargetPropertyBaseType" : "LONG",
-                  "TargetPropertyType" : "Parameter"
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
                 } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "Data",
-                "TargetId" : "UpdateMaintenanceTicket",
-                "TargetSection" : "Things_BayerMaintenanceTicketsPage"
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetMaintenanceStatusFilterList",
+                "SourceSection" : "Things_BayerMaintenanceTicketsPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-113",
+                "TargetSection" : ""
+              }, {
+                "Id" : "ecc2ce51-f98d-4d61-95b8-4c85db89bf19",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetMaintenanceTicketListUsers",
+                "SourceSection" : "Things_BayerMaintenanceTicketsPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxlist-119",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -300,24 +299,6 @@
                 "EventTriggerSection" : "",
                 "Id" : "8daba579-a064-4b6c-ad90-bfba94350d48"
               }, {
-                "EventHandlerArea" : "Mashup",
-                "EventHandlerId" : "mashup-root",
-                "EventHandlerService" : "CloseIfPopup",
-                "EventTriggerArea" : "UI",
-                "EventTriggerEvent" : "Clicked",
-                "EventTriggerId" : "button-76",
-                "EventTriggerSection" : "",
-                "Id" : "ae3f1e57-eabc-4652-95bc-16c33ed93b60"
-              }, {
-                "EventHandlerArea" : "Data",
-                "EventHandlerId" : "Things_BayerMaintenanceTicketsPage",
-                "EventHandlerService" : "GetMaintenanceStatusList",
-                "EventTriggerArea" : "Mashup",
-                "EventTriggerEvent" : "Loaded",
-                "EventTriggerId" : "mashup-root",
-                "EventTriggerSection" : "",
-                "Id" : "ae13f57c-c515-45ae-ae3e-f07bfdd2f2e3"
-              }, {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "Things_BayerMaintenanceTicketsPage",
                 "EventHandlerService" : "GetMaintenanceTicketListUsers",
@@ -336,6 +317,24 @@
                 "EventTriggerSection" : "",
                 "Id" : "de55c2cb-ffac-4d5d-bec6-af48c093351b"
               }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerMaintenanceTicketsPage",
+                "EventHandlerService" : "GetMaintenanceStatusFilterList",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "cc66fa71-8a47-417d-99c8-87cd5051d08f"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-141",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-74",
+                "EventTriggerSection" : "",
+                "Id" : "6b2ee22e-dee4-496a-a63e-5fd9d639f516"
+              }, {
                 "EventHandlerArea" : "Mashup",
                 "EventHandlerId" : "mashup-root",
                 "EventHandlerService" : "CloseIfPopup",
@@ -343,7 +342,16 @@
                 "EventTriggerEvent" : "Clicked",
                 "EventTriggerId" : "button-74",
                 "EventTriggerSection" : "",
-                "Id" : "42fe6707-cc57-4889-bcd3-bd479cb344b0"
+                "Id" : "577b5206-b425-41c9-a5d0-4968b231454e"
+              }, {
+                "EventHandlerArea" : "Mashup",
+                "EventHandlerId" : "mashup-root",
+                "EventHandlerService" : "CloseIfPopup",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-76",
+                "EventTriggerSection" : "",
+                "Id" : "f36dd265-62e9-4305-82c9-9c9ff670c512"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -407,7 +415,7 @@
                       "bindingDirection" : "BOTH",
                       "isMandatory" : false
                     },
-                    "BaseType" : "INTEGER",
+                    "BaseType" : "STRING",
                     "Description" : "",
                     "ParameterName" : "status"
                   }, {
@@ -435,7 +443,7 @@
                     "Description" : "",
                     "ParameterName" : "ticketId"
                   } ],
-                  "id_index" : 140,
+                  "id_index" : 142,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -2136,6 +2144,31 @@
                     },
                     "Widgets" : [ ]
                   } ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "ALWAYS",
+                    "DisplayName" : "setEditDate",
+                    "Expression" : "new Date();",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-141",
+                    "Left" : 0,
+                    "OutputBaseType" : "DATETIME",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ ],
+                    "editMode" : "edit",
+                    "helperType" : "expression",
+                    "parameters" : [ ]
+                  },
+                  "Widgets" : [ ]
                 } ]
               },
               "mashupType" : "mashup"

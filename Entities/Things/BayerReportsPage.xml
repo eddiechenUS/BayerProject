@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2019-09-06T11:18:51.204Z"
+         lastModifiedDate="2019-12-12T08:04:33.968Z"
          name="BayerReportsPage"
          projectName="BayerIoT"
          published="false"
@@ -129,6 +129,30 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetDelays">
+                        <ResultType
+                         aspect.dataShape="GetDelayShiftDetailsDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="line"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetProblemsAndIssues">
                         <ResultType
                          aspect.dataShape="BayerProblemsAndIssuesDataShape"
@@ -224,6 +248,40 @@
                                             // result: INFOTABLE dataShape: BayerChangeoverTimesDataShape
                                             var result = Things[lineName].GetChangeoverTimes(params);
                                         }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetDelays">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: "BayerDelaysSummaryDataShape"
+                                        var result =  Things[line].GetDelayShiftDetails({
+                                        	shiftScheduleId: Things[line].currentShiftId 
+                                        });
                                         ]]>
                                         </code>
                                     </Row>
