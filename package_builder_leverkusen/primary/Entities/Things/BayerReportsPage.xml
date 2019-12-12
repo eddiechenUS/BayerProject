@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-12T08:04:33.968Z" name="BayerReportsPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-12T10:34:40.210Z" name="BayerReportsPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -21,6 +21,15 @@
                     <EventSubscribe/>
                 </Permissions>
                 <Permissions resourceName="GetProblemsAndIssues">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetDelays">
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
@@ -61,13 +70,6 @@
                         <ResultType aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
                             <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="1"/>
-                        </ParameterDefinitions>
-                    </ServiceDefinition>
-                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetProblemsAndIssues">
-                        <ResultType aspect.dataShape="BayerProblemsAndIssuesDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                        <ParameterDefinitions>
-                            <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="lineName" ordinal="1"/>
-                            <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="3"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetProductionPerformance">
@@ -126,57 +128,6 @@
                                         var result =  Things[line].GetDelayShiftDetails({
                                         	shiftScheduleId: Things[line].currentShiftId 
                                         });
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                    <ServiceImplementation description="" handlerName="Script" name="GetProblemsAndIssues">
-                        <ConfigurationTables>
-                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        var shifts = {
-                                            shift1 : startTime,
-                                            shift2 : dateAddHours(startTime, 8),
-                                            shift3 : dateAddHours(startTime, 16)
-                                        }
-                                        
-                                        var params = {
-                                            infoTableName : "InfoTable",
-                                            dataShapeName : "BayerProblemsAndIssuesDataShape"
-                                        };
-                                        
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
-                                        
-                                        if (lineName) {
-                                            for (var i = 1; i < 4; i++) {
-                                                var params = {
-                                                    shiftStart: shifts["shift" + i] /* DATETIME */
-                                                };
-                                        
-                                                var issuesIT = Things[lineName].GetIssues(params);
-                                        
-                                                for(var j = 0; j < issuesIT.rows.length; j++) {
-                                                    var row = new Object();
-                                                    row.Shift = i;
-                                                    row.IssueDescription = issuesIT.getRow(j).problem;
-                                                    row.Duration = issuesIT.getRow(j).duration;
-                                                    row.IssueSolution = issuesIT.getRow(j).solution;
-                                                    row.IssueCategory = issuesIT.getRow(j).category;
-                                                    result.AddRow(row);
-                                                }
-                                            }
-                                        }
                                         ]]>
                                         </code>
                                     </Row>

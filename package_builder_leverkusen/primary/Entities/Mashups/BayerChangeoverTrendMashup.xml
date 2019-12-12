@@ -16,7 +16,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-09T13:50:25.078Z"
+         lastModifiedDate="2019-12-12T11:19:30.954Z"
          name="BayerChangeoverTrendMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -68,15 +68,13 @@
                   "EntityType" : "DynamicThingTemplates",
                   "Id" : "c4844d32-566b-4b92-9348-38129894917a",
                   "Services" : [ {
-                    "APIMethod" : "post",
+                    "APIMethod" : "get",
                     "Characteristic" : "Services",
-                    "Id" : "f94672d0-2a06-479b-9220-5ab7b1befada",
-                    "Name" : "GetStringPropertyValue",
-                    "Parameters" : {
-                      "propertyName" : "displayName"
-                    },
+                    "Id" : "d786f514-e729-4197-bb26-14a28b50ca51",
+                    "Name" : "GetProperties",
+                    "Parameters" : { },
                     "RefreshInterval" : 0,
-                    "Target" : "GetStringPropertyValue"
+                    "Target" : "GetProperties"
                   } ]
                 },
                 "Session" : {
@@ -371,18 +369,18 @@
                 "TargetId" : "EntityName",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
               }, {
-                "Id" : "bf6294bd-9604-46ed-aceb-a78aa74f5ceb",
+                "Id" : "b93e5e63-2075-4f36-8525-ba80c0ddc4fc",
                 "PropertyMaps" : [ {
-                  "SourceProperty" : "result",
+                  "SourceProperty" : "displayName",
                   "SourcePropertyBaseType" : "STRING",
-                  "SourcePropertyType" : "Field",
+                  "SourcePropertyType" : "Property",
                   "TargetProperty" : "Text",
                   "TargetPropertyBaseType" : "STRING",
                   "TargetPropertyType" : "property"
                 } ],
                 "SourceArea" : "Data",
                 "SourceDetails" : "AllData",
-                "SourceId" : "GetStringPropertyValue",
+                "SourceId" : "GetProperties",
                 "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
                 "TargetArea" : "UI",
                 "TargetId" : "label-19",
@@ -470,12 +468,12 @@
               }, {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
-                "EventHandlerService" : "GetStringPropertyValue",
+                "EventHandlerService" : "GetProperties",
                 "EventTriggerArea" : "Mashup",
                 "EventTriggerEvent" : "Loaded",
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
-                "Id" : "38aa781c-5417-473b-b810-1d8d8b958b15"
+                "Id" : "e126be0c-4f37-4632-831d-66a8efce905e"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -618,20 +616,20 @@
                           "AllowEllipsis" : false,
                           "Area" : "UI",
                           "DisplayName" : "label-19",
-                          "Height" : 22,
+                          "Height" : 40,
                           "Id" : "label-19",
                           "Left" : 265,
-                          "Margin" : "5",
+                          "Margin" : "10",
                           "ResponsiveLayout" : false,
                           "ShowDataLoading" : false,
                           "Style" : "Bayer_WhiteTitleBig",
-                          "Text" : "[[Bayer.Line]]",
+                          "Text" : "",
                           "ToolTipField" : "",
                           "ToolTipStyle" : "DefaultTooltipStyle",
                           "Top" : 40,
                           "Type" : "label",
                           "Visible" : true,
-                          "Width" : 310,
+                          "Width" : 350,
                           "Z-index" : 10,
                           "__TypeDisplayName" : "Label",
                           "__supportsTooltip" : true
@@ -2025,6 +2023,8 @@
                         "ChartType" : "bar",
                         "DataField1" : "target",
                         "DataField2" : "actual",
+                        "DataLabel1" : "[[Bayer.Target]]",
+                        "DataLabel2" : "[[Bayer.Actual]]",
                         "DisplayName" : "labelchart-100",
                         "EnableHover" : true,
                         "GridStyle" : "DefaultChartGridStyle",

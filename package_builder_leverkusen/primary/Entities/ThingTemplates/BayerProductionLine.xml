@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2019-12-04T08:26:31.550Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2019-12-12T10:24:42.769Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -246,6 +246,41 @@
                     </ServiceImplementation>
                 </ServiceImplementations>
                 <Subscriptions>
+                    <Subscription description="" enabled="true" eventName="ActionListItemChanged" name="OnActionListItemChangedGlobal" source="" sourceProperty="">
+                        <ServiceImplementation description="" handlerName="Script" name="OnActionListItemChangedGlobal">
+                            <ConfigurationTables>
+                                <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                    <DataShape>
+                                        <FieldDefinitions>
+                                            <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                        </FieldDefinitions>
+                                    </DataShape>
+                                    <Rows>
+                                        <Row>
+                                            <code>
+                                            <![CDATA[
+                                            if (eventData.newValues.assignedTo !== eventData.oldValues.assignedTo && eventData.newValues.assignedTo) {
+                                            	me.SendActionAssignmentNotification({
+                                            		to: Users[eventData.newValues.assignedTo].mailingAddress /* STRING */ ,
+                                            		subject: "Action assigned to you ["+ eventData.newValues.productionLine +"]" /* STRING */ ,
+                                            		messageBody:  '<b>Problem Description:</b>' + '<br> \r\n' +
+                                            			eventData.newValues.problemDescription + '<br> \r\n' +
+                                            			'<b>Solution Description:</b>' + '<br> \r\n' +
+                                            			eventData.newValues.solutionDescription + '<br> \r\n' +
+                                            			'<b>Due Date:</b>' + '<br> \r\n' +
+                                            			eventData.newValues.dueDate + '<br> \r\n' +
+                                            			'<b>Status:</b>' + '<br> \r\n' +
+                                            			eventData.newValues.status/* STRING */
+                                            	});
+                                            }
+                                            ]]>
+                                            </code>
+                                        </Row>
+                                    </Rows>
+                                </ConfigurationTable>
+                            </ConfigurationTables>
+                        </ServiceImplementation>
+                    </Subscription>
                     <Subscription description="" enabled="true" eventName="DataChange" name="OnCurrentProductKeyChangedGlobal" source="" sourceProperty="currentProductKey">
                         <ServiceImplementation description="" handlerName="Script" name="OnCurrentProductKeyChangedGlobal">
                             <ConfigurationTables>
