@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-05T12:34:54.033Z"
+         lastModifiedDate="2019-12-09T11:05:00.064Z"
          name="BayerDelaysMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -63,6 +63,14 @@
                  baseType="INTEGER"
                  description=""
                  name="shiftId"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="3"
+                 baseType="DATETIME"
+                 description=""
+                 name="shiftRefresh"
                  ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
             <Things>
@@ -608,6 +616,22 @@
                 "TargetArea" : "Mashup",
                 "TargetId" : "mashup-root",
                 "TargetSection" : ""
+              }, {
+                "Id" : "8449d656-4162-434f-9848-8bbda0c7d288",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "actionListRefreshTrigger",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Data",
+                  "TargetProperty" : "shiftRefresh",
+                  "TargetPropertyBaseType" : "DATETIME"
+                } ],
+                "SourceArea" : "Session",
+                "SourceDetails" : "AllData",
+                "SourceId" : "Session",
+                "SourceSection" : "Session",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -751,6 +775,15 @@
                 "EventTriggerId" : "collection-54",
                 "EventTriggerSection" : "",
                 "Id" : "3bf9da3d-bcf5-4d26-86c2-224d0b63d967"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetDelayShiftDetails",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "shiftRefreshChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "99e1b976-e059-4568-a460-85933a053dd2"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -817,6 +850,14 @@
                     "BaseType" : "MASHUPNAME",
                     "Description" : "",
                     "ParameterName" : "navigateToMashup"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "DATETIME",
+                    "Description" : "",
+                    "ParameterName" : "shiftRefresh"
                   } ],
                   "flex-grow" : 0,
                   "id_index" : 95,
