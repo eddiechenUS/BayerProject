@@ -15,12 +15,12 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2019-09-27T15:04:37.852Z"
-         name="BayerShiftTrackingPage"
+         lastModifiedDate="2019-12-19T14:41:04.225Z"
+         name="BayerExportPage"
          projectName="BayerIoT"
          published="false"
-         tags="Applications:Bayer"
-         thingTemplate="BayerPageController"
+         tags=""
+         thingTemplate="GenericThing"
          valueStream="">
             <avatar></avatar>
             <DesignTimePermissions>
@@ -32,7 +32,7 @@
             </DesignTimePermissions>
             <RunTimePermissions>
                 <Permissions
-                 resourceName="GetDistinctProducts">
+                 resourceName="GetPerformanceData">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
@@ -49,7 +49,7 @@
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
                 <Permissions
-                 resourceName="GetShiftPlan">
+                 resourceName="GetChangoverData">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
@@ -66,7 +66,7 @@
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
                 <Permissions
-                 resourceName="GetLineStopReasonCodes">
+                 resourceName="GetActionsData">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
@@ -83,7 +83,7 @@
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
                 <Permissions
-                 resourceName="GetDailyPerformanceWithAxisMinMax">
+                 resourceName="ExportToCSV">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
@@ -100,7 +100,24 @@
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
                 <Permissions
-                 resourceName="GetFakeLineStoppageDetails">
+                 resourceName="GetDelaysData">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetMaintenanceTicketsData">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
@@ -138,20 +155,136 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
-                     name="GetDailyPerformanceWithAxisMinMax">
+                     name="ExportToCSV">
                         <ResultType
-                         aspect.dataShape="BayerDailyPerformanceWithAxisMinMax"
+                         aspect.dataShape="FileSystemFileWithLinks"
                          baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="dataType"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endDate"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="line"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startDate"
+                             ordinal="4"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetActionsData">
+                        <ResultType
+                         aspect.dataShape="BayerActionListDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endDate"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="line"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startDate"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetChangoverData">
+                        <ResultType
+                         aspect.dataShape="BayerChangeoverTrendDetailsDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endDate"
+                             ordinal="3"></FieldDefinition>
                             <FieldDefinition
                              aspect.isRequired="true"
                              aspect.thingTemplate="BayerProductionLine"
                              baseType="THINGNAME"
                              description=""
-                             name="productionLine"
+                             name="line"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="startDate"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetDelaysData">
+                        <ResultType
+                         aspect.dataShape="GetDelayShiftDetailsDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endDate"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="line"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startDate"
                              ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
@@ -163,20 +296,29 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
-                     name="GetDistinctProducts">
+                     name="GetMaintenanceTicketsData">
                         <ResultType
-                         aspect.dataShape="BayerShiftPlanDataShape"
+                         aspect.dataShape="BayerMaintenanceTicketsDataShape"
                          baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
                             <FieldDefinition
-                             aspect.dataShape="BayerScheduleDataShape"
-                             aspect.isRequired="true"
-                             baseType="INFOTABLE"
+                             baseType="DATETIME"
                              description=""
-                             name="shiftSchedule"
+                             name="endDate"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="line"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startDate"
                              ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
@@ -188,55 +330,30 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
-                     name="GetFakeLineStoppageDetails">
+                     name="GetPerformanceData">
                         <ResultType
-                         aspect.dataShape="BayerLineStoppageDetailsShape"
-                         baseType="INFOTABLE"
-                         description=""
-                         name="result"
-                         ordinal="0"></ResultType>
-                        <ParameterDefinitions></ParameterDefinitions>
-                    </ServiceDefinition>
-                    <ServiceDefinition
-                     aspect.isAsync="false"
-                     category=""
-                     description=""
-                     isAllowOverride="false"
-                     isLocalOnly="false"
-                     isOpen="false"
-                     isPrivate="false"
-                     name="GetLineStopReasonCodes">
-                        <ResultType
-                         aspect.dataShape="GenericStringList"
-                         baseType="INFOTABLE"
-                         description=""
-                         name="result"
-                         ordinal="0"></ResultType>
-                        <ParameterDefinitions></ParameterDefinitions>
-                    </ServiceDefinition>
-                    <ServiceDefinition
-                     aspect.isAsync="false"
-                     category=""
-                     description=""
-                     isAllowOverride="false"
-                     isLocalOnly="false"
-                     isOpen="false"
-                     isPrivate="false"
-                     name="GetShiftPlan">
-                        <ResultType
-                         aspect.dataShape="BayerShiftPlanDataShape"
+                         aspect.dataShape="BayerScheduleDataShape"
                          baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
                             <FieldDefinition
-                             aspect.dataShape="BayerScheduleDataShape"
-                             aspect.isRequired="true"
-                             baseType="INFOTABLE"
+                             baseType="DATETIME"
                              description=""
-                             name="shiftSchedule"
+                             name="endDate"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="line"
                              ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startDate"
+                             ordinal="3"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
@@ -246,10 +363,10 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="GetDailyPerformanceWithAxisMinMax">
+                     name="ExportToCSV">
                         <ConfigurationTables>
                             <ConfigurationTable
-                             description="Script"
+                             description=""
                              isMultiRow="false"
                              name="Script"
                              ordinal="0">
@@ -266,96 +383,148 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        // result: INFOTABLE dataShape: BayerDailyPerformanceDataShape
-                                        var result = Things[productionLine].GetDailyPerformance();
+                                        var data;
+                                        switch (dataType) {
+                                        	case "performance":
+                                        		data = Things[line].GetPerformanceDataForExport({
+                                        			endDate: endDate,
+                                        			startDate: startDate
+                                        		});
+                                        		break;
+                                        	case "delays":
+                                        		data = me.GetDelaysData({
+                                        			startDate: startDate,
+                                        			endDate: endDate,
+                                        			line: line
+                                        		});
+                                        		break;
+                                        	case "changeover":
+                                        		data = me.GetChangoverData({
+                                        			startDate: startDate,
+                                        			endDate: endDate,
+                                        			line: line
+                                        		});
+                                        		break;
+                                        	case "actions":
+                                        		data = me.GetActionsData({
+                                        			startDate: startDate,
+                                        			endDate: endDate,
+                                        			line: line
+                                        		});
+                                        		break;
+                                                case "maintenance":
+                                        		data = me.GetMaintenanceTicketsData({
+                                        			startDate: startDate,
+                                        			endDate: endDate,
+                                        			line: line
+                                        		});
+                                        		break;
                                         
-                                        var yAxisMin = 0;
-                                        var yAxisMax = 100;
+                                        }
+                                        var result = Things[line].ExportToCSV({
+                                        	data: data,
+                                        	type: dataType
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetActionsData">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result =  Things[line].GetActionsDataForExport({
+                                        	endDate: endDate /* DATETIME */,
+                                        	startDate: startDate /* DATETIME */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetChangoverData">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerChangeoverTrendDetailsDataShape" });
                                         
-                                        var tableLength = result.rows.length;
+                                        var changeoverTrendData = Things[line].GetChangeoverTrendByDate({
+                                        	endDate: endDate ,
+                                        	startDate: startDate
+                                        });
                                         
-                                        for (var x = 0; x < tableLength; x++) {
-                                        	var day = result.rows[x];
-                                        	
-                                            var dayTableLength = day.dailyPerformance.rows.length;
+                                        var changeoverTrendDataLength = changeoverTrendData.rows.length;
+                                        for (var x=0; x < changeoverTrendDataLength; x++) {
+                                            var row = changeoverTrendData.rows[x];
                                             
-                                            for (var y = 0; y < dayTableLength; y++) {
-                                                var row = day.dailyPerformance.rows[y];
-                                                
-                                                if (row.performance > yAxisMax) {
-                                                    yAxisMax = row.performance;
-                                                }
-                                            }
-                                        }
-                                        
-                                        var newField = new Object();
-                                        newField.name = "yAxisMin";
-                                        newField.baseType = 'NUMBER';
-                                        result.AddField(newField);
-                                        var newField = new Object();
-                                        newField.name = "yAxisMax";
-                                        newField.baseType = 'NUMBER';
-                                        result.AddField(newField);
-                                        
-                                        for (var x = 0; x < tableLength; x++) {
-                                        	var day = result.rows[x];
-                                            day.yAxisMin = yAxisMin;
-                                            day.yAxisMax = yAxisMax;
-                                        }
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                    <ServiceImplementation
-                     description=""
-                     handlerName="Script"
-                     name="GetDistinctProducts">
-                        <ConfigurationTables>
-                            <ConfigurationTable
-                             description="Script"
-                             isMultiRow="false"
-                             name="Script"
-                             ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition
-                                         baseType="STRING"
-                                         description="code"
-                                         name="code"
-                                         ordinal="0"></FieldDefinition>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        var result;
-                                        if (shiftSchedule) {
-                                            // result: INFOTABLE
-                                            result = Resources["InfoTableFunctions"].Distinct({
-                                                t: shiftSchedule /* INFOTABLE */,
-                                                columns: "productId,productDescription" /* STRING */
+                                            var chnageover = new Object();
+                                            chnageover.id = row.id;
+                                            
+                                            var prevAndNextOrder =  Things["BayerDBDataProvider"].GetPrevAndNextOrder({
+                                                productionLine: line,
+                                                shiftIdMin: parseInt(row.id,10),
+                                                shiftIdMax: parseInt(row.id,10),
                                             });
-                                        }
-                                        else {
-                                            // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerScheduleDataShape)
-                                            result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerScheduleDataShape" });
-                                        }
                                         
-                                        var newField = new Object();
-                                        newField.name = "sectionColorState";
-                                        newField.baseType = 'STRING';
-                                        result.AddField(newField);
-                                        
-                                        var tableLength = result.rows.length;
-                                        
-                                        for (var x = 0; x < tableLength; x++) {
-                                        	var row = result.rows[x];
-                                        	
-                                            row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
+                                            chnageover.fromId = prevAndNextOrder.rows[0].fromId;
+                                            chnageover.fromOrderNr = prevAndNextOrder.rows[0].fromOrderNr;
+                                            chnageover.fromProductName = prevAndNextOrder.rows[0].fromProductName;
+                                            chnageover.toId = prevAndNextOrder.rows[0].toId;
+                                            chnageover.toOrderNr = prevAndNextOrder.rows[0].toOrderNr;
+                                            chnageover.toProductName = prevAndNextOrder.rows[0].toProductName;
+                                            
+                                        	chnageover.dayStart = row.dayStart; // DATETIME
+                                            chnageover.weekStart = row.weekStart; // DATETIME
+                                            chnageover.start = row.start; // DATETIME
+                                            chnageover.end = row.end; // DATETIME
+                                            chnageover.target = row.targetHours;
+                                            chnageover.actual = row.workedHours;
+                                            chnageover.delta = row.delta;
+                                            
+                                            result.AddRow(chnageover);
                                         }
                                         ]]>
                                         </code>
@@ -367,10 +536,10 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="GetFakeLineStoppageDetails">
+                     name="GetDelaysData">
                         <ConfigurationTables>
                             <ConfigurationTable
-                             description="Script"
+                             description=""
                              isMultiRow="false"
                              name="Script"
                              ordinal="0">
@@ -387,57 +556,10 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        // result: INFOTABLE dataShape: BayerShiftTimeDataShape
-                                        var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
-                                        
-                                        
-                                        var params = {
-                                        	infoTableName : "InfoTable",
-                                        	dataShapeName : "BayerLineStoppageDetailsShape"
-                                        };
-                                        
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerLineStoppageDetailsShape)
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
-                                        
-                                        // BayerLineStoppageDetailsShape entry object
-                                        var newEntry = new Object();
-                                        newEntry.colorState = "lightblue"; // STRING
-                                        newEntry.timestamp = new Date(shiftTime.startTime); // DATETIME
-                                        newEntry.status = undefined; // STRING
-                                        newEntry.duration = 4 * 60 * 60 * 1000;
-                                        result.AddRow(newEntry);
-                                        
-                                        // BayerLineStoppageDetailsShape entry object
-                                        var newEntry = new Object();
-                                        newEntry.colorState = "grey2"; // STRING
-                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 4); // DATETIME
-                                        newEntry.status = undefined; // STRING
-                                        newEntry.duration = 1 * 60 * 60 * 1000;
-                                        result.AddRow(newEntry);
-                                        
-                                        // BayerLineStoppageDetailsShape entry object
-                                        var newEntry = new Object();
-                                        newEntry.colorState = "lightblue"; // STRING
-                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 5); // DATETIME
-                                        newEntry.status = undefined; // STRING
-                                        newEntry.duration = 1 * 60 * 60 * 1000;
-                                        result.AddRow(newEntry);
-                                        
-                                        // BayerLineStoppageDetailsShape entry object
-                                        var newEntry = new Object();
-                                        newEntry.colorState = "grey2"; // STRING
-                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 6); // DATETIME
-                                        newEntry.status = undefined; // STRING
-                                        newEntry.duration = 1 * 60 * 60 * 1000;
-                                        result.AddRow(newEntry);
-                                        
-                                        // BayerLineStoppageDetailsShape entry object
-                                        var newEntry = new Object();
-                                        newEntry.colorState = "lightblue"; // STRING
-                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 7); // DATETIME
-                                        newEntry.status = undefined; // STRING
-                                        newEntry.duration = 1 * 60 * 60 * 1000;
-                                        result.AddRow(newEntry);
+                                        var result =  Things[line].GetDelaysDataForExport({
+                                        	startTime: startDate,
+                                        	endTime: endDate 
+                                        });
                                         ]]>
                                         </code>
                                     </Row>
@@ -448,10 +570,10 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="GetLineStopReasonCodes">
+                     name="GetMaintenanceTicketsData">
                         <ConfigurationTables>
                             <ConfigurationTable
-                             description="Script"
+                             description=""
                              isMultiRow="false"
                              name="Script"
                              ordinal="0">
@@ -468,43 +590,10 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var params = {
-                                        	infoTableName : "InfoTable",
-                                        	dataShapeName : "GenericStringList"
-                                        };
-                                        
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(GenericStringList)
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
-                                        
-                                        // GenericStringList entry object
-                                        var newEntry = new Object();
-                                        newEntry.item = "Mechanical Failure"; // STRING - isPrimaryKey = true
-                                        result.AddRow(newEntry);
-                                        
-                                        // GenericStringList entry object
-                                        var newEntry = new Object();
-                                        newEntry.item = "Scheduling Change"; // STRING - isPrimaryKey = true
-                                        result.AddRow(newEntry);
-                                        
-                                        // GenericStringList entry object
-                                        var newEntry = new Object();
-                                        newEntry.item = "Not Enough Personnel"; // STRING - isPrimaryKey = true
-                                        result.AddRow(newEntry);
-                                        
-                                        // GenericStringList entry object
-                                        var newEntry = new Object();
-                                        newEntry.item = "Out of Infeed Material"; // STRING - isPrimaryKey = true
-                                        result.AddRow(newEntry);
-                                        
-                                        // GenericStringList entry object
-                                        var newEntry = new Object();
-                                        newEntry.item = "Changeover Overrun"; // STRING - isPrimaryKey = true
-                                        result.AddRow(newEntry);
-                                        
-                                        // GenericStringList entry object
-                                        var newEntry = new Object();
-                                        newEntry.item = "Other"; // STRING - isPrimaryKey = true
-                                        result.AddRow(newEntry);
+                                        var result =  Things[line].GetMaintenanceTicketsByDate({
+                                        	endDate: endDate,
+                                        	startDate: startDate 
+                                        });
                                         ]]>
                                         </code>
                                     </Row>
@@ -515,10 +604,10 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="GetShiftPlan">
+                     name="GetPerformanceData">
                         <ConfigurationTables>
                             <ConfigurationTable
-                             description="Script"
+                             description=""
                              isMultiRow="false"
                              name="Script"
                              ordinal="0">
@@ -535,25 +624,10 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        if (shiftSchedule) {
-                                            var newField = new Object();
-                                            newField.name = "sectionColorState";
-                                            newField.baseType = 'STRING';
-                                            shiftSchedule.AddField(newField);
-                                        
-                                            var tableLength = shiftSchedule.rows.length;
-                                        
-                                            for (var x = 0; x < tableLength; x++) {
-                                                var row = shiftSchedule.rows[x];
-                                        
-                                                row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
-                                            }
-                                        
-                                            var result = shiftSchedule;
-                                        }
-                                        else {
-                                            var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerShiftPlanDataShape" });
-                                        }
+                                        var result =  Things[line].GetPerformanceDataForExport({
+                                        	endDate: endDate,
+                                        	startDate: startDate
+                                        });
                                         ]]>
                                         </code>
                                     </Row>

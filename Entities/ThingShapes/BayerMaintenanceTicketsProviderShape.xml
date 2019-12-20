@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-05T21:18:40.024Z"
+         lastModifiedDate="2019-12-19T10:33:00.202Z"
          name="BayerMaintenanceTicketsProviderShape"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -92,6 +92,40 @@
                          description=""
                          name="timeThreshold"
                          ordinal="3"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetMaintenanceTicketsByDate">
+                    <ResultType
+                     aspect.dataShape="BayerMaintenanceTicketsDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="endDate"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.thingTemplate="BayerProductionLine"
+                         baseType="THINGNAME"
+                         description=""
+                         name="productionLine"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="startDate"
+                         ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -229,6 +263,41 @@
                                     	timeThreshold: timeThreshold /* DATETIME */,
                                     	assignedTo: assignedTo /* STRING */,
                                     	status: status /* STRING */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetMaintenanceTicketsByDate">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].GetMaintenanceTicketsByDate({
+                                    	endDate: endDate,
+                                    	productionLine: productionLine,
+                                    	startDate: startDate
                                     });
                                     ]]>
                                     </code>

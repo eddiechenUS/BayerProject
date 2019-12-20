@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-02T14:09:02.524Z"
+         lastModifiedDate="2019-12-16T13:21:22.268Z"
          name="BayerDelaysManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -524,26 +524,6 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    //var startTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
-                                    //	productionLine: me.name /* THINGNAME */,
-                                    //	time: startTime /* DATETIME */
-                                    //});
-                                    
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    //var endTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
-                                    //	productionLine: me.name /* THINGNAME */,
-                                    //	time: endTime /* DATETIME */
-                                    //});
-                                    
-                                    
-                                    
-                                    //if (startTimeShift.id == endTimeShift.id) {   
-                                    //}
-                                    //else {
-                                    //}
-                                    
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
                                     var currentShift = Things["BayerUtilities"].GetCurrentShift({
                                     	lineName: me.name /* THINGNAME */
                                     });
@@ -588,21 +568,25 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // REFACTOR NEEDED ! 
+                                    // check id changeover
                                     var currentProduct = me.GetCurrentProduct();
                                     var isProductionTargetZero = (currentProduct.targetQuantity === 0);
                                     var isProductCambio = (currentProduct.productId === 'Cambio');
-                                    
                                     var isChangeover = (isProductionTargetZero || isProductCambio);
+                                    
+                                    // update or create events only if production is running
                                     if (me.productionRunning) {
                                     	var shiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
                                     		shiftScheduleId: me.currentShiftId
                                     	});
                                     	var shouldUpdateLastTask = false;
                                     	var newTaskCategory = '';
+                                        // check if is any event on current shift 
                                     	if (shiftEvents.getRowCount() !== 0) {
+                                            // find status of last event
                                     		var lastEvent = shiftEvents.rows[shiftEvents.getRowCount() - 1];
                                     		var lastStatus = lastEvent.category;
+                                            // decide if should update event or create new
                                     		if (isChangeover) {
                                     			if (lastStatus == 'changeover') {
                                     				shouldUpdateLastTask = true;
@@ -616,6 +600,7 @@
                                     				newTaskCategory = 'running';
                                     			}
                                     		}
+                                            // depending on decision create or update event
                                     		if (shouldUpdateLastTask) {
                                     			Things["BayerDBDataProvider"].UpdateShiftEvent({
                                     				endTime: Date.now(),
@@ -631,7 +616,9 @@
                                     				category: newTaskCategory
                                     			});
                                     		}
-                                    	} else {
+                                    	}
+                                        // if shift event list is empty create new task 
+                                        else {
                                     		var shiftSchedule = Things["BayerDBDataProvider"].GetShiftScheduleById({
                                     			id: me.currentShiftId
                                     		});
@@ -649,56 +636,36 @@
                                     		});
                                     	}
                                     }
-                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
-                                    //var currentProduct = me.GetCurrentProduct();
                                     
                                     if (currentProduct && currentProduct.getRowCount() > 0) {
-                                        //logger.debug('S:ProcessChangeoverDelayRules');
-                                       // var isChangeover = (currentProduct.productId === 'Cambio');
-                                        var isChangeoverExeedTarget = (currentProduct.workedHours * 60) >
-                                            (currentProduct.targetHours * 60) + (currentProduct.targetHours * 60 * 0.1);
-                                      //  var isProductionTargetZero = (currentProduct.targetQuantity === 0);
-                                        
-                                        /* Requirments
-                                        	- All changeovers which exceed the target by more than 10% generate entries.
-                                        */
-                                        
-                                        if (isChangeover === true && 
-                                            isChangeoverExeedTarget === true &&
-                                            me.changeoverDelayStartTime.getTime() === (new Date(0).getTime())
-                                           ) {
-                                            me.changeoverDelayStartTime = new Date();
-                                        } else if (
-                                            isChangeover === false &&
-                                            me.changeoverDelayStartTime.getTime() !== (new Date(0).getTime())
-                                        ) {
-                                            //logger.debug('S:ChangeoverDelayedOver:ChangeoverDelayed');
-                                            me.ProductionDelayed({
-                                                category: 'changeover', /* STRING */
-                                                startTime: me.changeoverDelayStartTime,
-                                                endTime: new Date(), /* DATETIME */
-                                            });
-                                            //logger.debug('S:ChangeoverDelayedOver.ResetTimer');
-                                            me.changeoverDelayStartTime = new Date(0);
-                                        }
-                                        
-                                    //    // Grey indicates when there was a changeover active 
-                                    //    // or the target of the line is zero (0).
-                                    //    if ((isChangeover === true || isProductionTargetZero === true) && 
-                                    //        me.changeoverStartTime.getTime() === (new Date(0).getTime())
-                                    //       ) {
-                                    //        me.changeoverStartTime = new Date();
-                                    //    } else if (
-                                    //        isChangeover === false &&
-                                    //        me.changeoverStartTime.getTime() !== (new Date(0).getTime())
-                                    //    ) {
-                                    //        me.InsertShiftEventEntry({
-                                    //            category: 'changeover', /* STRING */
-                                    //            startTime: me.changeoverStartTime,
-                                    //            endTime: new Date(), /* DATETIME */
-                                    //        });
-                                    //        me.changeoverStartTime = new Date(0);
-                                    //    }
+                                    	//logger.debug('S:ProcessChangeoverDelayRules');
+                                    	var isChangeoverExeedTarget = (currentProduct.workedHours * 60) >
+                                    		(currentProduct.targetHours * 60) + (currentProduct.targetHours * 60 * 0.1);
+                                    
+                                    	/* Requirments
+                                    		- All changeovers which exceed the target by more than 10% generate entries.
+                                    	*/
+                                    
+                                    	if (isChangeover === true &&
+                                    		isChangeoverExeedTarget === true &&
+                                    		me.changeoverDelayStartTime.getTime() === (new Date(0).getTime())
+                                    	) {
+                                    		me.changeoverDelayStartTime = new Date();
+                                    	} else if (
+                                    		isChangeover === false &&
+                                    		me.changeoverDelayStartTime.getTime() !== (new Date(0).getTime())
+                                    	) {
+                                    		//logger.debug('S:ChangeoverDelayedOver:ChangeoverDelayed');
+                                    		me.ProductionDelayed({
+                                    			category: 'changeover',
+                                    			/* STRING */
+                                    			startTime: me.changeoverDelayStartTime,
+                                    			endTime: new Date(),
+                                    			/* DATETIME */
+                                    		});
+                                    		//logger.debug('S:ChangeoverDelayedOver.ResetTimer');
+                                    		me.changeoverDelayStartTime = new Date(0);
+                                    	}
                                     }
                                     ]]>
                                     </code>
@@ -730,20 +697,22 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    // get event from previous shift
                                     var prevShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
                                             	shiftScheduleId: eventData.oldValue.value
                                             });
-                                    var prevShift= Things["BayerDBDataProvider"].GetShiftScheduleById({
+                                    // get data about previous shift (id and timestamp may be needed)
+                                    var prevShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
                                             	id: eventData.oldValue.value
                                             });
                                     var lastEvent;
+                                    // get event from current (new) shift
                                     var currentShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
                                             	id: eventData.newValue.value
                                             });
-                                    
                                     if(me.productionRunning){
+                                        	// finish last event from previous shift
                                             lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
-                                            //finish last event from previous shift
                                             Things["BayerDBDataProvider"].UpdateShiftEvent({
                                             	endTime: dateAddHours(prevShift.timestamp, 8),
                                             	id: lastEvent.id,
@@ -755,6 +724,7 @@
                                                 var isProductionTargetZero = (currentProduct.targetQuantity === 0);
                                                 var isProductCambio = (currentProduct.productId === 'Cambio');
                                     			var isChangeover = (isProductionTargetZero || isProductCambio);
+                                        		// select event catagory
                                             	if (isChangeover) {
                                             		category = "changeover";
                                             	} else {
@@ -768,9 +738,12 @@
                                             	category: category
                                             });
                                     }
+                                    // cases when production isn't running
                                     else{
+                                        // if there was any event on  previous shift, update endtime 
                                         if(prevShiftEvents.getRowCount() !== 0){
                                         	lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
+                                            // if previous event was breakdown, update event 
                                             if(lastEvent.category === "breakdown"){
                                                 Things["BayerDBDataProvider"].UpdateShiftEvent({
                                             	endTime: dateAddHours(prevShift.timestamp, 8),
@@ -778,6 +751,7 @@
                                             	shiftScheduleId: eventData.oldValue.value
                                             });
                                             }
+                                            // insert new taks if previously other type of event occured
                                             else{
                                             	Things["BayerDBDataProvider"].InsertShiftEventEntry({
                                             	startTime: lastEvent.endTime,
@@ -788,7 +762,9 @@
                                             });
                                             }
                                         }
-                                        else{
+                                        // if previous shift event list is empty and previous shift exists,
+                                        // insert one shift-long event
+                                        else if (prevShift) {
                                         	Things["BayerDBDataProvider"].InsertShiftEventEntry({
                                             	startTime: prevShift.timestamp,
                                             	endTime: dateAddHours(prevShift.timestamp, 8) ,
@@ -797,6 +773,7 @@
                                             	category: 'breakdown'
                                             });
                                         }
+                                        //add first event to new shift
                                         Things["BayerDBDataProvider"].InsertShiftEventEntry({
                                             	startTime: currentShift.timestamp,
                                             	endTime: Date.now() ,
@@ -837,7 +814,6 @@
                                     <![CDATA[
                                     var lineConfig = me.GetLineConfiguration();
                                     
-                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
                                     var currentProduct = me.GetCurrentProduct();
                                     
                                     var delayCategory = {
@@ -1212,41 +1188,7 @@
                 <Delete></Delete>
                 <Metadata></Metadata>
             </DesignTimePermissions>
-            <RunTimePermissions>
-                <Permissions
-                 resourceName="*">
-                    <PropertyRead>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </EventInvoke>
-                    <EventSubscribe>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </EventSubscribe>
-                </Permissions>
-            </RunTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
             <VisibilityPermissions>
                 <Visibility>
                     <Principal
@@ -1285,14 +1227,35 @@
             </AlertConfigurations>
             <InstanceRunTimePermissions>
                 <Permissions
-                 resourceName="GetPcsPerShift">
+                 resourceName="UpdateDelayShift">
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
                         <Principal
                          isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="ResetMicrostopDelayProperties">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerSchedulerUser"
+                         type="User"></Principal>
                     </ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>
@@ -1317,9 +1280,31 @@
                     <ServiceInvoke>
                         <Principal
                          isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
                     </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="periodMicrostop">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
@@ -1335,6 +1320,41 @@
                         <Principal
                          isPermitted="true"
                          name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="delayMicrostopTimeStart">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
                          type="User"></Principal>
                     </PropertyWrite>
                     <ServiceInvoke></ServiceInvoke>
@@ -1381,11 +1401,38 @@
                          isPermitted="true"
                          name="BayerDelaysSystemUser"
                          type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="InsertShiftEventEntry">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
                         <Principal
                          isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
                     </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="overloadDelayStartTime">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerDelaysSystemUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
@@ -1427,6 +1474,10 @@
                     <ServiceInvoke>
                         <Principal
                          isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
                     </ServiceInvoke>
@@ -1466,219 +1517,6 @@
                          type="User"></Principal>
                     </PropertyWrite>
                     <ServiceInvoke></ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="GetDailyPerformanceForTimeframe">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="ScheduleShifts">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="UpdateDelayShift">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="GetDailyPerformance">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="ResetMicrostopDelayProperties">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerDelaysSystemUser"
-                         type="User"></Principal>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerSchedulerUser"
-                         type="User"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="GetAvailability">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="System"
-                         type="User"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="periodMicrostop">
-                    <PropertyRead>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerDelaysSystemUser"
-                         type="User"></Principal>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerDelaysSystemUser"
-                         type="User"></Principal>
-                    </PropertyWrite>
-                    <ServiceInvoke></ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="CalculateShiftsFromNow">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="System"
-                         type="User"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="GetNearestChangeoverFromSchedule">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerNotificationSystemUser"
-                         type="User"></Principal>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="*">
-                    <PropertyRead>
-                        <Principal
-                         isPermitted="true"
-                         name="System"
-                         type="User"></Principal>
-                    </PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke></ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="delayMicrostopTimeStart">
-                    <PropertyRead>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerDelaysSystemUser"
-                         type="User"></Principal>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerDelaysSystemUser"
-                         type="User"></Principal>
-                        <Principal
-                         isPermitted="true"
-                         name="System"
-                         type="User"></Principal>
-                    </PropertyWrite>
-                    <ServiceInvoke></ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="InsertShiftEventEntry">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerDelaysSystemUser"
-                         type="User"></Principal>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="overloadDelayStartTime">
-                    <PropertyRead>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerDelaysSystemUser"
-                         type="User"></Principal>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal
-                         isPermitted="true"
-                         name="BayerDelaysSystemUser"
-                         type="User"></Principal>
-                    </PropertyWrite>
-                    <ServiceInvoke></ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
-                <Permissions
-                 resourceName="GetShiftsFromNow">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal
-                         isPermitted="true"
-                         name="Role.BayerProductionLine.Any"
-                         type="Group"></Principal>
-                    </ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>
                 </Permissions>

@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-11-21T17:13:58.731Z"
+         lastModifiedDate="2019-12-18T13:49:06.459Z"
          name="BayerProductionPlansProviderShape"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -141,6 +141,39 @@
                          description=""
                          name="startTime"
                          ordinal="2"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetChangeoverTrendByDate">
+                    <ResultType
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="endDate"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.thingTemplate="BayerProductionLine"
+                         baseType="THINGNAME"
+                         description=""
+                         name="line"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="startDate"
+                         ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -567,6 +600,41 @@
                                     	productionLine: productionLine /* THINGNAME */,
                                     	startTime: startTime /* DATETIME */,
                                     	endTime: endTime /* DATETIME */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetChangeoverTrendByDate">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].GetChangeOverTrendByDate({
+                                    	endDate: endDate,
+                                    	productionLine: line,
+                                    	startDate: startDate
                                     });
                                     ]]>
                                     </code>
