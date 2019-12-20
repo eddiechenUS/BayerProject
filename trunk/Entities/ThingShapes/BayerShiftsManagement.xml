@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-05T13:21:24.967Z"
+         lastModifiedDate="2019-12-19T10:47:38.090Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -791,11 +791,17 @@
                                     
                                             // keep every [groupingFactor] row and merge others into those
                                             for (var y = 0; y < scheduleTableLength; y++) {        
+                                                var row = shift.shiftSchedule.rows[y];
+                                                
                                                 if (y%groupingFactor === 0) {
+                                                    // result: STRING
+                                                    row.productDescription =  Things["BayerUtilities"].GetProductDescriptionTranslated({
+                                                        productId: row.productId /* STRING */,
+                                                        productDescription: row.productDescription /* STRING */
+                                                    });
                                                     continue;
                                                 }
                                     
-                                                var row = shift.shiftSchedule.rows[y];
                                                 var baseRow = shift.shiftSchedule.rows[Math.floor(y/groupingFactor)*groupingFactor];
                                     
                                                 baseRow.targetQuantity += row.targetQuantity;
@@ -1134,6 +1140,10 @@
                     <ServiceInvoke>
                         <Principal
                          isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
                     </ServiceInvoke>
@@ -1145,6 +1155,10 @@
                     <PropertyRead></PropertyRead>
                     <PropertyWrite></PropertyWrite>
                     <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
                         <Principal
                          isPermitted="true"
                          name="Role.BayerProductionLine.Any"
@@ -1203,6 +1217,10 @@
                          type="User"></Principal>
                         <Principal
                          isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
                     </ServiceInvoke>
@@ -1242,6 +1260,10 @@
                     <ServiceInvoke>
                         <Principal
                          isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
                         <Principal
@@ -1276,6 +1298,10 @@
                     <ServiceInvoke>
                         <Principal
                          isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
                     </ServiceInvoke>
@@ -1304,6 +1330,10 @@
                          isPermitted="true"
                          name="BayerDelaysSystemUser"
                          type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
                         <Principal
                          isPermitted="true"
                          name="Role.BayerProductionLine.Any"
