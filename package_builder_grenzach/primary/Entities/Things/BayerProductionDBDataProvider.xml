@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <Things>
-        <Thing description="Runs every minute at 2 sec" documentationContent="" effectiveThingPackage="SchedulerThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-05T15:10:14.902Z" name="BayerProductionPlansScheduler" projectName="BayerIoT" published="false" tags="Applications:BayerProductionPlans;Applications:Bayer" thingTemplate="Scheduler" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-02-10T18:32:12.658Z" name="BayerProductionDBDataProvider" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerProductionDBDataProviderTemplate" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -16,27 +16,19 @@
             </VisibilityPermissions>
             <ConfigurationTableDefinitions/>
             <ConfigurationTables>
-                <ConfigurationTable description="General Settings" isMultiRow="false" name="Settings" ordinal="0">
+                <ConfigurationTable description="" isMultiRow="false" name="Connector" ordinal="0">
                     <DataShape>
                         <FieldDefinitions>
-                            <FieldDefinition aspect.defaultValue="true" baseType="BOOLEAN" description="Automatically enable scheduler on startup" name="enabled" ordinal="0"/>
-                            <FieldDefinition baseType="USERNAME" description="User context in which to run event handlers" name="runAsUser" ordinal="0"/>
-                            <FieldDefinition aspect.defaultValue="0 0/1 * * * ?" baseType="SCHEDULE" description="Execution Schedule (Cron String)" name="schedule" ordinal="0"/>
+                            <FieldDefinition aspect.isPrimaryKey="true" baseType="THINGNAME" description="" name="connector" ordinal="1"/>
                         </FieldDefinitions>
                     </DataShape>
                     <Rows>
                         <Row>
-                            <enabled>true</enabled>
-                            <runAsUser>
+                            <connector>
                             <![CDATA[
-                            BayerProductionPlansProcessingUser
+                            BayerGrenzach37ProductionDBConnector
                             ]]>
-                            </runAsUser>
-                            <schedule>
-                            <![CDATA[
-                            2 * 0/1 * * ? *
-                            ]]>
-                            </schedule>
+                            </connector>
                         </Row>
                     </Rows>
                 </ConfigurationTable>
@@ -55,7 +47,18 @@
             <RemoteEventBindings/>
             <AlertConfigurations/>
             <ImplementedShapes/>
-            <ThingProperties/>
+            <ThingProperties>
+                <mockedValue>
+                    <Value>125</Value>
+                    <Timestamp>2020-02-11T12:21:57.679Z</Timestamp>
+                    <Quality>GOOD</Quality>
+                </mockedValue>
+                <mockCounterData>
+                    <Value>true</Value>
+                    <Timestamp>2020-02-11T12:21:17.634Z</Timestamp>
+                    <Quality>GOOD</Quality>
+                </mockCounterData>
+            </ThingProperties>
         </Thing>
     </Things>
 </Entities>
