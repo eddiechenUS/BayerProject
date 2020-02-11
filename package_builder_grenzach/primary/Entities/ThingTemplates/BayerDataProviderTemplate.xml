@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <ThingTemplates>
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2019-09-06T12:02:41.577Z" name="BayerDataProviderTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions>
+                <ConfigurationTableDefinition category="" dataShapeName="BayerConnectorSettingDataShape" description="" isHidden="false" isMultiRow="false" name="Connector" ordinal="0" source="IMPORT"/>
+            </ConfigurationTableDefinitions>
+            <ConfigurationTables>
+                <ConfigurationTable description="" isMultiRow="false" name="Connector" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.isPrimaryKey="true" baseType="THINGNAME" description="" name="connector" ordinal="1"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <connector/>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+            </ConfigurationTables>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetConnector">
+                        <ResultType baseType="THINGNAME" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="GetConnector">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // table: INFOTABLE dataShape: ""
+                                        var table =  me.GetConfigurationTable({
+                                        	tableName: "Connector" /* STRING */
+                                        });
+                                        
+                                        var result = table.connector;
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <ImplementedShapes/>
+            <SharedConfigurationTables/>
+            <InstanceDesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </InstanceDesignTimePermissions>
+            <InstanceRunTimePermissions/>
+            <InstanceVisibilityPermissions>
+                <Visibility/>
+            </InstanceVisibilityPermissions>
+        </ThingTemplate>
+    </ThingTemplates>
+</Entities>

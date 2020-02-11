@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <ThingShapes>
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-04T09:34:40.830Z" name="BayerShiftsProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
+            <PropertyDefinitions/>
+            <ServiceDefinitions>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddShiftSchedule">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.dataShape="BayerShiftSchedulesDataShape" baseType="INFOTABLE" description="" name="data" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddShiftScheduleEntry">
+                    <ResultType baseType="INTEGER" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.dataShape="BayerShiftScheduleDataShape" aspect.isRequired="true" baseType="INFOTABLE" description="" name="data" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddShiftScheduleItem">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="duration" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="hour" ordinal="1"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="productionPlanId" ordinal="5"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="scheduleId" ordinal="4"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetQuantity" ordinal="6"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="time" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteShiftsAfter">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelayShiftDetails">
+                    <ResultType aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
+                        <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelaysSummary">
+                    <ResultType aspect.dataShape="BayerDelaysSummaryDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNearestChangeoverFromSchedule">
+                    <ResultType aspect.dataShape="BayerScheduleItemDbDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="fromTime" ordinal="1"/>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftActual">
+                    <ResultType aspect.dataShape="BayerShiftScheduleDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="time" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftEvents">
+                    <ResultType aspect.dataShape="ShiftEventsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftsByTime">
+                    <ResultType aspect.dataShape="BayerShiftScheduleDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftScheduleById">
+                    <ResultType aspect.dataShape="BayerShiftScheduleDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="STRING" description="" name="id" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftSchedules">
+                    <ResultType aspect.dataShape="BayerShiftSchedulesDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetSingleShiftByTime">
+                    <ResultType aspect.dataShape="BayerShiftScheduleDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="shiftTime" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetSingleShiftByTimeWithTargetDiff">
+                    <ResultType aspect.dataShape="PcsPerShiftDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="shiftTime" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertDelayEntry">
+                    <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="STRING" description="" name="category" ordinal="2"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="endTime" ordinal="5"/>
+                        <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="3"/>
+                        <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="source" ordinal="1"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="startTime" ordinal="4"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertShiftEventEntry">
+                    <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="STRING" description="" name="category" ordinal="2"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="endTime" ordinal="5"/>
+                        <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="3"/>
+                        <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="source" ordinal="1"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="startTime" ordinal="4"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateDelayShift">
+                    <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.dataShape="GetDelayShiftDetailsDataShape" aspect.isRequired="true" baseType="INFOTABLE" description="" name="delayShift" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShiftEvent">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="DATETIME" description="" name="endTime" ordinal="4"/>
+                        <FieldDefinition baseType="INTEGER" description="" name="id" ordinal="1"/>
+                        <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShiftProduction">
+                    <ResultType baseType="BOOLEAN" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="productionPlanId_actual" ordinal="1"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="quantityProduced" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="timestamp" ordinal="4"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShiftTotalProduction">
+                    <ResultType baseType="BOOLEAN" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="quantityProduced" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="timestamp" ordinal="4"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+            </ServiceDefinitions>
+            <EventDefinitions/>
+            <ServiceMappings/>
+            <ServiceImplementations>
+                <ServiceImplementation description="" handlerName="Script" name="AddShiftSchedule">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var shiftTimestamp = data.shiftSchedule.rows[0].time;
+                                    
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerShiftScheduleDataShape)
+                                    var scheduleData = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerShiftScheduleDataShape" });
+                                    // BayerShiftScheduleDataShape entry object
+                                    var newEntry = new Object();
+                                    newEntry.totalQuantityProduced = data.totalQuantityProduced; // NUMBER
+                                    newEntry.productionLine = data.source; // THINGNAME
+                                    newEntry.totalTargetQuantity = data.totalTargetQuantity; // NUMBER
+                                    newEntry.timestamp = data.timestamp; // DATETIME
+                                    scheduleData.AddRow(newEntry);
+                                    
+                                    // result: INTEGER
+                                    var shiftScheduleId =  me.AddShiftScheduleEntry({
+                                    	data: scheduleData /* INFOTABLE */
+                                    });
+                                    
+                                    var tableLength = data.shiftSchedule.rows.length;
+                                    for (var x=0; x < tableLength; x++) {
+                                        var row = data.shiftSchedule.rows[x];
+                                        
+                                         me.AddShiftScheduleItem({
+                                            hour: row.hour /* INTEGER */,
+                                            time: row.time /* DATETIME */,
+                                            duration: row.duration /* INTEGER */,
+                                            scheduleId: shiftScheduleId /* INTEGER */,
+                                            productionPlanId: row.productionPlanId /* INTEGER */,
+                                            targetQuantity: row.targetQuantity /* NUMBER */
+                                        });
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="AddShiftScheduleEntry">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].InsertShiftSchedule({
+                                    	totalQuantityProduced: data.totalQuantityProduced /* NUMBER */,
+                                    	productionLine: data.productionLine /* THINGNAME */,
+                                    	totalTargetQuantity: data.totalTargetQuantity /* NUMBER */,
+                                    	timestamp: data.timestamp /* DATETIME */
+                                    }).id;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="AddShiftScheduleItem">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: NUMBER
+                                    var result =  Things[me.GetConnector()].InsertShiftScheduleItem({
+                                    	duration: duration /* INTEGER */,
+                                    	productionPlanId: productionPlanId /* INTEGER */,
+                                    	hour: hour /* INTEGER */,
+                                    	time: time /* DATETIME */,
+                                    	scheduleId: scheduleId /* INTEGER */,
+                                    	targetQuantity: targetQuantity /* NUMBER */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="DeleteShiftsAfter">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: NUMBER
+                                    var result =  Things[me.GetConnector()].DeleteShiftsAfter({
+                                    	startTime: startTime, /* DATETIME */
+                                        productionLine: productionLine
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetDelayShiftDetails">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = Things[me.GetConnector()].GetDelayShiftDetails({
+                                        productionLine: productionLine,
+                                        shiftScheduleId: shiftScheduleId,
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetDelaysSummary">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = Things[me.GetConnector()].GetDelaysSummary({
+                                        shiftScheduleId: shiftScheduleId,
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetNearestChangeoverFromSchedule">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: ""
+                                    var result =  Things[me.GetConnector()].GetNearestChangeoverFromSchedule({
+                                    	fromTime: fromTime /* DATETIME */,
+                                        productionLine: productionLine
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetShiftActual">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var result =  Things[me.GetConnector()].GetShiftActual({
+                                    	productionLine: productionLine /* THINGNAME */,
+                                    	time: time /* DATETIME */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetShiftEvents">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].GetShiftEvents({
+                                        shiftScheduleId: shiftScheduleId,
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetShiftsByTime">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: ""
+                                    var result =  Things[me.GetConnector()].GetShiftsByTime({
+                                    	startTime: startTime /* DATETIME */,
+                                    	endTime: endTime /* DATETIME */,
+                                        productionLine: productionLine
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetShiftScheduleById">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].GetShiftScheduleById({
+                                    	id: id
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetShiftSchedules">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerShiftSchedulesDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerShiftSchedulesDataShape" });
+                                    
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleItemDataShape"
+                                    var items =  Things[me.GetConnector()].GetShiftsScheduleByTime({
+                                    	productionLine: productionLine /* THINGNAME */,
+                                    	startTime: startTime /* DATETIME */,
+                                    	endTime: endTime /* DATETIME */
+                                    });
+                                    
+                                    var lastShiftId = null;
+                                    var shiftEntry = null;
+                                    
+                                    var tableLength = items.rows.length;
+                                    for (var x=0; x < tableLength; x++) {
+                                        var row = items.rows[x];
+                                        
+                                        if (row.id !== lastShiftId) {
+                                            lastShiftId = row.id;
+                                            if (shiftEntry) {
+                                                result.AddRow(shiftEntry);
+                                            }
+                                            shiftEntry = new Object();
+                                            shiftEntry.shiftSchedule = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerScheduleDataShape" }); // INFOTABLE
+                                            shiftEntry.totalQuantityProduced = row.totalQuantityProduced; // NUMBER
+                                            shiftEntry.totalTargetQuantity = row.totalTargetQuantity; // NUMBER
+                                            shiftEntry.id = row.id;
+                                            shiftEntry.timestamp = row.timestamp;
+                                            shiftEntry.source = row.productionLine;
+                                        }
+                                        
+                                        // BayerScheduleDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.duration = row.duration; // INTEGER
+                                        newEntry.productionPlanId = row.productionPlanId; // INTEGER
+                                        newEntry.productionPlanId_actual = row.productionPlanId_actual; // INTEGER
+                                        newEntry.hour = row.hour; // INTEGER
+                                        newEntry.productId = row.productId; // STRING
+                                        newEntry.quantityTargetOk = row.quantityTargetOk; // BOOLEAN
+                                        newEntry.time = row.time; // DATETIME
+                                        newEntry.quantityProduced = row.quantityProduced; // NUMBER
+                                        newEntry.quantityProducedBlisters = row.quantityProducedBlisters;
+                                        newEntry.productDescription = row.productDescription; // STRING
+                                        newEntry.targetQuantity = row.targetQuantity; // NUMBER
+                                        newEntry.targetQuantityBlisters = row.targetQuantityBlisters;
+                                        shiftEntry.shiftSchedule.AddRow(newEntry);
+                                    }
+                                    if (shiftEntry) {
+                                        result.AddRow(shiftEntry);
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetSingleShiftByTime">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var result =  Things[me.GetConnector()].GetSingleShiftByTime({
+                                    	shiftTime: shiftTime /* DATETIME */,
+                                    	productionLine: productionLine /* THINGNAME */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetSingleShiftByTimeWithTargetDiff">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+                                    var result =  Things[me.GetConnector()].GetSingleShiftByTimeWithTargetDiff({
+                                    	shiftTime: shiftTime /* DATETIME */,
+                                    	productionLine: productionLine /* THINGNAME */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="InsertDelayEntry">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //    source: me.name,
+                                    //    category: category,
+                                    //    shiftScheduleId: shiftScheduleId,
+                                    //    startTime: startTime,
+                                    //    endTime: endTime
+                                    
+                                    var result =  Things[me.GetConnector()].InsertDelayEntry({
+                                        source: source,
+                                        category: category,
+                                        shiftScheduleId: shiftScheduleId,
+                                        startTime: startTime,
+                                        endTime: endTime
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="InsertShiftEventEntry">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //    source: me.name,
+                                    //    category: category,
+                                    //    shiftScheduleId: shiftScheduleId,
+                                    //    startTime: startTime,
+                                    //    endTime: endTime
+                                    
+                                    var result =  Things[me.GetConnector()].InsertShiftEventEntry({
+                                        source: source,
+                                        category: category,
+                                        shiftScheduleId: shiftScheduleId,
+                                        startTime: startTime,
+                                        endTime: endTime
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="UpdateDelayShift">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].UpdateDelayShift({
+                                        id: id, 
+                                        source: delayShift.source,
+                                        reasonCode: delayShift.reasonCode,
+                                        description: delayShift.description,
+                                        endTime: delayShift.endTime,
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="UpdateShiftEvent">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].UpdateShiftEvent({
+                                    	endTime: endTime,
+                                    	shiftScheduleId: shiftScheduleId,
+                                    	id: id
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="UpdateShiftProduction">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = Things[me.GetConnector()].UpdateShiftProduction({
+                                    	productionPlanId_actual: productionPlanId_actual /* INTEGER */,
+                                    	productionLine: productionLine /* THINGNAME */,
+                                    	quantityProduced: quantityProduced /* NUMBER */,
+                                    	timestamp: timestamp /* DATETIME */
+                                    }) === 1;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="UpdateShiftTotalProduction">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = Things[me.GetConnector()].UpdateShiftTotalProduction({
+                                    	productionLine: productionLine /* THINGNAME */,
+                                    	quantityProduced: quantityProduced /* NUMBER */,
+                                    	timestamp: timestamp /* DATETIME */
+                                    }) === 1;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+            </ServiceImplementations>
+            <Subscriptions/>
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <InstanceRunTimePermissions/>
+        </ThingShape>
+    </ThingShapes>
+</Entities>
