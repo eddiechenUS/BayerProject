@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+    <Things>
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-09-27T15:04:37.852Z" name="BayerShiftTrackingPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions resourceName="GetDistinctProducts">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetShiftPlan">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetLineStopReasonCodes">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetDailyPerformanceWithAxisMinMax">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetFakeLineStoppageDetails">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformanceWithAxisMinMax">
+                        <ResultType aspect.dataShape="BayerDailyPerformanceWithAxisMinMax" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDistinctProducts">
+                        <ResultType aspect.dataShape="BayerShiftPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.dataShape="BayerScheduleDataShape" aspect.isRequired="true" baseType="INFOTABLE" description="" name="shiftSchedule" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetFakeLineStoppageDetails">
+                        <ResultType aspect.dataShape="BayerLineStoppageDetailsShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetLineStopReasonCodes">
+                        <ResultType aspect.dataShape="GenericStringList" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftPlan">
+                        <ResultType aspect.dataShape="BayerShiftPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.dataShape="BayerScheduleDataShape" aspect.isRequired="true" baseType="INFOTABLE" description="" name="shiftSchedule" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="GetDailyPerformanceWithAxisMinMax">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: BayerDailyPerformanceDataShape
+                                        var result = Things[productionLine].GetDailyPerformance();
+                                        
+                                        var yAxisMin = 0;
+                                        var yAxisMax = 100;
+                                        
+                                        var tableLength = result.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var day = result.rows[x];
+                                        	
+                                            var dayTableLength = day.dailyPerformance.rows.length;
+                                            
+                                            for (var y = 0; y < dayTableLength; y++) {
+                                                var row = day.dailyPerformance.rows[y];
+                                                
+                                                if (row.performance > yAxisMax) {
+                                                    yAxisMax = row.performance;
+                                                }
+                                            }
+                                        }
+                                        
+                                        var newField = new Object();
+                                        newField.name = "yAxisMin";
+                                        newField.baseType = 'NUMBER';
+                                        result.AddField(newField);
+                                        var newField = new Object();
+                                        newField.name = "yAxisMax";
+                                        newField.baseType = 'NUMBER';
+                                        result.AddField(newField);
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var day = result.rows[x];
+                                            day.yAxisMin = yAxisMin;
+                                            day.yAxisMax = yAxisMax;
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetDistinctProducts">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result;
+                                        if (shiftSchedule) {
+                                            // result: INFOTABLE
+                                            result = Resources["InfoTableFunctions"].Distinct({
+                                                t: shiftSchedule /* INFOTABLE */,
+                                                columns: "productId,productDescription" /* STRING */
+                                            });
+                                        }
+                                        else {
+                                            // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerScheduleDataShape)
+                                            result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerScheduleDataShape" });
+                                        }
+                                        
+                                        var newField = new Object();
+                                        newField.name = "sectionColorState";
+                                        newField.baseType = 'STRING';
+                                        result.AddField(newField);
+                                        
+                                        var tableLength = result.rows.length;
+                                        
+                                        for (var x = 0; x < tableLength; x++) {
+                                        	var row = result.rows[x];
+                                        	
+                                            row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetFakeLineStoppageDetails">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: BayerShiftTimeDataShape
+                                        var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
+                                        
+                                        
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerLineStoppageDetailsShape"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerLineStoppageDetailsShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "lightblue"; // STRING
+                                        newEntry.timestamp = new Date(shiftTime.startTime); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 4 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "grey2"; // STRING
+                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 4); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 1 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "lightblue"; // STRING
+                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 5); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 1 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "grey2"; // STRING
+                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 6); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 1 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        
+                                        // BayerLineStoppageDetailsShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.colorState = "lightblue"; // STRING
+                                        newEntry.timestamp = dateAddHours(shiftTime.startTime, 7); // DATETIME
+                                        newEntry.status = undefined; // STRING
+                                        newEntry.duration = 1 * 60 * 60 * 1000;
+                                        result.AddRow(newEntry);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetLineStopReasonCodes">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "GenericStringList"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(GenericStringList)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Mechanical Failure"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Scheduling Change"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Not Enough Personnel"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Out of Infeed Material"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Changeover Overrun"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        
+                                        // GenericStringList entry object
+                                        var newEntry = new Object();
+                                        newEntry.item = "Other"; // STRING - isPrimaryKey = true
+                                        result.AddRow(newEntry);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetShiftPlan">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        if (shiftSchedule) {
+                                            var newField = new Object();
+                                            newField.name = "sectionColorState";
+                                            newField.baseType = 'STRING';
+                                            shiftSchedule.AddField(newField);
+                                        
+                                            var tableLength = shiftSchedule.rows.length;
+                                        
+                                            for (var x = 0; x < tableLength; x++) {
+                                                var row = shiftSchedule.rows[x];
+                                        
+                                                row.sectionColorState = row.productId == "Cambio" ? "Cambio" : row.productDescription.substr(0, row.productDescription.indexOf(" "));
+                                            }
+                                        
+                                            var result = shiftSchedule;
+                                        }
+                                        else {
+                                            var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerShiftPlanDataShape" });
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ImplementedShapes/>
+            <ThingProperties/>
+        </Thing>
+    </Things>
+</Entities>
