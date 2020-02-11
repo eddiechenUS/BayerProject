@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-05T13:21:24.967Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-19T10:47:38.090Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="lastShiftsUpdate" ordinal="4"/>
@@ -448,11 +448,17 @@
                                     
                                             // keep every [groupingFactor] row and merge others into those
                                             for (var y = 0; y < scheduleTableLength; y++) {        
+                                                var row = shift.shiftSchedule.rows[y];
+                                                
                                                 if (y%groupingFactor === 0) {
+                                                    // result: STRING
+                                                    row.productDescription =  Things["BayerUtilities"].GetProductDescriptionTranslated({
+                                                        productId: row.productId /* STRING */,
+                                                        productDescription: row.productDescription /* STRING */
+                                                    });
                                                     continue;
                                                 }
                                     
-                                                var row = shift.shiftSchedule.rows[y];
                                                 var baseRow = shift.shiftSchedule.rows[Math.floor(y/groupingFactor)*groupingFactor];
                                     
                                                 baseRow.targetQuantity += row.targetQuantity;
@@ -731,6 +737,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -740,6 +747,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -777,6 +785,7 @@
                     <PropertyWrite/>
                     <ServiceInvoke>
                         <Principal isPermitted="true" name="BayerNotificationSystemUser" type="User"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -804,6 +813,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
@@ -824,6 +834,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -843,6 +854,7 @@
                     <PropertyWrite/>
                     <ServiceInvoke>
                         <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>

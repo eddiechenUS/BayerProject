@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2019-12-12T10:24:42.769Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2019-12-16T12:48:56.460Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -15,6 +15,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
@@ -35,9 +36,11 @@
                     <PropertyWrite/>
                     <ServiceInvoke/>
                     <EventInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </EventInvoke>
                     <EventSubscribe>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </EventSubscribe>
                 </Permissions>
@@ -378,6 +381,7 @@
                 <ImplementedShape name="BayerMaintenanceTicketsManagement" type="ThingShape"/>
                 <ImplementedShape name="BayerProductionManagement" type="ThingShape"/>
                 <ImplementedShape name="BayerDelaysManagement" type="ThingShape"/>
+                <ImplementedShape name="BayerExportsManagment" type="ThingShape"/>
                 <ImplementedShape name="BayerSafetyManagement" type="ThingShape"/>
                 <ImplementedShape name="BayerNotificationsManagement" type="ThingShape"/>
                 <ImplementedShape name="BayerReportsGenerator" type="ThingShape"/>

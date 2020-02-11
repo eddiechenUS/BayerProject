@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-11-21T17:13:58.731Z" name="BayerProductionPlansProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-18T13:49:06.459Z" name="BayerProductionPlansProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions/>
             <ServiceDefinitions>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddProductionPlanItems">
@@ -30,6 +30,14 @@
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="3"/>
                         <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendByDate">
+                    <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                        <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="3"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendForLine">
@@ -199,6 +207,30 @@
                                     	productionLine: productionLine /* THINGNAME */,
                                     	startTime: startTime /* DATETIME */,
                                     	endTime: endTime /* DATETIME */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetChangeoverTrendByDate">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].GetChangeOverTrendByDate({
+                                    	endDate: endDate,
+                                    	productionLine: line,
+                                    	startDate: startDate
                                     });
                                     ]]>
                                     </code>

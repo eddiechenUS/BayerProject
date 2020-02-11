@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-02T15:35:17.098Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-19T10:49:06.762Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="counter" ordinal="2"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INTEGER" category="" description="" isLocalOnly="false" name="currentProductKey" ordinal="4"/>
@@ -33,6 +33,13 @@
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendByDate">
+                    <ResultType aspect.dataShape="BayerChangeoverTrendDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendForLine">
                     <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
@@ -43,6 +50,13 @@
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetCurrentProduct">
                     <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsByDate">
+                    <ResultType aspect.dataShape="BayerMaintenanceTicketsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
+                    </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetProductionPlan">
                     <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
@@ -290,6 +304,30 @@
                         </ConfigurationTable>
                     </ConfigurationTables>
                 </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetChangeoverTrendByDate">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = Things["BayerDBDataProvider"].GetChangeoverTrendByDate({
+                                    	endDate: endDate,
+                                    	line: me.name,
+                                    	startDate: startDate
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
                 <ServiceImplementation description="" handlerName="Script" name="GetChangeoverTrendForLine">
                     <ConfigurationTables>
                         <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
@@ -355,6 +393,38 @@
                                             result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerProductionPlanDataShape" });
                                         }
                                     }
+                                    
+                                    if (result && result.rows.length > 0) {
+                                        // result: STRING
+                                        result.productDescription =  Things["BayerUtilities"].GetProductDescriptionTranslated({
+                                            productId: result.productId /* STRING */,
+                                            productDescription: result.productDescription /* STRING */
+                                        });
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetMaintenanceTicketsByDate">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things["BayerDBDataProvider"].GetMaintenanceTicketsByDate({
+                                    	endDate: endDate,
+                                    	productionLine: me.name,
+                                    	startDate: startDate
+                                    });
                                     ]]>
                                     </code>
                                 </Row>
@@ -869,6 +939,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="false" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -878,6 +949,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -887,6 +959,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -894,9 +967,11 @@
                 </Permissions>
                 <Permissions resourceName="currentProductKey">
                     <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </PropertyRead>
                     <PropertyWrite>
+                        <Principal isPermitted="false" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </PropertyWrite>
                     <ServiceInvoke/>
@@ -936,6 +1011,7 @@
                     <ServiceInvoke>
                         <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
                         <Principal isPermitted="true" name="BayerNotificationSystemUser" type="User"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
@@ -944,9 +1020,11 @@
                 </Permissions>
                 <Permissions resourceName="counter">
                     <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </PropertyRead>
                     <PropertyWrite>
+                        <Principal isPermitted="false" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </PropertyWrite>
                     <ServiceInvoke/>
@@ -957,6 +1035,17 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetChangeoverTrendByDate">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -966,6 +1055,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -977,15 +1067,6 @@
                         <Principal isPermitted="true" name="System" type="User"/>
                     </PropertyWrite>
                     <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="LoadCSVv2">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
@@ -1011,6 +1092,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -1021,6 +1103,16 @@
                     <PropertyWrite/>
                     <ServiceInvoke>
                         <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetMaintenanceTicketsByDate">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
                     <EventSubscribe/>
