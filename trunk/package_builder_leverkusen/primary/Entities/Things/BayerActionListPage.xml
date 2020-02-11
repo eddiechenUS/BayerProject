@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-12T11:40:52.850Z" name="BayerActionListPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-12T13:45:49.077Z" name="BayerActionListPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -360,14 +360,18 @@
                                         <code>
                                         <![CDATA[
                                         var currentDate = new Date();
-                                        
-                                        // result: INFOTABLE dataShape: "BayerActionListDataShape"
+                                        if(status && status !== "undefined"){
+                                        	status = " ";
+                                        }
+                                        if(assignedTo && assignedTo !== "undefined"){
+                                        	assignedTo = " ";
+                                        }
                                         var result =  Things[productionLine].QueryActions({
-                                        	dueDate: dueDate /* DATETIME */,
+                                        	dueDate: dueDate ,
                                         	createdTimeFrom: createdFrom /* DATETIME */,
-                                        	assignedTo: assignedTo /* USERNAME */,
+                                        	assignedTo: " " /* USERNAME */,
                                         	createdTimeTo: createdTo /* DATETIME */,
-                                        	status: status /* STRING */
+                                        	status: status
                                         });
                                         
                                         
@@ -436,7 +440,7 @@
                                         <code>
                                         <![CDATA[
                                         result = Groups["Role.BayerProductionLine.Operator"].GetGroupMembers();
-                                        result.AddRow({ name: "", description: "", type: "User" });
+                                        result.AddRow({ name: " ", description: "", type: "User" });
                                         
                                         var sort = new Object();
                                         sort.name = "name";
