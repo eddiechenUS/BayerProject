@@ -13,12 +13,44 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-02-10T18:36:44.099Z"
+         lastModifiedDate="2020-02-21T12:34:15.978Z"
          name="BayerProductionDbCapability"
          projectName="BayerIoT"
          tags="Applications:Bayer">
             <PropertyDefinitions></PropertyDefinitions>
             <ServiceDefinitions>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetFactorMultiplication">
+                    <ResultType
+                     baseType="STRING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetSensorStatus">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
                  category=""
@@ -39,6 +71,75 @@
             <EventDefinitions></EventDefinitions>
             <ServiceMappings></ServiceMappings>
             <ServiceImplementations>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetFactorMultiplication">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    me.kepwareCounter = Things["BayerProductionDBDataProvider"].GetCurrentCounterValueFromDB();
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetSensorStatus">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var val= Things["BayerProductionDBDataProvider"].GetSensorStatusValueFromDB();
+                                    if(me.productionsensorvalue == val){
+                                    me.productionRunning = false;
+                                    }
+                                    else{
+                                    me.productionRunning= true ;
+                                    }
+                                    me.productionsensorvalue= val;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
@@ -103,7 +204,8 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        me.UpdateProductionFromDB();
+                                        me.GetFactorMultiplication();
+                                        me.GetSensorStatus();
                                         ]]>
                                         </code>
                                     </Row>
@@ -121,7 +223,41 @@
                 <Delete></Delete>
                 <Metadata></Metadata>
             </DesignTimePermissions>
-            <RunTimePermissions></RunTimePermissions>
+            <RunTimePermissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
             <VisibilityPermissions>
                 <Visibility>
                     <Principal
