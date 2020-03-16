@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-02-10T14:06:25.702Z"
+         lastModifiedDate="2020-02-24T10:19:21.344Z"
          name="BayerGrenzach37ProductionDBConnector"
          projectName="BayerIoT"
          published="false"
@@ -30,7 +30,41 @@
                 <Delete></Delete>
                 <Metadata></Metadata>
             </DesignTimePermissions>
-            <RunTimePermissions></RunTimePermissions>
+            <RunTimePermissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
             <VisibilityPermissions>
                 <Visibility></Visibility>
             </VisibilityPermissions>
@@ -88,22 +122,30 @@
                         <Row>
                             <connectionValidationString>
                             <![CDATA[
-                            SELECT NOW()
+                            SELECT GETDATE()
                             ]]>
                             </connectionValidationString>
                             <jDBCConnectionURL>
                             <![CDATA[
-                            jdbc:mydb:/server:port/database?param=value
+                            jdbc:sqlserver://localhost\SQLEXPRESS:1433;databaseName=BayerDevDb;
                             ]]>
                             </jDBCConnectionURL>
                             <jDBCDriverClass>
                             <![CDATA[
-                            com.yourdatabase.yourDriver
+                            com.microsoft.sqlserver.jdbc.SQLServerDriver
                             ]]>
                             </jDBCDriverClass>
                             <maxConnections>5.0</maxConnections>
-                            <password></password>
-                            <userName></userName>
+                            <password>
+                            <![CDATA[
+                            eMQGrQkvLNsGPH2Cl8XTxA==:jyKUrUbDPvlwitcDkCD9JA==
+                            ]]>
+                            </password>
+                            <userName>
+                            <![CDATA[
+                            ThingworxUser
+                            ]]>
+                            </userName>
                         </Row>
                     </Rows>
                 </ConfigurationTable>

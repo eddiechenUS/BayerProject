@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-19T10:49:06.762Z"
+         lastModifiedDate="2020-02-27T21:54:36.022Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -82,6 +82,25 @@
                  isLocalOnly="false"
                  name="previousProductCounter"
                  ordinal="3"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 baseType="STRING"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="productionlinestatus"
+                 ordinal="8"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="NUMBER"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="productionsensorvalue"
+                 ordinal="9"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
@@ -350,7 +369,7 @@
                  aspect.isAsync="false"
                  category=""
                  description=""
-                 isAllowOverride="false"
+                 isAllowOverride="true"
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
@@ -455,7 +474,7 @@
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
                                         var current = me.GetCurrentProduct();
                                     
-                                        if (current.rows.length > 0) {
+                                        if (current && current.rows.length > 0) {
                                             current.producedQuantity = me.counter;
                                             me.previousProductCounter += me.counter;
                                             me.previousCycleCounter -= me.counter;
@@ -1406,7 +1425,41 @@
                 <Delete></Delete>
                 <Metadata></Metadata>
             </DesignTimePermissions>
-            <RunTimePermissions></RunTimePermissions>
+            <RunTimePermissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
             <VisibilityPermissions>
                 <Visibility>
                     <Principal
@@ -1432,6 +1485,10 @@
                  name="lastProductionPlanUpdate"></AlertDefinitions>
                 <AlertDefinitions
                  name="previousProductCounter"></AlertDefinitions>
+                <AlertDefinitions
+                 name="productionlinestatus"></AlertDefinitions>
+                <AlertDefinitions
+                 name="productionsensorvalue"></AlertDefinitions>
                 <AlertDefinitions
                  name="updateProductLock"></AlertDefinitions>
             </AlertConfigurations>
