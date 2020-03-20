@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b2319"
+ build="b222"
  majorVersion="8"
- minorVersion="4"
+ minorVersion="5"
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
- schemaVersion="1041"
+ schemaVersion="1053"
  universal="">
     <ThingTemplates>
         <ThingTemplate
@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2020-02-11T09:33:20.596Z"
+         lastModifiedDate="2020-03-19T07:17:03.114Z"
          name="BayerProductionPlansParserTemplate"
          projectName="BayerIoT"
          tags="Applications:BayerProductionPlans;Applications:Bayer"
@@ -28,7 +28,61 @@
                 <Delete></Delete>
                 <Metadata></Metadata>
             </DesignTimePermissions>
-            <RunTimePermissions></RunTimePermissions>
+            <RunTimePermissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionPlansProcessingUser"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionPlansProcessingUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionPlansProcessingUser"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionPlansProcessingUser"
+                         type="User"></Principal>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionPlansProcessingUser"
+                         type="User"></Principal>
+                    </EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
             <VisibilityPermissions>
                 <Visibility>
                     <Principal
@@ -798,6 +852,9 @@
                                         files.Sort(sort);
                                         
                                         var tableLength = files.rows.length;
+                                        if(tableLength > 0) {
+                                            logger.debug(me.name+": ScanFiles: found '"+tableLength+"' files and beginning processing now...");
+                                        }
                                         for (var x=0; x < tableLength; x++) {
                                             var file = files.rows[x];
                                             

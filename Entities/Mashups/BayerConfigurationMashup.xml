@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b2319"
+ build="b222"
  majorVersion="8"
- minorVersion="4"
+ minorVersion="5"
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
- schemaVersion="1041"
+ schemaVersion="1053"
  universal="">
     <Mashups>
         <Mashup
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-09-27T11:08:06.001Z"
+         lastModifiedDate="2020-03-18T09:39:39.781Z"
          name="BayerConfigurationMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -60,7 +60,9 @@
                     "Characteristic" : "Services",
                     "Id" : "354dedda-4f40-4304-bc3a-c9e067e5b659",
                     "Name" : "LoadCSVv2",
-                    "Parameters" : { },
+                    "Parameters" : {
+                      "repository" : "BayerCSVRepository"
+                    },
                     "Properties" : {
                       "CustomErrorMessage" : "[[service.error]]",
                       "ShowErrorMessage" : true
@@ -238,8 +240,29 @@
                 "TargetArea" : "UI",
                 "TargetId" : "dhxgrid-18",
                 "TargetSection" : ""
+              }, {
+                "Id" : "0300d91b-ffde-4e36-813c-2d11f005ff69",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "RepositoryName",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "repository",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "fileupload-14",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "LoadCSVv2",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
               } ],
-              "DesignTimePermissions" : { },
+              "DesignTimePermissions" : {
+                "Create" : [ ],
+                "Delete" : [ ],
+                "Metadata" : [ ],
+                "Read" : [ ],
+                "Update" : [ ]
+              },
               "Events" : [ {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "ThingTemplates_BayerProductionLine",
@@ -304,14 +327,19 @@
                 "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
                 "Id" : "5a92ed34-5620-4e18-a656-f5fbf4733817"
               } ],
-              "RunTimePermissions" : { },
+              "RunTimePermissions" : {
+                "permissions" : [ ]
+              },
               "UI" : {
                 "Properties" : {
+                  "AddToDashboardButton" : "SimplePlus",
                   "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
                   "Area" : "Mashup",
+                  "BGImage" : "",
                   "BGImageRepeat" : "no-repeat",
                   "BGImageSize" : "auto",
                   "Columns" : 0,
+                  "ConfigureGadgetButton" : "SimpleGear",
                   "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
                   "DisplayName" : "Mashup",
                   "EnableParameterEditing" : false,
@@ -327,12 +355,15 @@
                   "Rows" : 0,
                   "ShowDataLoading" : true,
                   "Style" : "DefaultMashupStyle",
+                  "StyleTheme" : "PTC Convergence Theme",
                   "Title" : "",
                   "TitleBar" : false,
                   "TitleBarStyle" : "DefaultTitleBarStyle",
                   "TitleBarText" : "Gadget Title Here",
                   "Top" : 0,
                   "Type" : "mashup",
+                  "UseMasterTheme" : false,
+                  "UseTheme" : false,
                   "Visible" : true,
                   "Width" : 1024,
                   "Z-index" : 10,
@@ -352,6 +383,7 @@
                     "Id" : "layout-5",
                     "IncludeSpacingInFixedAreas" : false,
                     "IsPrintLayout" : false,
+                    "LastContainer" : false,
                     "Left" : 345,
                     "LeftSidebar" : false,
                     "LeftSidebarWidth" : 0,
@@ -397,6 +429,7 @@
                       "ExpandCollapseTabLocation" : "outside",
                       "Expanded" : true,
                       "Id" : "container-6",
+                      "LastContainer" : false,
                       "MinHeight" : 0,
                       "MinWidth" : 0,
                       "Overlay" : false,
@@ -414,16 +447,19 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
                         "Area" : "UI",
+                        "ContainerClass" : "",
                         "DisplayName" : "panel-12",
                         "Height" : 200,
                         "HideScrollbars" : false,
                         "HorizontalAnchor" : "left",
                         "Id" : "panel-12",
+                        "LastContainer" : false,
                         "Left" : 170,
                         "ResponsiveLayout" : true,
                         "ShowDataLoading" : true,
@@ -453,11 +489,13 @@
                           "DropdownSelectedStyle" : "DefaultDropdownSelectedStyle",
                           "DropdownStyle" : "DefaultDropdownStyle",
                           "EnableKeyboardSelections" : true,
+                          "EnableToolTips" : true,
                           "Height" : 28,
                           "HeightOfDropdownView" : 170,
                           "Id" : "dhxlist-11",
                           "Label" : "",
                           "LabelAlignment" : "left",
+                          "LastContainer" : false,
                           "Left" : 10,
                           "ListBackgroundStyle" : "DefaultListBackgroundStyle",
                           "ListFocusStyle" : "DefaultFocusStyle",
@@ -468,11 +506,14 @@
                           "ListLabelStyle" : "DefaultWidgetLabelStyle",
                           "MultiSelect" : false,
                           "NumberOfItemsInDropdownView" : 6,
+                          "NumberOfItemsPerPage" : 500,
                           "ResponsiveLayout" : false,
                           "RowHeight" : 28,
                           "ShowDataLoading" : true,
+                          "SingleClickSelectOnTablets" : false,
                           "TabSequence" : -1,
                           "TextIfNoSelectionType" : "editable",
+                          "TextVerticalAlignment" : 28,
                           "ToolTipStyle" : "DefaultTooltipStyle",
                           "Top" : 10,
                           "Type" : "dhxlist",
@@ -499,6 +540,7 @@
                       "ExpandCollapseTabLocation" : "outside",
                       "Expanded" : true,
                       "Id" : "container-7",
+                      "LastContainer" : false,
                       "MinHeight" : 0,
                       "MinWidth" : 0,
                       "Overlay" : false,
@@ -516,7 +558,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -526,6 +569,7 @@
                         "DisplayName" : "tabsv2-1",
                         "Height" : 300,
                         "Id" : "tabsv2-1",
+                        "LastContainer" : false,
                         "Left" : 255,
                         "MaxTabWidth" : 256,
                         "NumberOfTabs" : 3,
@@ -635,6 +679,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-2",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -652,7 +697,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -666,6 +712,7 @@
                             "Id" : "layout-15",
                             "IncludeSpacingInFixedAreas" : false,
                             "IsPrintLayout" : false,
+                            "LastContainer" : false,
                             "Left" : 245,
                             "LeftSidebar" : false,
                             "LeftSidebarWidth" : 0,
@@ -711,6 +758,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-16",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -728,7 +776,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -919,6 +968,7 @@
                                 "Id" : "dhxgrid-18",
                                 "IsEditable" : false,
                                 "IsPrintLayout" : false,
+                                "LastContainer" : false,
                                 "Left" : 320,
                                 "MultiSelect" : false,
                                 "ResponsiveLayout" : true,
@@ -951,6 +1001,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-17",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -968,16 +1019,19 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
                                 "Area" : "UI",
+                                "ContainerClass" : "",
                                 "DisplayName" : "panel-13",
                                 "Height" : 200,
                                 "HideScrollbars" : false,
                                 "HorizontalAnchor" : "left",
                                 "Id" : "panel-13",
+                                "LastContainer" : false,
                                 "Left" : 30,
                                 "ResponsiveLayout" : true,
                                 "ShowDataLoading" : true,
@@ -1002,6 +1056,7 @@
                                   "FullPath" : "",
                                   "Height" : 40,
                                   "Id" : "fileupload-14",
+                                  "LastContainer" : false,
                                   "Left" : 5,
                                   "Path" : "/",
                                   "RepositoryName" : "BayerCSVRepository",
@@ -1039,10 +1094,12 @@
                                   "IconAlignment" : "left",
                                   "Id" : "button-19",
                                   "Label" : "RESET",
+                                  "LastContainer" : false,
                                   "Left" : 345,
                                   "ResponsiveLayout" : false,
                                   "RoundedCorners" : true,
                                   "ShowDataLoading" : true,
+                                  "SingleClickSelectOnTablets" : true,
                                   "Style" : "DefaultButtonStyle",
                                   "TabSequence" : 0,
                                   "ToolTipField" : "",
@@ -1077,10 +1134,12 @@
                                   "IconAlignment" : "left",
                                   "Id" : "button-20",
                                   "Label" : "SCHEDULE",
+                                  "LastContainer" : false,
                                   "Left" : 430,
                                   "ResponsiveLayout" : false,
                                   "RoundedCorners" : true,
                                   "ShowDataLoading" : true,
+                                  "SingleClickSelectOnTablets" : true,
                                   "Style" : "DefaultButtonStyle",
                                   "TabSequence" : 0,
                                   "ToolTipField" : "",
@@ -1108,6 +1167,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-3",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -1125,7 +1185,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1133,6 +1194,7 @@
                             "DisplayName" : "mashupcontainer-9",
                             "Height" : 300,
                             "Id" : "mashupcontainer-9",
+                            "LastContainer" : false,
                             "Left" : 335,
                             "MashupParameters" : [ {
                               "BaseType" : "THINGNAME",
@@ -1171,6 +1233,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-4",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -1188,7 +1251,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -1196,6 +1260,7 @@
                             "DisplayName" : "mashupcontainer-10",
                             "Height" : 300,
                             "Id" : "mashupcontainer-10",
+                            "LastContainer" : false,
                             "Left" : 0,
                             "MashupParameters" : [ {
                               "BaseType" : "THINGNAME",
