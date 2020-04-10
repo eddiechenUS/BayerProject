@@ -274,6 +274,30 @@
                     </DataShape>
                     <Rows></Rows>
                 </ConfigurationTable>
+                <ConfigurationTable
+                 description=""
+                 isMultiRow="true"
+                 name="SameProductChangeover"
+                 ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="true"
+                             baseType="STRING"
+                             description=""
+                             name="productCode"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="false"
+                             aspect.units="minutes"
+                             baseType="INTEGER"
+                             description=""
+                             name="time"
+                             ordinal="2"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows></Rows>
+                </ConfigurationTable>
             </ConfigurationTables>
             <PropertyBindings></PropertyBindings>
             <RemotePropertyBindings></RemotePropertyBindings>
@@ -569,6 +593,10 @@
                          isPermitted="true"
                          name="Administrators"
                          type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
                     </ServiceInvoke>
                     <EventInvoke>
                         <Principal
@@ -597,7 +625,12 @@
                 </Permissions>
             </InstanceRunTimePermissions>
             <InstanceVisibilityPermissions>
-                <Visibility></Visibility>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
             </InstanceVisibilityPermissions>
         </ThingTemplate>
     </ThingTemplates>

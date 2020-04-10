@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-02-27T21:54:36.022Z"
+         lastModifiedDate="2020-03-31T09:11:59.948Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -585,38 +585,40 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProgressDisplayDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerProgressDisplayDataShape" });
-                                    
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable")
+                                    // dataShapeName:STRING):INFOTABLE(BayerProgressDisplayDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        dataShapeName: "BayerProgressDisplayDataShape"
+                                    });
                                     // BayerProgressDisplayDataShape entry object
-                                    var newEntry = new Object();
+                                    var newEntry = {};
                                     newEntry.min = 0; // NUMBER
                                     
                                     // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
                                     var currentProduct = me.GetCurrentProduct();
-                                    
                                     if (currentProduct && currentProduct.getRowCount() > 0) {
                                         if (currentProduct.productId == "Cambio") {
-                                            var targetMinutes = currentProduct.targetHours * 60; 
+                                            var targetMinutes = currentProduct.targetHours * 60;
                                     
                                             // dateDifference(date1:DATETIME,date2:DATETIME):NUMBER
                                             var difference = dateDifference(new Date(), currentProduct.startTime) / 1000 / 60;
                                     
                                             newEntry.max = targetMinutes; // NUMBER
                                             newEntry.value = difference; // NUMBER
+                                            
+                                            // #FIXME
+                                            //newEntry.value = targetMinutes - 10;
                                     
                                             // Bayer wants to be able to exceed the target by 10%
-                                            newEntry.green = difference < targetMinutes * 1.1; 
+                                            newEntry.green = difference < targetMinutes * 1.1;
                                             newEntry.red = !newEntry.green;
-                                        }
-                                        else {
+                                        } else {
                                             newEntry.max = 60; // NUMBER
                                             newEntry.value = 0; // NUMBER
                                             newEntry.green = true;
                                             newEntry.red = false;
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         newEntry.red = false; // BOOLEAN
                                         newEntry.green = false; // BOOLEAN
                                         newEntry.max = 60; // NUMBER
@@ -1601,10 +1603,19 @@
                     <PropertyRead>
                         <Principal
                          isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                        <Principal
+                         isPermitted="true"
                          name="System"
                          type="User"></Principal>
                     </PropertyRead>
-                    <PropertyWrite></PropertyWrite>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="BayerProductionDbSchedulerUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
                     <ServiceInvoke></ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>

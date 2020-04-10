@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2020-03-06T11:08:21.637Z"
+         lastModifiedDate="2020-03-25T13:54:02.306Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -234,6 +234,29 @@
                              baseType="INTEGER"
                              description=""
                              name="id"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="DeleteSafetyIssue">
+                        <ResultType
+                         aspect.dataShape="SafetyIssuesShape"
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="ID"
                              ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
@@ -2051,6 +2074,51 @@
                     <ServiceImplementation
                      description=""
                      handlerName="SQLCommand"
+                     name="DeleteSafetyIssue">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>9.999999999E9</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        DELETE
+                                          FROM [dbo].[SafetyIssue]
+                                          WHERE [id] = [[ID]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
                      name="DeleteScheduledProduction">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -3250,7 +3318,8 @@
                                         <maxItems>9.999999999E9</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT [productionLine]
+                                        SELECT [ID]
+                                        	   ,[productionLine]
                                                ,[type]
                                                ,[comment]
                                                ,[timestamp]
