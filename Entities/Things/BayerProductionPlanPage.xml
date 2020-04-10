@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2019-11-19T11:15:42.234Z"
+         lastModifiedDate="2020-04-01T14:39:09.482Z"
          name="BayerProductionPlanPage"
          projectName="BayerIoT"
          published="false"
@@ -70,6 +70,36 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="FilterProductionPlan">
+                        <ResultType
+                         aspect.dataShape="BayerProductionPlanStatusFormattedDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.defaultValue="false"
+                             baseType="BOOLEAN"
+                             description=""
+                             name="filterOnlyCompleted"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.dataShape="BayerProductionPlanStatusFormattedDataShape"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="productionPlan"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetProductionPlanStatusFormatted">
                         <ResultType
                          aspect.dataShape="BayerProductionPlanStatusFormattedDataShape"
@@ -78,6 +108,12 @@
                          name="result"
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.defaultValue="false"
+                             baseType="BOOLEAN"
+                             description=""
+                             name="filterOnlyCompleted"
+                             ordinal="2"></FieldDefinition>
                             <FieldDefinition
                              aspect.thingTemplate="BayerProductionLine"
                              baseType="THINGNAME"
@@ -90,6 +126,46 @@
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="FilterProductionPlan">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = Resources["InfoTableFunctions"].Query({
+                                            t: productionPlan,                                 
+                                            query: {                                            
+                                                "filters": {                                    
+                                                    "fieldName": "status",                   
+                                                    "type": (!filterOnlyCompleted ? "NE" : "EQ"),                               
+                                                    "value": "COMPLETED"                               
+                                                }                                               
+                                            }                                                   
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
@@ -151,6 +227,17 @@
                                         };
                                         
                                         result = Resources["InfoTableFunctions"].DeriveFields(params);
+                                        
+                                        /*result = Resources["InfoTableFunctions"].Query({
+                                            t: result,                                 
+                                            query: {                                            
+                                                "filters": {                                    
+                                                    "fieldName": "status",                   
+                                                    "type": (!filterOnlyCompleted ? "NE" : "EQ"),                               
+                                                    "value": "COMPLETED"                               
+                                                }                                               
+                                            }                                                   
+                                        });*/
                                         ]]>
                                         </code>
                                     </Row>

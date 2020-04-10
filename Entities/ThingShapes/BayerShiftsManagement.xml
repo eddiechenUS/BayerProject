@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-03-18T21:46:00.352Z"
+         lastModifiedDate="2020-03-31T07:51:00.336Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -694,9 +694,18 @@
                                     	dataShapeName: 'PcsPerShiftDataShape' /* DATASHAPENAME */
                                     });
                                     
+                                    var colorState;
+                                    
+                                    if	(shift.shiftTargetPercent >= 100) {
+                                        colorState = 100;
+                                    } else {
+                                        colorState = shift.actualDiffPerMinute;
+                                    }
+                                        
                                     result.AddRow({
                                         shiftTargetPercent: shift.shiftTargetPercent,
                                         actualDiffPerMinute: shift.actualDiffPerMinute,
+                                        colorState: colorState,
                                     });
                                     ]]>
                                     </code>

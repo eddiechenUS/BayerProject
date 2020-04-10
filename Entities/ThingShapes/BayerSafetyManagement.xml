@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-09-27T14:48:35.190Z"
+         lastModifiedDate="2020-03-25T10:27:58.269Z"
          name="BayerSafetyManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -111,6 +111,34 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="DeleteSafetyIssue">
+                    <ResultType
+                     baseType="BOOLEAN"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="INTEGER"
+                         description=""
+                         name="ID"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="type"
+                         ordinal="3"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="GetSafetyIssues">
                     <ResultType
                      aspect.dataShape="SafetyIssuesShape"
@@ -187,6 +215,54 @@
                                     } else {
                                     	me.nearMissesLastModified = date;
                                         me.nearMissesCount+=1;
+                                    }
+                                    
+                                    result = true;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="DeleteSafetyIssue">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = false;
+                                    var date = new Date();
+                                    
+                                    var data = {
+                                    	ID: ID
+                                    };
+                                    
+                                    var accidentDeleted = Things['BayerDBDataProvider'].DeleteSafetyIssue(data);
+                                    
+                                    if (type === 'accident') {
+                                    	me.accidentsLastModified = date;
+                                        me.accidentsCount-=1;
+                                    } else {
+                                    	me.nearMissesLastModified = date;
+                                        me.nearMissesCount-=1;
                                     }
                                     
                                     result = true;

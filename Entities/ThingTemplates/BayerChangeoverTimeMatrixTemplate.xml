@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DataTableThing"
          homeMashup="DataTableEditor"
-         lastModifiedDate="2020-01-23T09:29:19.707Z"
+         lastModifiedDate="2020-03-26T15:52:32.541Z"
          name="BayerChangeoverTimeMatrixTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -486,6 +486,18 @@
                                             
                                             // FROM == TO
                                             if (sourceCode == targetCode) {
+                                                var lineThing = Things[productionLine];
+                                                if (!lineThing) {
+                                                	return 0;
+                                                }
+                                                var configTable = lineThing.GetConfigurationTable({tableName: "SameProductChangeover"});
+                                                if (!configTable.rows.length) {
+                                                    return 0;
+                                                }
+                                                var found = configTable.Find({productCode: sourceCode});
+                                                if (found !== null) {
+                                                	return found.time;   
+                                                }
                                                 return 0;
                                             }
                                             
