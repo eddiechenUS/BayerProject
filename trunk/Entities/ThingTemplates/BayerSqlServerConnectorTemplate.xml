@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2020-03-25T13:54:02.306Z"
+         lastModifiedDate="2020-04-09T15:52:52.182Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -1202,6 +1202,12 @@
                              description=""
                              name="startTime"
                              ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="totalDuration"
+                             ordinal="8"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -2640,9 +2646,11 @@
                                               ,[startTime]
                                               ,[endTime]
                                               ,FORMAT([endTime] - [startTime], 'HH:mm:ss') as [duration]
+                                              ,FORMAT([totalDuration], 'HH:mm:ss') as [totalDuration]
                                               ,[reasonCode]
                                               ,[description]
                                               ,[shiftScheduleId]
+                                              
                                           FROM 
                                         	[dbo].[Delay]
                                           WHERE 
@@ -2693,7 +2701,8 @@
                                         DECLARE @shiftScheduleId AS INT = [[shiftScheduleId]];  
                                         
                                         SELECT *
-                                        	,FORMAT([grouped].[durationDiff],'mm:ss') AS [duration]
+                                        	--,FORMAT([grouped].[durationDiff],'mm:ss') AS [duration]
+                                            ,FORMAT([grouped].[totalDurationDiff],'mm:ss') AS [duration]
                                         	,(SELECT TOP(1) [description] 
                                         		FROM [dbo].[Delay] AS [parent] 
                                         		WHERE 
@@ -2710,6 +2719,8 @@
                                         		  -- ,SUM((CAST((DATEDIFF(SECOND,[startTime], [endTime]) / 60.0) AS DECIMAL(6,2)))) AS [duration]
                                         		  ,CAST(SUM(CAST([endTime] - [startTime] AS FLOAT)) AS DATETIME) AS [durationDiff]
                                         		  ,SUM(DATEDIFF(SECOND, [startTime], [endTime])) as [durationSec]
+                                        		  --,SUM(DATEDIFF(SECOND, 0 , [totalDuration])) as [totalDurationSec]
+                                        		  ,CAST(SUM(CAST([totalDuration] AS FLOAT)) AS DATETIME) AS [totalDurationDiff]
                                         	  FROM [dbo].[Delay]
                                         	  WHERE 
                                         		[shiftScheduleId] = @shiftScheduleId
@@ -3877,7 +3888,8 @@
                                                    ,[endTime]
                                                    ,[reasonCode]
                                                    ,[description]
-                                                   ,[shiftScheduleId])
+                                                   ,[shiftScheduleId]
+                                                   ,[totalDuration])
                                              VALUES
                                                    ([[category]]
                                                    ,[[source]]
@@ -3885,7 +3897,8 @@
                                                    ,[[endTime]]
                                                    ,[[reasonCode]]
                                                    ,[[description]]
-                                                   ,[[shiftScheduleId]]);
+                                                   ,[[shiftScheduleId]]
+                                                   ,[[totalDuration]]);
                                         SELECT * FROM [dbo].[Delay] WHERE [id] = SCOPE_IDENTITY();
                                         ]]>
                                         </sql>

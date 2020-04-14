@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-16T13:21:22.268Z"
+         lastModifiedDate="2020-04-09T15:08:13.876Z"
          name="BayerDelaysManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -211,6 +211,12 @@
                          description=""
                          name="startTime"
                          ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="totalDuration"
+                         ordinal="4"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
@@ -490,7 +496,8 @@
                                         category: category,
                                         shiftScheduleId: shiftScheduleId,
                                         startTime: startTime,
-                                        endTime: endTime
+                                        endTime: endTime,
+                                        totalDuration: totalDuration
                                     };
                                     
                                     var result = Things["BayerDBDataProvider"].InsertDelayEntry(delayEntry);
@@ -866,7 +873,7 @@
                                     			me.delayMicrostopTimeStart = oldProductionRunning.time; //m
                                     			me.delayMicrostopTime = diffTime;
                                     		} else {
-                                    			me.delayMicrostopTime += me.delayMicrostopTime; //m
+                                    			me.delayMicrostopTime += diffTime; //m
                                     		}
                                     		//logger.debug('ProcessProductionDelayRules:me.delayMicrostopTime:' + me.delayMicrostopTime);
                                     
@@ -877,7 +884,8 @@
                                     			me.ProductionDelayed({
                                     				startTime: me.delayMicrostopTimeStart /* DATETIME */ ,
                                     				endTime: now /* DATETIME */ ,
-                                    				category: delayCategory.microstop /* STRING */
+                                    				category: delayCategory.microstop /* STRING */,
+                                                    totalDuration: new Date (me.delayMicrostopTime * 60 * 1000)
                                     			});
                                     			me.ResetMicrostopDelayProperties();
                                     		}
@@ -885,7 +893,8 @@
                                     		me.ProductionDelayed({
                                     			startTime: oldProductionRunning.time /* DATETIME */ ,
                                     			endTime: newProductionRunning.time /* DATETIME */ ,
-                                    			category: delayCategory.breakdown /* STRING */
+                                    			category: delayCategory.breakdown /* STRING */,
+                                                totalDuration: new Date (newProductionRunning.time.getTime() - oldProductionRunning.time.getTime())
                                     		});
                                     
                                     		// Red indicates when there was an active production order with a target
@@ -1088,6 +1097,7 @@
                                             category: eventData.category, /* STRING */
                                             startTime: eventData.startTime,
                                             endTime: eventData.endTime, /* DATETIME */
+                                            totalDuration: eventData.totalDuration,
                                         });
                                         ]]>
                                         </code>
