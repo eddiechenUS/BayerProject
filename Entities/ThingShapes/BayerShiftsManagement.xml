@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-03-31T07:51:00.336Z"
+         lastModifiedDate="2020-04-10T14:31:53.142Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -566,56 +566,91 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // GetDailyPerformanceForTimeframe service
+                                    // * startTime - DATETIME
+                                    // * endTime - DATETIME
+                                    function checkDay(d1, d2) {
+                                        return (d1.getDate() == d2.getDate() && d1.getMonth() == d2.getMonth() && d1.getFullYear() == d2.getFullYear());
+                                    }
                                     // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
-                                    var shifts =  Things["BayerDBDataProvider"].GetShiftSchedules({
-                                    	productionLine: me.name /* THINGNAME */,
-                                    	startTime: startTime /* DATETIME */,
-                                    	endTime: endTime /* DATETIME */
+                                    var shifts = Things["BayerDBDataProvider"].GetShiftSchedules({
+                                        productionLine: me.name /* THINGNAME */,
+                                        startTime: startTime /* DATETIME */,
+                                        endTime: endTime /* DATETIME */
+                                    });
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerDailyPerformanceDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        dataShapeName: "BayerDailyPerformanceDataShape"
                                     });
                                     
-                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerDailyPerformanceDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerDailyPerformanceDataShape" });
-                                    
                                     var tableLength = shifts.rows.length;
-                                    for (var x = 0; x < tableLength;) {	
+                                    for (var sIdx = 0; sIdx < tableLength;) {
                                         // BayerDailyPerformanceDataShape entry object
-                                        var newResultEntry = new Object();
-                                        newResultEntry.timestamp = shifts.rows[x].timestamp; // DATETIME
+                                        var newResultEntry = {};
+                                        newResultEntry.timestamp = shifts.rows[sIdx].timestamp; // DATETIME
                                     
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerPerformancePerShiftDataShape)
-                                        newResultEntry.dailyPerformance = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerPerformancePerShiftDataShape" });
-                                    
-                                        for (var i = 0; i < 3 && x < tableLength; i++) {
-                                            var shift = shifts.rows[x];
-                                                
+                                        newResultEntry.dailyPerformance = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            dataShapeName: "BayerPerformancePerShiftDataShape"
+                                        });
+                                        let previousDate = null;
+                                        for (var sub = 0; sub < 3 && sIdx < tableLength; sub++) {
+                                            var shift = shifts.rows[sIdx];
+                                            if (!previousDate) {
+                                                previousDate = new Date(shift.timestamp.getTime());
+                                            } else if (sIdx > 0) {
+                                                prevousDate = new Date(shifts.rows[sIdx - 1].timestamp.getTime());
+                                            }
+                                            if (!checkDay(previousDate, shift.timestamp)) {
+                                                // day is not the same, there is missing data
+                                                // should add remaining daily performance shift entries
+                                                //debugger; // should skip?
+                                                //console.log("Dates are not aligned! sub='" + sub + "' prev='" + previousDate.toISOString() + "' cur='" + shift.timestamp.toISOString() + "'");
+                                                // TODO ?
+                                            }
                                             // BayerPerformancePerShiftDataShape entry object
-                                            var newEntry = new Object();
-                                            newEntry.shift = "" + (i+1); // STRING
-                                            
-                                            if (shift.timestamp.getHours() == 6 + (i*8)) {
+                                            var newEntry = {};
+                                            newEntry.shift = "" + (sub + 1); // STRING
+                                            let hours = shift.timestamp.getUTCHours();
+                                            // What if there is missing data in shift schedule?
+                                            // Then this condition would start to fail miserably, one after another,
+                                            // simply because dates are out of order - only one missing schedule record
+                                            // for 6:00 / 14:00 / 22:00 would cause all other entries to return false.
+                                            // Need to detect missing record and skip over it (increment sub, leave sIdx)
+                                            if (hours == 6 + (sub * 8)) {
+                                                //logger.debug("[" + me.name + ".GetDailyPerformance] Adding shift: (" + hours + " != 6 + (" + sub + "*8) | " + (6 + (sub * 8)) + "): '" +
+                                                //    shift.timestamp.toISOString() + "' produced='" + shift.totalQuantityProduced + "'");
                                                 newEntry.quantityProduced = shift.totalQuantityProduced; // NUMBER
                                                 newEntry.targetQuantity = shift.totalTargetQuantity; // NUMBER
-                                                
+                                    
                                                 // if target==0, then performance=quantity
                                                 newEntry.performance = newEntry.targetQuantity ? (newEntry.quantityProduced / newEntry.targetQuantity * 100) : newEntry.quantityProduced;
-                                                
                                                 newEntry.status = newEntry.quantityProduced >= newEntry.targetQuantity; // BOOLEAN
-                                            }
-                                            else {
-                                                //logger.debug("[" + me.name + ".GetDailyPerformance] Skipping shift");
+                                    
+                                                newResultEntry.dailyPerformance.AddRow(newEntry);
+                                            } else {
+                                                //logger.debug("[" + me.name + ".GetDailyPerformance] Skipping shift: (" + hours + " != 6 + (" + sub + "*8) | " + (6 + (sub * 8)) + "): '" +
+                                                //   shift.timestamp.toISOString() + "' produced='" + shift.totalQuantityProduced + "'");
                                                 newEntry.quantityProduced = 0; // NUMBER
                                                 newEntry.targetQuantity = 0; // NUMBER
                                                 newEntry.performance = 0;
                                                 newEntry.status = false; // BOOLEAN
+                                                newResultEntry.dailyPerformance.AddRow(newEntry);
+                                                continue; // need to skip in both cases (hold on current record until)
+                                                let cSubId = (hours - 6) / 8;
+                                                if (cSubId < sub) {
+                                                    continue;
+                                                    // based on id, it means that new hours are before
+                                                    // like in previous day shift (there is missing data?)
+                                                }
+                                                if (cSubId > sub) {
+                                                }
                                             }
-                                            
-                                            newResultEntry.dailyPerformance.AddRow(newEntry);
-                                            
-                                            x++;
-                                        }
-                                        
+                                            sIdx++;
+                                        } // for each 8h shift
                                         result.AddRow(newResultEntry);
-                                    }
+                                    } // for each shift schedule entry
                                     ]]>
                                     </code>
                                 </Row>

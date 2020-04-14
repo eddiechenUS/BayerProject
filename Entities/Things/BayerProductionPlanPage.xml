@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-04-01T14:39:09.482Z"
+         lastModifiedDate="2020-04-13T18:03:14.587Z"
          name="BayerProductionPlanPage"
          projectName="BayerIoT"
          published="false"
@@ -216,13 +216,17 @@
                                             "status === 'COMPLETED' ? 'Completed' :" +
                                             	"status === 'INPROGRESS' ? 'Running' : " +
                                             	"status === 'PENDING' ? 'Scheduled' : ''," + /* 2nd column */
+                                            
                                             "productId === 'Cambio' ? 'Cambio' : status === 'COMPLETED' ? 'Completed' :" +
                                             	"status === 'INPROGRESS' ? 'Running' : " +
                                             	"status === 'PENDING' ? 'Scheduled' : ''," + /* 3rd column */
+                                            
                                             "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," +
                                             "productId === 'Cambio' ? '' : productId," +
+                                            
                                             "status === 'COMPLETED' && productId === 'Cambio' ? 'CompletedChangeover' :" +
-                                            	"status === 'PENDING' ? 'ScheduledChangeover' :" +
+                                            	"status === 'PENDING' && productId === 'Cambio' ? 'ScheduledChangeover' :" +
+                                        		"status === 'PENDING' ? 'Scheduled' :" +
                                             	"status === 'INPROGRESS' ? 'Running' : 'Completed'"
                                         };
                                         
