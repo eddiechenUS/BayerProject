@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2019-12-12T15:17:15.002Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2020-04-09T15:52:52.182Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -97,6 +97,12 @@
                             <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteSafetyIssue">
+                        <ResultType aspect.dataShape="SafetyIssuesShape" baseType="NUMBER" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="INTEGER" description="" name="ID" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteScheduledProduction">
                         <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -143,6 +149,14 @@
                             <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeOverTrendByDate">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                            <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendForLine">
                         <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -176,6 +190,14 @@
                             <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
                             <FieldDefinition baseType="STRING" description="" name="status" ordinal="3"/>
                             <FieldDefinition baseType="DATETIME" description="A DATETIME type value that limits the querying for a period of time. From timeThreshold till now (e.g. during last 7 days)." name="timeThreshold" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsByDate">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                            <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsTimeThreshold">
@@ -300,6 +322,7 @@
                             <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="7"/>
                             <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="source" ordinal="2"/>
                             <FieldDefinition baseType="DATETIME" description="" name="startTime" ordinal="3"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="totalDuration" ordinal="8"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertMaintenanceTicket">
@@ -522,6 +545,32 @@
                                         <![CDATA[
                                         DELETE FROM [dbo].[Action]
                                               WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLCommand" name="DeleteSafetyIssue">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>9.999999999E9</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        DELETE
+                                          FROM [dbo].[SafetyIssue]
+                                          WHERE [id] = [[ID]]
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -773,6 +822,47 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetChangeOverTrendByDate">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SET DATEFIRST 1;
+                                        DECLARE @line AS VARCHAR(MAX) = [[productionLine]];  
+                                        DECLARE @start AS DATE = [[startDate]];
+                                        DECLARE @end AS DATE = [[endDate]];  
+                                        
+                                        SELECT
+                                        	  [id]
+                                              ,DATEADD(WEEK, DATEDIFF(WEEK, 0, [startTime]), 0) AS [weekStart]
+                                        	  ,DATEADD(DAY, DATEDIFF(DAY, 0, [startTime]), 0) AS [dayStart]
+                                              ,[startTime] AS [start]
+                                        	  ,[endTime] AS [end]
+                                              ,([targetHours] * 60) AS [targetHours]
+                                              ,([workedHours] * 60) AS [workedHours]
+                                        	  ,([workedHours] - [targetHours]) * 60 AS [delta] 
+                                        FROM [dbo].[ProductionPlan]
+                                        WHERE [productionLine] = @line
+                                         AND [productId] = 'Cambio'
+                                         AND [startTime] BETWEEN @start AND @end
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="SQLQuery" name="GetChangeoverTrendForLine">
                         <ConfigurationTables>
                             <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
@@ -841,10 +931,12 @@
                                               ,[source]
                                               ,[startTime]
                                               ,[endTime]
-                                              ,FORMAT([endTime] - [startTime], 'mm:ss') as [duration]
+                                              ,FORMAT([endTime] - [startTime], 'HH:mm:ss') as [duration]
+                                              ,FORMAT([totalDuration], 'HH:mm:ss') as [totalDuration]
                                               ,[reasonCode]
                                               ,[description]
                                               ,[shiftScheduleId]
+                                              
                                           FROM 
                                         	[dbo].[Delay]
                                           WHERE 
@@ -876,7 +968,8 @@
                                         DECLARE @shiftScheduleId AS INT = [[shiftScheduleId]];  
                                         
                                         SELECT *
-                                        	,FORMAT([grouped].[durationDiff],'mm:ss') AS [duration]
+                                        	--,FORMAT([grouped].[durationDiff],'mm:ss') AS [duration]
+                                            ,FORMAT([grouped].[totalDurationDiff],'mm:ss') AS [duration]
                                         	,(SELECT TOP(1) [description] 
                                         		FROM [dbo].[Delay] AS [parent] 
                                         		WHERE 
@@ -893,6 +986,8 @@
                                         		  -- ,SUM((CAST((DATEDIFF(SECOND,[startTime], [endTime]) / 60.0) AS DECIMAL(6,2)))) AS [duration]
                                         		  ,CAST(SUM(CAST([endTime] - [startTime] AS FLOAT)) AS DATETIME) AS [durationDiff]
                                         		  ,SUM(DATEDIFF(SECOND, [startTime], [endTime])) as [durationSec]
+                                        		  --,SUM(DATEDIFF(SECOND, 0 , [totalDuration])) as [totalDurationSec]
+                                        		  ,CAST(SUM(CAST([totalDuration] AS FLOAT)) AS DATETIME) AS [totalDurationDiff]
                                         	  FROM [dbo].[Delay]
                                         	  WHERE 
                                         		[shiftScheduleId] = @shiftScheduleId
@@ -983,6 +1078,39 @@
                                         	AND ([timestamp] > [[timeThreshold]])
                                             AND ([[status]] = '' OR [status] = [[status]])
                                             AND ([[assignedTo]] = '' OR [assignedTo] = [[assignedTo]])
+                                        ORDER BY [timestamp]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetMaintenanceTicketsByDate">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT [id]
+                                              ,[status]
+                                              ,[productionLine]
+                                              ,[timestamp]
+                                              ,[assignedTo]
+                                              ,[type]      
+                                        FROM [dbo].[MaintenanceTicket]
+                                        WHERE [productionLine] = [[productionLine]]
+                                        	AND ([timestamp] BETWEEN [[startDate]] AND [[endDate]])
                                         ORDER BY [timestamp]
                                         ]]>
                                         </sql>
@@ -1278,7 +1406,8 @@
                                         <maxItems>9.999999999E9</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT [productionLine]
+                                        SELECT [ID]
+                                        	   ,[productionLine]
                                                ,[type]
                                                ,[comment]
                                                ,[timestamp]
@@ -1646,7 +1775,8 @@
                                                    ,[endTime]
                                                    ,[reasonCode]
                                                    ,[description]
-                                                   ,[shiftScheduleId])
+                                                   ,[shiftScheduleId]
+                                                   ,[totalDuration])
                                              VALUES
                                                    ([[category]]
                                                    ,[[source]]
@@ -1654,7 +1784,8 @@
                                                    ,[[endTime]]
                                                    ,[[reasonCode]]
                                                    ,[[description]]
-                                                   ,[[shiftScheduleId]]);
+                                                   ,[[shiftScheduleId]]
+                                                   ,[[totalDuration]]);
                                         SELECT * FROM [dbo].[Delay] WHERE [id] = SCOPE_IDENTITY();
                                         ]]>
                                         </sql>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="DataTable" description="" documentationContent="" effectiveThingPackage="DataTableThing" homeMashup="DataTableEditor" lastModifiedDate="2019-11-29T13:36:17.528Z" name="BayerChangeoverTimeMatrixTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="DataTable" description="" documentationContent="" effectiveThingPackage="DataTableThing" homeMashup="DataTableEditor" lastModifiedDate="2020-03-26T15:52:32.541Z" name="BayerChangeoverTimeMatrixTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -112,6 +112,7 @@
                         <ParameterDefinitions>
                             <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="path" ordinal="1"/>
                             <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="2"/>
+                            <FieldDefinition aspect.defaultValue="SystemRepository" aspect.isRequired="true" aspect.thingTemplate="FileRepository" baseType="THINGNAME" description="" name="repository" ordinal="3"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
@@ -290,6 +291,18 @@
                                             
                                             // FROM == TO
                                             if (sourceCode == targetCode) {
+                                                var lineThing = Things[productionLine];
+                                                if (!lineThing) {
+                                                	return 0;
+                                                }
+                                                var configTable = lineThing.GetConfigurationTable({tableName: "SameProductChangeover"});
+                                                if (!configTable.rows.length) {
+                                                    return 0;
+                                                }
+                                                var found = configTable.Find({productCode: sourceCode});
+                                                if (found !== null) {
+                                                	return found.time;   
+                                                }
                                                 return 0;
                                             }
                                             

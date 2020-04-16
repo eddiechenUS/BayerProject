@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
- build="b2319"
+ build="b222"
  majorVersion="8"
- minorVersion="4"
+ minorVersion="5"
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
- schemaVersion="1041"
+ schemaVersion="1053"
  universal="">
     <Mashups>
         <Mashup
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-12-12T11:18:23.033Z"
+         lastModifiedDate="2020-04-13T17:50:45.952Z"
          name="BayerProductionPlanMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -101,9 +101,31 @@
                     "Characteristic" : "Services",
                     "Id" : "b973a916-928c-44a8-915e-9f44d359bb36",
                     "Name" : "GetProductionPlanStatusFormatted",
-                    "Parameters" : { },
+                    "Parameters" : {
+                      "filterOnlyCompleted" : false
+                    },
                     "RefreshInterval" : 0,
                     "Target" : "GetProductionPlanStatusFormatted"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "3b028fa9-1c64-4968-acbb-c743f8d331ed",
+                    "Name" : "FilterProductionPlan",
+                    "Parameters" : {
+                      "filterOnlyCompleted" : false
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "FilterProductionPlan"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "7cb43bca-17dd-4d45-a6a4-3d60fa70be30",
+                    "Name" : "FilterProductionPlan1",
+                    "Parameters" : {
+                      "filterOnlyCompleted" : true
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "FilterProductionPlan"
                   } ]
                 },
                 "UserExtensions" : {
@@ -138,23 +160,6 @@
                 "TargetId" : "EntityName",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
               }, {
-                "Id" : "e8864c8e-0db7-439f-9fb2-6256d62f6b19",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "InfoTable",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetProductionPlanStatusFormatted",
-                "SourceSection" : "Things_BayerProductionPlanPage",
-                "TargetArea" : "UI",
-                "TargetId" : "dhxgrid-46",
-                "TargetSection" : ""
-              }, {
                 "Id" : "62cb2fc2-42fc-4d34-9ccc-104295b9f755",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "line",
@@ -185,6 +190,72 @@
                 "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
                 "TargetArea" : "UI",
                 "TargetId" : "valuedisplay-48",
+                "TargetSection" : ""
+              }, {
+                "Id" : "5dca9134-de13-4839-9696-f3690786d34f",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "TargetProperty" : "productionPlan",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetProductionPlanStatusFormatted",
+                "SourceSection" : "Things_BayerProductionPlanPage",
+                "TargetArea" : "Data",
+                "TargetId" : "FilterProductionPlan",
+                "TargetSection" : "Things_BayerProductionPlanPage"
+              }, {
+                "Id" : "12d169b0-435f-4b09-8640-178062692d2c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "TargetProperty" : "productionPlan",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetProductionPlanStatusFormatted",
+                "SourceSection" : "Things_BayerProductionPlanPage",
+                "TargetArea" : "Data",
+                "TargetId" : "FilterProductionPlan1",
+                "TargetSection" : "Things_BayerProductionPlanPage"
+              }, {
+                "Id" : "663c46ab-b43e-4da5-a70e-f2121093214b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "FilterProductionPlan",
+                "SourceSection" : "Things_BayerProductionPlanPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxgrid-46",
+                "TargetSection" : ""
+              }, {
+                "Id" : "90821fae-e535-4649-96c7-95bbbf789c97",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "FilterProductionPlan1",
+                "SourceSection" : "Things_BayerProductionPlanPage",
+                "TargetArea" : "UI",
+                "TargetId" : "dhxgrid-55",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
@@ -221,6 +292,24 @@
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
                 "Id" : "2003ddf7-07ef-441e-9afa-96659c5bf1cb"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerProductionPlanPage",
+                "EventHandlerService" : "FilterProductionPlan",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "GetProductionPlanStatusFormatted",
+                "EventTriggerSection" : "Things_BayerProductionPlanPage",
+                "Id" : "82710165-ad0f-42e3-8bde-5858334d30e0"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerProductionPlanPage",
+                "EventHandlerService" : "FilterProductionPlan1",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "GetProductionPlanStatusFormatted",
+                "EventTriggerSection" : "Things_BayerProductionPlanPage",
+                "Id" : "ab8095e2-e87b-426e-ab02-94d6a8d7f383"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -257,6 +346,7 @@
                   "TitleBarText" : "Gadget Title Here",
                   "Top" : 0,
                   "Type" : "mashup",
+                  "UseMasterTheme" : false,
                   "UseTheme" : false,
                   "UseThemeForHybrids" : false,
                   "Visible" : true,
@@ -272,14 +362,15 @@
                     "Description" : "",
                     "ParameterName" : "line"
                   } ],
-                  "id_index" : 51,
+                  "id_index" : 56,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
                   "Properties" : {
                     "Area" : "UI",
                     "Columns" : 1,
-                    "DisplayName" : "layout-2",
+                    "Description" : "Mashup-Layout",
+                    "DisplayName" : "Mashup-Layout",
                     "Footer" : false,
                     "FooterHeight" : 0,
                     "Header" : false,
@@ -287,6 +378,7 @@
                     "Id" : "layout-2",
                     "IncludeSpacingInFixedAreas" : false,
                     "IsPrintLayout" : false,
+                    "LastContainer" : false,
                     "Left" : 470,
                     "LeftSidebar" : false,
                     "LeftSidebarWidth" : 0,
@@ -328,10 +420,11 @@
                       "Area" : "UI",
                       "BGImageRepeat" : "no-repeat",
                       "BGImageSize" : "auto",
-                      "DisplayName" : "Column 1",
+                      "DisplayName" : "Content",
                       "ExpandCollapseTabLocation" : "outside",
                       "Expanded" : true,
                       "Id" : "container-4",
+                      "LastContainer" : false,
                       "MinHeight" : 0,
                       "MinWidth" : 0,
                       "Overlay" : false,
@@ -356,7 +449,8 @@
                       "Properties" : {
                         "Area" : "UI",
                         "Columns" : 0,
-                        "DisplayName" : "layout-6",
+                        "Description" : "Content-Layout",
+                        "DisplayName" : "Content-Layout",
                         "Footer" : false,
                         "FooterHeight" : 0,
                         "Header" : true,
@@ -364,6 +458,7 @@
                         "Id" : "layout-6",
                         "IncludeSpacingInFixedAreas" : false,
                         "IsPrintLayout" : false,
+                        "LastContainer" : false,
                         "Left" : 345,
                         "LeftSidebar" : false,
                         "LeftSidebarWidth" : 0,
@@ -376,8 +471,8 @@
                         "PctColumn6" : 1,
                         "PctColumn7" : 1,
                         "PctColumn8" : 1,
-                        "PctRow1" : 10,
-                        "PctRow2" : 90,
+                        "PctRow1" : 7,
+                        "PctRow2" : 93,
                         "PctRow3" : 90,
                         "PctRow4" : 37.5,
                         "PctRow5" : 0,
@@ -409,6 +504,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-28",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -433,7 +529,8 @@
                           "Properties" : {
                             "Area" : "UI",
                             "Columns" : 1,
-                            "DisplayName" : "layout-49",
+                            "Description" : "Header-Layout",
+                            "DisplayName" : "Header-Layout",
                             "Footer" : false,
                             "FooterHeight" : 0,
                             "Header" : false,
@@ -441,6 +538,7 @@
                             "Id" : "layout-49",
                             "IncludeSpacingInFixedAreas" : false,
                             "IsPrintLayout" : false,
+                            "LastContainer" : false,
                             "Left" : 160,
                             "LeftSidebar" : true,
                             "LeftSidebarWidth" : 10,
@@ -486,6 +584,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-51",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -517,6 +616,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-50",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -541,7 +641,7 @@
                               "Properties" : {
                                 "Area" : "UI",
                                 "Columns" : 1,
-                                "DisplayName" : "layout-29",
+                                "DisplayName" : "Layout",
                                 "Footer" : false,
                                 "FooterHeight" : 0,
                                 "Header" : false,
@@ -549,6 +649,7 @@
                                 "Id" : "layout-29",
                                 "IncludeSpacingInFixedAreas" : false,
                                 "IsPrintLayout" : false,
+                                "LastContainer" : false,
                                 "Left" : 275,
                                 "LeftSidebar" : true,
                                 "LeftSidebarWidth" : 350,
@@ -594,6 +695,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-47",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -619,12 +721,14 @@
                                     "Alignment" : "left",
                                     "Area" : "UI",
                                     "BackgroundFill" : "content",
-                                    "DisplayName" : "valuedisplay-48",
+                                    "Description" : "VD-LineDisplayName",
+                                    "DisplayName" : "VD-LineDisplayName",
                                     "Height" : 22,
                                     "Id" : "valuedisplay-48",
                                     "ImageScaling" : "Width",
                                     "Label" : "",
                                     "LabelAlignment" : "left",
+                                    "LastContainer" : false,
                                     "Left" : 135,
                                     "Overflow" : "hidden",
                                     "ResponsiveLayout" : true,
@@ -665,6 +769,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-30",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -701,6 +806,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-40",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -725,7 +831,7 @@
                           "Properties" : {
                             "Area" : "UI",
                             "Columns" : 1,
-                            "DisplayName" : "layout-41",
+                            "DisplayName" : "Layout",
                             "Footer" : false,
                             "FooterHeight" : 0,
                             "Header" : false,
@@ -733,9 +839,10 @@
                             "Id" : "layout-41",
                             "IncludeSpacingInFixedAreas" : false,
                             "IsPrintLayout" : false,
+                            "LastContainer" : false,
                             "Left" : 210,
-                            "LeftSidebar" : false,
-                            "LeftSidebarWidth" : 0,
+                            "LeftSidebar" : true,
+                            "LeftSidebarWidth" : 150,
                             "Orientation" : "horizontal",
                             "PctColumn1" : 100,
                             "PctColumn2" : 0,
@@ -757,8 +864,8 @@
                             "PrintMarginTopBottom" : 0.5,
                             "PrintWidth" : 650,
                             "ResponsiveLayout" : true,
-                            "RightSidebar" : true,
-                            "RightSidebarWidth" : 140,
+                            "RightSidebar" : false,
+                            "RightSidebarWidth" : 0,
                             "Rows" : 0,
                             "ShowDataLoading" : true,
                             "Spacing" : 2,
@@ -774,41 +881,11 @@
                               "Area" : "UI",
                               "BGImageRepeat" : "no-repeat",
                               "BGImageSize" : "auto",
-                              "DisplayName" : "Column 1",
+                              "DisplayName" : "Left Sidebar",
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
-                              "Id" : "container-42",
-                              "MinHeight" : 0,
-                              "MinWidth" : 0,
-                              "Overlay" : false,
-                              "OverlayIsTransparent" : false,
-                              "ResponsiveLayout" : true,
-                              "ShowDataLoading" : true,
-                              "ShowExpandCollapseTab" : false,
-                              "Style" : "DefaultContainerStyle",
-                              "TabCollapseStyle" : "DefaultTabCollapseStyle",
-                              "TabExpandStyle" : "DefaultTabExpandStyle",
-                              "TabHeight" : 36,
-                              "TabLocation" : "center",
-                              "TabOffset" : 0,
-                              "TabWidth" : 36,
-                              "Type" : "container",
-                              "Visible" : true,
-                              "Z-index" : 10,
-                              "__TypeDisplayName" : "Container",
-                              "userCannotRemove" : true
-                            },
-                            "Widgets" : [ ]
-                          }, {
-                            "Properties" : {
-                              "AnimateExpandCollapse" : true,
-                              "Area" : "UI",
-                              "BGImageRepeat" : "no-repeat",
-                              "BGImageSize" : "auto",
-                              "DisplayName" : "Right Sidebar",
-                              "ExpandCollapseTabLocation" : "outside",
-                              "Expanded" : true,
-                              "Id" : "container-43",
+                              "Id" : "container-56",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -832,14 +909,16 @@
                             "Widgets" : [ {
                               "Properties" : {
                                 "Area" : "UI",
-                                "DisplayName" : "panel-44",
+                                "ContainerClass" : "",
+                                "DisplayName" : "Panel",
                                 "Height" : 200,
-                                "HideScrollbars" : false,
+                                "HideScrollbars" : true,
                                 "HorizontalAnchor" : "left",
                                 "Id" : "panel-44",
+                                "LastContainer" : false,
                                 "Left" : 40,
                                 "ResponsiveLayout" : true,
-                                "ShowDataLoading" : true,
+                                "ShowDataLoading" : false,
                                 "Style" : "DefaultWhiteLabelStyle",
                                 "Top" : 15,
                                 "Type" : "panel",
@@ -861,16 +940,18 @@
                                   "ConfirmationTitle" : "Confirm Action",
                                   "ContextId" : "",
                                   "DefaultConfirmationButton" : "button1",
+                                  "Description" : "Button-Refresh",
                                   "Disabled" : false,
                                   "DisabledStyle" : "DefaultButtonDisabledStyle",
-                                  "DisplayName" : "button-45",
+                                  "DisplayName" : "Button-Refresh",
                                   "FocusStyle" : "DefaultButtonFocusStyle",
                                   "Height" : 30,
                                   "HoverStyle" : "Bayer_ButtonBlueHover",
                                   "IconAlignment" : "left",
                                   "Id" : "button-45",
                                   "Label" : "[[refresh]]",
-                                  "Left" : 0,
+                                  "LastContainer" : false,
+                                  "Left" : 15,
                                   "ResponsiveLayout" : false,
                                   "RoundedCorners" : true,
                                   "ShowDataLoading" : true,
@@ -890,6 +971,38 @@
                                 "Widgets" : [ ]
                               } ]
                             } ]
+                          }, {
+                            "Properties" : {
+                              "AnimateExpandCollapse" : true,
+                              "Area" : "UI",
+                              "BGImageRepeat" : "no-repeat",
+                              "BGImageSize" : "auto",
+                              "DisplayName" : "Void",
+                              "ExpandCollapseTabLocation" : "outside",
+                              "Expanded" : true,
+                              "Id" : "container-42",
+                              "LastContainer" : false,
+                              "MinHeight" : 0,
+                              "MinWidth" : 0,
+                              "Overlay" : false,
+                              "OverlayIsTransparent" : false,
+                              "ResponsiveLayout" : true,
+                              "ShowDataLoading" : true,
+                              "ShowExpandCollapseTab" : false,
+                              "Style" : "DefaultContainerStyle",
+                              "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                              "TabExpandStyle" : "DefaultTabExpandStyle",
+                              "TabHeight" : 36,
+                              "TabLocation" : "center",
+                              "TabOffset" : 0,
+                              "TabWidth" : 36,
+                              "Type" : "container",
+                              "Visible" : true,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
+                            },
+                            "Widgets" : [ ]
                           } ]
                         } ]
                       }, {
@@ -903,6 +1016,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-20",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -925,572 +1039,1353 @@
                         },
                         "Widgets" : [ {
                           "Properties" : {
-                            "AlignHeader" : false,
                             "Area" : "UI",
-                            "AutoSelectFirstRow" : false,
-                            "CellTextWrapping" : false,
-                            "ColumnFormat" : {
-                              "formatInfo" : [ {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "statusFormatted",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "statusForColoring",
-                                    "StateDefinition" : "BayerProductionPlanGridStatusState",
-                                    "StateDefinitionType" : "string",
-                                    "StateFormats" : [ {
-                                      "comparator" : "==",
-                                      "state" : "BayerProductionPlanGridStatusScheduledChangeover",
-                                      "stateName" : "",
-                                      "value" : "ScheduledChangeover"
-                                    }, {
-                                      "comparator" : "==",
-                                      "state" : "BayerProductionPlanGridStatusCompletedChangeover",
-                                      "stateName" : "",
-                                      "value" : "CompletedChangeover"
-                                    }, {
-                                      "comparator" : "==",
-                                      "state" : "BayerProductPlanGridStatusCompleted",
-                                      "stateName" : "",
-                                      "value" : "Completed"
-                                    }, {
-                                      "comparator" : "==",
-                                      "state" : "BayerProductPlanGridStatusRunning",
-                                      "stateName" : "",
-                                      "value" : "Running"
-                                    }, {
-                                      "state" : "ThingWorxSystemTargetHeader",
-                                      "stateName" : ""
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.Status]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "orderNr",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.orderNumber]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "productIdTranslated",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.ProductID]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "productDescriptionTranslated",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.ProductDescription]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "version",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.version]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "right",
-                                "AllowEdit" : false,
-                                "FieldName" : "targetQuantity",
-                                "FormatOptions" : {
-                                  "FormatString" : "0.00",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "NUMBER",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.targetQuantity]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "uom",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.uom]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "right",
-                                "AllowEdit" : false,
-                                "FieldName" : "targetHours",
-                                "FormatOptions" : {
-                                  "FormatString" : "0.00",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "NUMBER",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.targetHours]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "right",
-                                "AllowEdit" : false,
-                                "FieldName" : "targetQuantityPerHour",
-                                "FormatOptions" : {
-                                  "FormatString" : "0.00",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "NUMBER",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.targetQuantityPerHour]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "right",
-                                "AllowEdit" : false,
-                                "FieldName" : "remainingHours",
-                                "FormatOptions" : {
-                                  "FormatString" : "0.00",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "NUMBER",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.remainingHours]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "right",
-                                "AllowEdit" : false,
-                                "FieldName" : "workedHours",
-                                "FormatOptions" : {
-                                  "FormatString" : "0.00",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "NUMBER",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.workedHours]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "right",
-                                "AllowEdit" : false,
-                                "FieldName" : "producedQuantity",
-                                "FormatOptions" : {
-                                  "FormatString" : "0.00",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "NUMBER",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.producedQuantity]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "startTime",
-                                "FormatOptions" : {
-                                  "FormatString" : "[[Bayer.TimeFormat1]]",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "DATETIME",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[startTime]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "endTime",
-                                "FormatOptions" : {
-                                  "FormatString" : "[[Bayer.TimeFormat1]]",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "DATETIME",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[endTime]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "activeMaterialNumber",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.activeMaterialNumber]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "blisterType",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.blisterType]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "foldedBoxFormat",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.foldedBoxFormat]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "right",
-                                "AllowEdit" : false,
-                                "FieldName" : "blistersPerFoldedBox",
-                                "FormatOptions" : {
-                                  "FormatString" : "0",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "INTEGER",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.blistersPerFoldedBox]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "right",
-                                "AllowEdit" : false,
-                                "FieldName" : "tabletsPerBlister",
-                                "FormatOptions" : {
-                                  "FormatString" : "0",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "INTEGER",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.tabletsPerBlister]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "commentFirstLine",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.Comments]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "mdatSaf",
-                                "FormatOptions" : {
-                                  "FormatString" : "[[Bayer.TimeFormat1]]",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "DATETIME",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.mdatSaf]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "mdatOos",
-                                "FormatOptions" : {
-                                  "FormatString" : "[[Bayer.TimeFormat1]]",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "DATETIME",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.mdatOos]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              }, {
-                                "Align" : "left",
-                                "AllowEdit" : false,
-                                "FieldName" : "manufProcess",
-                                "FormatOptions" : {
-                                  "FormatString" : "full",
-                                  "formatInfo" : {
-                                    "FieldName" : "",
-                                    "StateDefinition" : "",
-                                    "StateDefinitionType" : "fixed",
-                                    "StateFormats" : [ {
-                                      "state" : "",
-                                      "stateName" : "fixed"
-                                    } ]
-                                  },
-                                  "renderer" : "STRING",
-                                  "roundingEnabled" : true
-                                },
-                                "Title" : "[[Bayer.manufProcess]]",
-                                "ValidationExpression" : "",
-                                "ValidationMessage" : "",
-                                "Width" : "auto"
-                              } ]
-                            },
-                            "CurrentScrollTop" : 0,
-                            "DisplayName" : "dhxgrid-46",
-                            "FocusStyle" : "DefaultFocusStyle",
-                            "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
-                            "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
-                            "GridHeaderStyle" : "DefaultGridHeaderStyle",
-                            "GridHeaderTextCase" : "capitalize",
-                            "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
-                            "Height" : 200,
-                            "Id" : "dhxgrid-46",
-                            "IsEditable" : false,
-                            "IsPrintLayout" : false,
-                            "Left" : 130,
-                            "MultiSelect" : false,
+                            "DefaultTabNumber" : 1,
+                            "Description" : "Production-Tabset",
+                            "Disabled" : false,
+                            "DisplayName" : "Production-Tabset",
+                            "Height" : 170,
+                            "Id" : "ptcstabset-52",
+                            "Items" : [ {
+                              "disabled" : false,
+                              "name" : "Current View",
+                              "value" : "current",
+                              "visible" : true
+                            }, {
+                              "disabled" : false,
+                              "name" : "Historical View",
+                              "value" : "previous",
+                              "visible" : true
+                            } ],
+                            "LastContainer" : false,
+                            "Left" : 305,
+                            "NumberOfTabs" : 2,
                             "ResponsiveLayout" : true,
-                            "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
-                            "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
-                            "RowFormat_StateParameters" : [ ],
-                            "RowHeight" : 30,
-                            "RowHoverStyle" : "DefaultRowHoverStyle",
-                            "RowSelectedStyle" : "DefaultRowSelectedStyle",
-                            "ScrollTop" : 0,
-                            "ShowAllColumns" : false,
+                            "SelectedTab" : 1,
                             "ShowDataLoading" : true,
+                            "Tab10Disabled" : false,
+                            "Tab10Name" : "Tab Name 10",
+                            "Tab10Value" : "TabValue10",
+                            "Tab10Visible" : true,
+                            "Tab11Disabled" : false,
+                            "Tab11Name" : "Tab Name 11",
+                            "Tab11Value" : "TabValue11",
+                            "Tab11Visible" : true,
+                            "Tab12Disabled" : false,
+                            "Tab12Name" : "Tab Name 12",
+                            "Tab12Value" : "TabValue12",
+                            "Tab12Visible" : true,
+                            "Tab13Disabled" : false,
+                            "Tab13Name" : "Tab Name 13",
+                            "Tab13Value" : "TabValue13",
+                            "Tab13Visible" : true,
+                            "Tab14Disabled" : false,
+                            "Tab14Name" : "Tab Name 14",
+                            "Tab14Value" : "TabValue14",
+                            "Tab14Visible" : true,
+                            "Tab15Disabled" : false,
+                            "Tab15Name" : "Tab Name 15",
+                            "Tab15Value" : "TabValue15",
+                            "Tab15Visible" : true,
+                            "Tab16Disabled" : false,
+                            "Tab16Name" : "Tab Name 16",
+                            "Tab16Value" : "TabValue16",
+                            "Tab16Visible" : true,
+                            "Tab1Disabled" : false,
+                            "Tab1Name" : "[[Bayer.CurrentProductionTab]]",
+                            "Tab1Value" : "current",
+                            "Tab1Visible" : true,
+                            "Tab2Disabled" : false,
+                            "Tab2Name" : "[[Bayer.PreviousProductionTab]]",
+                            "Tab2Value" : "previous",
+                            "Tab2Visible" : true,
+                            "Tab3Disabled" : false,
+                            "Tab3Name" : "Tab Name 3",
+                            "Tab3Value" : "TabValue3",
+                            "Tab3Visible" : true,
+                            "Tab4Disabled" : false,
+                            "Tab4Name" : "Tab Name 4",
+                            "Tab4Value" : "TabValue4",
+                            "Tab4Visible" : true,
+                            "Tab5Disabled" : false,
+                            "Tab5Name" : "Tab Name 5",
+                            "Tab5Value" : "TabValue5",
+                            "Tab5Visible" : true,
+                            "Tab6Disabled" : false,
+                            "Tab6Name" : "Tab Name 6",
+                            "Tab6Value" : "TabValue6",
+                            "Tab6Visible" : true,
+                            "Tab7Disabled" : false,
+                            "Tab7Name" : "Tab Name 7",
+                            "Tab7Value" : "TabValue7",
+                            "Tab7Visible" : true,
+                            "Tab8Disabled" : false,
+                            "Tab8Name" : "Tab Name 8",
+                            "Tab8Value" : "TabValue8",
+                            "Tab8Visible" : true,
+                            "Tab9Disabled" : false,
+                            "Tab9Name" : "Tab Name 9",
+                            "Tab9Value" : "TabValue9",
+                            "Tab9Visible" : true,
                             "TabSequence" : 0,
-                            "Top" : 90,
-                            "Type" : "dhxgrid",
+                            "Top" : 210,
+                            "Type" : "ptcstabset",
+                            "UseTheme" : true,
                             "Visible" : true,
                             "Width" : 400,
                             "Z-index" : 10,
-                            "__TypeDisplayName" : "Grid"
+                            "__TypeDisplayName" : "Tabs"
                           },
-                          "Widgets" : [ ]
+                          "Widgets" : [ {
+                            "Properties" : {
+                              "AnimateExpandCollapse" : true,
+                              "Area" : "UI",
+                              "BGImageRepeat" : "no-repeat",
+                              "BGImageSize" : "auto",
+                              "Description" : "Tab-CurrentPlan",
+                              "DisplayName" : "Tab-CurrentPlan",
+                              "ExpandCollapseTabLocation" : "outside",
+                              "Expanded" : true,
+                              "Id" : "container-53",
+                              "LastContainer" : false,
+                              "MinHeight" : 0,
+                              "MinWidth" : 0,
+                              "Overlay" : false,
+                              "OverlayIsTransparent" : false,
+                              "ResponsiveLayout" : true,
+                              "ShowDataLoading" : true,
+                              "ShowExpandCollapseTab" : false,
+                              "Style" : "DefaultContainerStyle",
+                              "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                              "TabExpandStyle" : "DefaultTabExpandStyle",
+                              "TabHeight" : 36,
+                              "TabLocation" : "center",
+                              "TabOffset" : 0,
+                              "TabWidth" : 36,
+                              "Type" : "container",
+                              "Visible" : true,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
+                            },
+                            "Widgets" : [ {
+                              "Properties" : {
+                                "AlignHeader" : false,
+                                "Area" : "UI",
+                                "AutoSelectFirstRow" : false,
+                                "CellTextWrapping" : false,
+                                "ColumnFormat" : {
+                                  "formatInfo" : [ {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "statusFormatted",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "statusForColoring",
+                                        "StateDefinition" : "BayerProductionPlanGridStatusState",
+                                        "StateDefinitionType" : "string",
+                                        "StateFormats" : [ {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductionPlanGridStatusScheduledChangeover",
+                                          "stateName" : "",
+                                          "value" : "ScheduledChangeover"
+                                        }, {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductionPlanGridStatusCompletedChangeover",
+                                          "stateName" : "",
+                                          "value" : "CompletedChangeover"
+                                        }, {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductPlanGridStatusCompleted",
+                                          "stateName" : "",
+                                          "value" : "Completed"
+                                        }, {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductPlanGridStatusRunning",
+                                          "stateName" : "",
+                                          "value" : "Running"
+                                        }, {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductPlanGridStatusScheduled",
+                                          "stateName" : "",
+                                          "value" : "Scheduled"
+                                        }, {
+                                          "state" : "BayerProductionPlanProductDescriptionOther",
+                                          "stateName" : ""
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.Status]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "orderNr",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.orderNumber]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "productIdTranslated",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.ProductID]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "productDescriptionTranslated",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.ProductDescription]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "version",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.version]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetQuantity",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[Bayer.CustomIntegerFormat]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.targetQuantity]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "uom",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.uom]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.targetHours]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetQuantityPerHour",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[Bayer.CustomNumberFormat]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.targetQuantityPerHour]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "remainingHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.remainingHours]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "workedHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.workedHours]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "producedQuantity",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[Bayer.CustomIntegerFormat]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.producedQuantity]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "startTime",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "DATETIME",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[startTime]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "endTime",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "DATETIME",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[endTime]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "activeMaterialNumber",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.activeMaterialNumber]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "blisterType",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.blisterType]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "foldedBoxFormat",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.foldedBoxFormat]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "blistersPerFoldedBox",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "INTEGER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.blistersPerFoldedBox]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "tabletsPerBlister",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "INTEGER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.tabletsPerBlister]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "commentFirstLine",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.Comments]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "mdatSaf",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "DATETIME",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.mdatSaf]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "mdatOos",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "DATETIME",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.mdatOos]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "manufProcess",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.manufProcess]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  } ]
+                                },
+                                "CurrentScrollTop" : 0,
+                                "Description" : "Grid-ProductionPlan-Current",
+                                "DisplayName" : "Grid-ProductionPlan-Current",
+                                "FocusStyle" : "DefaultFocusStyle",
+                                "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
+                                "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
+                                "GridHeaderStyle" : "Bayer_GridHeader",
+                                "GridHeaderTextCase" : "capitalize",
+                                "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
+                                "Height" : 200,
+                                "Id" : "dhxgrid-46",
+                                "IsEditable" : false,
+                                "IsPrintLayout" : false,
+                                "LastContainer" : false,
+                                "Left" : 130,
+                                "MultiSelect" : false,
+                                "ResponsiveLayout" : true,
+                                "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
+                                "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
+                                "RowFormat" : {
+                                  "FieldName" : "productDescription",
+                                  "StateDefinition" : "BayerProductionPlanProductDescriptionState",
+                                  "StateDefinitionType" : "string",
+                                  "StateFormats" : [ {
+                                    "comparator" : "==",
+                                    "state" : "BayerProductionPlanProductDescriptionCambio",
+                                    "stateName" : "Cambio",
+                                    "value" : "Cambio"
+                                  }, {
+                                    "state" : "BayerProductionPlanProductDescriptionOther",
+                                    "stateName" : "Any Product"
+                                  } ]
+                                },
+                                "RowFormat_StateParameters" : [ {
+                                  "BaseType" : "STRING",
+                                  "DefaultValue" : "Cambio",
+                                  "Description" : "Cambio",
+                                  "ParameterName" : "RowFormat_Cambio"
+                                } ],
+                                "RowHeight" : 30,
+                                "RowHoverStyle" : "BayerProductionPlanRowHoverStyle",
+                                "RowSelectedStyle" : "DefaultRowSelectedStyle",
+                                "ScrollTop" : 0,
+                                "ShowAllColumns" : false,
+                                "ShowDataLoading" : true,
+                                "TabSequence" : 0,
+                                "Top" : 90,
+                                "Type" : "dhxgrid",
+                                "Visible" : true,
+                                "Width" : 400,
+                                "Z-index" : 10,
+                                "__TypeDisplayName" : "Grid"
+                              },
+                              "Widgets" : [ ]
+                            } ]
+                          }, {
+                            "Properties" : {
+                              "AnimateExpandCollapse" : true,
+                              "Area" : "UI",
+                              "BGImageRepeat" : "no-repeat",
+                              "BGImageSize" : "auto",
+                              "Description" : "Tab-PastPlan",
+                              "DisplayName" : "Tab-PastPlan",
+                              "ExpandCollapseTabLocation" : "outside",
+                              "Expanded" : true,
+                              "Id" : "container-54",
+                              "LastContainer" : false,
+                              "MinHeight" : 0,
+                              "MinWidth" : 0,
+                              "Overlay" : false,
+                              "OverlayIsTransparent" : false,
+                              "ResponsiveLayout" : true,
+                              "ShowDataLoading" : true,
+                              "ShowExpandCollapseTab" : false,
+                              "Style" : "DefaultContainerStyle",
+                              "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                              "TabExpandStyle" : "DefaultTabExpandStyle",
+                              "TabHeight" : 36,
+                              "TabLocation" : "center",
+                              "TabOffset" : 0,
+                              "TabWidth" : 36,
+                              "Type" : "container",
+                              "Visible" : true,
+                              "Z-index" : 10,
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
+                            },
+                            "Widgets" : [ {
+                              "Properties" : {
+                                "AlignHeader" : false,
+                                "Area" : "UI",
+                                "AutoSelectFirstRow" : false,
+                                "CellTextWrapping" : false,
+                                "ColumnFormat" : {
+                                  "formatInfo" : [ {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "statusFormatted",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "statusForColoring",
+                                        "StateDefinition" : "BayerProductionPlanGridStatusState",
+                                        "StateDefinitionType" : "string",
+                                        "StateFormats" : [ {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductionPlanGridStatusScheduledChangeover",
+                                          "stateName" : "",
+                                          "value" : "ScheduledChangeover"
+                                        }, {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductionPlanGridStatusCompletedChangeover",
+                                          "stateName" : "",
+                                          "value" : "CompletedChangeover"
+                                        }, {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductPlanGridStatusCompleted",
+                                          "stateName" : "",
+                                          "value" : "Completed"
+                                        }, {
+                                          "comparator" : "==",
+                                          "state" : "BayerProductPlanGridStatusRunning",
+                                          "stateName" : "",
+                                          "value" : "Running"
+                                        }, {
+                                          "state" : "ThingWorxSystemTargetHeader",
+                                          "stateName" : ""
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.Status]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "orderNr",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.orderNumber]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "productIdTranslated",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.ProductID]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "productDescriptionTranslated",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.ProductDescription]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "version",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.version]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetQuantity",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[Bayer.CustomIntegerFormat]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.targetQuantity]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "uom",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.uom]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.targetHours]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "targetQuantityPerHour",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[Bayer.CustomNumberFormat]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.targetQuantityPerHour]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "remainingHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.remainingHours]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "workedHours",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.workedHours]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "producedQuantity",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0.00",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "NUMBER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.producedQuantity]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "startTime",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "DATETIME",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[startTime]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "endTime",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "DATETIME",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[endTime]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "activeMaterialNumber",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.activeMaterialNumber]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "blisterType",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.blisterType]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "foldedBoxFormat",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.foldedBoxFormat]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "blistersPerFoldedBox",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "INTEGER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.blistersPerFoldedBox]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "right",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "tabletsPerBlister",
+                                    "FormatOptions" : {
+                                      "FormatString" : "0",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "INTEGER",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.tabletsPerBlister]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "commentFirstLine",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.Comments]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "mdatSaf",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "DATETIME",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.mdatSaf]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "mdatOos",
+                                    "FormatOptions" : {
+                                      "FormatString" : "[[dateTimeFormat_Default]]",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "DATETIME",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.mdatOos]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  }, {
+                                    "Align" : "left",
+                                    "AllowEdit" : false,
+                                    "FieldName" : "manufProcess",
+                                    "FormatOptions" : {
+                                      "FormatString" : "full",
+                                      "formatInfo" : {
+                                        "FieldName" : "",
+                                        "StateDefinition" : "",
+                                        "StateDefinitionType" : "fixed",
+                                        "StateFormats" : [ {
+                                          "state" : "",
+                                          "stateName" : "fixed"
+                                        } ]
+                                      },
+                                      "renderer" : "STRING",
+                                      "roundingEnabled" : true
+                                    },
+                                    "Title" : "[[Bayer.manufProcess]]",
+                                    "ValidationExpression" : "",
+                                    "ValidationMessage" : "",
+                                    "Width" : "auto"
+                                  } ]
+                                },
+                                "CurrentScrollTop" : 0,
+                                "Description" : "Grid-ProductionPlan-Past",
+                                "DisplayName" : "Grid-ProductionPlan-Past",
+                                "FocusStyle" : "DefaultFocusStyle",
+                                "GridBackgroundStyle" : "DefaultGridBackgroundStyle",
+                                "GridEditableFieldStyle" : "DefaultGridEditableFieldStyle",
+                                "GridHeaderStyle" : "Bayer_GridHeader",
+                                "GridHeaderTextCase" : "capitalize",
+                                "GridInvalidFieldStyle" : "DefaultGridInvalidFieldStyle",
+                                "Height" : 200,
+                                "Id" : "dhxgrid-55",
+                                "IsEditable" : false,
+                                "IsPrintLayout" : false,
+                                "LastContainer" : false,
+                                "Left" : 0,
+                                "MultiSelect" : false,
+                                "ResponsiveLayout" : true,
+                                "RowAlternateBackgroundStyle" : "DefaultRowAlternateBackgroundStyle",
+                                "RowBackgroundStyle" : "DefaultRowBackgroundStyle",
+                                "RowFormat" : {
+                                  "FieldName" : "productDescription",
+                                  "StateDefinition" : "BayerProductionPlanProductDescriptionState",
+                                  "StateDefinitionType" : "string",
+                                  "StateFormats" : [ {
+                                    "comparator" : "==",
+                                    "state" : "BayerProductionPlanProductDescriptionCambio",
+                                    "stateName" : "Cambio",
+                                    "value" : "Cambio"
+                                  }, {
+                                    "state" : "BayerProductionPlanProductDescriptionOther",
+                                    "stateName" : "Any Product"
+                                  } ]
+                                },
+                                "RowFormat_StateParameters" : [ {
+                                  "BaseType" : "STRING",
+                                  "DefaultValue" : "Cambio",
+                                  "Description" : "Cambio",
+                                  "ParameterName" : "RowFormat_Cambio"
+                                } ],
+                                "RowHeight" : 30,
+                                "RowHoverStyle" : "BayerProductionPlanRowHoverStyle",
+                                "RowSelectedStyle" : "DefaultRowSelectedStyle",
+                                "ScrollTop" : 0,
+                                "ShowAllColumns" : false,
+                                "ShowDataLoading" : true,
+                                "TabSequence" : 0,
+                                "Top" : 0,
+                                "Type" : "dhxgrid",
+                                "Visible" : true,
+                                "Width" : 400,
+                                "Z-index" : 10,
+                                "__TypeDisplayName" : "Grid"
+                              },
+                              "Widgets" : [ ]
+                            } ]
+                          } ]
                         } ]
                       } ]
                     } ]

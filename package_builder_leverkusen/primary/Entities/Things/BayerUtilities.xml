@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-11-26T09:00:39.657Z" name="BayerUtilities" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-04-08T11:05:09.523Z" name="BayerUtilities" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -15,6 +15,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
@@ -25,6 +26,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -34,6 +36,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -43,7 +46,19 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="CheckUserInRole">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                        <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
                     <EventInvoke/>
                     <EventSubscribe/>
@@ -61,6 +76,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
@@ -68,6 +84,15 @@
                     <EventSubscribe/>
                 </Permissions>
                 <Permissions resourceName="LoadCSVGeneric">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetProductDescriptionTranslated">
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
@@ -96,6 +121,12 @@
             <ThingShape>
                 <PropertyDefinitions/>
                 <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CheckUserInRole">
+                        <ResultType baseType="BOOLEAN" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" baseType="GROUPNAME" description="" name="role" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetCurrentShift">
                         <ResultType aspect.dataShape="BayerShiftScheduleDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -106,6 +137,12 @@
                         <ResultType aspect.dataShape="BayerShiftTimeDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions/>
                     </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetLineExtendedStatus">
+                        <ResultType aspect.dataShape="EntityList" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="lineName" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetLineName">
                         <ResultType baseType="STRING" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -115,6 +152,13 @@
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetPastDayStartEndTime">
                         <ResultType aspect.dataShape="BayerShiftTimeDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetProductDescriptionTranslated">
+                        <ResultType baseType="STRING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="productDescription" ordinal="2"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="productId" ordinal="1"/>
+                        </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetRowNumOfCurrentShift">
                         <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INTEGER" description="" name="result" ordinal="0"/>
@@ -140,6 +184,44 @@
                 <EventDefinitions/>
                 <ServiceMappings/>
                 <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="CheckUserInRole">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = false;
+                                        
+                                        try {
+                                            // result: INFOTABLE dataShape: "EntityList"
+                                        	var groups =  Resources["CurrentSessionInfo"].GetCurrentUserGroups();
+                                        
+                                            var tableLength = groups.rows.length;
+                                            for (var x=0; x < tableLength; x++) {
+                                                var row = groups.rows[x];
+                                        
+                                                if (row.name == role) {
+                                                    result = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        catch (ex) {
+                                            logger.error(me.name + "CheckUserInRole: " + ex);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="Script" name="GetCurrentShift">
                         <ConfigurationTables>
                             <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
@@ -241,6 +323,122 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetLineExtendedStatus">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var line = Things[lineName];
+                                        var product = line.GetCurrentProduct();
+                                        var isProductionRunning = line.productionRunning;
+                                        var productId = product.productId;
+                                        var productDescription = product.productDescription;
+                                        var lineConfiguration = line.GetLineConfiguration();
+                                        var delayMicrostopTimeMax = lineConfiguration.rows[0].delayMicrostopTimeMax;
+                                        var delayMicrostopTimeMaxMs = delayMicrostopTimeMax * 60 * 1000;
+                                        var params = {
+                                            infoTableName: "InfoTable",
+                                            dataShapeName: "EntityList"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(EntityList)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        var newRow = new Object();
+                                        
+                                        if (isProductionRunning) {
+                                            if (productId == "Cambio") {
+                                                newRow = {
+                                                    name: productId,
+                                                    description: productDescription
+                                                };
+                                            } else {
+                                                newRow = {
+                                                    name: "InProduction",
+                                                    description: productDescription
+                                                };
+                                            }
+                                        } else {
+                                            if (productId == "standby") {
+                                                newRow = {
+                                                    name: "Cambio",
+                                                    description: productDescription
+                                                };
+                                            } else {
+                                                newRow = {
+                                                    name: "Stopped",
+                                                    description: "[[Bayer.State.NotRunning]]"
+                                                };
+                                                if (isCurrentBreakdown()) {
+                                                    newRow = {
+                                                        name: "Breakdown",
+                                                        description: "[[Bayer.State.breakdown]]"
+                                                    };
+                                                }
+                                            }
+                                        }
+                                        result.AddRow(newRow);
+                                        
+                                        function isCurrentBreakdown() {
+                                            let shifts = line.GetShiftsFromNow({
+                                                nrOfPrevShifts: 0,
+                                                nrOfNextShifts: 0,
+                                                interval: 30
+                                            });
+                                            if (!shifts || !shifts.rows.length) {
+                                                return false;
+                                            }
+                                            let shiftStartTime = shifts.rows[0].timestamp;
+                                            let shiftId = line.currentShiftId;
+                                            let events = Things["BayerDBDataProvider"].GetShiftEvents({
+                                                shiftScheduleId: shiftId /* INTEGER */
+                                            });
+                                            let breakdownEvent;
+                                            let breakdownDuration;
+                                            let lastEventEndTime = new Date(shiftStartTime);
+                                            let totalTime = 0;
+                                            if (events.getRowCount() > 0) {
+                                                let tableLength = events.rows.length;
+                                                for (let x = 0; x < tableLength; x++) {            
+                                                    let event = events.rows[x];
+                                                    // Take into account (total time in this shift) only breakdowns
+                                                    if(event.category != "breakdown" && event.category != "microstop") {
+                                                    	continue;
+                                                    }
+                                                    let duration = event.durationMs;
+                                                    totalTime += duration;
+                                                } // for each entry
+                                                lastEventEndTime = events.rows[tableLength - 1].endTime;
+                                            } // got events?
+                                        
+                                            if (!isProductionRunning) {
+                                                // check the last event date difference (it'll be 'running' record, so we know when it stopped running!)
+                                                breakdownDuration = dateDifference(Date.now(), lastEventEndTime);
+                                                totalTime += breakdownDuration;        
+                                                //logger.warn(line.name+" >> totalTime='"+totalTime+"' breakdownDuration='"+breakdownDuration+"' lastEventTime='"+lastEventEndTime.toISOString()+"';");
+                                                //logger.warn(line.name+" >> delayMicrostopTimeMaxMs='"+delayMicrostopTimeMaxMs+"';");
+                                                lastEventEndTime = dateAddMilliseconds(lastEventEndTime, breakdownDuration);
+                                                if (breakdownDuration >= delayMicrostopTimeMaxMs /*|| totalTime >= delayMicrostopTimeMaxMs*/) {
+                                                    // Should check this length is more than configured microstop in minutes?
+                                                    // Or maybe check the total breakdowns duration from current events on the line (events rows)
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        } // isCurrentBreakdown()
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="Script" name="GetLineName">
                         <ConfigurationTables>
                             <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
@@ -308,6 +506,41 @@
                                         newEntry.endTime = endTime; // DATETIME
                                         
                                         result.AddRow(newEntry);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetProductDescriptionTranslated">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = productDescription;
+                                        
+                                        switch (productId) {
+                                            case "Cambio":
+                                                result =  Resources["RuntimeLocalizationFunctions"].GetEffectiveToken({
+                                                    token: "Bayer.Cambio" /* STRING */
+                                                });
+                                                break;
+                                            case "standby":
+                                                result =  Resources["RuntimeLocalizationFunctions"].GetEffectiveToken({
+                                                    token: "Bayer.Standby" /* STRING */
+                                                });
+                                                break;
+                                            default:
+                                                break;
+                                        }
                                         ]]>
                                         </code>
                                     </Row>
