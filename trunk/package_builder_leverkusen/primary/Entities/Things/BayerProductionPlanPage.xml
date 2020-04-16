@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-11-19T11:15:42.234Z" name="BayerProductionPlanPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-04-13T18:03:14.587Z" name="BayerProductionPlanPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -15,6 +15,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -31,9 +32,17 @@
             <ThingShape>
                 <PropertyDefinitions/>
                 <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="FilterProductionPlan">
+                        <ResultType aspect.dataShape="BayerProductionPlanStatusFormattedDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.defaultValue="false" baseType="BOOLEAN" description="" name="filterOnlyCompleted" ordinal="2"/>
+                            <FieldDefinition aspect.dataShape="BayerProductionPlanStatusFormattedDataShape" baseType="INFOTABLE" description="" name="productionPlan" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetProductionPlanStatusFormatted">
                         <ResultType aspect.dataShape="BayerProductionPlanStatusFormattedDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
+                            <FieldDefinition aspect.defaultValue="false" baseType="BOOLEAN" description="" name="filterOnlyCompleted" ordinal="2"/>
                             <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
@@ -41,6 +50,35 @@
                 <EventDefinitions/>
                 <ServiceMappings/>
                 <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="FilterProductionPlan">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = Resources["InfoTableFunctions"].Query({
+                                            t: productionPlan,                                 
+                                            query: {                                            
+                                                "filters": {                                    
+                                                    "fieldName": "status",                   
+                                                    "type": (!filterOnlyCompleted ? "NE" : "EQ"),                               
+                                                    "value": "COMPLETED"                               
+                                                }                                               
+                                            }                                                   
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="Script" name="GetProductionPlanStatusFormatted">
                         <ConfigurationTables>
                             <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
@@ -80,17 +118,32 @@
                                             "status === 'COMPLETED' ? 'Completed' :" +
                                             	"status === 'INPROGRESS' ? 'Running' : " +
                                             	"status === 'PENDING' ? 'Scheduled' : ''," + /* 2nd column */
+                                            
                                             "productId === 'Cambio' ? 'Cambio' : status === 'COMPLETED' ? 'Completed' :" +
                                             	"status === 'INPROGRESS' ? 'Running' : " +
                                             	"status === 'PENDING' ? 'Scheduled' : ''," + /* 3rd column */
+                                            
                                             "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," +
                                             "productId === 'Cambio' ? '' : productId," +
+                                            
                                             "status === 'COMPLETED' && productId === 'Cambio' ? 'CompletedChangeover' :" +
-                                            	"status === 'PENDING' ? 'ScheduledChangeover' :" +
+                                            	"status === 'PENDING' && productId === 'Cambio' ? 'ScheduledChangeover' :" +
+                                        		"status === 'PENDING' ? 'Scheduled' :" +
                                             	"status === 'INPROGRESS' ? 'Running' : 'Completed'"
                                         };
                                         
                                         result = Resources["InfoTableFunctions"].DeriveFields(params);
+                                        
+                                        /*result = Resources["InfoTableFunctions"].Query({
+                                            t: result,                                 
+                                            query: {                                            
+                                                "filters": {                                    
+                                                    "fieldName": "status",                   
+                                                    "type": (!filterOnlyCompleted ? "NE" : "EQ"),                               
+                                                    "value": "COMPLETED"                               
+                                                }                                               
+                                            }                                                   
+                                        });*/
                                         ]]>
                                         </code>
                                     </Row>

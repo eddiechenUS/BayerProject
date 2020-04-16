@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-09-27T14:48:35.190Z" name="BayerSafetyManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-03-25T10:27:58.269Z" name="BayerSafetyManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="accident" baseType="NUMBER" category="" description="" isLocalOnly="false" name="accidentsCount" ordinal="2"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="accidentsLastModified" ordinal="4"/>
@@ -14,6 +14,13 @@
                     <ParameterDefinitions>
                         <FieldDefinition baseType="TEXT" description="" name="comment" ordinal="2"/>
                         <FieldDefinition baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="type" ordinal="3"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteSafetyIssue">
+                    <ResultType baseType="BOOLEAN" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="INTEGER" description="" name="ID" ordinal="2"/>
                         <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="type" ordinal="3"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
@@ -60,6 +67,43 @@
                                     } else {
                                     	me.nearMissesLastModified = date;
                                         me.nearMissesCount+=1;
+                                    }
+                                    
+                                    result = true;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="DeleteSafetyIssue">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = false;
+                                    var date = new Date();
+                                    
+                                    var data = {
+                                    	ID: ID
+                                    };
+                                    
+                                    var accidentDeleted = Things['BayerDBDataProvider'].DeleteSafetyIssue(data);
+                                    
+                                    if (type === 'accident') {
+                                    	me.accidentsLastModified = date;
+                                        me.accidentsCount-=1;
+                                    } else {
+                                    	me.nearMissesLastModified = date;
+                                        me.nearMissesCount-=1;
                                     }
                                     
                                     result = true;
@@ -150,6 +194,7 @@
             <InstanceRunTimePermissions>
                 <Permissions resourceName="nearMissesLastModified">
                     <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </PropertyRead>
                     <PropertyWrite>
@@ -161,6 +206,7 @@
                 </Permissions>
                 <Permissions resourceName="accidentsCount">
                     <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </PropertyRead>
                     <PropertyWrite>
@@ -174,6 +220,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -181,6 +228,7 @@
                 </Permissions>
                 <Permissions resourceName="nearMissesCount">
                     <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </PropertyRead>
                     <PropertyWrite>
@@ -194,6 +242,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -203,6 +252,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -219,6 +269,7 @@
                 </Permissions>
                 <Permissions resourceName="accidentsLastModified">
                     <PropertyRead>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </PropertyRead>
                     <PropertyWrite>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-04T09:34:40.830Z" name="BayerShiftsProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-04-09T15:11:22.436Z" name="BayerShiftsProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions/>
             <ServiceDefinitions>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddShiftSchedule">
@@ -111,6 +111,7 @@
                         <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="3"/>
                         <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="source" ordinal="1"/>
                         <FieldDefinition baseType="DATETIME" description="" name="startTime" ordinal="4"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="totalDuration" ordinal="6"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertShiftEventEntry">
@@ -587,7 +588,8 @@
                                         category: category,
                                         shiftScheduleId: shiftScheduleId,
                                         startTime: startTime,
-                                        endTime: endTime
+                                        endTime: endTime,
+                                        totalDuration: totalDuration
                                     });
                                     ]]>
                                     </code>

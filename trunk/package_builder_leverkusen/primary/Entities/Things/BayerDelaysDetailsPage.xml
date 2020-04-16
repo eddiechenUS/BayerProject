@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-10T14:49:27.332Z" name="BayerDelaysDetailsPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-04-09T15:57:45.006Z" name="BayerDelaysDetailsPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -15,6 +15,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -22,25 +23,18 @@
                 </Permissions>
                 <Permissions resourceName="*">
                     <PropertyRead>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                        <Principal isPermitted="true" name="System" type="User"/>
                     </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </EventInvoke>
-                    <EventSubscribe>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </EventSubscribe>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
                 </Permissions>
                 <Permissions resourceName="GetRowNumById">
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -50,6 +44,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -136,6 +131,7 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        // creates result infotable entries
                                         function createStateTableEntry(duration,category,startTime){
                                         	var entry = new Object();
                                             entry.duration = duration;
@@ -143,7 +139,7 @@
                                             entry.time = startTime;
                                             return entry;
                                         }
-                                        
+                                        // get all shit events
                                         var events = Things["BayerDBDataProvider"].GetShiftEvents({
                                         	shiftScheduleId: shiftId /* INTEGER */
                                         });
@@ -152,7 +148,8 @@
                                         var shiftLeft = shift;
                                         var breakdownEvent;
                                         var breakdownDuration;
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(DelaysDetailsMaschineStateDataShape)
+                                        
+                                        // create result infotable
                                         var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
                                             infoTableName : "InfoTable",
                                             dataShapeName : "DelaysDetailsMaschineStateDataShape"
@@ -162,7 +159,7 @@
                                         
                                         if (events.getRowCount() > 0) {
                                             var tableLength = events.rows.length;
-                                            //create entry for every event in shift
+                                            // create entry for every event in shift
                                             for (var x=0; x < tableLength; x++) {
                                                 var event = events.rows[x];
                                                 var duration = event.durationMs;
@@ -172,12 +169,15 @@
                                             }
                                             lastEventEndTime = events.rows[tableLength-1].endTime;
                                         }
+                                        // if no events for shift and shift is in progress and production is not running
+                                        // add to result row with breakdown 
                                         if(isCurrentShift && !Things[line].productionRunning){
                                                 breakdownDuration =  dateDifference(Date.now(), lastEventEndTime);
                                                 result.AddRow(createStateTableEntry(breakdownDuration,'breakdown',lastEventEndTime));
                                                 shiftLeft-= breakdownDuration;
                                             	lastEventEndTime =  dateAddMilliseconds(lastEventEndTime, breakdownDuration);
                                         }
+                                        // complete timeline by adding "unknown" if shift isn't full
                                         if(shiftLeft > 0) {
                                            var endShift = new Object();
                                            endShift.time = lastEventEndTime;

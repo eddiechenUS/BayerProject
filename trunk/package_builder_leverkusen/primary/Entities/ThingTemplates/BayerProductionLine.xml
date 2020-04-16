@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2019-12-12T10:24:42.769Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-03-26T15:32:08.984Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -15,6 +15,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
@@ -31,13 +32,22 @@
                     <EventSubscribe/>
                 </Permissions>
                 <Permissions resourceName="*">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke/>
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="Administrators" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="Administrators" type="Group"/>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Administrators" type="Group"/>
+                    </ServiceInvoke>
                     <EventInvoke>
+                        <Principal isPermitted="true" name="Administrators" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </EventInvoke>
                     <EventSubscribe>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </EventSubscribe>
                 </Permissions>
@@ -51,6 +61,7 @@
                 <ConfigurationTableDefinition category="" dataShapeName="GenericStringList" description="" isHidden="false" isMultiRow="true" name="NotificationTargetGroupA" ordinal="0" source="IMPORT"/>
                 <ConfigurationTableDefinition category="" dataShapeName="BayerAvailabilityDataShape" description="" isHidden="false" isMultiRow="true" name="Availability" ordinal="0" source="IMPORT"/>
                 <ConfigurationTableDefinition category="" dataShapeName="GenericStringList" description="" isHidden="false" isMultiRow="true" name="NotificationTargetGroupB" ordinal="0" source="IMPORT"/>
+                <ConfigurationTableDefinition category="" dataShapeName="BayerSameProductChangeoverDataShape" description="" isHidden="false" isMultiRow="true" name="SameProductChangeover" ordinal="0" source="IMPORT"/>
                 <ConfigurationTableDefinition category="" dataShapeName="BayerProductionLineConfigurationDataShape" description="" isHidden="false" isMultiRow="false" name="LineConfiguration" ordinal="0" source="IMPORT"/>
             </ConfigurationTableDefinitions>
             <ConfigurationTables>
@@ -164,7 +175,7 @@
                     <DataShape>
                         <FieldDefinitions>
                             <FieldDefinition aspect.defaultValue="90" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="INTEGER" description="" name="additionalChangeoverTime" ordinal="1"/>
-                            <FieldDefinition aspect.defaultValue="5.0" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopBreakdownThreshold" ordinal="6"/>
+                            <FieldDefinition aspect.defaultValue="2.3" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopBreakdownThreshold" ordinal="6"/>
                             <FieldDefinition aspect.defaultValue="3.0" aspect.isPrimaryKey="true" aspect.units="occurences" baseType="NUMBER" description="" name="delayMicrostopCountMax" ordinal="5"/>
                             <FieldDefinition aspect.defaultValue="5.0" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopTimeMax" ordinal="4"/>
                             <FieldDefinition aspect.defaultValue="0.6" aspect.isPrimaryKey="true" aspect.units="multiplier" baseType="NUMBER" description="" name="nominalRateCorrection" ordinal="2"/>
@@ -175,7 +186,7 @@
                     <Rows>
                         <Row>
                             <additionalChangeoverTime>90</additionalChangeoverTime>
-                            <delayMicrostopBreakdownThreshold>5.0</delayMicrostopBreakdownThreshold>
+                            <delayMicrostopBreakdownThreshold>2.3</delayMicrostopBreakdownThreshold>
                             <delayMicrostopCountMax>3.0</delayMicrostopCountMax>
                             <delayMicrostopTimeMax>5.0</delayMicrostopTimeMax>
                             <nominalRateCorrection>0.6</nominalRateCorrection>
@@ -196,6 +207,15 @@
                     <DataShape>
                         <FieldDefinitions>
                             <FieldDefinition aspect.isPrimaryKey="true" baseType="STRING" description="Item" name="item" ordinal="0"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows/>
+                </ConfigurationTable>
+                <ConfigurationTable description="" isMultiRow="true" name="SameProductChangeover" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.isPrimaryKey="true" baseType="STRING" description="" name="productCode" ordinal="1"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" aspect.units="minutes" baseType="INTEGER" description="" name="time" ordinal="2"/>
                         </FieldDefinitions>
                     </DataShape>
                     <Rows/>
@@ -378,6 +398,7 @@
                 <ImplementedShape name="BayerMaintenanceTicketsManagement" type="ThingShape"/>
                 <ImplementedShape name="BayerProductionManagement" type="ThingShape"/>
                 <ImplementedShape name="BayerDelaysManagement" type="ThingShape"/>
+                <ImplementedShape name="BayerExportsManagment" type="ThingShape"/>
                 <ImplementedShape name="BayerSafetyManagement" type="ThingShape"/>
                 <ImplementedShape name="BayerNotificationsManagement" type="ThingShape"/>
                 <ImplementedShape name="BayerReportsGenerator" type="ThingShape"/>
@@ -397,6 +418,7 @@
                     <PropertyWrite/>
                     <ServiceInvoke>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                        <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
                     <EventInvoke/>
                     <EventSubscribe/>
@@ -405,6 +427,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -414,6 +437,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -423,6 +447,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -445,6 +470,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
                     <EventInvoke/>
@@ -454,6 +480,7 @@
                     <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </ServiceInvoke>
                     <EventInvoke/>

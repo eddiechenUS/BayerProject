@@ -1,1088 +1,1243 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
-    <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-02T14:09:02.524Z" name="BayerDelaysManagement" projectName="BayerIoT" tags="Applications:Bayer">
-            <PropertyDefinitions>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="changeoverDelayStartTime" ordinal="11"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="changeoverStartTime" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - if a delay was longer, we register a breakdown" isLocalOnly="false" name="delayBreakDownTimeMoreThan" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0" baseType="INTEGER" category="" description="" isLocalOnly="false" name="delayMicrostopCount" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0" baseType="INTEGER" category="" description="Threshold count - nr of micro stops allowed. After that a delay will be recorded in DB." isLocalOnly="false" name="delayMicrostopCountMax" ordinal="13"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.units="min" baseType="NUMBER" category="" description="Total duration of micro-stops after with delay will trigger" isLocalOnly="false" name="delayMicrostopTime" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - if a delay was shorter, we register a microstop" isLocalOnly="false" name="delayMicrostopTimeLessThan" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - total duration of micro-stops allowed. After that delay will be recorded in DB" isLocalOnly="false" name="delayMicrostopTimeMax" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="delayMicrostopTimeStart" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="true" aspect.isLogged="false" aspect.isPersistent="true" baseType="BOOLEAN" category="" description="simulate production" isLocalOnly="false" name="productionRunning" ordinal="7"/>
-            </PropertyDefinitions>
-            <ServiceDefinitions>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelayShiftDetails">
-                    <ResultType aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="1"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelaysSummary">
-                    <ResultType aspect.dataShape="BayerDelaysSummaryDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="1"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertDelayEntry">
-                    <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="category" ordinal="2"/>
-                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="3"/>
-                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="2"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertShiftEventEntry">
-                    <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="category" ordinal="2"/>
-                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="3"/>
-                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="2"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessChangeoverDelayRules">
-                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition aspect.dataShape="TimerEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessEventsOnShiftChange">
-                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition aspect.dataShape="DataChangeEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessProductionDelayRules">
-                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition aspect.dataShape="DataChangeEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessSwitchShift">
-                    <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions/>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="executed after entry microstop and change shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ResetMicrostopDelayProperties">
-                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions/>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateDelayShift">
-                    <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="delayShift" ordinal="2"/>
-                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="3"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-            </ServiceDefinitions>
-            <EventDefinitions>
-                <EventDefinition category="" dataShape="BayerDelayEventDataShape" description="" name="ProductionDelayed"/>
-            </EventDefinitions>
-            <ServiceMappings/>
-            <ServiceImplementations>
-                <ServiceImplementation description="" handlerName="Script" name="GetDelayShiftDetails">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    var result = Things['BayerDBDataProvider'].GetDelayShiftDetails({
-                                        shiftScheduleId: shiftScheduleId
-                                    });
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="GetDelaysSummary">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    var result = Things['BayerDBDataProvider'].GetDelaysSummary({
-                                        shiftScheduleId: shiftScheduleId
-                                    });
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="InsertDelayEntry">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    var currentShift = Things["BayerUtilities"].GetCurrentShift({
-                                    	lineName: me.name /* THINGNAME */
-                                    });
-                                    var shiftScheduleId = currentShift.id;
-                                    
-                                    var delayEntry = {
-                                        source: "",
-                                        category: category,
-                                        shiftScheduleId: shiftScheduleId,
-                                        startTime: startTime,
-                                        endTime: endTime
-                                    };
-                                    
-                                    var result = Things["BayerDBDataProvider"].InsertDelayEntry(delayEntry);
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="InsertShiftEventEntry">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    //var startTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
-                                    //	productionLine: me.name /* THINGNAME */,
-                                    //	time: startTime /* DATETIME */
-                                    //});
-                                    
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    //var endTimeShift =  Things["BayerDBDataProvider"].GetShiftActual({
-                                    //	productionLine: me.name /* THINGNAME */,
-                                    //	time: endTime /* DATETIME */
-                                    //});
-                                    
-                                    
-                                    
-                                    //if (startTimeShift.id == endTimeShift.id) {   
-                                    //}
-                                    //else {
-                                    //}
-                                    
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    var currentShift = Things["BayerUtilities"].GetCurrentShift({
-                                    	lineName: me.name /* THINGNAME */
-                                    });
-                                    var shiftScheduleId = currentShift.id;
-                                    
-                                    var delayEntry = {
-                                        source: me.name,
-                                        category: category,
-                                        shiftScheduleId: shiftScheduleId,
-                                        startTime: startTime,
-                                        endTime: endTime
-                                    };
-                                    
-                                    var result = Things["BayerDBDataProvider"].InsertShiftEventEntry(delayEntry);
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="ProcessChangeoverDelayRules">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    // REFACTOR NEEDED ! 
-                                    var currentProduct = me.GetCurrentProduct();
-                                    var isProductionTargetZero = (currentProduct.targetQuantity === 0);
-                                    var isProductCambio = (currentProduct.productId === 'Cambio');
-                                    
-                                    var isChangeover = (isProductionTargetZero || isProductCambio);
-                                    if (me.productionRunning) {
-                                    	var shiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
-                                    		shiftScheduleId: me.currentShiftId
-                                    	});
-                                    	var shouldUpdateLastTask = false;
-                                    	var newTaskCategory = '';
-                                    	if (shiftEvents.getRowCount() !== 0) {
-                                    		var lastEvent = shiftEvents.rows[shiftEvents.getRowCount() - 1];
-                                    		var lastStatus = lastEvent.category;
-                                    		if (isChangeover) {
-                                    			if (lastStatus == 'changeover') {
-                                    				shouldUpdateLastTask = true;
-                                    			} else {
-                                    				newTaskCategory = 'changeover';
-                                    			}
-                                    		} else {
-                                    			if (lastStatus == 'running') {
-                                    				shouldUpdateLastTask = true;
-                                    			} else {
-                                    				newTaskCategory = 'running';
-                                    			}
-                                    		}
-                                    		if (shouldUpdateLastTask) {
-                                    			Things["BayerDBDataProvider"].UpdateShiftEvent({
-                                    				endTime: Date.now(),
-                                    				id: lastEvent.id,
-                                    				shiftScheduleId: me.currentShiftId
-                                    			});
-                                    		} else {
-                                    			Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                    				startTime: lastEvent.endTime,
-                                    				endTime: Date.now(),
-                                    				shiftScheduleId: me.currentShiftId,
-                                    				source: me.name,
-                                    				category: newTaskCategory
-                                    			});
-                                    		}
-                                    	} else {
-                                    		var shiftSchedule = Things["BayerDBDataProvider"].GetShiftScheduleById({
-                                    			id: me.currentShiftId
-                                    		});
-                                    		if (isChangeover) {
-                                    			newTaskCategory = 'changeover';
-                                    		} else {
-                                    			newTaskCategory = 'running';
-                                    		}
-                                    		Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                    			startTime: shiftSchedule.timestamp,
-                                    			endTime: Date.now(),
-                                    			shiftScheduleId: me.currentShiftId,
-                                    			source: me.name,
-                                    			category: newTaskCategory
-                                    		});
-                                    	}
-                                    }
-                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
-                                    //var currentProduct = me.GetCurrentProduct();
-                                    
-                                    if (currentProduct && currentProduct.getRowCount() > 0) {
-                                        //logger.debug('S:ProcessChangeoverDelayRules');
-                                       // var isChangeover = (currentProduct.productId === 'Cambio');
-                                        var isChangeoverExeedTarget = (currentProduct.workedHours * 60) >
-                                            (currentProduct.targetHours * 60) + (currentProduct.targetHours * 60 * 0.1);
-                                      //  var isProductionTargetZero = (currentProduct.targetQuantity === 0);
-                                        
-                                        /* Requirments
-                                        	- All changeovers which exceed the target by more than 10% generate entries.
-                                        */
-                                        
-                                        if (isChangeover === true && 
-                                            isChangeoverExeedTarget === true &&
-                                            me.changeoverDelayStartTime.getTime() === (new Date(0).getTime())
-                                           ) {
-                                            me.changeoverDelayStartTime = new Date();
-                                        } else if (
-                                            isChangeover === false &&
-                                            me.changeoverDelayStartTime.getTime() !== (new Date(0).getTime())
-                                        ) {
-                                            //logger.debug('S:ChangeoverDelayedOver:ChangeoverDelayed');
-                                            me.ProductionDelayed({
-                                                category: 'changeover', /* STRING */
-                                                startTime: me.changeoverDelayStartTime,
-                                                endTime: new Date(), /* DATETIME */
-                                            });
-                                            //logger.debug('S:ChangeoverDelayedOver.ResetTimer');
-                                            me.changeoverDelayStartTime = new Date(0);
-                                        }
-                                        
-                                    //    // Grey indicates when there was a changeover active 
-                                    //    // or the target of the line is zero (0).
-                                    //    if ((isChangeover === true || isProductionTargetZero === true) && 
-                                    //        me.changeoverStartTime.getTime() === (new Date(0).getTime())
-                                    //       ) {
-                                    //        me.changeoverStartTime = new Date();
-                                    //    } else if (
-                                    //        isChangeover === false &&
-                                    //        me.changeoverStartTime.getTime() !== (new Date(0).getTime())
-                                    //    ) {
-                                    //        me.InsertShiftEventEntry({
-                                    //            category: 'changeover', /* STRING */
-                                    //            startTime: me.changeoverStartTime,
-                                    //            endTime: new Date(), /* DATETIME */
-                                    //        });
-                                    //        me.changeoverStartTime = new Date(0);
-                                    //    }
-                                    }
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="ProcessEventsOnShiftChange">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    var prevShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
-                                    var prevShift= Things["BayerDBDataProvider"].GetShiftScheduleById({
-                                            	id: eventData.oldValue.value
-                                            });
-                                    var lastEvent;
-                                    var currentShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
-                                            	id: eventData.newValue.value
-                                            });
-                                    
-                                    if(me.productionRunning){
-                                            lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
-                                            //finish last event from previous shift
-                                            Things["BayerDBDataProvider"].UpdateShiftEvent({
-                                            	endTime: dateAddHours(prevShift.timestamp, 8),
-                                            	id: lastEvent.id,
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
-                                            //add first event to new shift
-                                                var category;
-                                            	var currentProduct = me.GetCurrentProduct();
-                                                var isProductionTargetZero = (currentProduct.targetQuantity === 0);
-                                                var isProductCambio = (currentProduct.productId === 'Cambio');
-                                    			var isChangeover = (isProductionTargetZero || isProductCambio);
-                                            	if (isChangeover) {
-                                            		category = "changeover";
-                                            	} else {
-                                            		category = "running";
-                                            	}
-                                            var result = Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: currentShift.timestamp,
-                                            	endTime: Date.now() ,
-                                            	shiftScheduleId: eventData.newValue.value,
-                                            	source: me.name,
-                                            	category: category
-                                            });
-                                    }
-                                    else{
-                                        if(prevShiftEvents.getRowCount() !== 0){
-                                        	lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
-                                            if(lastEvent.category === "breakdown"){
-                                                Things["BayerDBDataProvider"].UpdateShiftEvent({
-                                            	endTime: dateAddHours(prevShift.timestamp, 8),
-                                            	id: lastEvent.id,
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
-                                            }
-                                            else{
-                                            	Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: lastEvent.endTime,
-                                            	endTime: dateAddHours(prevShift.timestamp, 8) ,
-                                            	shiftScheduleId: eventData.oldValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
-                                            }
-                                        }
-                                        else{
-                                        	Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: prevShift.timestamp,
-                                            	endTime: dateAddHours(prevShift.timestamp, 8) ,
-                                            	shiftScheduleId: eventData.oldValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
-                                        }
-                                        Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: currentShift.timestamp,
-                                            	endTime: Date.now() ,
-                                            	shiftScheduleId: eventData.newValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
-                                    }
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="ProcessProductionDelayRules">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    var lineConfig = me.GetLineConfiguration();
-                                    
-                                    // result: INFOTABLE dataShape: BayerProductionPlanDataShape
-                                    var currentProduct = me.GetCurrentProduct();
-                                    
-                                    var delayCategory = {
-                                    	microstop: 'microstop',
-                                    	breakdown: 'breakdown',
-                                    };
-                                    
-                                    var oldProductionRunning = {
-                                    	value: eventData.oldValue.value,
-                                    	time: eventData.oldValue.time,
-                                    };
-                                    var newProductionRunning = {
-                                    	value: eventData.newValue.value,
-                                    	time: eventData.newValue.time,
-                                    };
-                                    
-                                    var now = new Date();
-                                    var diffTime = dateDifference(newProductionRunning.time, oldProductionRunning.time) / 1000 / 60;
-                                    
-                                    // - Green indicating when the machine was running
-                                    //if (newProductionRunning.value === false) {
-                                    //    me.InsertShiftEventEntry({
-                                    //        category: 'running' /* STRING */,
-                                    //        startTime: oldProductionRunning.time /* DATETIME */,
-                                    //        endTime: now /* DATETIME */
-                                    //   });
-                                    //}
-                                    
-                                    // comeback from not runing production
-                                    if (newProductionRunning.value === true) {
-                                    	if (diffTime < lineConfig.delayMicrostopBreakdownThreshold) {
-                                    		//logger.debug('ProcessProductionDelayRules:microstopProcess:diffTime:'+ diffTime);
-                                    
-                                    		// Orange indicating when there was an active production order with a
-                                    		// target greater than zero (>0), but the machine stopped (based on “State” tag)
-                                    		// for less than X minutes – value is configurable.
-                                    		me.InsertShiftEventEntry({
-                                    			category: 'microstop' /* STRING */ ,
-                                    			startTime: oldProductionRunning.time /* DATETIME */ ,
-                                    			endTime: now /* DATETIME */
-                                    		});
-                                    
-                                    		//count microstop
-                                    		//me.delayMicrostopCount = me.delayMicrostopCount + 1;
-                                    		me.delayMicrostopCount += 1;
-                                    		//logger.debug('ProcessProductionDelayRules:me.delayMicrostopCount:' + me.delayMicrostopCount);
-                                    		//sum time of microstop
-                                    		if (me.delayMicrostopTime === 0) {
-                                    			// init counters
-                                    			me.delayMicrostopTimeStart = oldProductionRunning.time; //m
-                                    			me.delayMicrostopTime = diffTime;
-                                    		} else {
-                                    			me.delayMicrostopTime += me.delayMicrostopTime; //m
-                                    		}
-                                    		//logger.debug('ProcessProductionDelayRules:me.delayMicrostopTime:' + me.delayMicrostopTime);
-                                    
-                                    		//counter exeed
-                                    		if (me.delayMicrostopCount > lineConfig.delayMicrostopCountMax ||
-                                    			me.delayMicrostopTime > lineConfig.delayMicrostopTimeMax
-                                    		) {
-                                    			me.ProductionDelayed({
-                                    				startTime: me.delayMicrostopTimeStart /* DATETIME */ ,
-                                    				endTime: now /* DATETIME */ ,
-                                    				category: delayCategory.microstop /* STRING */
-                                    			});
-                                    			me.ResetMicrostopDelayProperties();
-                                    		}
-                                    	} else if (diffTime >= lineConfig.delayMicrostopBreakdownThreshold) {
-                                    		me.ProductionDelayed({
-                                    			startTime: oldProductionRunning.time /* DATETIME */ ,
-                                    			endTime: newProductionRunning.time /* DATETIME */ ,
-                                    			category: delayCategory.breakdown /* STRING */
-                                    		});
-                                    
-                                    		// Red indicates when there was an active production order with a target
-                                    		// greater than zero (>0), but the machine stopped (based on “State” tag) for
-                                    		// more than Y minutes – value is configurable.
-                                    
-                                    
-                                    		//check if current shift has any shift event
-                                    		var currentShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
-                                    			shiftScheduleId: me.currentShiftId
-                                    		});
-                                    		var finishTime;
-                                    		if (currentShiftEvents.getRowCount() === 0) {
-                                    			me.InsertShiftEventEntry({
-                                    				category: 'breakdown' /* STRING */ ,
-                                    				startTime: Things["BayerUtilities"].GetCurrentShiftTime().startTime /* DATETIME */ ,
-                                    				endTime: Date.now()
-                                    			});
-                                    
-                                    		} else {
-                                    			var lastEvent = currentShiftEvents.rows[currentShiftEvents.getRowCount() - 1];
-                                    			if (lastEvent.category === 'breakdown') {
-                                    				Things["BayerDBDataProvider"].UpdateShiftEvent({
-                                    					endTime: Date.now(),
-                                    					id: lastEvent.id,
-                                    					shiftScheduleId: me.currentShiftId
-                                    				});
-                                    			} else {
-                                    				me.InsertShiftEventEntry({
-                                    					category: 'breakdown',
-                                    					startTime: lastEvent.endTime,
-                                    					endTime: Date.now()
-                                    				});
-                                    			}
-                                    
-                                    		}
-                                    	}
-                                    }
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="ProcessSwitchShift">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    /* @DRAFT @DEPRACATED @todo delete if no need */
-                                    
-                                    // result: INFOTABLE dataShape: BayerShiftTimeDataShape
-                                    var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
-                                    
-                                    var startTime = shiftTime.startTime;
-                                    
-                                    // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
-                                    var prevShift =  Things["BayerDBDataProvider"].GetSingleShiftByTime({
-                                    	productionLine: 'BayerIMA90C1' /* THINGNAME */,
-                                    	shiftTime: dateAddHours(shiftTime.startTime, 1*-8) /* DATETIME */,
-                                    });
-                                    
-                                    var isProduced = (prevShift.totalQuantityProduced > 0);
-                                    //var isEventsExist = ;
-                                    
-                                    
-                                    if (isEventsExist === false && isProduced === true) {
-                                        me.InsertShiftEventEntry({
-                                            category: 'running' /* STRING */,
-                                            startTime: dateAddHours(shiftTime.startTime, 1*-8) /* DATETIME */,
-                                            endTime: shiftTime.startTime /* DATETIME */
-                                        });
-                                    }
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="ResetMicrostopDelayProperties">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    // executed after entry microstop and change shift
-                                    logger.debug(me.name + ' !!! RESET MISCROSTOP COUNTERS !!!');
-                                    me.delayMicrostopCount = 0;
-                                    me.delayMicrostopTime = 0;
-                                    me.delayMicrostopTimeStart = new Date(0);
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-                <ServiceImplementation description="" handlerName="Script" name="UpdateDelayShift">
-                    <ConfigurationTables>
-                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <code>
-                                    <![CDATA[
-                                    var result = Things["BayerDBDataProvider"].UpdateDelayShift({id: id, delayShift: delayShift});
-                                    ]]>
-                                    </code>
-                                </Row>
-                            </Rows>
-                        </ConfigurationTable>
-                    </ConfigurationTables>
-                </ServiceImplementation>
-            </ServiceImplementations>
-            <Subscriptions>
-                <Subscription description="" enabled="true" eventName="ProductionDelayed" name="OnProductionDelayed" source="" sourceProperty="">
-                    <ServiceImplementation description="" handlerName="Script" name="OnProductionDelayed">
-                        <ConfigurationTables>
-                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        me.InsertDelayEntry({
-                                            category: eventData.category, /* STRING */
-                                            startTime: eventData.startTime,
-                                            endTime: eventData.endTime, /* DATETIME */
-                                        });
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                </Subscription>
-                <Subscription description="" enabled="true" eventName="Timer" name="OnProductionDelayTimerTickChanged" source="BayerDelayManagamentTimer" sourceProperty="">
-                    <ServiceImplementation description="" handlerName="Script" name="OnProductionDelayTimerTickChanged">
-                        <ConfigurationTables>
-                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        me.ProcessChangeoverDelayRules({
-                                        	eventData: eventData
-                                        });
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                </Subscription>
-                <Subscription description="" enabled="true" eventName="DataChange" name="OnProductionRunningChanged" source="" sourceProperty="productionRunning">
-                    <ServiceImplementation description="" handlerName="Script" name="OnProductionRunningChanged">
-                        <ConfigurationTables>
-                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        me.ProcessProductionDelayRules({eventData: eventData});
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                </Subscription>
-            </Subscriptions>
-            <avatar/>
-            <DesignTimePermissions>
-                <Create/>
-                <Read/>
-                <Update/>
-                <Delete/>
-                <Metadata/>
-            </DesignTimePermissions>
-            <RunTimePermissions>
-                <Permissions resourceName="*">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </PropertyWrite>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </EventInvoke>
-                    <EventSubscribe>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </EventSubscribe>
-                </Permissions>
-            </RunTimePermissions>
-            <VisibilityPermissions>
-                <Visibility>
-                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
-                </Visibility>
-            </VisibilityPermissions>
-            <ConfigurationTableDefinitions/>
-            <ConfigurationTables/>
-            <PropertyBindings/>
-            <RemotePropertyBindings/>
-            <RemoteServiceBindings/>
-            <RemoteEventBindings/>
-            <AlertConfigurations>
-                <AlertDefinitions name="changeoverDelayStartTime"/>
-                <AlertDefinitions name="changeoverStartTime"/>
-                <AlertDefinitions name="delayBreakDownTimeMoreThan"/>
-                <AlertDefinitions name="delayMicrostopCount"/>
-                <AlertDefinitions name="delayMicrostopCountMax"/>
-                <AlertDefinitions name="delayMicrostopTime"/>
-                <AlertDefinitions name="delayMicrostopTimeLessThan"/>
-                <AlertDefinitions name="delayMicrostopTimeMax"/>
-                <AlertDefinitions name="delayMicrostopTimeStart"/>
-                <AlertDefinitions name="productionRunning"/>
-            </AlertConfigurations>
-            <InstanceRunTimePermissions>
-                <Permissions resourceName="GetPcsPerShift">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="ChangeoverDelayedOver">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="GetDelayShiftDetails">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="changeoverStartTime">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="changeoverDelayStartTime">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="ProcessChangeoverDelayRules">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="InsertDelayEntry">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="countMicrostop">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="UpdateShift">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="GetDelaysSummary">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="activeShiftId">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="maxCountMicrostops">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="GetDailyPerformanceForTimeframe">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="ScheduleShifts">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="UpdateDelayShift">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="GetDailyPerformance">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="ResetMicrostopDelayProperties">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                        <Principal isPermitted="true" name="BayerSchedulerUser" type="User"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="GetAvailability">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="periodMicrostop">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="CalculateShiftsFromNow">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="GetNearestChangeoverFromSchedule">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="BayerNotificationSystemUser" type="User"/>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="*">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite/>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="delayMicrostopTimeStart">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="InsertShiftEventEntry">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="overloadDelayStartTime">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="GetShiftsFromNow">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="maxPeriodMicrostops">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="ProcessEventsOnShiftChange">
-                    <PropertyRead/>
-                    <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="BayerSchedulerUser" type="User"/>
-                    </ServiceInvoke>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="delayMicrostopCount">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-                <Permissions resourceName="delayMicrostopTime">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                    </PropertyRead>
-                    <PropertyWrite>
-                        <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
-                        <Principal isPermitted="true" name="System" type="User"/>
-                    </PropertyWrite>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
-                </Permissions>
-            </InstanceRunTimePermissions>
-        </ThingShape>
-    </ThingShapes>
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
+<ThingShapes>
+<ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-04-15T12:48:40.497Z" name="BayerDelaysManagement" projectName="BayerIoT" tags="Applications:Bayer">
+<PropertyDefinitions>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="changeoverDelayStartTime" ordinal="11"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="changeoverStartTime" ordinal="12"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - if a delay was longer, we register a breakdown" isLocalOnly="false" name="delayBreakDownTimeMoreThan" ordinal="12"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0" baseType="INTEGER" category="" description="" isLocalOnly="false" name="delayMicrostopCount" ordinal="12"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0" baseType="INTEGER" category="" description="Threshold count - nr of micro stops allowed. After that a delay will be recorded in DB." isLocalOnly="false" name="delayMicrostopCountMax" ordinal="13"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.units="min" baseType="NUMBER" category="" description="Total duration of micro-stops after with delay will trigger" isLocalOnly="false" name="delayMicrostopTime" ordinal="12"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - if a delay was shorter, we register a microstop" isLocalOnly="false" name="delayMicrostopTimeLessThan" ordinal="12"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - total duration of micro-stops allowed. After that delay will be recorded in DB" isLocalOnly="false" name="delayMicrostopTimeMax" ordinal="12"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="delayMicrostopTimeStart" ordinal="12"/>
+<PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="true" aspect.isLogged="false" aspect.isPersistent="true" baseType="BOOLEAN" category="" description="simulate production" isLocalOnly="false" name="productionRunning" ordinal="7"/>
+</PropertyDefinitions>
+<ServiceDefinitions>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelayShiftDetails">
+<ResultType aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+<ParameterDefinitions>
+<FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="1"/>
+</ParameterDefinitions>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelaysSummary">
+<ResultType aspect.dataShape="BayerDelaysSummaryDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+<ParameterDefinitions>
+<FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="1"/>
+</ParameterDefinitions>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertDelayEntry">
+<ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+<ParameterDefinitions>
+<FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="category" ordinal="2"/>
+<FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="3"/>
+<FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="2"/>
+<FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="totalDuration" ordinal="4"/>
+</ParameterDefinitions>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertShiftEventEntry">
+<ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+<ParameterDefinitions>
+<FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="category" ordinal="2"/>
+<FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="3"/>
+<FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="2"/>
+</ParameterDefinitions>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessChangeoverDelayRules">
+<ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+<ParameterDefinitions>
+<FieldDefinition aspect.dataShape="TimerEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
+</ParameterDefinitions>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessEventsOnShiftChange">
+<ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+<ParameterDefinitions>
+<FieldDefinition aspect.dataShape="DataChangeEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
+</ParameterDefinitions>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessProductionDelayRules">
+<ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+<ParameterDefinitions>
+<FieldDefinition aspect.dataShape="DataChangeEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
+</ParameterDefinitions>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessSwitchShift">
+<ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+<ParameterDefinitions/>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="executed after entry microstop and change shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ResetMicrostopDelayProperties">
+<ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+<ParameterDefinitions/>
+</ServiceDefinition>
+<ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateDelayShift">
+<ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+<ParameterDefinitions>
+<FieldDefinition aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="delayShift" ordinal="2"/>
+<FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="3"/>
+</ParameterDefinitions>
+</ServiceDefinition>
+</ServiceDefinitions>
+<EventDefinitions>
+<EventDefinition category="" dataShape="BayerDelayEventDataShape" description="" name="ProductionDelayed"/>
+</EventDefinitions>
+<ServiceMappings/>
+<ServiceImplementations>
+<ServiceImplementation description="" handlerName="Script" name="GetDelayShiftDetails">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[var result = Things['BayerDBDataProvider'].GetDelayShiftDetails({
+    shiftScheduleId: shiftScheduleId
+});]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="GetDelaysSummary">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[var result = Things['BayerDBDataProvider'].GetDelaysSummary({
+    shiftScheduleId: shiftScheduleId
+});]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="InsertDelayEntry">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[// result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
+var currentShift = Things["BayerUtilities"].GetCurrentShift({
+	lineName: me.name /* THINGNAME */
+});
+var shiftScheduleId = currentShift.id;
+
+var delayEntry = {
+    source: "",
+    category: category,
+    shiftScheduleId: shiftScheduleId,
+    startTime: startTime,
+    endTime: endTime,
+    totalDuration: totalDuration
+};
+
+var result = Things["BayerDBDataProvider"].InsertDelayEntry(delayEntry);
+]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="InsertShiftEventEntry">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[var currentShift = Things["BayerUtilities"].GetCurrentShift({
+	lineName: me.name /* THINGNAME */
+});
+var shiftScheduleId = currentShift.id;
+
+var delayEntry = {
+    source: me.name,
+    category: category,
+    shiftScheduleId: shiftScheduleId,
+    startTime: startTime,
+    endTime: endTime
+};
+
+var result = Things["BayerDBDataProvider"].InsertShiftEventEntry(delayEntry);]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="ProcessChangeoverDelayRules">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[// check id changeover
+var currentProduct = me.GetCurrentProduct();
+var isProductionTargetZero = (currentProduct.targetQuantity === 0);
+var isProductCambio = (currentProduct.productId === 'Cambio');
+var isChangeover = (isProductionTargetZero || isProductCambio);
+
+// update or create events only if production is running
+if (me.productionRunning) {
+	var shiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
+		shiftScheduleId: me.currentShiftId
+	});
+	var shouldUpdateLastTask = false;
+	var newTaskCategory = '';
+    // check if is any event on current shift 
+	if (shiftEvents.getRowCount() !== 0) {
+        // find status of last event
+		var lastEvent = shiftEvents.rows[shiftEvents.getRowCount() - 1];
+		var lastStatus = lastEvent.category;
+        // decide if should update event or create new
+		if (isChangeover) {
+			if (lastStatus == 'changeover') {
+				shouldUpdateLastTask = true;
+			} else {
+				newTaskCategory = 'changeover';
+			}
+		} else {
+			if (lastStatus == 'running') {
+				shouldUpdateLastTask = true;
+			} else {
+				newTaskCategory = 'running';
+			}
+		}
+        // depending on decision create or update event
+		if (shouldUpdateLastTask) {
+			Things["BayerDBDataProvider"].UpdateShiftEvent({
+				endTime: Date.now(),
+				id: lastEvent.id,
+				shiftScheduleId: me.currentShiftId
+			});
+		} else {
+			Things["BayerDBDataProvider"].InsertShiftEventEntry({
+				startTime: lastEvent.endTime,
+				endTime: Date.now(),
+				shiftScheduleId: me.currentShiftId,
+				source: me.name,
+				category: newTaskCategory
+			});
+		}
+	}
+    // if shift event list is empty create new task 
+    else {
+		var shiftSchedule = Things["BayerDBDataProvider"].GetShiftScheduleById({
+			id: me.currentShiftId
+		});
+		if (isChangeover) {
+			newTaskCategory = 'changeover';
+		} else {
+			newTaskCategory = 'running';
+		}
+		Things["BayerDBDataProvider"].InsertShiftEventEntry({
+			startTime: shiftSchedule.timestamp,
+			endTime: Date.now(),
+			shiftScheduleId: me.currentShiftId,
+			source: me.name,
+			category: newTaskCategory
+		});
+	}
+}
+
+if (currentProduct && currentProduct.getRowCount() > 0) {
+	//logger.debug('S:ProcessChangeoverDelayRules');
+	var isChangeoverExeedTarget = (currentProduct.workedHours * 60) >
+		(currentProduct.targetHours * 60) + (currentProduct.targetHours * 60 * 0.1);
+
+	/* Requirments
+		- All changeovers which exceed the target by more than 10% generate entries.
+	*/
+
+	if (isChangeover === true &&
+		isChangeoverExeedTarget === true &&
+		me.changeoverDelayStartTime.getTime() === (new Date(0).getTime())
+	) {
+		me.changeoverDelayStartTime = new Date();
+	} else if (
+		isChangeover === false &&
+		me.changeoverDelayStartTime.getTime() !== (new Date(0).getTime())
+	) {
+		//logger.debug('S:ChangeoverDelayedOver:ChangeoverDelayed');
+		me.ProductionDelayed({
+			category: 'changeover',
+			/* STRING */
+			startTime: me.changeoverDelayStartTime,
+			endTime: new Date(),
+			/* DATETIME */
+		});
+		//logger.debug('S:ChangeoverDelayedOver.ResetTimer');
+		me.changeoverDelayStartTime = new Date(0);
+	}
+}]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="ProcessEventsOnShiftChange">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[// get event from previous shift
+var prevShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
+        	shiftScheduleId: eventData.oldValue.value
+        });
+// get data about previous shift (id and timestamp may be needed)
+var prevShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
+        	id: eventData.oldValue.value
+        });
+var lastEvent;
+// get event from current (new) shift
+var currentShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
+        	id: eventData.newValue.value
+        });
+if(me.productionRunning){
+    	// finish last event from previous shift
+        lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
+        Things["BayerDBDataProvider"].UpdateShiftEvent({
+        	endTime: dateAddHours(prevShift.timestamp, 8),
+        	id: lastEvent.id,
+        	shiftScheduleId: eventData.oldValue.value
+        });
+        //add first event to new shift
+            var category;
+        	var currentProduct = me.GetCurrentProduct();
+            var isProductionTargetZero = (currentProduct.targetQuantity === 0);
+            var isProductCambio = (currentProduct.productId === 'Cambio');
+			var isChangeover = (isProductionTargetZero || isProductCambio);
+    		// select event catagory
+        	if (isChangeover) {
+        		category = "changeover";
+        	} else {
+        		category = "running";
+        	}
+        var result = Things["BayerDBDataProvider"].InsertShiftEventEntry({
+        	startTime: currentShift.timestamp,
+        	endTime: Date.now() ,
+        	shiftScheduleId: eventData.newValue.value,
+        	source: me.name,
+        	category: category
+        });
+}
+// cases when production isn't running
+else{
+    // if there was any event on  previous shift, update endtime 
+    if(prevShiftEvents.getRowCount() !== 0){
+    	lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
+        // if previous event was breakdown, update event 
+        if(lastEvent.category === "breakdown"){
+            Things["BayerDBDataProvider"].UpdateShiftEvent({
+        	endTime: dateAddHours(prevShift.timestamp, 8),
+        	id: lastEvent.id,
+        	shiftScheduleId: eventData.oldValue.value
+        });
+        }
+        // insert new taks if previously other type of event occured
+        else{
+        	Things["BayerDBDataProvider"].InsertShiftEventEntry({
+        	startTime: lastEvent.endTime,
+        	endTime: dateAddHours(prevShift.timestamp, 8) ,
+        	shiftScheduleId: eventData.oldValue.value,
+        	source: me.name,
+        	category: 'breakdown'
+        });
+        }
+    }
+    // if previous shift event list is empty and previous shift exists,
+    // insert one shift-long event
+    else if (prevShift) {
+    	Things["BayerDBDataProvider"].InsertShiftEventEntry({
+        	startTime: prevShift.timestamp,
+        	endTime: dateAddHours(prevShift.timestamp, 8) ,
+        	shiftScheduleId: eventData.oldValue.value,
+        	source: me.name,
+        	category: 'breakdown'
+        });
+    }
+    //add first event to new shift
+    Things["BayerDBDataProvider"].InsertShiftEventEntry({
+        	startTime: currentShift.timestamp,
+        	endTime: Date.now() ,
+        	shiftScheduleId: eventData.newValue.value,
+        	source: me.name,
+        	category: 'breakdown'
+        });
+}
+]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="ProcessProductionDelayRules">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[var lineConfig = me.GetLineConfiguration();
+
+var currentProduct = me.GetCurrentProduct();
+
+var delayCategory = {
+	microstop: 'microstop',
+	breakdown: 'breakdown',
+};
+
+var oldProductionRunning = {
+	value: eventData.oldValue.value,
+	time: eventData.oldValue.time,
+};
+var newProductionRunning = {
+	value: eventData.newValue.value,
+	time: eventData.newValue.time,
+};
+
+var now = new Date();
+var diffTime = dateDifference(newProductionRunning.time, oldProductionRunning.time) / 1000 / 60;
+
+// - Green indicating when the machine was running
+//if (newProductionRunning.value === false) {
+//    me.InsertShiftEventEntry({
+//        category: 'running' /* STRING */,
+//        startTime: oldProductionRunning.time /* DATETIME */,
+//        endTime: now /* DATETIME */
+//   });
+//}
+
+// comeback from not runing production
+if (newProductionRunning.value === true) {
+	if (diffTime < lineConfig.delayMicrostopBreakdownThreshold) {
+		//logger.debug('ProcessProductionDelayRules:microstopProcess:diffTime:'+ diffTime);
+
+		// Orange indicating when there was an active production order with a
+		// target greater than zero (>0), but the machine stopped (based on “State” tag)
+		// for less than X minutes – value is configurable.
+		me.InsertShiftEventEntry({
+			category: 'microstop' /* STRING */ ,
+			startTime: oldProductionRunning.time /* DATETIME */ ,
+			endTime: now /* DATETIME */
+		});
+
+		//count microstop
+		//me.delayMicrostopCount = me.delayMicrostopCount + 1;
+		me.delayMicrostopCount += 1;
+		//logger.debug('ProcessProductionDelayRules:me.delayMicrostopCount:' + me.delayMicrostopCount);
+		//sum time of microstop
+		if (me.delayMicrostopTime === 0) {
+			// init counters
+			me.delayMicrostopTimeStart = oldProductionRunning.time; //m
+			me.delayMicrostopTime = diffTime;
+		} else {
+			me.delayMicrostopTime += diffTime; //m
+		}
+		//logger.debug('ProcessProductionDelayRules:me.delayMicrostopTime:' + me.delayMicrostopTime);
+
+		//counter exeed
+		if (me.delayMicrostopCount > lineConfig.delayMicrostopCountMax ||
+			me.delayMicrostopTime > lineConfig.delayMicrostopTimeMax
+		) {
+			me.ProductionDelayed({
+				startTime: me.delayMicrostopTimeStart /* DATETIME */ ,
+				endTime: now /* DATETIME */ ,
+				category: delayCategory.microstop /* STRING */,
+                totalDuration: new Date (me.delayMicrostopTime * 60 * 1000)
+			});
+			me.ResetMicrostopDelayProperties();
+		}
+	} else if (diffTime >= lineConfig.delayMicrostopBreakdownThreshold) {
+		me.ProductionDelayed({
+			startTime: oldProductionRunning.time /* DATETIME */ ,
+			endTime: newProductionRunning.time /* DATETIME */ ,
+			category: delayCategory.breakdown /* STRING */,
+            totalDuration: new Date (newProductionRunning.time.getTime() - oldProductionRunning.time.getTime())
+		});
+
+		// Red indicates when there was an active production order with a target
+		// greater than zero (>0), but the machine stopped (based on “State” tag) for
+		// more than Y minutes – value is configurable.
+
+
+		//check if current shift has any shift event
+		var currentShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
+			shiftScheduleId: me.currentShiftId
+		});
+		var finishTime;
+		if (currentShiftEvents.getRowCount() === 0) {
+			me.InsertShiftEventEntry({
+				category: 'breakdown' /* STRING */ ,
+				startTime: Things["BayerUtilities"].GetCurrentShiftTime().startTime /* DATETIME */ ,
+				endTime: Date.now()
+			});
+
+		} else {
+			var lastEvent = currentShiftEvents.rows[currentShiftEvents.getRowCount() - 1];
+			if (lastEvent.category === 'breakdown') {
+				Things["BayerDBDataProvider"].UpdateShiftEvent({
+					endTime: Date.now(),
+					id: lastEvent.id,
+					shiftScheduleId: me.currentShiftId
+				});
+			} else {
+				me.InsertShiftEventEntry({
+					category: 'breakdown',
+					startTime: lastEvent.endTime,
+					endTime: Date.now()
+				});
+			}
+
+		}
+	}
+}]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="ProcessSwitchShift">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[/* @DRAFT @DEPRACATED @todo delete if no need */
+
+// result: INFOTABLE dataShape: BayerShiftTimeDataShape
+var shiftTime = Things["BayerUtilities"].GetCurrentShiftTime();
+
+var startTime = shiftTime.startTime;
+
+// result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
+var prevShift =  Things["BayerDBDataProvider"].GetSingleShiftByTime({
+	productionLine: 'BayerIMA90C1' /* THINGNAME */,
+	shiftTime: dateAddHours(shiftTime.startTime, 1*-8) /* DATETIME */,
+});
+
+var isProduced = (prevShift.totalQuantityProduced > 0);
+//var isEventsExist = ;
+
+
+if (isEventsExist === false && isProduced === true) {
+    me.InsertShiftEventEntry({
+        category: 'running' /* STRING */,
+        startTime: dateAddHours(shiftTime.startTime, 1*-8) /* DATETIME */,
+        endTime: shiftTime.startTime /* DATETIME */
+    });
+}]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="ResetMicrostopDelayProperties">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[// executed after entry microstop and change shift
+logger.debug(me.name + ' !!! RESET MISCROSTOP COUNTERS !!!');
+me.delayMicrostopCount = 0;
+me.delayMicrostopTime = 0;
+me.delayMicrostopTimeStart = new Date(0);]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+<ServiceImplementation description="" handlerName="Script" name="UpdateDelayShift">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[var result = Things["BayerDBDataProvider"].UpdateDelayShift({id: id, delayShift: delayShift});
+]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+</ServiceImplementations>
+<Subscriptions>
+<Subscription description="" enabled="true" eventName="ProductionDelayed" name="OnProductionDelayed" source="" sourceProperty="">
+<ServiceImplementation description="" handlerName="Script" name="OnProductionDelayed">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[me.InsertDelayEntry({
+    category: eventData.category, /* STRING */
+    startTime: eventData.startTime,
+    endTime: eventData.endTime, /* DATETIME */
+    totalDuration: eventData.totalDuration,
+});]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+</Subscription>
+<Subscription description="" enabled="true" eventName="Timer" name="OnProductionDelayTimerTickChanged" source="BayerDelayManagamentTimer" sourceProperty="">
+<ServiceImplementation description="" handlerName="Script" name="OnProductionDelayTimerTickChanged">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[me.ProcessChangeoverDelayRules({
+	eventData: eventData
+});]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+</Subscription>
+<Subscription description="" enabled="true" eventName="DataChange" name="OnProductionRunningChanged" source="" sourceProperty="productionRunning">
+<ServiceImplementation description="" handlerName="Script" name="OnProductionRunningChanged">
+<ConfigurationTables>
+<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+<DataShape>
+<FieldDefinitions>
+<FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+</FieldDefinitions>
+</DataShape>
+<Rows>
+<Row>
+<code><![CDATA[me.ProcessProductionDelayRules({eventData: eventData});]]></code>
+</Row>
+</Rows>
+</ConfigurationTable>
+</ConfigurationTables>
+</ServiceImplementation>
+</Subscription>
+</Subscriptions>
+<Owner name="lstrzelecki" type="User"/>
+<avatar/>
+<DesignTimePermissions>
+<Create/>
+<Read/>
+<Update/>
+<Delete/>
+<Metadata/>
+</DesignTimePermissions>
+<RunTimePermissions/>
+<VisibilityPermissions>
+<Visibility>
+<Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+</Visibility>
+</VisibilityPermissions>
+<ConfigurationTableDefinitions/>
+<ConfigurationTables/>
+<PropertyBindings/>
+<RemotePropertyBindings/>
+<RemoteServiceBindings/>
+<RemoteEventBindings/>
+<AlertConfigurations>
+<AlertDefinitions name="changeoverDelayStartTime"/>
+<AlertDefinitions name="changeoverStartTime"/>
+<AlertDefinitions name="delayBreakDownTimeMoreThan"/>
+<AlertDefinitions name="delayMicrostopCount"/>
+<AlertDefinitions name="delayMicrostopCountMax"/>
+<AlertDefinitions name="delayMicrostopTime"/>
+<AlertDefinitions name="delayMicrostopTimeLessThan"/>
+<AlertDefinitions name="delayMicrostopTimeMax"/>
+<AlertDefinitions name="delayMicrostopTimeStart"/>
+<AlertDefinitions name="productionRunning"/>
+</AlertConfigurations>
+<InstanceRunTimePermissions>
+<Permissions resourceName="UpdateDelayShift">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+<Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="ResetMicrostopDelayProperties">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+<Principal isPermitted="true" name="BayerSchedulerUser" type="User"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="ChangeoverDelayedOver">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="GetDelayShiftDetails">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+<Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="periodMicrostop">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="changeoverStartTime">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="*">
+<PropertyRead>
+<Principal isPermitted="true" name="System" type="User"/>
+</PropertyRead>
+<PropertyWrite/>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="delayMicrostopTimeStart">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+<Principal isPermitted="true" name="System" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="changeoverDelayStartTime">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="ProcessChangeoverDelayRules">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="InsertDelayEntry">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="InsertShiftEventEntry">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="overloadDelayStartTime">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="countMicrostop">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="UpdateShift">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="System" type="User"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="GetDelaysSummary">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+<Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="activeShiftId">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="maxCountMicrostops">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="maxPeriodMicrostops">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="ProcessEventsOnShiftChange">
+<PropertyRead/>
+<PropertyWrite/>
+<ServiceInvoke>
+<Principal isPermitted="true" name="BayerSchedulerUser" type="User"/>
+</ServiceInvoke>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="delayMicrostopCount">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+<Principal isPermitted="true" name="System" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+<Permissions resourceName="delayMicrostopTime">
+<PropertyRead>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+</PropertyRead>
+<PropertyWrite>
+<Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+<Principal isPermitted="true" name="System" type="User"/>
+</PropertyWrite>
+<ServiceInvoke/>
+<EventInvoke/>
+<EventSubscribe/>
+</Permissions>
+</InstanceRunTimePermissions>
+<ConfigurationChanges>
+<ConfigurationChange changeAction="CREATE" changeReason="header : name : updated&#10;" timestamp="2019-10-17T13:29:35.847Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-10-17T13:31:49.848Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-10-17T13:32:33.160Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveShiftIdChanged : removed, added&#10;" timestamp="2019-10-17T13:32:33.332Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="" timestamp="2019-10-17T13:32:46.488Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveShiftIdPropertyChanged : added&#10;" timestamp="2019-10-17T13:34:02.848Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveShiftIdPropertyChanged : removed&#10;OnActiveShiftIdChanged : removed&#10;" timestamp="2019-10-17T13:34:27.786Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="events : DelayedEvent : dataShape updated, category updated&#10;" timestamp="2019-10-17T13:36:13.614Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveShiftIdChanged : added&#10;" timestamp="2019-10-17T13:37:10.552Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertDelayEntry : input parameter isProductionRunning deleted, inputs updated&#10;" timestamp="2019-10-17T13:49:45.018Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T16:51:20.034Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : overloadDelayStopTime : removed, overloadDelayEndTime : added&#10;" timestamp="2019-10-17T16:52:26.065Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T16:59:51.530Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T17:06:24.514Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetChangeoverDelayProperties : service added, description updated&#10;" timestamp="2019-10-17T17:09:00.243Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetChangeoverDelayProperties : service updated&#10;" timestamp="2019-10-17T17:10:16.850Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T17:15:04.223Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:19:39.255Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:22:28.424Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : isOverload : removed, isOverloadEventTriggered : removed, overloadDelayEndTime : removed&#10;" timestamp="2019-10-17T18:22:52.642Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetChangeoverDelayProperties : service deleted&#10;" timestamp="2019-10-17T18:23:09.891Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveShiftIdChanged : code updated&#10;" timestamp="2019-10-17T18:30:57.925Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveShiftIdChanged : removed, added&#10;" timestamp="2019-10-17T18:32:40.579Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:37:10.402Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:37:43.792Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:40:23.662Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:43:25.923Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:44:18.827Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : changeoverDelayStartTime : added, overloadDelayStartTime : removed&#10;" timestamp="2019-10-17T18:46:44.028Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:50:51.335Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:52:53.613Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:54:34.642Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T18:58:13.698Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T19:01:56.803Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T19:05:27.344Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-17T19:07:59.761Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-17T19:17:43.715Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-17T19:30:11.009Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;ChangeoverDelayedOver : service added&#10;" timestamp="2019-10-18T05:28:07.977Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-18T05:29:29.850Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : activeShiftId : updated&#10;" timestamp="2019-10-18T05:29:46.724Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : maxCountMicrostops : updated, maxPeriodMicrostops : updated&#10;" timestamp="2019-10-18T05:33:08.891Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : maxPeriodMicrostops : updated&#10;" timestamp="2019-10-18T05:33:32.218Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveShiftIdChanged : code updated&#10;" timestamp="2019-10-18T05:34:40.451Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-18T05:39:28.396Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-10-18T05:43:23.625Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionRunningChanged : code updated&#10;" timestamp="2019-10-18T05:55:13.841Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-18T06:09:49.912Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : testXAs : added&#10;" timestamp="2019-10-18T06:20:03.443Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="" timestamp="2019-10-18T06:20:11.380Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : testXAs : removed&#10;" timestamp="2019-10-18T06:21:00.707Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionRunningChanged : code updated&#10;" timestamp="2019-10-18T06:34:04.281Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="events : DelayedEvent : removed&#10;subscriptions : OnActiveShiftIdChanged : removed&#10;OnDelayedEvent : removed&#10;OnDelayTimerTickChanged : removed&#10;OnProductionRunningChanged : removed&#10;" timestamp="2019-10-18T06:49:59.878Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="events : ProductionDelayedEvent : added&#10;subscriptions : OnActiveProductionShiftIdChanged : added&#10;" timestamp="2019-10-18T06:55:30.573Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShiftIdChanged : removed&#10;events : ProductionDelayedEvent : removed&#10;ProductionDelayed : added, removed&#10;" timestamp="2019-10-18T06:56:28.570Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShiftIdChanged : added&#10;" timestamp="2019-10-18T06:57:38.489Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionDelayed : added&#10;" timestamp="2019-10-18T07:00:38.268Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionDelayTimerTickChanged : added&#10;" timestamp="2019-10-18T07:01:33.825Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionRunningChanged : added&#10;" timestamp="2019-10-18T07:02:21.033Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ChangeoverDelayedOver : service updated&#10;" timestamp="2019-10-18T07:03:20.473Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T07:04:08.896Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T07:04:56.568Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-18T07:48:36.101Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T08:01:27.802Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : productionDelayStartTime : added&#10;services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-10-18T08:08:21.972Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-18T08:19:00.367Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-10-18T08:49:42.661Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T08:54:22.539Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T09:00:21.273Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-18T09:11:51.978Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T09:16:25.278Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T09:22:01.967Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T09:34:29.217Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T09:43:45.864Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T09:52:15.186Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-10-18T09:53:22.918Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T10:02:02.786Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T10:08:07.520Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T10:14:48.190Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : countMicrostop : updated, maxCountMicrostops : updated, maxPeriodMicrostops : updated, periodMicrostop : updated&#10;services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T10:21:55.672Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T10:31:39.725Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertDelayEntry : service updated&#10;" timestamp="2019-10-18T10:35:16.137Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShiftIdChanged : code updated&#10;" timestamp="2019-10-18T10:38:31.441Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShiftIdChanged : removed, added&#10;" timestamp="2019-10-18T10:40:52.514Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="" timestamp="2019-10-18T10:40:58.685Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShiftIdChanged : removed&#10;" timestamp="2019-10-18T10:43:06.508Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionShiftIdChanged : added&#10;" timestamp="2019-10-18T10:44:16.801Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionShiftIdChanged : enabled updated, removed&#10;OnActiveProductionShift : added&#10;" timestamp="2019-10-18T10:51:54.078Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T11:30:24.448Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-18T12:00:57.103Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T12:14:04.226Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-18T12:23:40.561Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T11:44:39.909Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T12:19:05.701Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T12:22:07.056Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T12:34:05.858Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : thresholdPeriodLessThan : updated, thresholdPeriodMoreThan : updated&#10;" timestamp="2019-10-19T12:38:11.888Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T12:53:26.563Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T13:09:32.809Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T13:10:52.479Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T13:12:58.727Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T13:15:55.317Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : delayMicrostopTimeLessThan : added, delayMicrostopTimeMoreThan : added, thresholdPeriodLessThan : removed, thresholdPeriodMoreThan : removed, delayMicrostopCount : added, delayMaxMicrostop : added, countMicrostop : removed, maxCountMicrostops : removed, delayMaxMicrostopCount : updated, delayMicrostopCountMax : updated, delayMicrostopTime : added, periodMicrostop : removed, delayMicrostopTimeMax : added, maxPeriodMicrostops : removed&#10;" timestamp="2019-10-19T13:26:11.370Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : delayBreakDownTimeMoreThan : added, delayMicrostopTimeMoreThan : removed&#10;" timestamp="2019-10-19T13:30:56.208Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : delayMicrostopCount : updated&#10;" timestamp="2019-10-19T13:32:30.194Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T13:34:09.926Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T13:42:54.619Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-10-19T14:23:37.684Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : delayMicrostopTimeStart : added, productionDelayStartTime : removed&#10;" timestamp="2019-10-19T14:24:31.027Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T14:46:07.219Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T14:52:59.090Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T15:11:13.411Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-19T15:13:16.393Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : GetDelaysSummary : service added&#10;" timestamp="2019-10-22T06:02:56.641Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : GetDelaysSummary : service updated&#10;" timestamp="2019-10-22T06:05:34.813Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : GetDelaysSummary : input parameter shiftScheduleId added, inputs updated&#10;" timestamp="2019-10-22T07:55:46.520Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ChangeoverDelayedOver : service updated&#10;" timestamp="2019-10-22T08:38:37.402Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-23T06:53:59.640Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-23T07:31:20.354Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ChangeoverDelayedOver : service updated&#10;" timestamp="2019-10-23T12:13:55.350Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-23T12:25:12.143Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-23T12:27:51.185Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-23T12:40:40.694Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionRunningChanged : code updated&#10;" timestamp="2019-10-23T13:04:16.482Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-23T13:14:09.402Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-23T13:32:01.918Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-23T13:36:08.849Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-23T13:46:41.034Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ChangeoverDelayedOver : service deleted&#10;" timestamp="2019-10-23T14:33:05.610Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-23T14:33:36.953Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-23T14:34:33.452Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-10-25T14:13:19.210Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-25T14:14:20.474Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertDelayEntry : service updated&#10;InsertShiftEventEntry : service added&#10;" timestamp="2019-10-28T11:18:28.371Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertShiftEventEntry : service updated&#10;" timestamp="2019-10-28T11:58:02.382Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-28T12:01:21.000Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : changeoverStartTime : added&#10;" timestamp="2019-10-28T12:01:39.562Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-28T12:58:30.692Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : code updated&#10;" timestamp="2019-10-28T14:24:41.089Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="" timestamp="2019-10-28T14:24:45.699Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-29T10:56:29.769Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-29T10:58:46.941Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-29T14:00:06.179Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service added&#10;" timestamp="2019-10-29T14:07:06.194Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated&#10;" timestamp="2019-10-29T14:11:45.161Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated, output updated&#10;" timestamp="2019-10-29T14:22:34.846Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : input parameter shiftId deleted, inputs updated&#10;" timestamp="2019-10-29T14:23:59.799Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated&#10;" timestamp="2019-10-29T14:24:40.081Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated&#10;" timestamp="2019-10-29T14:27:20.548Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-10-29T14:28:18.204Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated&#10;" timestamp="2019-10-29T14:28:18.298Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated&#10;" timestamp="2019-10-29T14:28:55.673Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated&#10;" timestamp="2019-10-29T19:04:55.289Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated&#10;" timestamp="2019-10-29T19:05:37.695Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : GetDelaysSummary : service updated&#10;" timestamp="2019-10-29T19:14:42.283Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : GetDelaysSummary : service updated&#10;" timestamp="2019-10-29T19:15:38.478Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : GetDelayShiftDetails : service added&#10;" timestamp="2019-10-29T19:27:58.713Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : removed, added&#10;" timestamp="2019-10-29T19:43:06.184Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnProductionRunningChanged : removed, added&#10;" timestamp="2019-10-29T19:43:50.058Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : GetDelayShiftDetails : output updated&#10;" timestamp="2019-10-29T20:24:00.098Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessSwitchShift : service updated&#10;" timestamp="2019-10-30T08:17:57.688Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-30T10:19:20.987Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T07:08:51.228Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-31T07:13:00.908Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : activeShiftId : updated&#10;" timestamp="2019-10-31T07:16:26.325Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : code updated&#10;" timestamp="2019-10-31T07:18:29.526Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : removed&#10;" timestamp="2019-10-31T07:20:24.743Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : added&#10;" timestamp="2019-10-31T07:21:01.227Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="" timestamp="2019-10-31T07:21:09.133Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : removed, added&#10;" timestamp="2019-10-31T07:24:58.769Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-10-31T07:37:02.062Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : removed&#10;" timestamp="2019-10-31T07:39:09.746Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : added&#10;" timestamp="2019-10-31T07:40:18.071Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T07:47:41.023Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T07:51:38.140Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T07:58:02.581Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T08:02:06.542Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T08:03:42.038Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T08:04:15.365Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T08:05:49.315Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-31T08:06:17.924Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T08:07:26.406Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T08:11:05.353Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : delayMicrostopTime : updated&#10;" timestamp="2019-10-31T08:15:08.548Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-10-31T08:18:44.886Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T08:31:57.551Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-10-31T08:34:45.061Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : UpdateDelayShift : service added, input parameter startTime deleted, inputs updated, input parameter category deleted, inputs updated, input parameter id updated, inputs updated, input parameter delayShift added, inputs updated&#10;" timestamp="2019-11-05T10:09:45.709Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : UpdateDelayShift : service updated&#10;" timestamp="2019-11-05T10:31:23.087Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : UpdateDelayShift : service updated&#10;" timestamp="2019-11-05T10:37:55.182Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : GetDelaysSummary : service updated&#10;" timestamp="2019-11-05T18:42:41.128Z" user="aborkowski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertDelayEntry : service updated&#10;" timestamp="2019-11-15T13:38:29.802Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-15T14:15:20.028Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-11-15T14:15:52.074Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-11-15T14:15:56.324Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-11-15T14:16:08.152Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="subscriptions : OnActiveProductionShift : removed&#10;" timestamp="2019-11-15T14:17:59.976Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : activeShiftId : removed&#10;" timestamp="2019-11-15T14:18:30.319Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : delayBreakDownTimeMoreThan : updated, delayMicrostopTimeLessThan : updated, delayMicrostopCountMax : updated, delayMicrostopTimeMax : updated&#10;" timestamp="2019-11-15T14:20:56.580Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="properties : productionRunning : updated&#10;" timestamp="2019-11-15T14:21:11.845Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-15T15:44:56.777Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-15T16:09:50.620Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertShiftEventEntry : service updated&#10;" timestamp="2019-11-15T16:10:06.760Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertShiftEventEntry : service updated&#10;" timestamp="2019-11-21T09:48:45.437Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T11:57:41.470Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:00:23.419Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:02:19.885Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:04:53.990Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:05:25.568Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:06:06.192Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:16:16.004Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:16:21.395Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:20:19.248Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:44:03.635Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T12:56:41.991Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T13:33:57.576Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T13:49:17.443Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T14:47:17.278Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-21T14:48:13.214Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ResetMicrostopDelayProperties : service updated&#10;" timestamp="2019-11-21T19:20:44.450Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T09:54:58.622Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T09:57:09.215Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T09:57:22.606Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:01:48.216Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:03:58.558Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:10:16.694Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:11:26.427Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:15:50.658Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:16:23.424Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:17:46.251Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:20:43.471Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:22:10.798Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:24:01.735Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:26:15.952Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:27:39.654Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:30:36.433Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:31:33.542Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:32:38.322Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:39:51.653Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:40:15.317Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T10:51:47.327Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-25T11:02:42.601Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T11:15:30.670Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T11:17:32.528Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T15:03:45.685Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T15:13:16.772Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T15:20:26.690Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T15:23:10.485Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T15:23:54.422Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T15:24:35.000Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T15:25:57.655Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service added&#10;" timestamp="2019-11-25T15:34:44.431Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-25T15:37:27.679Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : input parameter eventData added, inputs updated, input parameter eventData updated, inputs updated&#10;" timestamp="2019-11-25T15:42:32.488Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : input parameter new added, inputs updated, input parameter old added, inputs updated&#10;" timestamp="2019-11-26T06:43:09.230Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : input parameter newS updated, inputs updated&#10;" timestamp="2019-11-26T06:50:16.225Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-11-26T06:53:59.629Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-11-26T06:54:40.644Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-11-26T07:04:02.342Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : input parameter newS deleted, inputs updated, input parameter old deleted, inputs updated&#10;" timestamp="2019-11-26T07:21:45.205Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-26T07:36:17.743Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-26T07:41:00.302Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-11-26T08:42:57.450Z" user="rafjurek"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-11-26T11:13:25.555Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-11-26T12:37:21.111Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-26T12:37:21.283Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-11-26T12:39:02.313Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-11-26T15:48:30.555Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-11-26T15:48:35.383Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T09:05:47.225Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T09:39:50.813Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T09:57:48.629Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T10:46:52.003Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T10:52:28.906Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-11-27T12:10:53.793Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T12:26:20.893Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T13:49:54.184Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T13:53:05.510Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T13:59:21.351Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T14:05:43.253Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T14:41:14.089Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T14:50:25.818Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T14:53:28.379Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-27T14:55:30.377Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-11-28T07:32:21.391Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-11-28T07:43:56.197Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-11-29T10:21:39.640Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-11-29T10:22:46.639Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-29T10:22:46.717Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-11-29T10:27:26.620Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-12-02T10:42:49.253Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-12-02T10:54:55.626Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-12-02T11:02:23.996Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-12-02T11:05:35.534Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-12-02T11:27:47.238Z" user="rafjurek"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-12-02T11:53:59.477Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="ForceEdit" timestamp="2019-12-02T11:54:46.850Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-12-02T11:54:46.959Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-12-02T11:56:55.953Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-12-02T14:09:02.524Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-12-12T18:25:53.277Z" user="lstrzelecki"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-12-16T10:00:57.630Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessEventsOnShiftChange : service updated&#10;" timestamp="2019-12-16T10:05:46.758Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessChangeoverDelayRules : service updated&#10;" timestamp="2019-12-16T10:45:52.959Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertShiftEventEntry : service updated&#10;" timestamp="2019-12-16T12:04:17.373Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2019-12-16T12:06:11.420Z" user="jzawiasa"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2020-04-09T14:35:25.763Z" user="ppogorzelski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertDelayEntry : input parameter totalDuration added, inputs updated, input parameter totalDuration updated, inputs updated&#10;" timestamp="2020-04-09T14:59:09.383Z" user="ppogorzelski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : InsertDelayEntry : service updated&#10;subscriptions : OnProductionDelayed : code updated&#10;" timestamp="2020-04-09T15:01:42.544Z" user="ppogorzelski"/>
+<ConfigurationChange changeAction="MODIFY" changeReason="services : ProcessProductionDelayRules : service updated&#10;" timestamp="2020-04-09T15:08:13.876Z" user="ppogorzelski"/>
+</ConfigurationChanges>
+</ThingShape>
+</ThingShapes>
 </Entities>
