@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-04-15T12:48:40.497Z"
+         lastModifiedDate="2020-04-22T16:56:07.164Z"
          name="BayerDelaysManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -213,7 +213,7 @@
                          ordinal="2"></FieldDefinition>
                         <FieldDefinition
                          aspect.isRequired="true"
-                         baseType="DATETIME"
+                         baseType="LONG"
                          description=""
                          name="totalDuration"
                          ordinal="4"></FieldDefinition>
@@ -819,15 +819,16 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // ProcessProductionDelayRules service
+                                    // * eventData
                                     var lineConfig = me.GetLineConfiguration();
-                                    
                                     var currentProduct = me.GetCurrentProduct();
                                     
                                     var delayCategory = {
                                     	microstop: 'microstop',
                                     	breakdown: 'breakdown',
                                     };
-                                    
                                     var oldProductionRunning = {
                                     	value: eventData.oldValue.value,
                                     	time: eventData.oldValue.time,
@@ -836,10 +837,8 @@
                                     	value: eventData.newValue.value,
                                     	time: eventData.newValue.time,
                                     };
-                                    
                                     var now = new Date();
                                     var diffTime = dateDifference(newProductionRunning.time, oldProductionRunning.time) / 1000 / 60;
-                                    
                                     // - Green indicating when the machine was running
                                     //if (newProductionRunning.value === false) {
                                     //    me.InsertShiftEventEntry({
@@ -848,21 +847,18 @@
                                     //        endTime: now /* DATETIME */
                                     //   });
                                     //}
-                                    
                                     // comeback from not runing production
                                     if (newProductionRunning.value === true) {
                                     	if (diffTime < lineConfig.delayMicrostopBreakdownThreshold) {
                                     		//logger.debug('ProcessProductionDelayRules:microstopProcess:diffTime:'+ diffTime);
-                                    
                                     		// Orange indicating when there was an active production order with a
                                     		// target greater than zero (>0), but the machine stopped (based on “State” tag)
                                     		// for less than X minutes – value is configurable.
                                     		me.InsertShiftEventEntry({
-                                    			category: 'microstop' /* STRING */ ,
-                                    			startTime: oldProductionRunning.time /* DATETIME */ ,
+                                    			category: 'microstop' /* STRING */,
+                                    			startTime: oldProductionRunning.time /* DATETIME */,
                                     			endTime: now /* DATETIME */
                                     		});
-                                    
                                     		//count microstop
                                     		//me.delayMicrostopCount = me.delayMicrostopCount + 1;
                                     		me.delayMicrostopCount += 1;
@@ -876,32 +872,28 @@
                                     			me.delayMicrostopTime += diffTime; //m
                                     		}
                                     		//logger.debug('ProcessProductionDelayRules:me.delayMicrostopTime:' + me.delayMicrostopTime);
-                                    
                                     		//counter exeed
                                     		if (me.delayMicrostopCount > lineConfig.delayMicrostopCountMax ||
                                     			me.delayMicrostopTime > lineConfig.delayMicrostopTimeMax
                                     		) {
                                     			me.ProductionDelayed({
-                                    				startTime: me.delayMicrostopTimeStart /* DATETIME */ ,
-                                    				endTime: now /* DATETIME */ ,
+                                    				startTime: me.delayMicrostopTimeStart /* DATETIME */,
+                                    				endTime: now /* DATETIME */,
                                     				category: delayCategory.microstop /* STRING */,
-                                                    totalDuration: new Date (me.delayMicrostopTime * 60 * 1000)
+                                    				totalDuration: (me.delayMicrostopTime * 60 * 1000)
                                     			});
                                     			me.ResetMicrostopDelayProperties();
                                     		}
                                     	} else if (diffTime >= lineConfig.delayMicrostopBreakdownThreshold) {
                                     		me.ProductionDelayed({
-                                    			startTime: oldProductionRunning.time /* DATETIME */ ,
-                                    			endTime: newProductionRunning.time /* DATETIME */ ,
+                                    			startTime: oldProductionRunning.time /* DATETIME */,
+                                    			endTime: newProductionRunning.time /* DATETIME */,
                                     			category: delayCategory.breakdown /* STRING */,
-                                                totalDuration: new Date (newProductionRunning.time.getTime() - oldProductionRunning.time.getTime())
+                                    			totalDuration: (newProductionRunning.time.getTime() - oldProductionRunning.time.getTime())
                                     		});
-                                    
                                     		// Red indicates when there was an active production order with a target
                                     		// greater than zero (>0), but the machine stopped (based on “State” tag) for
                                     		// more than Y minutes – value is configurable.
-                                    
-                                    
                                     		//check if current shift has any shift event
                                     		var currentShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
                                     			shiftScheduleId: me.currentShiftId
@@ -909,11 +901,10 @@
                                     		var finishTime;
                                     		if (currentShiftEvents.getRowCount() === 0) {
                                     			me.InsertShiftEventEntry({
-                                    				category: 'breakdown' /* STRING */ ,
-                                    				startTime: Things["BayerUtilities"].GetCurrentShiftTime().startTime /* DATETIME */ ,
+                                    				category: 'breakdown' /* STRING */,
+                                    				startTime: Things["BayerUtilities"].GetCurrentShiftTime().startTime /* DATETIME */,
                                     				endTime: Date.now()
                                     			});
-                                    
                                     		} else {
                                     			var lastEvent = currentShiftEvents.rows[currentShiftEvents.getRowCount() - 1];
                                     			if (lastEvent.category === 'breakdown') {
@@ -929,10 +920,9 @@
                                     					endTime: Date.now()
                                     				});
                                     			}
-                                    
                                     		}
-                                    	}
-                                    }
+                                    	} //* delayMicrostopBreakdownThreshold
+                                    } //? newProductionRunning true
                                     ]]>
                                     </code>
                                 </Row>

@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2020-04-09T15:52:52.182Z"
+         lastModifiedDate="2020-04-22T17:43:05.324Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -1204,7 +1204,7 @@
                              ordinal="3"></FieldDefinition>
                             <FieldDefinition
                              aspect.isRequired="true"
-                             baseType="DATETIME"
+                             baseType="LONG"
                              description=""
                              name="totalDuration"
                              ordinal="8"></FieldDefinition>
@@ -2646,7 +2646,7 @@
                                               ,[startTime]
                                               ,[endTime]
                                               ,FORMAT([endTime] - [startTime], 'HH:mm:ss') as [duration]
-                                              ,FORMAT([totalDuration], 'HH:mm:ss') as [totalDuration]
+                                              ,FORMAT(DATEADD(MILLISECOND, [totalDurationMs] % 1000, DATEADD(SECOND, [totalDurationMs] / 1000, 0)), 'HH:mm:ss') as [totalDuration]
                                               ,[reasonCode]
                                               ,[description]
                                               ,[shiftScheduleId]
@@ -2701,7 +2701,6 @@
                                         DECLARE @shiftScheduleId AS INT = [[shiftScheduleId]];  
                                         
                                         SELECT *
-                                        	--,FORMAT([grouped].[durationDiff],'mm:ss') AS [duration]
                                             ,FORMAT([grouped].[totalDurationDiff],'mm:ss') AS [duration]
                                         	,(SELECT TOP(1) [description] 
                                         		FROM [dbo].[Delay] AS [parent] 
@@ -2716,11 +2715,9 @@
                                         		[category]
                                         		  ,COUNT(*) as [frequency]
                                         		  ,MAX(DATEDIFF(SECOND, [startTime], [endTime])) as [durationMax]
-                                        		  -- ,SUM((CAST((DATEDIFF(SECOND,[startTime], [endTime]) / 60.0) AS DECIMAL(6,2)))) AS [duration]
                                         		  ,CAST(SUM(CAST([endTime] - [startTime] AS FLOAT)) AS DATETIME) AS [durationDiff]
                                         		  ,SUM(DATEDIFF(SECOND, [startTime], [endTime])) as [durationSec]
-                                        		  --,SUM(DATEDIFF(SECOND, 0 , [totalDuration])) as [totalDurationSec]
-                                        		  ,CAST(SUM(CAST([totalDuration] AS FLOAT)) AS DATETIME) AS [totalDurationDiff]
+                                        		  ,CAST(SUM(CAST(DATEADD(MILLISECOND, [totalDurationMs] % 1000, DATEADD(SECOND, [totalDurationMs] / 1000, 0)) AS FLOAT)) AS DATETIME) AS [totalDurationDiff]
                                         	  FROM [dbo].[Delay]
                                         	  WHERE 
                                         		[shiftScheduleId] = @shiftScheduleId
@@ -3889,7 +3886,7 @@
                                                    ,[reasonCode]
                                                    ,[description]
                                                    ,[shiftScheduleId]
-                                                   ,[totalDuration])
+                                                   ,[totalDurationMs])
                                              VALUES
                                                    ([[category]]
                                                    ,[[source]]
