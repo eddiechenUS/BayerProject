@@ -11,7 +11,7 @@ COMMIT
 BEGIN TRANSACTION
 GO
 ALTER TABLE dbo.Delay ADD
-	totalDuration datetime NULL
+	totalDurationMs bigint NULL
 GO
 ALTER TABLE dbo.Delay SET (LOCK_ESCALATION = TABLE)
 GO
