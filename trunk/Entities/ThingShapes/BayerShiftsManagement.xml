@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-04-20T13:00:55.210Z"
+         lastModifiedDate="2020-05-05T22:54:04.255Z"
          name="BayerShiftsManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -716,30 +716,33 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    var shift =  Things["BayerDBDataProvider"].GetSingleShiftByTimeWithTargetDiff({
-                                    	shiftTime: shiftStartTime /* DATETIME */,
-                                    	productionLine: me.name /* THINGNAME */
+                                    // GetPcsPerShift service
+                                    // * shiftStartTime - DATETIME
+                                    
+                                    // result: INFOTABLE dataShape: "PcsPerShiftDataShape"
+                                    var shift = Things["BayerDBDataProvider"].GetSingleShiftByTimeWithTargetDiff({
+                                        shiftTime: shiftStartTime /* DATETIME */,
+                                        productionLine: me.name /* THINGNAME */
                                     });
                                     // shift = 8h, result = shift / 8
                                     
                                     // result: INFOTABLE
                                     var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
-                                    	infoTableName: 'InfoTable' /* STRING */,
-                                    	dataShapeName: 'PcsPerShiftDataShape' /* DATASHAPENAME */
+                                        infoTableName: 'InfoTable' /* STRING */,
+                                        dataShapeName: 'PcsPerShiftDataShape' /* DATASHAPENAME */
                                     });
                                     
                                     var colorState;
-                                    
-                                    if	(shift.shiftTargetPercent >= 100) {
+                                    if (shift.shiftTargetPercent >= 100) {
                                         colorState = 100;
                                     } else {
                                         colorState = shift.actualDiffPerMinute;
                                     }
-                                        
+                                    
                                     result.AddRow({
                                         shiftTargetPercent: shift.shiftTargetPercent,
                                         actualDiffPerMinute: shift.actualDiffPerMinute,
+                                        actualSpeedPerHour: shift.actualSpeedPerHour,
                                         colorState: colorState,
                                     });
                                     ]]>

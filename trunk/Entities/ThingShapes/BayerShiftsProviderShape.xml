@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-04-22T16:44:38.377Z"
+         lastModifiedDate="2020-05-12T14:28:24.274Z"
          name="BayerShiftsProviderShape"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -143,6 +143,46 @@
                          ordinal="2"></FieldDefinition>
                         <FieldDefinition
                          aspect.isRequired="true"
+                         baseType="DATETIME"
+                         description=""
+                         name="startTime"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetDelaysByDate">
+                    <ResultType
+                     aspect.dataShape="BayerDelaysTrendDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.defaultValue="breakdown"
+                         baseType="STRING"
+                         description=""
+                         name="category"
+                         ordinal="4"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="DATETIME"
+                         description=""
+                         name="endTime"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.thingTemplate="BayerProductionLine"
+                         baseType="THINGNAME"
+                         description=""
+                         name="productionLine"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
                          baseType="DATETIME"
                          description=""
                          name="startTime"
@@ -652,6 +692,33 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="UpdateShiftScheduleItem">
+                    <ResultType
+                     baseType="BOOLEAN"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="INTEGER"
+                         description=""
+                         name="newProductionPlanId"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="INTEGER"
+                         description=""
+                         name="oldProductionPlanId"
+                         ordinal="2"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="UpdateShiftTotalProduction">
                     <ResultType
                      baseType="BOOLEAN"
@@ -846,6 +913,43 @@
                                     var result =  Things[me.GetConnector()].DeleteShiftsAfter({
                                     	startTime: startTime, /* DATETIME */
                                         productionLine: productionLine
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetDelaysByDate">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: ""
+                                    var result =  Things[me.GetConnector()].GetDelaysByDate({
+                                    	productionLine: productionLine /* THINGNAME */,
+                                    	startTime: startTime /* DATETIME */,
+                                    	endTime: endTime /* DATETIME */,
+                                    	category: category /* STRING */
                                     });
                                     ]]>
                                     </code>
@@ -1430,6 +1534,40 @@
                                     	productionLine: productionLine /* THINGNAME */,
                                     	quantityProduced: quantityProduced /* NUMBER */,
                                     	timestamp: timestamp /* DATETIME */
+                                    }) === 1;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="UpdateShiftScheduleItem">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result = Things[me.GetConnector()].UpdateShiftScheduleItem({
+                                        oldProductionPlanId:oldProductionPlanId,
+                                        newProductionPlanId:newProductionPlanId
                                     }) === 1;
                                     ]]>
                                     </code>
