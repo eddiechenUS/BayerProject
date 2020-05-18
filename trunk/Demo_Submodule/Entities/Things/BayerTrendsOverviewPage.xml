@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="">
+    <Things>
+        <Thing
+         description=""
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2020-05-14T07:37:08.544Z"
+         name="BayerTrendsOverviewPage"
+         projectName="BayerIoT"
+         published="false"
+         tags=""
+         thingTemplate="GenericThing"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions></PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="CombineSelections">
+                        <ResultType
+                         aspect.dataShape="BayerTrendsCombinedDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.dataShape="BayerTrendsCombinedDataShape"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="selection1"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.dataShape="BayerTrendsCombinedDataShape"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="selection2"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetDelaysByDateHourly">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.defaultValue="breakdown"
+                             baseType="STRING"
+                             description=""
+                             name="category"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endDate"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startDate"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description="Get hourly trends for Microstops, Changeover, Breakdowns"
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetTrendsCombinedHourly">
+                        <ResultType
+                         aspect.dataShape="BayerTrendsCombinedDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.defaultValue="hourly"
+                             baseType="STRING"
+                             description="hourly | daily | weekly"
+                             name="aggregateBy"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endDate"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startDate"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="CombineSelections">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //
+                                        // CombineSelections service
+                                        // * selection1 - INFOTABLE
+                                        // * selection2 - INFOTABLE
+                                        
+                                        var result = Resources.InfoTableFunctions.CreateInfoTableFromDataShape({
+                                        	infoTableName: "result",
+                                            dataShapeName: "BayerTrendsCombinedDataShape"
+                                        });
+                                        
+                                        var useA = true, useB = true;
+                                        useA = useA && selection1 != undefined;
+                                        useB = useB && selection2 != undefined;
+                                        
+                                        useA = useA && selection1.rows.length > 0;
+                                        useB = useB && selection2.rows.length > 0;
+                                        
+                                        if(useA) {
+                                        	for(let idx=0;idx<selection1.rows.length;idx++) {
+                                            	result.AddRow(selection1.rows[idx]);
+                                            } // selection 1
+                                        }
+                                        
+                                        if(useB) {
+                                        	for(let idx=0;idx<selection2.rows.length;idx++) {
+                                            	result.AddRow(selection2.rows[idx]);
+                                            } // selection 1
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetDelaysByDateHourly">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //
+                                        // GetDelaysByDateHourly service
+                                        // * startDate - DATETIME
+                                        // * endDate - DATETIME
+                                        // * productionLine - THINGNAME
+                                        // * category - STRING
+                                        if (!startDate) {
+                                        	startDate = new Date(dateAddDays(new Date(), -7));
+                                        }
+                                        if (!endDate) {
+                                        	endDate = new Date();
+                                        }
+                                        if (!productionLine) {
+                                        	throw "Input 'productionLine' is required!";
+                                        }
+                                        if (!category) {
+                                        	category = "breakdown";
+                                        }
+                                        // timestamp / totalDurationMs / totalDurationMins
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        	infoTableName: "result",
+                                        	dataShapeName: "BayerTrendsSingleDataShape"
+                                        });
+                                        startDate.setHours(0);
+                                        startDate.setMinutes(0);
+                                        startDate.setSeconds(0);
+                                        startDate.setMilliseconds(0);
+                                        
+                                        // result: INFOTABLE dataShape: "BayerDelaysTrendDataShape"
+                                        var delaysData = Things["BayerDBDataProvider"].GetDelaysByDate({
+                                        	productionLine: productionLine /* THINGNAME */,
+                                        	startTime: startDate /* DATETIME */,
+                                        	endTime: endDate /* DATETIME */,
+                                        	category: category /* STRING */
+                                        });
+                                        // startTime / endTime / totalDurationMs / duration / totalDuration / totalDurationMins
+                                        
+                                        var tsStart = new Date(startDate.getTime());
+                                        tsStart.setMilliseconds(0);
+                                        tsStart.setSeconds(0);
+                                        tsStart.setMinutes(0);
+                                        var tsEnd = new Date(tsStart.getTime() + 60 * 60 * 1000);
+                                        endDate.setHours(endDate.getHours() + 1);
+                                        endDate.setMilliseconds(0);
+                                        endDate.setSeconds(0);
+                                        endDate.setMinutes(0);
+                                        
+                                        var delaysCurIdx = 0;
+                                        var numDelays = delaysData.rows.length;
+                                        while (true) {
+                                        	result.AddRow({
+                                        		timestamp: tsStart,
+                                        		totalDurationMs: undefined,
+                                        		totalDurationMins: undefined
+                                        	});
+                                        	let current = result.rows[result.rows.length - 1];
+                                        	for (let idx = delaysCurIdx; idx < numDelays; idx++, delaysCurIdx++) {
+                                        		let delay = delaysData.rows[idx];
+                                        		if (delay.startTime.getTime() >= tsEnd.getTime()) {
+                                        			break; // end this time frame
+                                        		}
+                                        		if (delay.startTime.getTime() >= tsStart.getTime()) {
+                                        			if (current.totalDurationMs == undefined) {
+                                        				current.totalDurationMs = 0;
+                                        				current.totalDurationMins = 0;
+                                        			}
+                                        			current.totalDurationMins += delay.totalDurationMins;
+                                        			current.totalDurationMs += delay.totalDurationMs;
+                                        		}
+                                        	} //# for each detected delay
+                                        	tsStart = new Date(tsEnd.getTime());
+                                        	tsEnd = new Date(tsStart.getTime() + 60 * 60 * 1000);
+                                        	if (tsStart.getTime() >= endDate.getTime()) {
+                                        		break;
+                                        	}
+                                        } // while(...)
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetTrendsCombinedHourly">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //
+                                        // GetTrendsCombinedHourly service
+                                        // * startDate - DATETIME
+                                        // * endDate - DATETIME
+                                        // * productionLine - THINGNAME
+                                        // * aggregateBy - STRING
+                                        
+                                        // Combined lines for:
+                                        // Microstops, Changeover, Breakdowns
+                                        // 1 line for showing trend (time) of micro-stops,
+                                        // should it be the total time or the time after threshold.
+                                        // 
+                                        // 1 line for showing trend (time) of breakdowns.
+                                        // 
+                                        // 1 line for showing trend (time) of changeovers
+                                        //	this would be the trend of the delta from target vs. actual for the changeover.
+                                        //
+                                        if (!aggregateBy) {
+                                        	aggregateBy = "hourly";
+                                        }
+                                        aggregateBy = aggregateBy.toLowerCase();
+                                        if (aggregateBy != "hourly" && aggregateBy != "daily" && aggregateBy != "weekly") {
+                                        	aggregateBy = "daily";
+                                        }
+                                        if (!startDate) {
+                                        	startDate = new Date(dateAddDays(new Date(), -7));
+                                        }
+                                        if (!endDate) {
+                                        	endDate = new Date();
+                                        }
+                                        if (dateDifference(endDate, startDate) / 1000 / 60 / 60 / 24 >= 31) {
+                                        	aggregateBy = "weekly";
+                                        }
+                                        if (!productionLine) {
+                                        	throw "Input 'productionLine' is required!";
+                                        }
+                                        // timestamp
+                                        // totalMicrostopsMins totalBreakdownsMins totalChangeoverMins
+                                        // totalMicrostopsStr totalBreakdownsStr totalChangeoverStr
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        	infoTableName: "result" /* STRING */,
+                                        	dataShapeName: "BayerTrendsCombinedDataShape" /* DATASHAPENAME */
+                                        });
+                                        
+                                        // timestamp / totalDurationMs / totalDurationMins
+                                        var microstopsHourly = me.GetDelaysByDateHourly({
+                                        	startDate: startDate /* DATETIME */,
+                                        	endDate: endDate /* DATETIME */,
+                                        	productionLine: productionLine /* THINGNAME */,
+                                        	category: "microstop" /* STRING */
+                                        });
+                                        
+                                        // timestamp / totalDurationMs / totalDurationMins
+                                        var breakdownsHourly = me.GetDelaysByDateHourly({
+                                        	startDate: startDate /* DATETIME */,
+                                        	endDate: endDate /* DATETIME */,
+                                        	productionLine: productionLine /* THINGNAME */,
+                                        	category: "breakdown" /* STRING */
+                                        });
+                                        // need something similar for the changeovers
+                                        
+                                        // dayStart / weekStart / delta / start / end / targetHours / workedHours / id
+                                        var changeoversDirect = Things["BayerDBDataProvider"].GetChangeoverTrendByDate({
+                                        	line: productionLine,
+                                        	startDate: startDate,
+                                        	endDate: endDate
+                                        }); // returns data in minutes actually
+                                        
+                                        // need to transform it to hourly data if possible
+                                        function transformChangeoversToHourly(data) {
+                                        	// timestamp / totalDurationMs / totalDurationMins
+                                        	let transformed = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        		infoTableName: "result",
+                                        		dataShapeName: "BayerTrendsSingleDataShape"
+                                        	});
+                                        	let tsStart = new Date(startDate.getTime());
+                                        	tsStart.setMilliseconds(0);
+                                        	tsStart.setSeconds(0);
+                                        	tsStart.setMinutes(0);
+                                        	let tsEnd = new Date(tsStart.getTime() + 60 * 60 * 1000);
+                                        	endDate.setHours(endDate.getHours() + 1);
+                                        	endDate.setMilliseconds(0);
+                                        	endDate.setSeconds(0);
+                                        	endDate.setMinutes(0);
+                                        	let curIdx = 0;
+                                        	let numRows = data.rows.length;
+                                        	while (true) {
+                                        		transformed.AddRow({
+                                        			timestamp: tsStart,
+                                        			totalDurationMs: undefined,
+                                        			totalDurationMins: undefined
+                                        		});
+                                        		let current = transformed.rows[transformed.rows.length - 1];
+                                        		for (let idx = curIdx; idx < numRows; idx++, curIdx++) {
+                                        			let chg_ovr = data.rows[idx];
+                                        			if (chg_ovr.start.getTime() >= tsEnd.getTime()) {
+                                        				break; // end this time frame
+                                        			}
+                                        			if (chg_ovr.start.getTime() >= tsStart.getTime()) {
+                                        				if (current.totalDurationMs == undefined) {
+                                        					current.totalDurationMs = 0;
+                                        					current.totalDurationMins = 0;
+                                        				}
+                                        				current.totalDurationMins += chg_ovr.delta;
+                                        				current.totalDurationMs += chg_ovr.delta * 60.0 * 1000.0;
+                                        			}
+                                        		} //# for each detected delay
+                                        		tsStart = new Date(tsEnd.getTime());
+                                        		tsEnd = new Date(tsStart.getTime() + 60 * 60 * 1000);
+                                        		if (tsStart.getTime() >= endDate.getTime()) {
+                                        			break;
+                                        		}
+                                        	} // while(...)
+                                        	return transformed;
+                                        } // transformChangeoversToHourly(...)
+                                        
+                                        var changeoversHourly = transformChangeoversToHourly(changeoversDirect);
+                                        
+                                        function myDateFormat(date) {
+                                        	let hours = ("00" + date.getUTCHours()).slice(-2);
+                                        	let minutes = ("00" + date.getUTCMinutes()).slice(-2);
+                                        	let seconds = ("00" + date.getUTCSeconds()).slice(-2);
+                                        	//let ms = ("000" + date.getUTCMilliseconds()).slice(-3);
+                                        	if (hours == "00" && minutes == "00" && seconds == "00") {
+                                        		return ""; // force empty!
+                                        	}
+                                        	return hours + ":" + minutes + ":" + seconds;
+                                        } // myDateFormat(...)
+                                        
+                                        var numRows = microstopsHourly.rows.length;
+                                        for (var tIdx = 0; tIdx < numRows; tIdx++) {
+                                        	let microstop = microstopsHourly.rows[tIdx];
+                                        	let breakdown = breakdownsHourly.rows[tIdx];
+                                            let changeover = {
+                                                timestamp: microstop.timestamp,
+                                                totalDurationMs: undefined,
+                                                totalDurationMins: undefined
+                                            };
+                                        	if(tIdx < changeoversHourly.length) {
+                                            	changeover = changeoversHourly.rows[tIdx];
+                                            }
+                                        	let timestamp = microstop.timestamp;
+                                        
+                                        	if (!microstop.totalDurationMins) {
+                                        		microstop.totalDurationMins = 0.0;
+                                        	}
+                                        	if (!breakdown.totalDurationMins) {
+                                        		breakdown.totalDurationMins = 0.0;
+                                        	}
+                                        	if (!changeover.totalDurationMins) {
+                                        		changeover.totalDurationMins = 0.0;
+                                        	}
+                                        
+                                        	let mMs = microstop.totalDurationMs;
+                                        	let bMs = breakdown.totalDurationMs;
+                                        	let cMs = changeover.totalDurationMs;
+                                        
+                                        	let microstopStr = myDateFormat(new Date(mMs > 0 ? mMs : 0));//, "HH:mm:ss");
+                                        	let breakdownStr = myDateFormat(new Date(bMs > 0 ? bMs : 0));//, "HH:mm:ss");
+                                        	let changeoverStr = myDateFormat(new Date(cMs > 0 ? cMs : 0));//, "HH:mm:ss");
+                                        
+                                        	result.AddRow({
+                                        		timestamp: timestamp,
+                                        		totalMicrostopsMins: microstop.totalDurationMins,
+                                        		totalBreakdownsMins: breakdown.totalDurationMins,
+                                        		totalChangeoverMins: changeover.totalDurationMins,
+                                        		totalMicrostopsStr: microstopStr,
+                                        		totalBreakdownsStr: breakdownStr,
+                                        		totalChangeoverStr: changeoverStr
+                                        	});
+                                        } //# for each main row
+                                        
+                                        if (aggregateBy != "hourly") {
+                                        	var oldResult = result;
+                                        	// new result
+                                        	result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        		infoTableName: "result" /* STRING */,
+                                        		dataShapeName: "BayerTrendsCombinedDataShape" /* DATASHAPENAME */
+                                        	});
+                                        	var tsStart = new Date(startDate.getTime());
+                                        	tsStart.setMilliseconds(0);
+                                        	tsStart.setSeconds(0);
+                                        	tsStart.setMinutes(0);
+                                        	tsStart.setHours(0);
+                                        	var jumpMs = 24 * 60 * 60 * 1000;
+                                        	if (aggregateBy == "weekly") {
+                                        		jumpMs = jumpMs * 7; // 7 days -> 1 week
+                                        	}
+                                        	var tsEnd = new Date(tsStart.getTime() + jumpMs);
+                                        	endDate.setDate(endDate.getDate() + 1);
+                                        	endDate.setMilliseconds(0);
+                                        	endDate.setSeconds(0);
+                                        	endDate.setMinutes(0);
+                                        	endDate.setHours(0);
+                                        	var curIdx = 0;
+                                        	var numRows = oldResult.rows.length;
+                                        	while (true) {
+                                        		result.AddRow({
+                                        			timestamp: tsStart,
+                                        			totalMicrostopsMins: 0.0,
+                                        			totalBreakdownsMins: 0.0,
+                                        			totalChangeoverMins: 0.0,
+                                        			totalMicrostopsStr: "",
+                                        			totalBreakdownsStr: "",
+                                        			totalChangeoverStr: ""
+                                        		});
+                                        		let current = result.rows[result.rows.length - 1];
+                                        		for (let idx = curIdx; idx < numRows; idx++, curIdx++) {
+                                        			let row = oldResult.rows[idx];
+                                        			if (row.timestamp.getTime() >= tsEnd.getTime()) {
+                                        				break; // end this time frame
+                                        			}
+                                        			if (row.timestamp.getTime() >= tsStart.getTime()) {
+                                        				if (!!row.totalMicrostopsMins) {
+                                        					current.totalMicrostopsMins += row.totalMicrostopsMins;
+                                        				}
+                                        				if (!!row.totalBreakdownsMins) {
+                                        					current.totalBreakdownsMins += row.totalBreakdownsMins;
+                                        				}
+                                        				if (!!row.totalChangeoverMins) {
+                                        					current.totalChangeoverMins += row.totalChangeoverMins;
+                                        				}
+                                        			} // ? collapse
+                                        		} //# for each detected delay
+                                        		tsStart = new Date(tsEnd.getTime());
+                                        		tsEnd = new Date(tsStart.getTime() + jumpMs);
+                                        		if (tsStart.getTime() >= endDate.getTime()) {
+                                        			break;
+                                        		}
+                                        	} // while(...)
+                                        	numRows = result.rows.length;
+                                        	for (let idx = 0; idx < numRows; idx++) {
+                                        		let row = result.rows[idx];
+                                        		let mMs = row.totalMicrostopsMins * 60.0 * 1000.0;
+                                        		let bMs = row.totalBreakdownsMins * 60.0 * 1000.0;
+                                        		let cMs = row.totalChangeoverMins * 60.0 * 1000.0;
+                                        		mMs = mMs > 0 ? mMs : 0;
+                                        		bMs = bMs > 0 ? bMs : 0;
+                                        		cMs = cMs > 0 ? cMs : 0;
+                                        		row.totalMicrostopsStr = myDateFormat(new Date(mMs));
+                                        		row.totalBreakdownsStr = myDateFormat(new Date(bMs));
+                                        		row.totalChangeoverStr = myDateFormat(new Date(cMs));
+                                        	} //# for each combined row
+                                        } //? forceDaily
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
+            <ImplementedShapes></ImplementedShapes>
+            <ThingProperties></ThingProperties>
+        </Thing>
+    </Things>
+</Entities>

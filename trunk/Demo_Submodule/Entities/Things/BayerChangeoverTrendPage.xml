@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="">
+    <Things>
+        <Thing
+         description=""
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2020-04-26T09:30:21.218Z"
+         name="BayerChangeoverTrendPage"
+         projectName="BayerIoT"
+         published="false"
+         tags="Applications:Bayer"
+         thingTemplate="GenericThing"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions
+                 resourceName="GetChangeOverWeekDetails">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetChangeOverDetails">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetDateRanges">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetChangeovers">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions></PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetChangeOverDetails">
+                        <ResultType
+                         aspect.dataShape="BayerChangeoverTrendDetailsDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description="should be a first date of week ! started from Monday !"
+                             name="dateTime"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.defaultValue="0"
+                             aspect.maximumValue="0"
+                             aspect.minimumValue="-5"
+                             aspect.units="week"
+                             baseType="INTEGER"
+                             description=""
+                             name="week"
+                             ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetChangeovers">
+                        <ResultType
+                         aspect.dataShape="BayerChangeoverTrendDetailsDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description="should be a first date of week ! started from Monday !"
+                             name="dateTime"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.defaultValue="0"
+                             aspect.maximumValue="0"
+                             aspect.minimumValue="-5"
+                             aspect.units="week"
+                             baseType="INTEGER"
+                             description=""
+                             name="week"
+                             ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetChangeOverWeekDetails">
+                        <ResultType
+                         aspect.dataShape="BayerChangeoverTrendDetailsDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description="should be a first date of week ! started from Monday !"
+                             name="dateTime"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.defaultValue="0"
+                             aspect.maximumValue="0"
+                             aspect.minimumValue="-5"
+                             aspect.units="week"
+                             baseType="INTEGER"
+                             description=""
+                             name="week"
+                             ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetDateRanges">
+                        <ResultType
+                         aspect.dataShape="BayerChangeoverTrendDateRangesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetChangeOverDetails">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var now = new Date();
+                                        
+                                        var changeoverTrendData =  Things[productionLine].GetChangeoverTrendForLine({
+                                            dateTime: dateTime,
+                                            week: week,
+                                        });
+                                        var changeoverTrendDataLength = changeoverTrendData.rows.length;
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTrendDetailsDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "BayerChangeoverTrendDetailsDataShape"
+                                        });
+                                        
+                                        for (var i=0; i<7; i++) {
+                                            var date = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate()+i);
+                                            var day = new Object();
+                                            day.id = i+1;
+                                            day.dayStart = date;
+                                            for (var x=0; x < changeoverTrendDataLength; x++) {
+                                                var row = changeoverTrendData.rows[x];
+                                                if (day.dayStart.getDate() == row.dayStart.getDate()) {
+                                                    day.dayStart = row.dayStart; // DATETIME
+                                                    day.weekStart = row.weekStart; // DATETIME
+                                                    day.start = row.start; // DATETIME
+                                                    day.end = row.end; // DATETIME
+                                                    day.target = row.targetHours;
+                                                    day.actual = row.workedHours;
+                                                    day.delta = row.delta;
+                                                }
+                                            }
+                                            result.AddRow(day);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetChangeovers">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTrendDetailsDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerChangeoverTrendDetailsDataShape" });
+                                        
+                                        var changeoverTrendData = Things[productionLine].GetChangeoverDetailsTrendForLine({
+                                            dateTime: dateTime,
+                                            week: week,
+                                        });
+                                        
+                                        var changeoverTrendDataLength = changeoverTrendData.rows.length;
+                                        for (var x=0; x < changeoverTrendDataLength; x++) {
+                                            var row = changeoverTrendData.rows[x];
+                                            
+                                            var chnageover = new Object();
+                                            chnageover.id = row.id;
+                                            
+                                            var prevAndNextOrder =  Things["BayerDBDataProvider"].GetPrevAndNextOrder({
+                                                productionLine: productionLine,
+                                                shiftIdMin: parseInt(row.id,10),
+                                                shiftIdMax: parseInt(row.id,10),
+                                            });
+                                        
+                                            chnageover.fromId = prevAndNextOrder.rows[0].fromId;
+                                            chnageover.fromOrderNr = prevAndNextOrder.rows[0].fromOrderNr;
+                                            chnageover.fromProductName = prevAndNextOrder.rows[0].fromProductName;
+                                            chnageover.toId = prevAndNextOrder.rows[0].toId;
+                                            chnageover.toOrderNr = prevAndNextOrder.rows[0].toOrderNr;
+                                            chnageover.toProductName = prevAndNextOrder.rows[0].toProductName;
+                                            
+                                            chnageover.dayStart = row.dayStart; // DATETIME
+                                            chnageover.weekStart = row.weekStart; // DATETIME
+                                            chnageover.start = row.start; // DATETIME
+                                            chnageover.end = row.end; // DATETIME
+                                            chnageover.target = row.targetHours;
+                                            chnageover.actual = row.workedHours;
+                                            chnageover.delta = row.delta;
+                                            
+                                            result.AddRow(chnageover);
+                                        }
+                                        
+                                        result.Sort({name:"end",ascending:false});
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetChangeOverWeekDetails">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var changeoverTrendData =  Things[productionLine].GetChangeoverTrendForLine({
+                                            dateTime: dateTime,
+                                            week: week,
+                                        });
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTrendDetailsDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "BayerChangeoverTrendDetailsDataShape"
+                                        });
+                                        
+                                        var day = new Object();
+                                        day.target = 0;
+                                        day.actual = 0;
+                                        day.delta = 0;
+                                        
+                                        var changeoverTrendDataLength = changeoverTrendData.rows.length;
+                                        for (var x=0; x < changeoverTrendDataLength; x++) {
+                                            var row = changeoverTrendData.rows[x];
+                                         	day.target += row.targetHours;
+                                            day.actual += row.workedHours;
+                                            day.delta += row.delta;
+                                        }
+                                        result.AddRow(day);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetDateRanges">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerChangeoverTrendDateRangesDataShape"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        var now = new Date();
+                                        
+                                        for (i=0; i<5; i++) {
+                                            var curr = new Date(now.getFullYear(),now.getMonth(), now.getDate()-7*i);
+                                            var startDate = new Date(curr.setDate(curr.getDate() - curr.getDay() + (curr.getDay() === 0 ? -6 : 1)));
+                                            var endDate = new Date(curr.setDate(curr.getDate() - curr.getDay()+7));
+                                            if (endDate >= now) {
+                                            	endDate = now;
+                                            }
+                                            
+                                            var range = new Object();
+                                            range.id = i; // actual
+                                            range.start = startDate; // DATETIME
+                                            range.end = endDate; // DATETIME
+                                            result.AddRow(range);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
+            <ImplementedShapes></ImplementedShapes>
+            <ThingProperties></ThingProperties>
+        </Thing>
+    </Things>
+</Entities>
