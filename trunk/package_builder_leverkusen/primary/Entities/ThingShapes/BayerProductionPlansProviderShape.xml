@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-02-18T15:58:18.159Z" name="BayerProductionPlansProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-05-21T12:53:25.495Z" name="BayerProductionPlansProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions/>
             <ServiceDefinitions>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddProductionPlanItems">
-                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="BayerProductionPlanDataShape" aspect.isRequired="true" baseType="INFOTABLE" description="" name="items" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteFromProductionPlan">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="INTEGER" description="" name="id" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteScheduledProduction">
@@ -87,6 +93,15 @@
                         <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertProductionQuantityChange">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="commentAdded" ordinal="4"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="originalTargetQuantity" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="productionPlanId" ordinal="1"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetQuantity" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateProductionPlanHours">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
@@ -105,6 +120,13 @@
                         <FieldDefinition aspect.dataShape="BayerProductionPlanDataShape" aspect.isRequired="true" baseType="INFOTABLE" description="" name="data" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateProductionPlanTargetHours">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="1"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetHours" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
             </ServiceDefinitions>
             <EventDefinitions/>
             <ServiceMappings/>
@@ -121,6 +143,15 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // AddProductionPlanItems
+                                    
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTable({
+                                    	infoTableName: "result" /* STRING */
+                                    });
+                                    result.AddField({name:"id", baseType:"INTEGER"});
+                                    result.AddField({name:"oldId", baseType:"INTEGER"});
+                                    
                                     var tableLength = items.rows.length;
                                     for (var x=0; x < tableLength; x++) {
                                         var row = items.rows[x];
@@ -132,9 +163,35 @@
                                             params[fieldName] = row[fieldName];
                                         }
                                     
-                                        // result: NUMBER
-                                        var result =  Things["BayerSqlServerConnector"].InsertProductionPlan(params);
-                                    }
+                                        var oldId = undefined;
+                                        if(!!row.id) {
+                                            oldId = row.id;
+                                        }
+                                        var insertedId =  Things[me.GetConnector()].InsertProductionPlan(params);
+                                    	result.AddRow({ id: insertedId.rows[0].id, oldId: oldId });
+                                    } // for each input row
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="DeleteFromProductionPlan">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    Things[me.GetConnector()].DeleteFromProductionPlan({
+                                    	id: id
+                                    });
                                     ]]>
                                     </code>
                                 </Row>
@@ -405,6 +462,37 @@
                         </ConfigurationTable>
                     </ConfigurationTables>
                 </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="InsertProductionQuantityChange">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: STRING
+                                    var userName = Resources["CurrentSessionInfo"].GetCurrentUser();
+                                    
+                                    var params = {
+                                        productionPlanId: productionPlanId,
+                                        targetQuantity: targetQuantity,
+                                        originalTargetQuantity: originalTargetQuantity,
+                                        commentAdded: commentAdded,
+                                        userName: userName,
+                                    };
+                                    
+                                    var result = Things[me.GetConnector()].InsertProductionQuantityChange(params);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
                 <ServiceImplementation description="" handlerName="Script" name="UpdateProductionPlanHours">
                     <ConfigurationTables>
                         <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
@@ -475,6 +563,31 @@
                                     	id: data.id /* INTEGER */,
                                     	startTime: data.startTime /* DATETIME */,
                                     	status: data.status /* STRING */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="UpdateProductionPlanTargetHours">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: NUMBER
+                                    var result =  Things[me.GetConnector()].UpdateProductionPlanTargetHours({
+                                    	targetHours: targetHours /* NUMBER */,
+                                    	id: id /* INTEGER */,
+                                        remainingHours: targetHours
                                     });
                                     ]]>
                                     </code>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-04-13T18:03:14.587Z" name="BayerProductionPlanPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-05-14T13:54:44.325Z" name="BayerProductionPlanPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -39,6 +39,10 @@
                             <FieldDefinition aspect.dataShape="BayerProductionPlanStatusFormattedDataShape" baseType="INFOTABLE" description="" name="productionPlan" ordinal="2"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetAvailableStandbyList">
+                        <ResultType aspect.dataShape="BayerStandbySelectionDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetProductionPlanStatusFormatted">
                         <ResultType aspect.dataShape="BayerProductionPlanStatusFormattedDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -72,6 +76,77 @@
                                                 }                                               
                                             }                                                   
                                         });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetAvailableStandbyList">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var numOfListItems = 18;
+                                        
+                                        var params = {
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "BayerStandbySelectionDataShape"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerStandbySelectionDataShape)
+                                        var tableOfStandbies = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        // BayerStandbySelectionDataShape entry object
+                                        var newEntry = new Object();
+                                        newEntry.DisplayTime = undefined; // STRING [Primary Key]
+                                        newEntry.NumberOfHours = undefined; // NUMBER [Primary Key]
+                                        var duration = 0.0;
+                                        for (let i = 0; i < numOfListItems; i++) {
+                                        
+                                        	if (i >=0 && i < 4 ){
+                                            	duration +=  0.25;  
+                                            }
+                                            if (i >=4 && i < 6 ){
+                                            	duration +=  0.5;  
+                                            }
+                                            if (i >=6 && i < 8 ){
+                                            	duration +=  1.0;  
+                                            }    
+                                        	if (i >=8 && i < 10 ){
+                                            	duration +=  2.0;  
+                                            }
+                                        	if (i >=10 && i < 12 ){
+                                            	duration +=  8.0;  
+                                            }    
+                                        	if (i >=12 && i < 18 ){
+                                            	duration +=  24.0;  
+                                            }
+                                            let durationToMinutes = "00";
+                                            let durationToHours = "0";
+                                            if (duration < 1) {
+                                                durationToMinutes = "" + parseInt(60*duration);
+                                            }
+                                            if (duration == 1.5 ) {
+                                                durationToMinutes = "30";
+                                                durationToHours = "1";
+                                            }
+                                            if (duration >= 1 && duration != 1.5) {
+                                                durationToHours = "" + parseInt(duration);
+                                            }
+                                            newEntry.DisplayTime = "" + durationToHours + " : " + durationToMinutes + " h";
+                                            newEntry.NumberOfHours = duration;
+                                            tableOfStandbies.AddRow(newEntry);
+                                        }
+                                         var result = tableOfStandbies;
                                         ]]>
                                         </code>
                                     </Row>

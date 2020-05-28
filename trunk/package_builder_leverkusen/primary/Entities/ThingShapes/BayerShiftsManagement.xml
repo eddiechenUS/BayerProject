@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-04-10T14:31:53.142Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-05-05T22:54:04.255Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="lastShiftsUpdate" ordinal="4"/>
@@ -395,30 +395,33 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    var shift =  Things["BayerDBDataProvider"].GetSingleShiftByTimeWithTargetDiff({
-                                    	shiftTime: shiftStartTime /* DATETIME */,
-                                    	productionLine: me.name /* THINGNAME */
+                                    // GetPcsPerShift service
+                                    // * shiftStartTime - DATETIME
+                                    
+                                    // result: INFOTABLE dataShape: "PcsPerShiftDataShape"
+                                    var shift = Things["BayerDBDataProvider"].GetSingleShiftByTimeWithTargetDiff({
+                                        shiftTime: shiftStartTime /* DATETIME */,
+                                        productionLine: me.name /* THINGNAME */
                                     });
                                     // shift = 8h, result = shift / 8
                                     
                                     // result: INFOTABLE
                                     var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
-                                    	infoTableName: 'InfoTable' /* STRING */,
-                                    	dataShapeName: 'PcsPerShiftDataShape' /* DATASHAPENAME */
+                                        infoTableName: 'InfoTable' /* STRING */,
+                                        dataShapeName: 'PcsPerShiftDataShape' /* DATASHAPENAME */
                                     });
                                     
                                     var colorState;
-                                    
-                                    if	(shift.shiftTargetPercent >= 100) {
+                                    if (shift.shiftTargetPercent >= 100) {
                                         colorState = 100;
                                     } else {
                                         colorState = shift.actualDiffPerMinute;
                                     }
-                                        
+                                    
                                     result.AddRow({
                                         shiftTargetPercent: shift.shiftTargetPercent,
                                         actualDiffPerMinute: shift.actualDiffPerMinute,
+                                        actualSpeedPerHour: shift.actualSpeedPerHour,
                                         colorState: colorState,
                                     });
                                     ]]>

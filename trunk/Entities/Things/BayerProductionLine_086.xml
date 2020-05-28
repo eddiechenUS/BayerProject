@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-05-15T11:23:23.268Z"
+         lastModifiedDate="2020-05-27T06:43:55.631Z"
          name="BayerProductionLine_086"
          projectName="BayerIoT"
          published="false"
@@ -308,14 +308,147 @@
                     </DataShape>
                     <Rows></Rows>
                 </ConfigurationTable>
+                <ConfigurationTable
+                 description="Changeover Split Times"
+                 isMultiRow="false"
+                 name="Changeover_SplitTimes"
+                 ordinal="10">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.friendlyName=""
+                             aspect.isPrimaryKey="true"
+                             aspect.units="min"
+                             baseType="INTEGER"
+                             description="Blister Amount Change"
+                             name="blisterAmountChange"
+                             ordinal="7"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.friendlyName=""
+                             aspect.isPrimaryKey="true"
+                             aspect.units="min"
+                             baseType="INTEGER"
+                             description="Blister Size Change"
+                             name="blisterSizeChange"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.friendlyName=""
+                             aspect.isPrimaryKey="true"
+                             aspect.units="min"
+                             baseType="INTEGER"
+                             description="Blister Type Change"
+                             name="blisterTypeChange"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.friendlyName=""
+                             aspect.isPrimaryKey="true"
+                             aspect.units="min"
+                             baseType="INTEGER"
+                             description="Box Format Change"
+                             name="boxFormatChange"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.friendlyName=""
+                             aspect.isPrimaryKey="true"
+                             aspect.units="min"
+                             baseType="INTEGER"
+                             description="Bundle Format Change"
+                             name="bundleFormatChange"
+                             ordinal="8"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.friendlyName=""
+                             aspect.isPrimaryKey="true"
+                             aspect.units="min"
+                             baseType="INTEGER"
+                             description="Ground Foil Change"
+                             name="groundFoilChange"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.friendlyName=""
+                             aspect.isPrimaryKey="true"
+                             aspect.units="min"
+                             baseType="INTEGER"
+                             description=""
+                             name="orderChange"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.friendlyName=""
+                             aspect.isPrimaryKey="true"
+                             aspect.units="min"
+                             baseType="INTEGER"
+                             description="Product Change"
+                             name="productChange"
+                             ordinal="2"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <blisterAmountChange>0</blisterAmountChange>
+                            <blisterSizeChange>0</blisterSizeChange>
+                            <blisterTypeChange>0</blisterTypeChange>
+                            <boxFormatChange>0</boxFormatChange>
+                            <bundleFormatChange>0</bundleFormatChange>
+                            <groundFoilChange>0</groundFoilChange>
+                            <orderChange>0</orderChange>
+                            <productChange>0</productChange>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
             </ConfigurationTables>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
                 <ServiceDefinitions></ServiceDefinitions>
-                <EventDefinitions></EventDefinitions>
+                <EventDefinitions>
+                    <EventDefinition
+                     category=""
+                     dataShape="GenericStringList"
+                     description=""
+                     name="MyCustomEvent"></EventDefinition>
+                </EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations></ServiceImplementations>
-                <Subscriptions></Subscriptions>
+                <Subscriptions>
+                    <Subscription
+                     description=""
+                     enabled="true"
+                     eventName="MyCustomEvent"
+                     name="OnMyCustomEvent"
+                     source=""
+                     sourceProperty=""
+                     sourceType="Thing">
+                        <ServiceImplementation
+                         description=""
+                         handlerName="Script"
+                         name="OnMyCustomEvent">
+                            <ConfigurationTables>
+                                <ConfigurationTable
+                                 description=""
+                                 isMultiRow="false"
+                                 name="Script"
+                                 ordinal="0">
+                                    <DataShape>
+                                        <FieldDefinitions>
+                                            <FieldDefinition
+                                             baseType="STRING"
+                                             description="code"
+                                             name="code"
+                                             ordinal="0"></FieldDefinition>
+                                        </FieldDefinitions>
+                                    </DataShape>
+                                    <Rows>
+                                        <Row>
+                                            <code>
+                                            <![CDATA[
+                                            logger.info("Testing OnMyCustomEvent: '" + eventData.item+"'");
+                                            ]]>
+                                            </code>
+                                        </Row>
+                                    </Rows>
+                                </ConfigurationTable>
+                            </ConfigurationTables>
+                        </ServiceImplementation>
+                    </Subscription>
+                </Subscriptions>
             </ThingShape>
             <PropertyBindings></PropertyBindings>
             <RemotePropertyBindings></RemotePropertyBindings>
@@ -336,17 +469,17 @@
                 </reportsSender>
                 <changeoverComingNotificationSent>
                     <Value>false</Value>
-                    <Timestamp>2020-05-09T19:29:03.370Z</Timestamp>
+                    <Timestamp>2020-05-27T06:50:07.140Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </changeoverComingNotificationSent>
                 <productionAlertLevel>
                     <Value>0</Value>
-                    <Timestamp>2020-05-18T07:14:04.929Z</Timestamp>
+                    <Timestamp>2020-05-27T14:24:44.488Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </productionAlertLevel>
                 <changeoverAlertLevel>
                     <Value>0</Value>
-                    <Timestamp>2020-05-18T07:14:04.929Z</Timestamp>
+                    <Timestamp>2020-05-27T14:24:44.488Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </changeoverAlertLevel>
                 <nearMissesLastModified>
@@ -356,12 +489,12 @@
                 </nearMissesLastModified>
                 <accidentsCount>
                     <Value>1.0</Value>
-                    <Timestamp>2020-05-15T15:24:22.217Z</Timestamp>
+                    <Timestamp>2020-05-27T14:18:03.459Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </accidentsCount>
                 <nearMissesCount>
                     <Value>2.0</Value>
-                    <Timestamp>2020-05-15T15:24:22.217Z</Timestamp>
+                    <Timestamp>2020-05-27T14:18:03.459Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </nearMissesCount>
                 <accidentsLastModified>
@@ -371,7 +504,7 @@
                 </accidentsLastModified>
                 <productionRunning>
                     <Value>true</Value>
-                    <Timestamp>2020-05-15T11:37:21.518Z</Timestamp>
+                    <Timestamp>2020-05-18T12:18:15.825Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </productionRunning>
                 <delayMicrostopCountMax>
@@ -386,7 +519,7 @@
                 </changeoverStartTime>
                 <delayMicrostopTimeStart>
                     <Value>1970-01-01T00:00:00.000Z</Value>
-                    <Timestamp>2020-05-18T07:07:16.348Z</Timestamp>
+                    <Timestamp>2020-05-27T14:00:02.715Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </delayMicrostopTimeStart>
                 <delayMicrostopTimeMax>
@@ -396,7 +529,7 @@
                 </delayMicrostopTimeMax>
                 <changeoverDelayStartTime>
                     <Value>1970-01-01T00:00:00.000Z</Value>
-                    <Timestamp>2020-04-21T10:06:45.415Z</Timestamp>
+                    <Timestamp>2020-05-20T07:37:43.146Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </changeoverDelayStartTime>
                 <delayBreakDownTimeMoreThan>
@@ -411,17 +544,17 @@
                 </delayMicrostopTimeLessThan>
                 <delayMicrostopCount>
                     <Value>0</Value>
-                    <Timestamp>2020-05-18T07:07:16.348Z</Timestamp>
+                    <Timestamp>2020-05-27T14:00:02.715Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </delayMicrostopCount>
                 <delayMicrostopTime>
                     <Value>0.0</Value>
-                    <Timestamp>2020-05-18T07:07:16.348Z</Timestamp>
+                    <Timestamp>2020-05-27T14:00:02.715Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </delayMicrostopTime>
                 <currentProductKey>
-                    <Value>3605</Value>
-                    <Timestamp>2020-05-09T19:29:03.370Z</Timestamp>
+                    <Value>3997</Value>
+                    <Timestamp>2020-05-27T06:50:07.140Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </currentProductKey>
                 <productionsensorvalue>
@@ -430,23 +563,23 @@
                     <Quality>UNKNOWN</Quality>
                 </productionsensorvalue>
                 <lastProductionPlanUpdate>
-                    <Value>2020-05-04T14:38:04.041Z</Value>
-                    <Timestamp>2020-05-04T14:38:04.041Z</Timestamp>
+                    <Value>2020-05-26T09:26:03.928Z</Value>
+                    <Timestamp>2020-05-26T09:26:03.928Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </lastProductionPlanUpdate>
                 <kepwareCounter>
-                    <Value>146530.0</Value>
-                    <Timestamp>2020-05-18T07:14:04.913Z</Timestamp>
+                    <Value>167960.0</Value>
+                    <Timestamp>2020-05-27T14:25:32.488Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </kepwareCounter>
                 <previousProductCounter>
-                    <Value>136854.0</Value>
-                    <Timestamp>2020-05-09T19:29:03.370Z</Timestamp>
+                    <Value>163405.0</Value>
+                    <Timestamp>2020-05-27T06:50:07.140Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </previousProductCounter>
                 <counter>
-                    <Value>9676.0</Value>
-                    <Timestamp>2020-05-18T07:14:04.913Z</Timestamp>
+                    <Value>4555.0</Value>
+                    <Timestamp>2020-05-27T14:25:32.488Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </counter>
                 <defaultStatus>
@@ -477,18 +610,18 @@
                     <Quality>GOOD</Quality>
                 </type2Description>
                 <previousCycleCounter>
-                    <Value>9672.0</Value>
-                    <Timestamp>2020-05-18T07:11:02.060Z</Timestamp>
+                    <Value>4529.0</Value>
+                    <Timestamp>2020-05-27T14:23:02.004Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </previousCycleCounter>
                 <currentShiftId>
-                    <Value>4120</Value>
-                    <Timestamp>2020-05-18T07:07:16.274Z</Timestamp>
+                    <Value>4363</Value>
+                    <Timestamp>2020-05-27T14:00:02.699Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </currentShiftId>
                 <lastShiftsUpdate>
-                    <Value>2020-05-18T07:07:16.259Z</Value>
-                    <Timestamp>2020-05-18T07:07:16.260Z</Timestamp>
+                    <Value>2020-05-27T14:00:02.699Z</Value>
+                    <Timestamp>2020-05-27T14:00:02.699Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </lastShiftsUpdate>
                 <displayName>
