@@ -10,10 +10,10 @@
     <ThingShapes>
         <ThingShape
          className=""
-         description=""
+         description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-05-13T12:33:03.181Z"
+         lastModifiedDate="2020-05-27T08:42:38.221Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -131,6 +131,11 @@
                      name="result"
                      ordinal="0"></ResultType>
                     <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="commentsOnEditedQuantity"
+                         ordinal="2"></FieldDefinition>
                         <FieldDefinition
                          aspect.minimumValue="0"
                          baseType="INTEGER"
@@ -500,22 +505,32 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // complete current in progress product
+                                    //
+                                    // CompleteCurrentProduct service
+                                    // * editedQuantity - INTEGER
+                                    // * commentsOnEditedQuantity - STRING
                                     
+                                    // complete current in progress product
                                     try {
                                         me.updateProductLock = true; // to block the periodic "UpdateProduct" task
                                         let lineConfiguration = me.GetLineConfiguration();
                                         let allowAdjustment = lineConfiguration.rows[0].allowManualAdjustment;
-                                        
                                         //throw test;
-                                        
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
                                         var current = me.GetCurrentProduct();
-                                    
+                                        var currentQuantity = me.counter;
                                         if (current && current.rows.length > 0) {
-                                            current.producedQuantity = me.counter;
-                                            if(allowAdjustment && (editedQuantity != undefined && editedQuantity > 0)) {
-                                             	current.producedQuantity = editedQuantity;   
+                                            current.producedQuantity = currentQuantity;
+                                            if (allowAdjustment && (editedQuantity != undefined && editedQuantity > 0)) {
+                                                current.producedQuantity = editedQuantity;
+                                    
+                                                // inserting changed quantity and comments if manually adjusted
+                                                Things["BayerDBDataProvider"].InsertProductionQuantityChange({
+                                                    productionPlanId: current.id /* INTEGER */,
+                                                    originalTargetQuantity: currentQuantity /* NUMBER */,
+                                                    commentAdded: commentsOnEditedQuantity /* STRING */,
+                                                    targetQuantity: editedQuantity /* NUMBER */
+                                                });
                                             }
                                             me.previousProductCounter += me.counter;
                                             me.previousCycleCounter -= me.counter;
@@ -532,33 +547,31 @@
                                                 current.remainingHours = 0;
                                             }
                                     
-                                             Things["BayerDBDataProvider"].UpdateProductionPlanOnCompletion({
+                                            Things["BayerDBDataProvider"].UpdateProductionPlanOnCompletion({
                                                 data: current /* INFOTABLE */
                                             });
                                         }
-                                    
                                         // start first pending product
-                                        
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
-                                        var pending =  Things["BayerDBDataProvider"].GetProductionPlanItemByStatus({
+                                        var pending = Things["BayerDBDataProvider"].GetProductionPlanItemByStatus({
                                             productionLine: me.name /* THINGNAME */,
                                             status: 'PENDING' /* STRING */
                                         });
                                     
-                                        me.currentProductKey = pending.id;
+                                        if (!!pending && !!pending.rows.length) {
+                                            me.currentProductKey = pending.id;
                                     
-                                        pending.startTime = new Date();
-                                        pending.status = "INPROGRESS";
+                                            pending.startTime = new Date();
+                                            pending.status = "INPROGRESS";
                                     
-                                        Things["BayerDBDataProvider"].UpdateProductionPlanOnStart({
-                                            data: pending /* INFOTABLE */
-                                        });
-                                    }
-                                    catch (ex) {
-                                        logger.error(me.name + ".CompleteCurrentProduct " + ex);
+                                            Things["BayerDBDataProvider"].UpdateProductionPlanOnStart({
+                                                data: pending /* INFOTABLE */
+                                            });
+                                        }
+                                    } catch (ex) {
+                                        logger.error(me.name + ".CompleteCurrentProduct " + ex + " " + ex.stack);
                                         throw ex;
-                                    }
-                                    finally {
+                                    } finally {
                                         me.updateProductLock = false;
                                     }
                                     ]]>
@@ -626,6 +639,9 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // GetChangeoverTime service
+                                    
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable")
                                     // dataShapeName:STRING):INFOTABLE(BayerProgressDisplayDataShape)
                                     var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
@@ -646,7 +662,7 @@
                                     
                                             newEntry.max = targetMinutes; // NUMBER
                                             newEntry.value = difference; // NUMBER
-                                            
+                                    
                                             // #FIXME
                                             //newEntry.value = targetMinutes - 10;
                                     
@@ -696,43 +712,38 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // GetChangeoverTimes service
+                                    // * startTime - DATETIME
+                                    // * endTime - DATETIME
+                                    
                                     // changeovers finished after startTime and started before endTime
-                                    // plus
-                                    // changeover in progress
-                                    
+                                    // plus changeover in progress
                                     // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
-                                    var filtered =  Things["BayerDBDataProvider"].GetChangeovers({
-                                    	productionLine: me.name /* THINGNAME */,
-                                    	startTime: startTime /* DATETIME */,
-                                    	endTime: endTime /* DATETIME */
+                                    var filtered = Things["BayerDBDataProvider"].GetChangeovers({
+                                        productionLine: me.name /* THINGNAME */,
+                                        startTime: startTime /* DATETIME */,
+                                        endTime: endTime /* DATETIME */
                                     });
-                                    
                                     // BUILDING RESULT
-                                    
                                     var currentTime = new Date();
-                                    
-                                    var params = {
-                                    	infoTableName : "InfoTable",
-                                    	dataShapeName : "BayerChangeoverTimesDataShape"
-                                    };
-                                    
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTimesDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
-                                    
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        infoTableName: "InfoTable",
+                                        dataShapeName: "BayerChangeoverTimesDataShape"
+                                    });
                                     var tableLength = filtered.rows.length;
+                                    for (let idx = 0; idx < tableLength; idx++) {
+                                        let row = filtered.rows[idx];
                                     
-                                    for (var x = 0; x < tableLength; x++) {
-                                    	var row = filtered.rows[x];
-                                    	
                                         // BayerChangeoverTimesDataShape entry object
-                                        var newEntry = new Object();
+                                        let newEntry = new Object();
                                         newEntry.startTime = row.startTime; // DATETIME
                                         newEntry.endTime = row.endTime; // DATETIME
                                         newEntry.targetTime = row.targetHours * 60; // INTEGER
                                         newEntry.actualTime = Math.round(dateDifference(row.status == "INPROGRESS" ? currentTime : row.endTime, row.startTime) / 1000 / 60); // INTEGER
                                         newEntry.difference = newEntry.actualTime - newEntry.targetTime; // INTEGER
-                                    
-                                    	result.AddRow(newEntry);
+                                        result.AddRow(newEntry);
                                     }
                                     ]]>
                                     </code>
@@ -1004,70 +1015,76 @@
                                         return insertedMap.rows[0].id;
                                     } // addStandby(...)
                                     
-                                    // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
-                                    var affectedProdItems =  dbDataProvider.GetProductionPlanForLine({
-                                    	line: me.name /* THINGNAME */
-                                    });
+                                    try {
                                     
-                                    var numRows = affectedProdItems.rows.length;
-                                    var oldNumRows = numRows;
-                                    for (let idx = 0; idx < numRows; idx++) {
-                                        let row = affectedProdItems.rows[idx];
-                                        if (row.id <= afterProductionId || row.status != "PENDING") {
-                                            affectedProdItems.RemoveRow(idx);
-                                            idx--;
-                                            numRows--;
-                                        }
-                                    } // for each row
-                                    logger.debug(me.name + ": InsertStandbyBelow: affectedProdItems oldCount=" + oldNumRows + " newCount=" + numRows);
-                                    /* before inserting standby record need to check
-                                       if the following record is not a standby
-                                    */
-                                    var productDescriptionValue = affectedProdItems.rows[0].productDescription;
-                                    
-                                    if (productDescriptionValue != "standby") {
-                                        // before duplicating list of affected items
-                                        // need to insert the actual standby record
-                                        var standbyId = addStandby(targetHours);
-                                        logger.debug(me.name + ": InsertStandbyBelow: inserted standby with id=" + standbyId);
-                                        // id / oldId
-                                        var prodItemsMapping = dbDataProvider.AddProductionPlanItems({
-                                            items: affectedProdItems /* INFOTABLE */
+                                        // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
+                                        var affectedProdItems = dbDataProvider.GetProductionPlanForLine({
+                                            line: me.name /* THINGNAME */
                                         });
-                                        var numMappings = prodItemsMapping.rows.length;
-                                        logger.debug(me.name + ": InsertStandbyBelow: numMappings=" + numMappings);
                                     
-                                        for (let idx = 0; idx < numMappings; idx++) {
-                                            let mapped = prodItemsMapping.rows[idx];
-                                            if (!mapped.oldId) {
-                                                continue; // just in case
+                                        var numRows = affectedProdItems.rows.length;
+                                        var oldNumRows = numRows;
+                                        for (let idx = 0; idx < numRows; idx++) {
+                                            let row = affectedProdItems.rows[idx];
+                                            if (row.id <= afterProductionId || row.status != "PENDING") {
+                                                affectedProdItems.RemoveRow(idx);
+                                                idx--;
+                                                numRows--;
                                             }
-                                            dbDataProvider.UpdateShiftScheduleItem({
-                                                oldProductionPlanId: mapped.oldId /* INTEGER */,
-                                                newProductionPlanId: mapped.id /* INTEGER */
-                                            });
-                                        } // for each inserted row map
+                                        } // for each row
+                                        logger.debug(me.name + ": InsertStandbyBelow: affectedProdItems oldCount=" + oldNumRows + " newCount=" + numRows);
+                                        /* before inserting standby record need to check
+                                           if the following record is not a standby
+                                        */
+                                        var productDescriptionValue = affectedProdItems.rows[0].productDescription;
                                     
-                                        for (let idx = 0; idx < numMappings; idx++) {
-                                            let mapped = prodItemsMapping.rows[idx];
-                                            if (!mapped.oldId) {
-                                                continue; // just in case
-                                            }
-                                            dbDataProvider.DeleteFromProductionPlan({
-                                                id: mapped.oldId /* INTEGER */
+                                        if (productDescriptionValue != "standby") {
+                                            // before duplicating list of affected items
+                                            // need to insert the actual standby record
+                                            var standbyId = addStandby(targetHours);
+                                            logger.debug(me.name + ": InsertStandbyBelow: inserted standby with id=" + standbyId);
+                                            // id / oldId
+                                            var prodItemsMapping = dbDataProvider.AddProductionPlanItems({
+                                                items: affectedProdItems /* INFOTABLE */
                                             });
-                                            // in result -> show new prod plan id!
-                                            affectedProdItems.rows[idx].id = mapped.id;
-                                        } // for each inserted row map
+                                            var numMappings = prodItemsMapping.rows.length;
+                                            logger.debug(me.name + ": InsertStandbyBelow: numMappings=" + numMappings);
                                     
-                                    	var result = affectedProdItems; // ids changed
-                                    } else {
-                                     	var  params = {
-                                        infoTableName : "InfoTable",
-                                        dataShapeName : "BayerProductionPlanDataShape"
-                                    	};
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                            for (let idx = 0; idx < numMappings; idx++) {
+                                                let mapped = prodItemsMapping.rows[idx];
+                                                if (!mapped.oldId) {
+                                                    continue; // just in case
+                                                }
+                                                dbDataProvider.UpdateShiftScheduleItem({
+                                                    oldProductionPlanId: mapped.oldId /* INTEGER */,
+                                                    newProductionPlanId: mapped.id /* INTEGER */
+                                                });
+                                            } // for each inserted row map
+                                    
+                                            for (let idx = 0; idx < numMappings; idx++) {
+                                                let mapped = prodItemsMapping.rows[idx];
+                                                if (!mapped.oldId) {
+                                                    continue; // just in case
+                                                }
+                                                dbDataProvider.DeleteFromProductionPlan({
+                                                    id: mapped.oldId /* INTEGER */
+                                                });
+                                                // in result -> show new prod plan id!
+                                                affectedProdItems.rows[idx].id = mapped.id;
+                                            } // for each inserted row map
+                                    
+                                            var result = affectedProdItems; // ids changed
+                                        } else {
+                                            var params = {
+                                                infoTableName: "InfoTable",
+                                                dataShapeName: "BayerProductionPlanDataShape"
+                                            };
+                                            // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
+                                            var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        }
+                                    } catch (ex) {
+                                        logger.error(me.name + ": Error: " + ex + " " + ex.stack);
+                                        throw ex;
                                     }
                                     ]]>
                                     </code>
@@ -1261,30 +1278,28 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // LoadProductionPlan service
+                                    // > BayerProductionManagement Thing Shape (Main Implementation)
+                                    // * data - INFOTABLE
+                                    
                                     var lineConfig = me.GetLineConfiguration();
-                                    
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerProductionPlanDataShape" });
-                                    
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName: "BayerProductionPlanDataShape" });
                                     Things["BayerDBDataProvider"].DeleteScheduledProduction({
-                                    	productionLine: me.name /* THINGNAME */
+                                        productionLine: me.name /* THINGNAME */
                                     });
-                                    
                                     if (data.rows.length === 1 && data.productId === 'standby') {
                                         addStandby();
-                                    }
-                                    else {
+                                    } else {
                                         processInputData();
                                     }
-                                    
                                     Things["BayerDBDataProvider"].AddProductionPlanItems({
                                         items: result /* INFOTABLE */
                                     });
-                                    
                                     me.lastProductionPlanUpdate = new Date();
-                                    logger.info(me.name + " PRODUCTION PLAN UPLOADED");
-                                    
-                                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                    INFO("Production Plan Loaded: OK");
+                                    //>----------------------------------------------------------------------------
                                     
                                     function addStandby() {
                                         // BayerProductionPlanDataShape entry object
@@ -1303,33 +1318,29 @@
                                         newEntry.targetHours = 168; // 7 days
                                         newEntry.remainingHours = newEntry.targetHours; // NUMBER
                                         result.AddRow(newEntry);
-                                    }
+                                    } //> addStandby()
+                                    //>----------------------------------------------------------------------------
                                     
                                     function processInputData() {
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
-                                        var lastItem =  Things["BayerDBDataProvider"].GetLastProductionPlanItem({
+                                        var lastItem = Things["BayerDBDataProvider"].GetLastProductionPlanItem({
                                             line: me.name /* THINGNAME */
                                         });
                                         var prev = lastItem.rows.length > 0 ? lastItem.rows[0] : undefined;
-                                    
                                         var tableLength = data.rows.length;
-                                        for (var x = 0; x < tableLength; x++) {
-                                            var row = data.rows[x];
-                                    
+                                        for (var idx = 0; idx < tableLength; idx++) {
+                                            var row = data.rows[idx];
                                             try {
                                                 // BayerProductionPlanDataShape entry object
                                                 var newEntry = new Object();
                                                 newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                                 newEntry.status = "PENDING"; // STRING
-                                    
-                                                //////////////// FROM FILE ///////////////////////
-                                    
+                                                //!---------------- FROM FILE -----------------
                                                 newEntry.productId = row.productId; // STRING
-                                                if(isNaN(parseInt(newEntry.productId))) {
-                                                    logger.debug(me.name + ".LoadProductionPlan: Skipping row " + x + "; product id " + newEntry.productId);
+                                                if (isNaN(parseInt(newEntry.productId))) {
+                                                    DEBUG("Skipping row " + idx + "; product id " + newEntry.productId);
                                                     continue;
                                                 }
-                                    
                                                 newEntry.orderNr = row.orderNr; // STRING
                                                 newEntry.productDescription = row.productDescription; // STRING
                                                 newEntry.version = row.version; // STRING
@@ -1340,67 +1351,52 @@
                                                 newEntry.blisterType = row.blisterType;
                                                 newEntry.foldedBoxFormat = row.foldedBoxFormat;
                                                 newEntry.blistersPerFoldedBox = parseIntSafe(row.blistersPerFoldedBox);
-                                    
                                                 try {
                                                     newEntry.mdatSaf = parseDate(row.mdatSaf, "yyyy-MM-dd");
+                                                } catch (dateParseEx) {
+                                                    WARNING("Error parsing MDAT-SAF date. Value: " + row.mdatSaf);
                                                 }
-                                                catch (dateParseEx) {
-                                                    logger.warn(me.name + ".LoadProductionPlan error parsing MDAT-SAF date. Value: " + row.mdatSaf);
-                                                }
-                                    
                                                 try {
                                                     newEntry.mdatOos = parseDate(row.mdatOos, "yyyy-MM-dd");
+                                                } catch (dateParseEx) {
+                                                    WARNING("Error parsing MDAT-OOS date. Value: " + row.mdatOos);
                                                 }
-                                                catch (dateParseEx) {
-                                                    logger.warn(me.name + ".LoadProductionPlan error parsing MDAT-OOS date. Value: " + row.mdatOos);
-                                                }
-                                    
                                                 newEntry.tabletsPerBlister = parseIntSafe(row.tabletsPerBlister);
                                                 newEntry.manufProcess = row.manufProcess;
-                                    
-                                                ///////////// CALCULATED //////////////////
-                                    
+                                                //!---------------- CALCULATED ----------------
                                                 var blitersPerBoxCorrection = 1;
                                                 if (lineConfig.nominalRateInBlisters) {
                                                     if (newEntry.blistersPerFoldedBox) {
                                                         blitersPerBoxCorrection = newEntry.blistersPerFoldedBox;
-                                                    }
-                                                    else {
-                                                        logger.error(me.name + ".LoadProductionPlan error: nominalRateInBlisters but no blistersPerFoldedBox provided");
+                                                    } else {
+                                                        ERROR("Error: nominalRateInBlisters but no blistersPerFoldedBox provided");
                                                     }
                                                 }
-                                    
-                                                newEntry.targetQuantityPerHour = (Things["BayerMaterialPerformanceTable"].GetNominalRate({code: newEntry.productId, productionLine: me.name}) / blitersPerBoxCorrection) * lineConfig.nominalRateCorrection; // NUMBER
+                                                newEntry.targetQuantityPerHour = (Things["BayerMaterialPerformanceTable"].GetNominalRate({ code: newEntry.productId, productionLine: me.name }) / blitersPerBoxCorrection) * lineConfig.nominalRateCorrection; // NUMBER
                                                 if (!newEntry.targetQuantityPerHour) {
-                                                    logger.warn(me.name + ".LoadProductionPlan - no NominalRate for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
+                                                    WARNING("No 'NominalRate' for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
                                                     newEntry.targetQuantityPerHour = 60;
                                                 }
                                                 newEntry.targetQuantityPerHour = Math.round(newEntry.targetQuantityPerHour);
-                                    
                                                 newEntry.targetHours = Math.round(newEntry.targetQuantity / newEntry.targetQuantityPerHour * 100) / 100; // NUMBER
                                                 newEntry.remainingHours = newEntry.targetHours; // NUMBER
                                                 newEntry.producedQuantity = 0; // NUMBER
                                                 newEntry.startTime = undefined; // DATETIME
                                                 newEntry.endTime = undefined; // DATETIME
                                                 newEntry.workedHours = 0; // NUMBER
-                                    
                                                 if (prev) {
                                                     result.AddRow(getChangeover(prev, newEntry));
                                                 }
-                                    
                                                 prev = newEntry;
-                                    
-                                                logger.debug(me.name + ".LoadProductionPlan row nr: " + x + ": " + JSON.stringify(newEntry));
-                                    
+                                                DEBG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
                                                 result.AddRow(newEntry);
+                                            } catch (ex) {
+                                                ERROR("Error parsing row " + idx + ": " + ex + " " + ex.stack);
                                             }
-                                            catch (ex) {
-                                                logger.error(me.name + ".LoadProductionPlan error parsing row " + x + ": " + ex);
-                                            }
-                                        }
-                                    
-                                        logger.debug(me.name + ".LoadProductionPlan content: " + JSON.stringify(result.ToJSON()));
-                                    }
+                                        } //# for each input data row
+                                        //#DEBUG("Content: " + JSON.stringify(result.ToJSON()));
+                                    } //> processInputData()
+                                    //>----------------------------------------------------------------------------
                                     
                                     function getChangeover(prevItem, newItem) {
                                         // BayerProductionPlanDataShape entry object
@@ -1416,39 +1412,59 @@
                                         newEntry.targetQuantity = 0; // NUMBER
                                         newEntry.targetQuantityPerHour = 0; // NUMBER
                                         newEntry.status = "PENDING"; // STRING
-                                    
                                         // result: INTEGER
                                         var activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
                                             sourceCode: prevItem.activeMaterialNumber /* STRING */,
                                             productionLine: me.name /* THINGNAME */,
                                             targetCode: newItem.activeMaterialNumber /* STRING */
                                         });
-                                    
                                         // result: INTEGER
                                         var blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
                                             sourceCode: prevItem.blisterType /* STRING */,
                                             productionLine: me.name /* THINGNAME */,
                                             targetCode: newItem.blisterType /* STRING */
                                         });
-                                    
                                         // result: INTEGER
-                                        var fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({ 
+                                        var fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({
                                             sourceCode: prevItem.foldedBoxFormat /* STRING */,
                                             productionLine: me.name /* THINGNAME */,
                                             targetCode: newItem.foldedBoxFormat /* STRING */
                                         });
-                                    
                                         newEntry.targetHours = (Math.max(activeMaterialTime, blisterTime, fbTime) + lineConfig.additionalChangeoverTime) / 60;
                                         newEntry.targetHours = Math.round(newEntry.targetHours * 100) / 100;
                                         newEntry.remainingHours = newEntry.targetHours; // NUMBER
-                                        
                                         return newEntry;
-                                    }
+                                    } //> getChangeover(...)
+                                    //>----------------------------------------------------------------------------
                                     
                                     function parseIntSafe(value) {
                                         var parsedVal = parseInt(value);
                                         return isNaN(parsedVal) ? undefined : parsedVal;
-                                    }
+                                    } //> parseIntSafe(...)
+                                    //>----------------------------------------------------------------------------
+                                    
+                                    var SERVICE_NAME = "LoadPlan(Base)";
+                                    
+                                    function DEBUG(message) {
+                                        logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> DEBUG
+                                    
+                                    function TRACE(message) {
+                                        logger.trace(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> TRACE
+                                    
+                                    function ERROR(message) {
+                                        logger.error(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> ERROR
+                                    
+                                    function WARNING(message) {
+                                        logger.warn(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> WARNING
+                                    
+                                    function INFO(message) {
+                                        logger.info(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> INFO
+                                    //>----------------------------------------------------------------------------
                                     ]]>
                                     </code>
                                 </Row>

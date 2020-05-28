@@ -10,10 +10,10 @@
     <ThingShapes>
         <ThingShape
          className=""
-         description=""
+         description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-04-22T16:56:07.164Z"
+         lastModifiedDate="2020-05-27T06:37:34.248Z"
          name="BayerDelaysManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -575,6 +575,10 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // ProcessChangeoverDelayRules service
+                                    // * eventData - INFOTABLE
+                                    
                                     // check id changeover
                                     var currentProduct = me.GetCurrentProduct();
                                     var isProductionTargetZero = (currentProduct.targetQuantity === 0);
@@ -588,12 +592,12 @@
                                     	});
                                     	var shouldUpdateLastTask = false;
                                     	var newTaskCategory = '';
-                                        // check if is any event on current shift 
+                                    	// check if is any event on current shift 
                                     	if (shiftEvents.getRowCount() !== 0) {
-                                            // find status of last event
+                                    		// find status of last event
                                     		var lastEvent = shiftEvents.rows[shiftEvents.getRowCount() - 1];
                                     		var lastStatus = lastEvent.category;
-                                            // decide if should update event or create new
+                                    		// decide if should update event or create new
                                     		if (isChangeover) {
                                     			if (lastStatus == 'changeover') {
                                     				shouldUpdateLastTask = true;
@@ -607,7 +611,7 @@
                                     				newTaskCategory = 'running';
                                     			}
                                     		}
-                                            // depending on decision create or update event
+                                    		// depending on decision create or update event
                                     		if (shouldUpdateLastTask) {
                                     			Things["BayerDBDataProvider"].UpdateShiftEvent({
                                     				endTime: Date.now(),
@@ -624,8 +628,8 @@
                                     			});
                                     		}
                                     	}
-                                        // if shift event list is empty create new task 
-                                        else {
+                                    	// if shift event list is empty create new task 
+                                    	else {
                                     		var shiftSchedule = Things["BayerDBDataProvider"].GetShiftScheduleById({
                                     			id: me.currentShiftId
                                     		});
@@ -704,90 +708,93 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // ProcessEventsOnShiftChange service
+                                    // * eventData - INFOTABLE
+                                    
                                     // get event from previous shift
                                     var prevShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
+                                    	shiftScheduleId: eventData.oldValue.value
+                                    });
                                     // get data about previous shift (id and timestamp may be needed)
                                     var prevShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
-                                            	id: eventData.oldValue.value
-                                            });
+                                    	id: eventData.oldValue.value
+                                    });
                                     var lastEvent;
                                     // get event from current (new) shift
                                     var currentShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
-                                            	id: eventData.newValue.value
-                                            });
-                                    if(me.productionRunning){
-                                        	// finish last event from previous shift
-                                            lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
-                                            Things["BayerDBDataProvider"].UpdateShiftEvent({
-                                            	endTime: dateAddHours(prevShift.timestamp, 8),
-                                            	id: lastEvent.id,
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
-                                            //add first event to new shift
-                                                var category;
-                                            	var currentProduct = me.GetCurrentProduct();
-                                                var isProductionTargetZero = (currentProduct.targetQuantity === 0);
-                                                var isProductCambio = (currentProduct.productId === 'Cambio');
-                                    			var isChangeover = (isProductionTargetZero || isProductCambio);
-                                        		// select event catagory
-                                            	if (isChangeover) {
-                                            		category = "changeover";
-                                            	} else {
-                                            		category = "running";
-                                            	}
-                                            var result = Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: currentShift.timestamp,
-                                            	endTime: Date.now() ,
-                                            	shiftScheduleId: eventData.newValue.value,
-                                            	source: me.name,
-                                            	category: category
-                                            });
-                                    }
-                                    // cases when production isn't running
-                                    else{
-                                        // if there was any event on  previous shift, update endtime 
-                                        if(prevShiftEvents.getRowCount() !== 0){
-                                        	lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
-                                            // if previous event was breakdown, update event 
-                                            if(lastEvent.category === "breakdown"){
-                                                Things["BayerDBDataProvider"].UpdateShiftEvent({
-                                            	endTime: dateAddHours(prevShift.timestamp, 8),
-                                            	id: lastEvent.id,
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
-                                            }
-                                            // insert new taks if previously other type of event occured
-                                            else{
-                                            	Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: lastEvent.endTime,
-                                            	endTime: dateAddHours(prevShift.timestamp, 8) ,
-                                            	shiftScheduleId: eventData.oldValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
-                                            }
-                                        }
-                                        // if previous shift event list is empty and previous shift exists,
-                                        // insert one shift-long event
-                                        else if (prevShift) {
-                                        	Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: prevShift.timestamp,
-                                            	endTime: dateAddHours(prevShift.timestamp, 8) ,
-                                            	shiftScheduleId: eventData.oldValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
-                                        }
-                                        //add first event to new shift
-                                        Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: currentShift.timestamp,
-                                            	endTime: Date.now() ,
-                                            	shiftScheduleId: eventData.newValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
+                                    	id: eventData.newValue.value
+                                    });
+                                    if (me.productionRunning) {
+                                    	// finish last event from previous shift
+                                    	lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
+                                    	Things["BayerDBDataProvider"].UpdateShiftEvent({
+                                    		endTime: dateAddHours(prevShift.timestamp, 8),
+                                    		id: lastEvent.id,
+                                    		shiftScheduleId: eventData.oldValue.value
+                                    	});
+                                    	//add first event to new shift
+                                    	var category;
+                                    	var currentProduct = me.GetCurrentProduct();
+                                    	var isProductionTargetZero = (currentProduct.targetQuantity === 0);
+                                    	var isProductCambio = (currentProduct.productId === 'Cambio');
+                                    	var isChangeover = (isProductionTargetZero || isProductCambio);
+                                    	// select event catagory
+                                    	if (isChangeover) {
+                                    		category = "changeover";
+                                    	} else {
+                                    		category = "running";
+                                    	}
+                                    	var result = Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                    		startTime: currentShift.timestamp,
+                                    		endTime: Date.now(),
+                                    		shiftScheduleId: eventData.newValue.value,
+                                    		source: me.name,
+                                    		category: category
+                                    	});
+                                    } else {
+                                    	// cases when production isn't running
+                                    	// if there was any event on  previous shift, update endtime 
+                                    	if (prevShiftEvents.getRowCount() !== 0) {
+                                    		lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
+                                    		// if previous event was breakdown, update event 
+                                    		if (lastEvent.category === "breakdown") {
+                                    			Things["BayerDBDataProvider"].UpdateShiftEvent({
+                                    				endTime: dateAddHours(prevShift.timestamp, 8),
+                                    				id: lastEvent.id,
+                                    				shiftScheduleId: eventData.oldValue.value
+                                    			});
+                                    		}
+                                    		// insert new taks if previously other type of event occured
+                                    		else {
+                                    			Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                    				startTime: lastEvent.endTime,
+                                    				endTime: dateAddHours(prevShift.timestamp, 8),
+                                    				shiftScheduleId: eventData.oldValue.value,
+                                    				source: me.name,
+                                    				category: 'breakdown'
+                                    			});
+                                    		}
+                                    	}
+                                    	// if previous shift event list is empty and previous shift exists,
+                                    	// insert one shift-long event
+                                    	else if (prevShift) {
+                                    		Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                    			startTime: prevShift.timestamp,
+                                    			endTime: dateAddHours(prevShift.timestamp, 8),
+                                    			shiftScheduleId: eventData.oldValue.value,
+                                    			source: me.name,
+                                    			category: 'breakdown'
+                                    		});
+                                    	}
+                                    	//add first event to new shift
+                                    	Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                    		startTime: currentShift.timestamp,
+                                    		endTime: Date.now(),
+                                    		shiftScheduleId: eventData.newValue.value,
+                                    		source: me.name,
+                                    		category: 'breakdown'
+                                    	});
                                     }
                                     ]]>
                                     </code>
@@ -822,6 +829,7 @@
                                     //
                                     // ProcessProductionDelayRules service
                                     // * eventData
+                                    
                                     var lineConfig = me.GetLineConfiguration();
                                     var currentProduct = me.GetCurrentProduct();
                                     

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-03-26T15:32:08.984Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-05-25T19:55:21.645Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -63,6 +63,7 @@
                 <ConfigurationTableDefinition category="" dataShapeName="GenericStringList" description="" isHidden="false" isMultiRow="true" name="NotificationTargetGroupB" ordinal="0" source="IMPORT"/>
                 <ConfigurationTableDefinition category="" dataShapeName="BayerSameProductChangeoverDataShape" description="" isHidden="false" isMultiRow="true" name="SameProductChangeover" ordinal="0" source="IMPORT"/>
                 <ConfigurationTableDefinition category="" dataShapeName="BayerProductionLineConfigurationDataShape" description="" isHidden="false" isMultiRow="false" name="LineConfiguration" ordinal="0" source="IMPORT"/>
+                <ConfigurationTableDefinition category="Changeovers" dataShapeName="BayerChangeoversSplitTimeDelays" description="Changeover Split Times" isHidden="false" isMultiRow="false" name="Changeover_SplitTimes" ordinal="10" source="IMPORT"/>
             </ConfigurationTableDefinitions>
             <ConfigurationTables>
                 <ConfigurationTable description="" isMultiRow="true" name="Availability" ordinal="0">
@@ -175,6 +176,7 @@
                     <DataShape>
                         <FieldDefinitions>
                             <FieldDefinition aspect.defaultValue="90" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="INTEGER" description="" name="additionalChangeoverTime" ordinal="1"/>
+                            <FieldDefinition aspect.defaultValue="false" aspect.isPrimaryKey="true" baseType="BOOLEAN" description="" name="allowManualAdjustment" ordinal="8"/>
                             <FieldDefinition aspect.defaultValue="2.3" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopBreakdownThreshold" ordinal="6"/>
                             <FieldDefinition aspect.defaultValue="3.0" aspect.isPrimaryKey="true" aspect.units="occurences" baseType="NUMBER" description="" name="delayMicrostopCountMax" ordinal="5"/>
                             <FieldDefinition aspect.defaultValue="5.0" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopTimeMax" ordinal="4"/>
@@ -186,6 +188,7 @@
                     <Rows>
                         <Row>
                             <additionalChangeoverTime>90</additionalChangeoverTime>
+                            <allowManualAdjustment>false</allowManualAdjustment>
                             <delayMicrostopBreakdownThreshold>2.3</delayMicrostopBreakdownThreshold>
                             <delayMicrostopCountMax>3.0</delayMicrostopCountMax>
                             <delayMicrostopTimeMax>5.0</delayMicrostopTimeMax>
@@ -220,12 +223,67 @@
                     </DataShape>
                     <Rows/>
                 </ConfigurationTable>
+                <ConfigurationTable description="Changeover Split Times" isMultiRow="false" name="Changeover_SplitTimes" ordinal="10">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Blister Amount Change" name="blisterAmountChange" ordinal="7"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Blister Size Change" name="blisterSizeChange" ordinal="5"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Blister Type Change" name="blisterTypeChange" ordinal="3"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Box Format Change" name="boxFormatChange" ordinal="6"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Bundle Format Change" name="bundleFormatChange" ordinal="8"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Ground Foil Change" name="groundFoilChange" ordinal="4"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="" name="orderChange" ordinal="1"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Product Change" name="productChange" ordinal="2"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <blisterAmountChange>30</blisterAmountChange>
+                            <blisterSizeChange>240</blisterSizeChange>
+                            <blisterTypeChange>180</blisterTypeChange>
+                            <boxFormatChange>40</boxFormatChange>
+                            <bundleFormatChange>30</bundleFormatChange>
+                            <groundFoilChange>60</groundFoilChange>
+                            <orderChange>120</orderChange>
+                            <productChange>30</productChange>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
             </ConfigurationTables>
             <PropertyBindings/>
             <RemotePropertyBindings/>
             <RemoteServiceBindings/>
             <RemoteEventBindings/>
             <AlertConfigurations>
+                <AlertDefinitions name="accidentsCount">
+                    <AlertDefinition alertType="DeviationAbove" description="Test Description" enabled="false" name="TestAlarm" priority="1" propertyBaseType="NUMBER">
+                        <AlertAttributes>
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition aspect.defaultValue="false" aspect.friendlyName="Calculate Limit based on value" aspect.isRequired="false" aspect.show="model.entityType === 'Thing' &amp;&amp; (model.itemType === undefined || model.itemType === 'my' || (model.itemType ==='inherited' &amp;&amp; model.override === true))" baseType="BOOLEAN" description="Calculate Limit from alert value" name="calculationShow" ordinal="4"/>
+                                    <FieldDefinition aspect.class="attribute-indent" aspect.defaultValue="Percentage" aspect.friendlyName="Calculation Units" aspect.isRequired="false" aspect.selectOptions="Amount:Amount|Percentage:Percentage" aspect.show="model.alertModel.alert.alertAttributes.rows[0].calculationShow" baseType="STRING" description="Calculation type" name="calculationType" ordinal="6"/>
+                                    <FieldDefinition aspect.class="attribute-indent" aspect.friendlyName="Calculation Value" aspect.isRequired="false" aspect.show="model.alertModel.alert.alertAttributes.rows[0].calculationShow" baseType="NUMBER" description="Calculation value for Limit from alert value" name="calculationValue" ordinal="5"/>
+                                    <FieldDefinition aspect.disabledWhenField="calculationShow" aspect.friendlyName="Limit" aspect.isRequired="true" baseType="NUMBER" description="Limit to deviation from reference value" name="limit" ordinal="2"/>
+                                    <FieldDefinition aspect.defaultValue="true" aspect.friendlyName="Include Limit?" aspect.isRequired="false" baseType="BOOLEAN" description="Limit includes value" name="limitInclusive" ordinal="3"/>
+                                    <FieldDefinition aspect.friendlyName="Value" aspect.isRequired="true" aspect.twxid="allowPropertyValueRetrieval" baseType="NUMBER" description="Reference value" name="value" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <calculationShow>false</calculationShow>
+                                    <calculationType>
+                                    <![CDATA[
+                                    Percentage
+                                    ]]>
+                                    </calculationType>
+                                    <limit>5.0</limit>
+                                    <limitInclusive>true</limitInclusive>
+                                    <value>5.0</value>
+                                </Row>
+                            </Rows>
+                        </AlertAttributes>
+                    </AlertDefinition>
+                </AlertDefinitions>
                 <AlertDefinitions name="displayName"/>
             </AlertConfigurations>
             <ThingShape>
