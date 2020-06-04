@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="">
+ universal="password">
     <Mashups>
         <Mashup
          aspect.isResponsive="true"
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-05-27T14:17:55.225Z"
+         lastModifiedDate="2020-05-29T07:18:32.400Z"
          name="BayerCompletedQtyAdjustPopup"
          projectName="BayerIoT"
          rows="0.0"
@@ -161,20 +161,6 @@
                 "TargetId" : "mashup-root",
                 "TargetSection" : ""
               }, {
-                "Id" : "cf503527-1dd3-41b1-b85f-ffc348115a30",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "Text",
-                  "SourcePropertyBaseType" : "STRING",
-                  "TargetProperty" : "editedQuantity",
-                  "TargetPropertyBaseType" : "INTEGER"
-                } ],
-                "SourceArea" : "UI",
-                "SourceId" : "ptcstextfield-17",
-                "SourceSection" : "",
-                "TargetArea" : "Mashup",
-                "TargetId" : "mashup-root",
-                "TargetSection" : ""
-              }, {
                 "Id" : "a6224175-7d5c-4a4d-a3fb-61e390e41435",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "Text",
@@ -285,6 +271,36 @@
                 "SourceSection" : "",
                 "TargetArea" : "UI",
                 "TargetId" : "expression-21",
+                "TargetSection" : ""
+              }, {
+                "Id" : "58fcd08c-2d20-4570-b928-8d51466d9010",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Text",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "inputQuantity",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "ptcstextfield-17",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-23",
+                "TargetSection" : ""
+              }, {
+                "Id" : "1f441c5d-0c6b-4215-abc1-51e6a9e6e686",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "TargetProperty" : "editedQuantity",
+                  "TargetPropertyBaseType" : "INTEGER"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-23",
+                "SourceSection" : "",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
@@ -404,7 +420,7 @@
                     "Description" : "",
                     "ParameterName" : "currentQuantity"
                   } ],
-                  "id_index" : 22,
+                  "id_index" : 23,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -492,7 +508,7 @@
                         "ContainerClass" : "",
                         "DisplayName" : "Panel",
                         "Height" : 200,
-                        "HideScrollbars" : false,
+                        "HideScrollbars" : true,
                         "HorizontalAnchor" : "left",
                         "Id" : "panel-8",
                         "LastContainer" : false,
@@ -514,7 +530,7 @@
                           "ContainerClass" : "",
                           "Description" : "Panel-Floating",
                           "DisplayName" : "Panel-Floating",
-                          "Height" : 186,
+                          "Height" : 170,
                           "HideScrollbars" : true,
                           "HorizontalAnchor" : "center",
                           "Id" : "panel-9",
@@ -992,6 +1008,37 @@
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
                       "name" : "editedQuantity"
+                    } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : true,
+                    "DataChangeType" : "ALWAYS",
+                    "DisplayName" : "valuePassthrough",
+                    "Expression" : "((!inputQuantity || inputQuantity == \"null\" || inputQuantity == \"undefined\" || isNaN(parseInt(inputQuantity))) ? 0 : parseInt(inputQuantity) );",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-23",
+                    "LastContainer" : false,
+                    "OutputBaseType" : "NUMBER",
+                    "ShowDataLoading" : true,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "STRING",
+                      "Description" : "",
+                      "ParameterName" : "inputQuantity",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "inputQuantity"
                     } ]
                   },
                   "Widgets" : [ ]
