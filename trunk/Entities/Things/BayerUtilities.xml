@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-04-08T11:05:09.523Z"
+         lastModifiedDate="2020-06-18T05:24:25.281Z"
          name="BayerUtilities"
          projectName="BayerIoT"
          published="false"
@@ -82,6 +82,27 @@
                          isPermitted="true"
                          name="Role.BayerProductionLine.Any"
                          type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="GetLineExtendedStatus">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerOffice"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
                     </ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>
@@ -184,14 +205,6 @@
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>
                 </Permissions>
-                <Permissions
-                 resourceName="GetTranslation">
-                    <PropertyRead></PropertyRead>
-                    <PropertyWrite></PropertyWrite>
-                    <ServiceInvoke></ServiceInvoke>
-                    <EventInvoke></EventInvoke>
-                    <EventSubscribe></EventSubscribe>
-                </Permissions>
             </RunTimePermissions>
             <VisibilityPermissions>
                 <Visibility>
@@ -226,6 +239,11 @@
                              baseType="GROUPNAME"
                              description=""
                              name="role"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="GROUPNAME"
+                             description=""
+                             name="role2"
                              ordinal="2"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
@@ -477,24 +495,31 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var result = false;
+                                        //
+                                        // CheckUserInRole service
                                         
+                                        var result = false;
                                         try {
                                             // result: INFOTABLE dataShape: "EntityList"
-                                        	var groups =  Resources["CurrentSessionInfo"].GetCurrentUserGroups();
-                                        
-                                            var tableLength = groups.rows.length;
-                                            for (var x=0; x < tableLength; x++) {
-                                                var row = groups.rows[x];
-                                        
+                                            var groups = Resources["CurrentSessionInfo"].GetCurrentUserGroups();
+                                            var numGroups = groups.rows.length;
+                                            for (let idx = 0; idx < numGroups; idx++) {
+                                                let row = groups.rows[idx];
+                                                if (row.name == "Administrators") {
+                                                    result = true;
+                                                }
                                                 if (row.name == role) {
                                                     result = true;
+                                                }
+                                                if (!!role2 && row.name == role2) {
+                                                    result = true;
+                                                }
+                                                if (result) {
                                                     break;
                                                 }
-                                            }
-                                        }
-                                        catch (ex) {
-                                            logger.error(me.name + "CheckUserInRole: " + ex);
+                                            } //> 
+                                        } catch (ex) {
+                                            logger.error(me.name + ": CheckUserInRole: " + ex);
                                         }
                                         ]]>
                                         </code>

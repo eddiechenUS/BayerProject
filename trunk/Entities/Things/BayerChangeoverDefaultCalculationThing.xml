@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="">
+    <Things>
+        <Thing
+         description="Bayer Changeover Default Calculation Thing"
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2020-06-01T07:53:47.227Z"
+         name="BayerChangeoverDefaultCalculationThing"
+         projectName="BayerIoT"
+         published="false"
+         tags=""
+         thingTemplate="GenericThing"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions></PropertyDefinitions>
+                <ServiceDefinitions></ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetChangeoverTime">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //
+                                        // GetChangeoverTime service
+                                        // * prevItem - JSON
+                                        // * nextItem - JSON
+                                        // * productionLine - THINGNAME
+                                        
+                                        if(!productionLine) {
+                                            throw "Input 'productionLine' is required!";
+                                        }
+                                        if(!prevItem || !nextItem) {
+                                            throw "Input 'prevItem' or 'nextItem' is required!";
+                                        }
+                                        var lineThing = Things[productionLine];
+                                        if(!lineThing) {
+                                            throw "Input Thing name '"+productionLine+"' is invalid!";
+                                        }
+                                        var lineConfig = lineThing.GetLineConfiguration();
+                                        var activeMaterialTime = 0.0;
+                                        var blisterTime = 0.0;
+                                        var fbTime = 0.0;
+                                        // Active Material Number Change
+                                        try {
+                                            // result: INTEGER
+                                            activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
+                                                sourceCode: prevItem.activeMaterialNumber /* STRING */,
+                                                productionLine: productionLine /* THINGNAME */,
+                                                targetCode: nextItem.activeMaterialNumber /* STRING */
+                                            });
+                                        } catch(ex) { }
+                                        // Blister Type Change
+                                        try {
+                                            // result: INTEGER
+                                            blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
+                                                sourceCode: prevItem.blisterType /* STRING */,
+                                                productionLine: productionLine /* THINGNAME */,
+                                                targetCode: nextItem.blisterType /* STRING */
+                                            });
+                                        } catch(ex) { }
+                                        // Folded Box Format Change
+                                        try {
+                                            // result: INTEGER
+                                            fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({
+                                                sourceCode: prevItem.foldedBoxFormat /* STRING */,
+                                                productionLine: productionLine /* THINGNAME */,
+                                                targetCode: nextItem.foldedBoxFormat /* STRING */
+                                            });
+                                        } catch(ex) { }
+                                        var targetHours = (Math.max(activeMaterialTime, blisterTime, fbTime) + lineConfig.additionalChangeoverTime) / 60.0;
+                                        targetHours = Math.round(targetHours * 100.0) / 100.0;
+                                        
+                                        var result = targetHours;
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
+            <ImplementedShapes>
+                <ImplementedShape
+                 name="BayerChangeoverCalculationShape"
+                 type="ThingShape"></ImplementedShape>
+            </ImplementedShapes>
+            <ThingProperties></ThingProperties>
+        </Thing>
+    </Things>
+</Entities>
