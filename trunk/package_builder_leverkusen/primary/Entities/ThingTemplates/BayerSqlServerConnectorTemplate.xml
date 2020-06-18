@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2020-05-22T10:28:11.223Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2020-06-06T22:12:06.398Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -370,6 +370,7 @@
                             <FieldDefinition baseType="DATETIME" description="" name="startTime" ordinal="12"/>
                             <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="status" ordinal="8"/>
                             <FieldDefinition baseType="INTEGER" description="" name="tabletsPerBlister" ordinal="23"/>
+                            <FieldDefinition baseType="STRING" description="TA Number" name="taNumber" ordinal="25"/>
                             <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetHours" ordinal="6"/>
                             <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetQuantity" ordinal="5"/>
                             <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetQuantityPerHour" ordinal="7"/>
@@ -1118,6 +1119,7 @@
                                         <![CDATA[
                                         SELECT TOP (1) [id]
                                               ,[productionLine]
+                                              ,[taNumber]
                                               ,[orderNr]
                                               ,[productId]
                                               ,[productDescription]
@@ -1352,6 +1354,7 @@
                                         <![CDATA[
                                         SELECT d.[id]
                                               ,d.[productionLine]
+                                              ,d.[taNumber]
                                               ,d.[orderNr]
                                               ,d.[productId]
                                               ,d.[productDescription]
@@ -1407,6 +1410,7 @@
                                         <![CDATA[
                                         SELECT d.[id]
                                               ,d.[productionLine]
+                                              ,d.[taNumber]
                                               ,d.[orderNr]
                                               ,d.[productId]
                                               ,d.[productDescription]
@@ -1963,6 +1967,7 @@
                                         <![CDATA[
                                         INSERT INTO [dbo].[ProductionPlan]
                                                    ([productionLine]
+                                                   ,[taNumber]
                                                    ,[orderNr]
                                                    ,[productId]
                                                    ,[productDescription]
@@ -1989,6 +1994,7 @@
                                              OUTPUT INSERTED.id
                                              VALUES
                                                    ([[productionLine]]
+                                                   ,[[taNumber]]
                                                    ,[[orderNr]]
                                                    ,[[productId]]
                                                    ,[[productDescription]]

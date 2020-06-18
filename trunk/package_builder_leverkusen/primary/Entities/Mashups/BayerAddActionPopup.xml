@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2019-09-27T11:08:06.001Z"
+         lastModifiedDate="2020-06-15T15:30:24.982Z"
          name="BayerAddActionPopup"
          projectName="BayerIoT"
          rows="0.0"
@@ -53,7 +53,9 @@
                  name="productionLine"
                  ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
-            <Things></Things>
+            <Things>
+                <Thing>BayerUtilities</Thing>
+            </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates>
                 <ThingTemplate>BayerProductionLine</ThingTemplate>
@@ -105,6 +107,24 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerUtilities" : {
+                  "DataName" : "Things_BayerUtilities",
+                  "EntityName" : "BayerUtilities",
+                  "EntityType" : "Things",
+                  "Id" : "ccea54d1-7261-4eab-8aad-96dc8c6e9026",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "d5639169-726d-40ea-aa75-40d1a6cada20",
+                    "Name" : "CheckUserInRole",
+                    "Parameters" : {
+                      "role" : "Role.BayerSuperUser",
+                      "role2" : "Role.BayerAdminUser"
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "CheckUserInRole"
                   } ]
                 },
                 "UserExtensions" : {
@@ -325,8 +345,31 @@
                 "TargetArea" : "Data",
                 "TargetId" : "AddIssue",
                 "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "22be1052-c0ef-4746-8351-236d3837c755",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Visible",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CheckUserInRole",
+                "SourceSection" : "Things_BayerUtilities",
+                "TargetArea" : "UI",
+                "TargetId" : "button-74",
+                "TargetSection" : ""
               } ],
-              "DesignTimePermissions" : { },
+              "DesignTimePermissions" : {
+                "Create" : [ ],
+                "Delete" : [ ],
+                "Metadata" : [ ],
+                "Read" : [ ],
+                "Update" : [ ]
+              },
               "Events" : [ {
                 "EventHandlerArea" : "UI",
                 "EventHandlerId" : "BMVoiceRecognition-77",
@@ -408,15 +451,29 @@
                 "EventTriggerId" : "expression-14",
                 "EventTriggerSection" : "",
                 "Id" : "df34c6a1-2486-48fb-a4ab-8655c78419c7"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerUtilities",
+                "EventHandlerService" : "CheckUserInRole",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "0d575305-3fa0-4037-8d88-f99f59e765be"
               } ],
-              "RunTimePermissions" : { },
+              "RunTimePermissions" : {
+                "permissions" : [ ]
+              },
               "UI" : {
                 "Properties" : {
+                  "AddToDashboardButton" : "SimplePlus",
                   "AddToDashboardButtonStyle" : "DefaultAddToDashboardButtonStyle",
                   "Area" : "Mashup",
+                  "BGImage" : "",
                   "BGImageRepeat" : "repeat",
                   "BGImageSize" : "auto",
                   "Columns" : 0,
+                  "ConfigureGadgetButton" : "SimpleGear",
                   "ConfigureGadgetButtonStyle" : "DefaultConfigureGadgetButtonStyle",
                   "DisplayName" : "Mashup",
                   "EnableParameterEditing" : false,
@@ -432,12 +489,15 @@
                   "Rows" : 0,
                   "ShowDataLoading" : true,
                   "Style" : "Bayer_PopupBgStyle",
+                  "StyleTheme" : "PTC Convergence Theme",
                   "Title" : "",
                   "TitleBar" : false,
                   "TitleBarStyle" : "DefaultTitleBarStyle",
                   "TitleBarText" : "Gadget Title Here",
                   "Top" : 0,
                   "Type" : "mashup",
+                  "UseMasterTheme" : false,
+                  "UseTheme" : false,
                   "Visible" : true,
                   "Width" : 1024,
                   "Z-index" : 10,
@@ -466,6 +526,7 @@
                     "Id" : "layout-1",
                     "IncludeSpacingInFixedAreas" : false,
                     "IsPrintLayout" : false,
+                    "LastContainer" : false,
                     "Left" : 270,
                     "LeftSidebar" : true,
                     "LeftSidebarWidth" : 20,
@@ -511,6 +572,7 @@
                       "ExpandCollapseTabLocation" : "outside",
                       "Expanded" : true,
                       "Id" : "container-2",
+                      "LastContainer" : false,
                       "MinHeight" : 0,
                       "MinWidth" : 0,
                       "Overlay" : false,
@@ -528,7 +590,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ ]
                   }, {
@@ -541,6 +604,7 @@
                       "ExpandCollapseTabLocation" : "outside",
                       "Expanded" : true,
                       "Id" : "container-3",
+                      "LastContainer" : false,
                       "MinHeight" : 0,
                       "MinWidth" : 0,
                       "Overlay" : false,
@@ -558,7 +622,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ {
                       "Properties" : {
@@ -572,6 +637,7 @@
                         "Id" : "layout-5",
                         "IncludeSpacingInFixedAreas" : false,
                         "IsPrintLayout" : false,
+                        "LastContainer" : false,
                         "Left" : 445,
                         "LeftSidebar" : false,
                         "LeftSidebarWidth" : 0,
@@ -617,6 +683,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-6",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -634,7 +701,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -648,6 +716,7 @@
                             "Id" : "layout-9",
                             "IncludeSpacingInFixedAreas" : false,
                             "IsPrintLayout" : false,
+                            "LastContainer" : false,
                             "Left" : 535,
                             "LeftSidebar" : false,
                             "LeftSidebarWidth" : 0,
@@ -693,6 +762,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-10",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -710,7 +780,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -723,6 +794,7 @@
                                 "ImageScaling" : "Width",
                                 "Label" : "",
                                 "LabelAlignment" : "left",
+                                "LastContainer" : false,
                                 "Left" : 90,
                                 "Overflow" : "hidden",
                                 "ResponsiveLayout" : true,
@@ -757,6 +829,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-11",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -774,16 +847,19 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
                                 "Area" : "UI",
+                                "ContainerClass" : "",
                                 "DisplayName" : "panel-13",
                                 "Height" : 200,
                                 "HideScrollbars" : false,
                                 "HorizontalAnchor" : "left",
                                 "Id" : "panel-13",
+                                "LastContainer" : false,
                                 "Left" : 75,
                                 "ResponsiveLayout" : true,
                                 "ShowDataLoading" : true,
@@ -806,6 +882,7 @@
                                   "FireOnFirstValue" : false,
                                   "Height" : 28,
                                   "Id" : "expression-14",
+                                  "LastContainer" : false,
                                   "Left" : 80,
                                   "OutputBaseType" : "DATETIME",
                                   "ResponsiveLayout" : false,
@@ -832,6 +909,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-7",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -849,7 +927,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -863,6 +942,7 @@
                             "Id" : "layout-16",
                             "IncludeSpacingInFixedAreas" : false,
                             "IsPrintLayout" : false,
+                            "LastContainer" : false,
                             "Left" : 205,
                             "LeftSidebar" : false,
                             "LeftSidebarWidth" : 0,
@@ -908,6 +988,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-17",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -925,7 +1006,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -939,6 +1021,7 @@
                                 "Id" : "layout-21",
                                 "IncludeSpacingInFixedAreas" : false,
                                 "IsPrintLayout" : false,
+                                "LastContainer" : false,
                                 "Left" : 60,
                                 "LeftSidebar" : false,
                                 "LeftSidebarWidth" : 0,
@@ -984,6 +1067,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-22",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -1001,7 +1085,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -1015,6 +1100,7 @@
                                     "Id" : "layout-25",
                                     "IncludeSpacingInFixedAreas" : false,
                                     "IsPrintLayout" : false,
+                                    "LastContainer" : false,
                                     "Left" : 50,
                                     "LeftSidebar" : true,
                                     "LeftSidebarWidth" : 60,
@@ -1060,6 +1146,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-26",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -1077,7 +1164,8 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
@@ -1090,6 +1178,7 @@
                                         "ImageScaling" : "Width",
                                         "Label" : "",
                                         "LabelAlignment" : "left",
+                                        "LastContainer" : false,
                                         "Left" : 40,
                                         "Overflow" : "hidden",
                                         "ResponsiveLayout" : true,
@@ -1124,6 +1213,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-27",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -1141,16 +1231,19 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
                                         "Area" : "UI",
+                                        "ContainerClass" : "",
                                         "DisplayName" : "panel-29",
                                         "Height" : 200,
                                         "HideScrollbars" : false,
                                         "HorizontalAnchor" : "left",
                                         "Id" : "panel-29",
+                                        "LastContainer" : false,
                                         "Left" : 135,
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
@@ -1175,6 +1268,7 @@
                                           "GradientType" : "linear",
                                           "Height" : 30,
                                           "Id" : "shape-30",
+                                          "LastContainer" : false,
                                           "Left" : 0,
                                           "RectangleCornerRadius" : 10,
                                           "ResponsiveLayout" : false,
@@ -1196,7 +1290,7 @@
                                           "Area" : "UI",
                                           "DateDelimiter" : "-",
                                           "DateDisplay" : "short",
-                                          "DateFormat" : "yy-M-dd",
+                                          "DateFormat" : "yyyy-M-dd",
                                           "DateFormatToken" : "",
                                           "DateOnly" : false,
                                           "DateOrder" : "yy-mm-dd",
@@ -1209,6 +1303,7 @@
                                           "Interval" : 0,
                                           "IntervalType" : "h",
                                           "Label" : "",
+                                          "LastContainer" : false,
                                           "Left" : 0,
                                           "ResponsiveLayout" : false,
                                           "ShowDataLoading" : true,
@@ -1241,6 +1336,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-23",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -1258,7 +1354,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -1272,6 +1369,7 @@
                                     "Id" : "layout-32",
                                     "IncludeSpacingInFixedAreas" : false,
                                     "IsPrintLayout" : false,
+                                    "LastContainer" : false,
                                     "Left" : 130,
                                     "LeftSidebar" : true,
                                     "LeftSidebarWidth" : 65,
@@ -1317,6 +1415,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-33",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -1334,7 +1433,8 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
@@ -1347,6 +1447,7 @@
                                         "ImageScaling" : "Width",
                                         "Label" : "",
                                         "LabelAlignment" : "left",
+                                        "LastContainer" : false,
                                         "Left" : 35,
                                         "Overflow" : "hidden",
                                         "ResponsiveLayout" : true,
@@ -1381,6 +1482,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-34",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -1398,16 +1500,19 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
                                         "Area" : "UI",
+                                        "ContainerClass" : "",
                                         "DisplayName" : "panel-42",
                                         "Height" : 200,
                                         "HideScrollbars" : false,
                                         "HorizontalAnchor" : "left",
                                         "Id" : "panel-42",
+                                        "LastContainer" : false,
                                         "Left" : 155,
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
@@ -1433,6 +1538,7 @@
                                           "InnerShadow" : true,
                                           "Label" : "",
                                           "LabelAlignment" : "left",
+                                          "LastContainer" : false,
                                           "Left" : 15,
                                           "Maximum" : 480,
                                           "Minimum" : 0,
@@ -1470,6 +1576,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-24",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -1487,7 +1594,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -1501,6 +1609,7 @@
                                     "Id" : "layout-35",
                                     "IncludeSpacingInFixedAreas" : false,
                                     "IsPrintLayout" : false,
+                                    "LastContainer" : false,
                                     "Left" : 50,
                                     "LeftSidebar" : true,
                                     "LeftSidebarWidth" : 90,
@@ -1546,6 +1655,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-36",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -1563,7 +1673,8 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
@@ -1576,6 +1687,7 @@
                                         "ImageScaling" : "Width",
                                         "Label" : "",
                                         "LabelAlignment" : "left",
+                                        "LastContainer" : false,
                                         "Left" : 35,
                                         "Overflow" : "hidden",
                                         "ResponsiveLayout" : true,
@@ -1610,6 +1722,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-37",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -1627,16 +1740,19 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
                                         "Area" : "UI",
+                                        "ContainerClass" : "",
                                         "DisplayName" : "panel-39",
                                         "Height" : 200,
                                         "HideScrollbars" : false,
                                         "HorizontalAnchor" : "left",
                                         "Id" : "panel-39",
+                                        "LastContainer" : false,
                                         "Left" : 55,
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
@@ -1666,11 +1782,13 @@
                                           "DropdownSelectedStyle" : "Bayer_GreyValue",
                                           "DropdownStyle" : "DefaultDropdownStyle",
                                           "EnableKeyboardSelections" : true,
+                                          "EnableToolTips" : true,
                                           "Height" : 30,
                                           "HeightOfDropdownView" : 170,
                                           "Id" : "dhxlist-40",
                                           "Label" : "",
                                           "LabelAlignment" : "left",
+                                          "LastContainer" : false,
                                           "Left" : 0,
                                           "ListBackgroundStyle" : "Bayer_TextAreaStyle",
                                           "ListFocusStyle" : "DefaultFocusStyle",
@@ -1681,11 +1799,14 @@
                                           "ListLabelStyle" : "DefaultWidgetLabelStyle",
                                           "MultiSelect" : false,
                                           "NumberOfItemsInDropdownView" : 10,
+                                          "NumberOfItemsPerPage" : 500,
                                           "ResponsiveLayout" : false,
                                           "RowHeight" : 28,
                                           "ShowDataLoading" : true,
+                                          "SingleClickSelectOnTablets" : false,
                                           "TabSequence" : -1,
                                           "TextIfNoSelectionType" : "editable",
+                                          "TextVerticalAlignment" : 28,
                                           "ToolTipStyle" : "DefaultTooltipStyle",
                                           "Top" : 10,
                                           "Type" : "dhxlist",
@@ -1716,6 +1837,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-18",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -1733,7 +1855,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -1747,6 +1870,7 @@
                                 "Id" : "layout-44",
                                 "IncludeSpacingInFixedAreas" : false,
                                 "IsPrintLayout" : false,
+                                "LastContainer" : false,
                                 "Left" : 185,
                                 "LeftSidebar" : false,
                                 "LeftSidebarWidth" : 0,
@@ -1792,6 +1916,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-45",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -1809,7 +1934,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -1823,6 +1949,7 @@
                                     "Id" : "layout-47",
                                     "IncludeSpacingInFixedAreas" : false,
                                     "IsPrintLayout" : false,
+                                    "LastContainer" : false,
                                     "Left" : 180,
                                     "LeftSidebar" : false,
                                     "LeftSidebarWidth" : 0,
@@ -1868,6 +1995,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-48",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -1885,7 +2013,8 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
@@ -1898,6 +2027,7 @@
                                         "ImageScaling" : "Width",
                                         "Label" : "",
                                         "LabelAlignment" : "left",
+                                        "LastContainer" : false,
                                         "Left" : 185,
                                         "Overflow" : "hidden",
                                         "ResponsiveLayout" : true,
@@ -1932,6 +2062,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-49",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -1949,16 +2080,19 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
                                         "Area" : "UI",
+                                        "ContainerClass" : "",
                                         "DisplayName" : "panel-51",
                                         "Height" : 200,
                                         "HideScrollbars" : false,
                                         "HorizontalAnchor" : "left",
                                         "Id" : "panel-51",
+                                        "LastContainer" : false,
                                         "Left" : 25,
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
@@ -1992,10 +2126,12 @@
                                           "IconAlignment" : "left",
                                           "Id" : "button-52",
                                           "Label" : "Button",
+                                          "LastContainer" : false,
                                           "Left" : 0,
                                           "ResponsiveLayout" : false,
                                           "RoundedCorners" : true,
                                           "ShowDataLoading" : true,
+                                          "SingleClickSelectOnTablets" : true,
                                           "Style" : "Bayer_mic_style",
                                           "TabSequence" : 0,
                                           "ToolTipField" : "",
@@ -2030,10 +2166,12 @@
                                           "IconAlignment" : "left",
                                           "Id" : "button-54",
                                           "Label" : "Button",
+                                          "LastContainer" : false,
                                           "Left" : 0,
                                           "ResponsiveLayout" : false,
                                           "RoundedCorners" : true,
                                           "ShowDataLoading" : true,
+                                          "SingleClickSelectOnTablets" : true,
                                           "Style" : "Bayer_mic_recStyle",
                                           "TabSequence" : 0,
                                           "ToolTipField" : "",
@@ -2061,6 +2199,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-46",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -2078,7 +2217,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -2089,6 +2229,7 @@
                                     "InnerShadow" : false,
                                     "Label" : "",
                                     "LabelAlignment" : "left",
+                                    "LastContainer" : false,
                                     "Left" : 170,
                                     "ReadOnly" : false,
                                     "ResponsiveLayout" : true,
@@ -2136,6 +2277,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-19",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -2153,7 +2295,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -2167,6 +2310,7 @@
                                 "Id" : "layout-56",
                                 "IncludeSpacingInFixedAreas" : false,
                                 "IsPrintLayout" : false,
+                                "LastContainer" : false,
                                 "Left" : 195,
                                 "LeftSidebar" : false,
                                 "LeftSidebarWidth" : 0,
@@ -2212,6 +2356,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-57",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -2229,7 +2374,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -2243,6 +2389,7 @@
                                     "Id" : "layout-59",
                                     "IncludeSpacingInFixedAreas" : false,
                                     "IsPrintLayout" : false,
+                                    "LastContainer" : false,
                                     "Left" : 195,
                                     "LeftSidebar" : false,
                                     "LeftSidebarWidth" : 0,
@@ -2288,6 +2435,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-60",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -2305,7 +2453,8 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
@@ -2318,6 +2467,7 @@
                                         "ImageScaling" : "Width",
                                         "Label" : "",
                                         "LabelAlignment" : "left",
+                                        "LastContainer" : false,
                                         "Left" : 120,
                                         "Overflow" : "hidden",
                                         "ResponsiveLayout" : true,
@@ -2352,6 +2502,7 @@
                                       "ExpandCollapseTabLocation" : "outside",
                                       "Expanded" : true,
                                       "Id" : "container-61",
+                                      "LastContainer" : false,
                                       "MinHeight" : 0,
                                       "MinWidth" : 0,
                                       "Overlay" : false,
@@ -2369,16 +2520,19 @@
                                       "Type" : "container",
                                       "Visible" : true,
                                       "Z-index" : 10,
-                                      "__TypeDisplayName" : "Container"
+                                      "__TypeDisplayName" : "Container",
+                                      "userCannotRemove" : true
                                     },
                                     "Widgets" : [ {
                                       "Properties" : {
                                         "Area" : "UI",
+                                        "ContainerClass" : "",
                                         "DisplayName" : "panel-63",
                                         "Height" : 200,
                                         "HideScrollbars" : false,
                                         "HorizontalAnchor" : "left",
                                         "Id" : "panel-63",
+                                        "LastContainer" : false,
                                         "Left" : 25,
                                         "ResponsiveLayout" : true,
                                         "ShowDataLoading" : true,
@@ -2412,10 +2566,12 @@
                                           "IconAlignment" : "left",
                                           "Id" : "button-64",
                                           "Label" : "Button",
+                                          "LastContainer" : false,
                                           "Left" : 0,
                                           "ResponsiveLayout" : false,
                                           "RoundedCorners" : true,
                                           "ShowDataLoading" : true,
+                                          "SingleClickSelectOnTablets" : true,
                                           "Style" : "Bayer_mic_style",
                                           "TabSequence" : 0,
                                           "ToolTipField" : "",
@@ -2450,10 +2606,12 @@
                                           "IconAlignment" : "left",
                                           "Id" : "button-65",
                                           "Label" : "Button",
+                                          "LastContainer" : false,
                                           "Left" : 0,
                                           "ResponsiveLayout" : false,
                                           "RoundedCorners" : true,
                                           "ShowDataLoading" : true,
+                                          "SingleClickSelectOnTablets" : true,
                                           "Style" : "Bayer_mic_recStyle",
                                           "TabSequence" : 0,
                                           "ToolTipField" : "",
@@ -2481,6 +2639,7 @@
                                   "ExpandCollapseTabLocation" : "outside",
                                   "Expanded" : true,
                                   "Id" : "container-58",
+                                  "LastContainer" : false,
                                   "MinHeight" : 0,
                                   "MinWidth" : 0,
                                   "Overlay" : false,
@@ -2498,7 +2657,8 @@
                                   "Type" : "container",
                                   "Visible" : true,
                                   "Z-index" : 10,
-                                  "__TypeDisplayName" : "Container"
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
@@ -2509,6 +2669,7 @@
                                     "InnerShadow" : false,
                                     "Label" : "",
                                     "LabelAlignment" : "left",
+                                    "LastContainer" : false,
                                     "Left" : 170,
                                     "ReadOnly" : false,
                                     "ResponsiveLayout" : true,
@@ -2558,6 +2719,7 @@
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
                           "Id" : "container-8",
+                          "LastContainer" : false,
                           "MinHeight" : 0,
                           "MinWidth" : 0,
                           "Overlay" : false,
@@ -2575,7 +2737,8 @@
                           "Type" : "container",
                           "Visible" : true,
                           "Z-index" : 10,
-                          "__TypeDisplayName" : "Container"
+                          "__TypeDisplayName" : "Container",
+                          "userCannotRemove" : true
                         },
                         "Widgets" : [ {
                           "Properties" : {
@@ -2589,6 +2752,7 @@
                             "Id" : "layout-68",
                             "IncludeSpacingInFixedAreas" : false,
                             "IsPrintLayout" : false,
+                            "LastContainer" : false,
                             "Left" : 175,
                             "LeftSidebar" : true,
                             "LeftSidebarWidth" : 140,
@@ -2634,6 +2798,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-69",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -2651,16 +2816,19 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
                                 "Area" : "UI",
+                                "ContainerClass" : "",
                                 "DisplayName" : "panel-73",
                                 "Height" : 200,
                                 "HideScrollbars" : false,
                                 "HorizontalAnchor" : "left",
                                 "Id" : "panel-73",
+                                "LastContainer" : false,
                                 "Left" : 50,
                                 "ResponsiveLayout" : true,
                                 "ShowDataLoading" : true,
@@ -2694,10 +2862,12 @@
                                   "IconAlignment" : "left",
                                   "Id" : "button-74",
                                   "Label" : "[[Bayer.ADD]]",
+                                  "LastContainer" : false,
                                   "Left" : 0,
                                   "ResponsiveLayout" : false,
                                   "RoundedCorners" : true,
                                   "ShowDataLoading" : true,
+                                  "SingleClickSelectOnTablets" : true,
                                   "Style" : "Bayer_ButtonBlue",
                                   "TabSequence" : 0,
                                   "ToolTipField" : "",
@@ -2723,6 +2893,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-70",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -2740,7 +2911,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -2749,6 +2921,7 @@
                                 "Height" : 640,
                                 "Id" : "BMVoiceRecognition-77",
                                 "IsRecording" : false,
+                                "LastContainer" : false,
                                 "Left" : 225,
                                 "ResponsiveLayout" : true,
                                 "ShowDataLoading" : true,
@@ -2771,6 +2944,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-71",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -2788,7 +2962,8 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
@@ -2797,6 +2972,7 @@
                                 "Height" : 640,
                                 "Id" : "BMVoiceRecognition-78",
                                 "IsRecording" : false,
+                                "LastContainer" : false,
                                 "Left" : 200,
                                 "ResponsiveLayout" : true,
                                 "ShowDataLoading" : true,
@@ -2819,6 +2995,7 @@
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
                               "Id" : "container-72",
+                              "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
                               "Overlay" : false,
@@ -2836,16 +3013,19 @@
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
-                              "__TypeDisplayName" : "Container"
+                              "__TypeDisplayName" : "Container",
+                              "userCannotRemove" : true
                             },
                             "Widgets" : [ {
                               "Properties" : {
                                 "Area" : "UI",
+                                "ContainerClass" : "",
                                 "DisplayName" : "panel-75",
                                 "Height" : 200,
                                 "HideScrollbars" : false,
                                 "HorizontalAnchor" : "left",
                                 "Id" : "panel-75",
+                                "LastContainer" : false,
                                 "Left" : 30,
                                 "ResponsiveLayout" : true,
                                 "ShowDataLoading" : true,
@@ -2879,10 +3059,12 @@
                                   "IconAlignment" : "left",
                                   "Id" : "button-76",
                                   "Label" : "[[Bayer.CANCEL]]",
+                                  "LastContainer" : false,
                                   "Left" : 0,
                                   "ResponsiveLayout" : false,
                                   "RoundedCorners" : true,
                                   "ShowDataLoading" : true,
+                                  "SingleClickSelectOnTablets" : true,
                                   "Style" : "Bayer_ButtonRed",
                                   "TabSequence" : 0,
                                   "ToolTipField" : "",
@@ -2912,6 +3094,7 @@
                       "ExpandCollapseTabLocation" : "outside",
                       "Expanded" : true,
                       "Id" : "container-4",
+                      "LastContainer" : false,
                       "MinHeight" : 0,
                       "MinWidth" : 0,
                       "Overlay" : false,
@@ -2929,7 +3112,8 @@
                       "Type" : "container",
                       "Visible" : true,
                       "Z-index" : 10,
-                      "__TypeDisplayName" : "Container"
+                      "__TypeDisplayName" : "Container",
+                      "userCannotRemove" : true
                     },
                     "Widgets" : [ ]
                   } ]

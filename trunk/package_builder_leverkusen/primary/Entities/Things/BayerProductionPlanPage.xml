@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-05-14T13:54:44.325Z" name="BayerProductionPlanPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-06-18T05:25:16.059Z" name="BayerProductionPlanPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -11,6 +11,25 @@
                 <Metadata/>
             </DesignTimePermissions>
             <RunTimePermissions>
+                <Permissions resourceName="FilterProductionPlan">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetAvailableStandbyList">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
                 <Permissions resourceName="GetProductionPlanStatusFormatted">
                     <PropertyRead/>
                     <PropertyWrite/>

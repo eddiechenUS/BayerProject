@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-03-24T11:07:49.669Z"
+         lastModifiedDate="2020-06-15T15:35:46.207Z"
          name="BayerMaintenanceTicketListCellMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -89,7 +89,9 @@
                  name="timestamp"
                  ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
-            <Things></Things>
+            <Things>
+                <Thing>BayerUtilities</Thing>
+            </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates></ThingTemplates>
             <mashupContent>
@@ -110,6 +112,24 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerUtilities" : {
+                  "DataName" : "Things_BayerUtilities",
+                  "EntityName" : "BayerUtilities",
+                  "EntityType" : "Things",
+                  "Id" : "e05c5313-d319-442b-a1a8-fba625ee12ce",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "3d4b2ef2-0b37-4744-8d77-e8b3998ca83b",
+                    "Name" : "CheckUserInRole",
+                    "Parameters" : {
+                      "role" : "Role.BayerSuperUser",
+                      "role2" : "Role.BayerAdminUser"
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "CheckUserInRole"
                   } ]
                 },
                 "UserExtensions" : {
@@ -287,6 +307,23 @@
                 "TargetArea" : "UI",
                 "TargetId" : "valuedisplay-60",
                 "TargetSection" : ""
+              }, {
+                "Id" : "2c791091-039c-4895-8457-087e43dc9ead",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Visible",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CheckUserInRole",
+                "SourceSection" : "Things_BayerUtilities",
+                "TargetArea" : "UI",
+                "TargetId" : "button-51",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -313,6 +350,15 @@
                 "EventTriggerId" : "button-51",
                 "EventTriggerSection" : "",
                 "Id" : "e5656f8d-aa7c-4d51-b2c9-f123dd59176d"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerUtilities",
+                "EventHandlerService" : "CheckUserInRole",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "fbaa64d1-eb73-4de1-8e9d-a9efc3c2e6e7"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]

@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="password">
+ universal="">
     <Mashups>
         <Mashup
          aspect.isResponsive="true"
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-05-29T07:19:50.368Z"
+         lastModifiedDate="2020-06-16T03:44:08.042Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -231,6 +231,17 @@
                     "Name" : "CheckUserInRole",
                     "Parameters" : {
                       "role" : "Role.BayerProductionLine.Any"
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "CheckUserInRole"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "14eb9daf-5cb3-41a0-8eca-b90c5c1079ae",
+                    "Name" : "CheckUserInRole1",
+                    "Parameters" : {
+                      "role" : "Role.BayerSuperUser",
+                      "role2" : "Role.BayerAdminUser"
                     },
                     "RefreshInterval" : 0,
                     "Target" : "CheckUserInRole"
@@ -1278,23 +1289,6 @@
                 "TargetId" : "valuedisplay-492",
                 "TargetSection" : ""
               }, {
-                "Id" : "c555c94c-1c78-47e0-bda9-369603d1bd95",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "result",
-                  "SourcePropertyBaseType" : "BOOLEAN",
-                  "SourcePropertyType" : "Field",
-                  "TargetProperty" : "Visible",
-                  "TargetPropertyBaseType" : "BOOLEAN",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "CheckUserInRole",
-                "SourceSection" : "Things_BayerUtilities",
-                "TargetArea" : "UI",
-                "TargetId" : "button-82",
-                "TargetSection" : ""
-              }, {
                 "Id" : "d919ad3a-f2bb-454c-a066-510a5de0c1d5",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "targetHours",
@@ -1674,6 +1668,72 @@
                 "TargetArea" : "UI",
                 "TargetId" : "navigation-529",
                 "TargetSection" : ""
+              }, {
+                "Id" : "cebc6e41-da92-4730-ae20-83bf252bcfb3",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "checkUserInRoleOutput1",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CheckUserInRole",
+                "SourceSection" : "Things_BayerUtilities",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-543",
+                "TargetSection" : ""
+              }, {
+                "Id" : "f446a6b8-df58-44b0-8c83-5f954fb6c84c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "checkUserInRoleOutput2",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CheckUserInRole1",
+                "SourceSection" : "Things_BayerUtilities",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-543",
+                "TargetSection" : ""
+              }, {
+                "Id" : "c799ce22-2100-4ffe-99d7-48acda9335ba",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Visible",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-543",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "button-82",
+                "TargetSection" : ""
+              }, {
+                "Id" : "57474c2e-e29f-4736-9f69-ba46373c6aaf",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "line",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "navigationfunction-544",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -1844,15 +1904,6 @@
                 "EventTriggerId" : "CompleteCurrentProduct",
                 "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
                 "Id" : "8f87228e-e586-4c48-b02c-ec051eda262e"
-              }, {
-                "EventHandlerArea" : "UI",
-                "EventHandlerId" : "navigation-387",
-                "EventHandlerService" : "Navigate",
-                "EventTriggerArea" : "UI",
-                "EventTriggerEvent" : "Clicked",
-                "EventTriggerId" : "button-31",
-                "EventTriggerSection" : "",
-                "Id" : "fcd01a13-2a21-4020-b425-2f0bff224a6e"
               }, {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
@@ -2060,6 +2111,33 @@
                 "EventTriggerId" : "autorefresh-384",
                 "EventTriggerSection" : "",
                 "Id" : "c15f0a49-8b9e-4e63-8a46-89320ead0f11"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerUtilities",
+                "EventHandlerService" : "CheckUserInRole1",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "CheckUserInRole",
+                "EventTriggerSection" : "Things_BayerUtilities",
+                "Id" : "554cb9c3-3c1e-4a04-9cbe-dd21c6db7b2f"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-543",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "CheckUserInRole1",
+                "EventTriggerSection" : "Things_BayerUtilities",
+                "Id" : "1dceaf13-5dbb-4889-b3b0-e439c732e07e"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "navigationfunction-544",
+                "EventHandlerService" : "Navigate",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-31",
+                "EventTriggerSection" : "",
+                "Id" : "9d9e1554-8bc2-4380-a34f-856b573fe798"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -2130,7 +2208,7 @@
                   } ],
                   "flex-grow" : 0,
                   "flex-shrink" : 0,
-                  "id_index" : 542,
+                  "id_index" : 544,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -3023,9 +3101,10 @@
                                   "ConfirmationTitle" : "Confirm Action",
                                   "ContextId" : "",
                                   "DefaultConfirmationButton" : "button1",
+                                  "Description" : "Button-Users",
                                   "Disabled" : true,
                                   "DisabledStyle" : "Bayer_EndShiftStyle",
-                                  "DisplayName" : "button-29",
+                                  "DisplayName" : "Button-Users",
                                   "FocusStyle" : "Bayer_EndShiftStyle",
                                   "Height" : 45,
                                   "HoverStyle" : "Bayer_EndShiftStyle_h",
@@ -3103,9 +3182,10 @@
                                   "ConfirmationTitle" : "Confirm Action",
                                   "ContextId" : "",
                                   "DefaultConfirmationButton" : "button1",
+                                  "Description" : "Button-ConfigGear",
                                   "Disabled" : false,
                                   "DisabledStyle" : "Bayer_SettingsButtonNavStyle",
-                                  "DisplayName" : "button-31",
+                                  "DisplayName" : "Button-ConfigGear",
                                   "FocusStyle" : "Bayer_SettingsButtonNavStyle",
                                   "Height" : 38,
                                   "HoverStyle" : "Bayer_SettingsButtonNavHoverStyle",
@@ -3143,9 +3223,10 @@
                                   "ConfirmationTitle" : "Confirm Action",
                                   "ContextId" : "",
                                   "DefaultConfirmationButton" : "button1",
+                                  "Description" : "Button-AudioPlay",
                                   "Disabled" : true,
                                   "DisabledStyle" : "Bayer_ListActionStyle",
-                                  "DisplayName" : "button-30",
+                                  "DisplayName" : "Button-AudioPlay",
                                   "FocusStyle" : "Bayer_ListActionStyle",
                                   "Height" : 45,
                                   "HoverStyle" : "Bayer_ListActionStyle_h",
@@ -6061,7 +6142,7 @@
                                               "ConfirmationTitle" : "Confirm Action",
                                               "ContextId" : "",
                                               "DefaultConfirmationButton" : "button1",
-                                              "Disabled" : false,
+                                              "Disabled" : true,
                                               "DisabledStyle" : "BayerButtonStyle",
                                               "DisplayName" : "button-export",
                                               "FocusStyle" : "BayerButtonStyle",
@@ -11006,6 +11087,87 @@
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
                       "name" : "subject"
+                    } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : true,
+                    "DataChangeType" : "ALWAYS",
+                    "DisplayName" : "ifCompleteButtonVisible",
+                    "Expression" : "(checkUserInRoleOutput1 && checkUserInRoleOutput2);",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-543",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "BOOLEAN",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "BOOLEAN",
+                      "DefaultValue" : false,
+                      "Description" : "",
+                      "ParameterName" : "checkUserInRoleOutput1",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "checkUserInRoleOutput1"
+                    }, {
+                      "BaseType" : "BOOLEAN",
+                      "DefaultValue" : false,
+                      "Description" : "",
+                      "ParameterName" : "checkUserInRoleOutput2",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "checkUserInRoleOutput2"
+                    } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "ClickOutsideToClose" : false,
+                    "CloseButton" : true,
+                    "DisplayName" : "Nav-ConfigOptions",
+                    "Id" : "navigationfunction-544",
+                    "LastContainer" : false,
+                    "MissingMashupMessage" : "",
+                    "PopupHeight" : "0",
+                    "PopupScrollbar" : "auto",
+                    "PopupTitle" : "",
+                    "PopupWidth" : "0",
+                    "ReloadOnReplace" : false,
+                    "ShowDataLoading" : true,
+                    "TargetMashup" : "BayerConfigSelectMashup",
+                    "TargetWindow" : "new",
+                    "TargetWindowType" : "replace",
+                    "Text" : "tw.navigationfunction-ide.properties.text.default-value",
+                    "Type" : "navigationfunction",
+                    "Visible" : true,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "navigationfunction",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "THINGNAME",
+                      "Description" : "",
+                      "ParameterName" : "line",
+                      "bindingDirection" : "Both",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : true,
+                      "isBindingTarget" : true,
+                      "name" : "line"
                     } ]
                   },
                   "Widgets" : [ ]

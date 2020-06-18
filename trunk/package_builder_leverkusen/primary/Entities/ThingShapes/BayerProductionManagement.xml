@@ -1,73 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-05-27T08:42:38.221Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-06-10T10:52:14.545Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="counter" ordinal="2"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INTEGER" category="" description="" isLocalOnly="false" name="currentProductKey" ordinal="4"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="kepwareCounter" ordinal="1"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="lastProductionPlanUpdate" ordinal="7"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="previousProductCounter" ordinal="3"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" baseType="STRING" category="" description="" isLocalOnly="false" name="productionlinestatus" ordinal="8"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="NUMBER" category="" description="" isLocalOnly="false" name="productionsensorvalue" ordinal="9"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="false" aspect.isLogged="false" aspect.isPersistent="false" aspect.isReadOnly="false" baseType="BOOLEAN" category="" description="" isLocalOnly="false" name="updateProductLock" ordinal="6"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="Production" description="" isLocalOnly="false" name="counter" ordinal="2"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INTEGER" category="Production" description="" isLocalOnly="false" name="currentProductKey" ordinal="4"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="Production" description="" isLocalOnly="false" name="kepwareCounter" ordinal="1"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="Production" description="" isLocalOnly="false" name="lastProductionPlanUpdate" ordinal="7"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="Production" description="" isLocalOnly="false" name="previousProductCounter" ordinal="3"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" baseType="STRING" category="Production" description="" isLocalOnly="false" name="productionlinestatus" ordinal="8"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="NUMBER" category="Production" description="" isLocalOnly="false" name="productionsensorvalue" ordinal="9"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="false" aspect.isLogged="false" aspect.isPersistent="false" aspect.isReadOnly="false" baseType="BOOLEAN" category="Production" description="" isLocalOnly="false" name="updateProductLock" ordinal="6"/>
             </PropertyDefinitions>
             <ServiceDefinitions>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CompleteCurrentProduct">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CompleteCurrentProduct">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition baseType="STRING" description="" name="commentsOnEditedQuantity" ordinal="2"/>
                         <FieldDefinition aspect.minimumValue="0" baseType="INTEGER" description="" name="editedQuantity" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverDetailsTrendForLine">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverDetailsTrendForLine">
                     <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="dateTime" ordinal="1"/>
                         <FieldDefinition aspect.defaultValue="0" aspect.isRequired="true" aspect.maximumValue="0" aspect.minimumValue="-5" aspect.units="week" baseType="INTEGER" description="" name="week" ordinal="2"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTime">
+                <ServiceDefinition aspect.isAsync="false" category="Changeover" description="Get Changeover Split Times as Info Table" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverSplitTimes">
+                    <ResultType aspect.dataShape="BayerChangeoverSplitTimeValue" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions/>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTime">
                     <ResultType aspect.dataShape="BayerProgressDisplayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTimes">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTimes">
                     <ResultType aspect.dataShape="BayerChangeoverTimesDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="2"/>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendByDate">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendByDate">
                     <ResultType aspect.dataShape="BayerChangeoverTrendDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
                         <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendForLine">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTrendForLine">
                     <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="dateTime" ordinal="1"/>
                         <FieldDefinition aspect.defaultValue="0" aspect.maximumValue="0" aspect.minimumValue="-5" aspect.units="week" baseType="INTEGER" description="" name="week" ordinal="3"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetCurrentProduct">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetCurrentProduct">
                     <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsByDate">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsByDate">
                     <ResultType aspect.dataShape="BayerMaintenanceTicketsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
                         <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetProductionPlan">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetProductionPlan">
                     <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertStandbyBelow">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertStandbyBelow">
                     <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="Stanby item will be inserted after this input production plan item. " name="afterProductionId" ordinal="1"/>
@@ -81,19 +85,32 @@
                         <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="FileRepository" baseType="THINGNAME" description="" name="repository" ordinal="2"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="LoadProductionPlan">
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="LoadProductionPlan">
                     <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="INFOTABLE" description="" name="data" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateCounter">
+                <ServiceDefinition aspect.isAsync="false" category="Changeover" description="Recalculate Plan Changeovers" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="RecalculatePlanChangeovers">
+                    <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.defaultValue="false" baseType="BOOLEAN" description="Should simulate?" name="simulate" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Changeover" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SetChangeoverSplitTimes">
+                    <ResultType aspect.dataShape="BayerChangeoversSplitTimeDelays" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.dataShape="BayerChangeoverSplitTimeValue" baseType="INFOTABLE" description="Changeover Split Times" name="splitTimes" ordinal="1"/>
+                        <FieldDefinition aspect.defaultValue="true" baseType="BOOLEAN" description="" name="updateTable" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateCounter">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="DataChangeEvent" aspect.isRequired="true" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="true" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateProduct">
+                <ServiceDefinition aspect.isAsync="true" category="Production" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateProduct">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="ScheduledEvent" aspect.isRequired="true" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
@@ -208,6 +225,68 @@
                                         dateTime: dateTime,
                                         week: week,
                                     });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetChangeoverSplitTimes">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //
+                                    // GetChangeoverSplitTimes service
+                                    
+                                    var splitTimes = me.GetConfigurationTable({ tableName: "Changeover_SplitTimes" });
+                                    var output = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                    	infoTableName: "result" /* STRING */,
+                                    	dataShapeName: "BayerChangeoverSplitTimeValue" /* DATASHAPENAME */
+                                    });
+                                    var result = output;
+                                    var fieldList = [
+                                    	"orderChange",
+                                    	"productChange",
+                                    	"blisterTypeChange",
+                                    	"groundFoilChange",
+                                    	"blisterSizeChange",
+                                    	"boxFormatChange",
+                                    	"blisterAmountChange",
+                                    	"bundleFormatChange"
+                                    ];
+                                    /*[
+                                    	"Bayer.OrderChange",
+                                    	"Bayer.ProductChange",
+                                    	"Bayer.BlisterTypeChange",
+                                    	"Bayer.GroundFoilChange",
+                                    	"Bayer.BlisterSizeChange",
+                                    	"Bayer.BoxFormatChange",
+                                    	"Bayer.BlisterAmountChange",
+                                    	"Bayer.BundleFormatChange"
+                                    ];*/
+                                    
+                                    splitTimes = splitTimes.rows[0];
+                                    var localization = Resources["RuntimeLocalizationFunctions"];
+                                    for(let idx=0; idx<fieldList.length; idx++) {
+                                        let fieldName = fieldList[idx];
+                                        let token = "Bayer." + fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+                                    	let tokenValue = localization.GetEffectiveToken({ token: token });
+                                    
+                                        output.AddRow({
+                                        	fieldName: fieldName,
+                                            description: tokenValue,
+                                            value: splitTimes[fieldName]
+                                        });
+                                    } //# for each field to convert
                                     ]]>
                                     </code>
                                 </Row>
@@ -772,7 +851,13 @@
                                     // > BayerProductionManagement Thing Shape (Main Implementation)
                                     // * data - INFOTABLE
                                     
+                                    var SERVICE_NAME = "LoadPlan(Base)";
                                     var lineConfig = me.GetLineConfiguration();
+                                    var changeoverCalculationThingName = lineConfig.changeoverCalculationThing;
+                                    var changeoverCalculationThing = null;
+                                    if (!!changeoverCalculationThingName) {
+                                        changeoverCalculationThing = Things[changeoverCalculationThingName];
+                                    }
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
                                     var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName: "BayerProductionPlanDataShape" });
                                     Things["BayerDBDataProvider"].DeleteScheduledProduction({
@@ -830,6 +915,7 @@
                                                     DEBUG("Skipping row " + idx + "; product id " + newEntry.productId);
                                                     continue;
                                                 }
+                                                newEntry.taNumber = row.taNumber; // STRING
                                                 newEntry.orderNr = row.orderNr; // STRING
                                                 newEntry.productDescription = row.productDescription; // STRING
                                                 newEntry.version = row.version; // STRING
@@ -874,7 +960,9 @@
                                                 newEntry.endTime = undefined; // DATETIME
                                                 newEntry.workedHours = 0; // NUMBER
                                                 if (prev) {
-                                                    result.AddRow(getChangeover(prev, newEntry));
+                                                    let changeoverItem = getChangeover(prev, newEntry);
+                                                    //DEBUG("Changeover time: '" + changeoverItem.targetHours + "' for prev='" + prev.taNumber + "' next='" + newEntry.taNumber + "'")
+                                                    result.AddRow(changeoverItem);
                                                 }
                                                 prev = newEntry;
                                                 DEBUG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
@@ -887,7 +975,20 @@
                                     } //> processInputData()
                                     //>----------------------------------------------------------------------------
                                     
-                                    function getChangeover(prevItem, newItem) {
+                                    function getChangeover(prevItem, nextItem) {
+                                        if (!changeoverCalculationThing) {
+                                            DEBUG("Changeover time calculated with OLD method for prev='" + prevItem.taNumber + "' next='" + nextItem.taNumber + "'")
+                                            return getChangeoverFallback(prevItem, nextItem);
+                                        }
+                                        return changeoverCalculationThing.GetChangeoverPlanItem({
+                                            prevItem: prevItem,
+                                            nextItem: nextItem,
+                                            productionLine: me.name
+                                        });
+                                    } //> getChangeover(...)
+                                    //>----------------------------------------------------------------------------
+                                    
+                                    function getChangeoverFallback(prevItem, newItem) {
                                         // BayerProductionPlanDataShape entry object
                                         var newEntry = new Object();
                                         newEntry.productId = "Cambio"; // STRING
@@ -932,7 +1033,101 @@
                                     } //> parseIntSafe(...)
                                     //>----------------------------------------------------------------------------
                                     
-                                    var SERVICE_NAME = "LoadPlan(Base)";
+                                    function DEBUG(message) {
+                                        logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> DEBUG
+                                    
+                                    function TRACE(message) {
+                                        logger.trace(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> TRACE
+                                    
+                                    function ERROR(message) {
+                                        logger.error(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> ERROR
+                                    
+                                    function WARNING(message) {
+                                        logger.warn(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> WARNING
+                                    
+                                    function INFO(message) {
+                                        logger.info(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> INFO
+                                    //>----------------------------------------------------------------------------
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="RecalculatePlanChangeovers">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //
+                                    // RecalculatePlanChangeovers service
+                                    // * simulate - BOOLEAN
+                                    
+                                    var SERVICE_NAME = "RecalculatePlanChangeovers";
+                                    var lineConfig = me.GetLineConfiguration();
+                                    var changeoverCalculationThingName = lineConfig.changeoverCalculationThing;
+                                    var changeoverCalculationThing = null;
+                                    if (!!changeoverCalculationThingName) {
+                                        changeoverCalculationThing = Things[changeoverCalculationThingName];
+                                    }
+                                    var dataProvider = Things["BayerDBDataProvider"];
+                                    var productionPlan = me.GetProductionPlan();
+                                    productionPlan.Delete({ status: "COMPLETED" });
+                                    var numRows = productionPlan.rows.length;
+                                    var changeover = null, prev = null, next = null;
+                                    for (let idx = 0; idx < numRows; idx++) {
+                                        let current = productionPlan.rows[idx];
+                                        if (!idx && current.productId == 'Cambio') {
+                                            continue; // skip!
+                                        }
+                                        if (!prev && current.productId != 'Cambio') {
+                                            changeover = null;
+                                            prev = current;
+                                        } else if (!!prev && !changeover && !next && current.productId == 'Cambio') {
+                                            changeover = current;
+                                        } else if (!next && current.productId != 'Cambio') {
+                                            next = current;
+                                        }
+                                        if (!!prev && !!changeover && !!next) {
+                                            let beforeHours = changeover.targetHours;
+                                            let afterHours = changeoverCalculationThing.GetChangeoverTime({
+                                                prevItem: prev,
+                                                nextItem: next,
+                                                productionLine: me.name
+                                            });
+                                            DEBUG("Changeover time: '" + afterHours + "' for prev='" + prev.taNumber +
+                                                "' next='" + next.taNumber + "' id='" + changeover.id + "'");
+                                            /*console.log("prev='" + prev.id + "' changeover='" + changeover.id +
+                                                "' next='" + next.id + "' before='" + beforeHours +
+                                                "' after='" + afterHours + "'");*/
+                                            if (!simulate && !!changeover.id) {
+                                                dataProvider.UpdateProductionPlanTargetHours({
+                                                    id: changeover.id,
+                                                    targetHours: afterHours
+                                                });
+                                            }
+                                            changeover.targetHours = afterHours;
+                                            changeover.remainingHours = afterHours;
+                                            changeover = null;
+                                            prev = next;
+                                            next = null;
+                                        }
+                                    } //# for each production plan row
+                                    var result = productionPlan;
+                                    //>----------------------------------------------------------------------------
                                     
                                     function DEBUG(message) {
                                         logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
@@ -954,6 +1149,56 @@
                                         logger.info(me.name + ":" + SERVICE_NAME + ": " + message);
                                     } //> INFO
                                     //>----------------------------------------------------------------------------
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="SetChangeoverSplitTimes">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // 
+                                    // SetChangeoverSplitTimes service
+                                    // * splitTimes - INFOTABLE
+                                    
+                                    var output = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        infoTableName: "result" /* STRING */,
+                                        dataShapeName: "BayerChangeoversSplitTimeDelays" /* DATASHAPENAME */
+                                    });
+                                    var result = output;
+                                    var entry = {};
+                                    var fields = output.dataShape.fields;
+                                    var numRows = 0;
+                                    if(!!splitTimes && !!splitTimes.rows) {
+                                        numRows = splitTimes.rows.length;
+                                    }
+                                    for(let idx=0; idx<numRows; idx++) {
+                                        let row = splitTimes.rows[idx];
+                                        if(!fields[row.fieldName]) {
+                                            continue; // skip!
+                                        }
+                                        entry[row.fieldName] = row.value;
+                                    } //# for each input row
+                                    output.AddRow(entry);
+                                    
+                                    if(!!updateTable) {
+                                        me.SetConfigurationTable({
+                                            tableName: "Changeover_SplitTimes", // STRING - Configuration table name
+                                            configurationTable: output, // INFOTABLE - Configuration table content
+                                            persistent: true, // BOOLEAN - Persist these changes
+                                        });
+                                    }
                                     ]]>
                                     </code>
                                 </Row>
