@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-05-25T19:55:21.645Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-06-10T14:17:49.311Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -177,6 +177,7 @@
                         <FieldDefinitions>
                             <FieldDefinition aspect.defaultValue="90" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="INTEGER" description="" name="additionalChangeoverTime" ordinal="1"/>
                             <FieldDefinition aspect.defaultValue="false" aspect.isPrimaryKey="true" baseType="BOOLEAN" description="" name="allowManualAdjustment" ordinal="8"/>
+                            <FieldDefinition aspect.defaultValue="BayerChangeoverDefaultCalculationThing" aspect.isPrimaryKey="true" aspect.thingShape="BayerChangeoverCalculationShape" baseType="THINGNAME" description="Changeover Calculation Thing Name" name="changeoverCalculationThing" ordinal="9"/>
                             <FieldDefinition aspect.defaultValue="2.3" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopBreakdownThreshold" ordinal="6"/>
                             <FieldDefinition aspect.defaultValue="3.0" aspect.isPrimaryKey="true" aspect.units="occurences" baseType="NUMBER" description="" name="delayMicrostopCountMax" ordinal="5"/>
                             <FieldDefinition aspect.defaultValue="5.0" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopTimeMax" ordinal="4"/>
@@ -189,6 +190,11 @@
                         <Row>
                             <additionalChangeoverTime>90</additionalChangeoverTime>
                             <allowManualAdjustment>false</allowManualAdjustment>
+                            <changeoverCalculationThing>
+                            <![CDATA[
+                            BayerChangeoverDefaultCalculationThing
+                            ]]>
+                            </changeoverCalculationThing>
                             <delayMicrostopBreakdownThreshold>2.3</delayMicrostopBreakdownThreshold>
                             <delayMicrostopCountMax>3.0</delayMicrostopCountMax>
                             <delayMicrostopTimeMax>5.0</delayMicrostopTimeMax>
@@ -245,7 +251,7 @@
                             <bundleFormatChange>30</bundleFormatChange>
                             <groundFoilChange>60</groundFoilChange>
                             <orderChange>120</orderChange>
-                            <productChange>30</productChange>
+                            <productChange>60</productChange>
                         </Row>
                     </Rows>
                 </ConfigurationTable>
@@ -255,6 +261,7 @@
             <RemoteServiceBindings/>
             <RemoteEventBindings/>
             <AlertConfigurations>
+                <AlertDefinitions name="accidentsCount"/>
                 <AlertDefinitions name="displayName"/>
             </AlertConfigurations>
             <ThingShape>
@@ -517,7 +524,9 @@
                 </Permissions>
             </InstanceRunTimePermissions>
             <InstanceVisibilityPermissions>
-                <Visibility/>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
             </InstanceVisibilityPermissions>
         </ThingTemplate>
     </ThingTemplates>

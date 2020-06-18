@@ -15,8 +15,8 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-05-09T21:09:46.140Z"
-         name="BayerCompleteConfirmPopup"
+         lastModifiedDate="2020-06-09T13:10:12.588Z"
+         name="BayerCustomChangeoverConfigTANumbersPopup"
          projectName="BayerIoT"
          rows="0.0"
          tags="Applications:Bayer">
@@ -43,7 +43,39 @@
                 <FieldDefinition
                  aspect.bindingDirection="BOTH"
                  aspect.isMandatory="false"
-                 aspect.ordinal="0"
+                 aspect.ordinal="6"
+                 baseType="STRING"
+                 description=""
+                 name="blisterSize"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="8"
+                 baseType="STRING"
+                 description=""
+                 name="blistersPerFoldedBox"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="4"
+                 baseType="STRING"
+                 description=""
+                 name="blisterType"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="9"
+                 baseType="STRING"
+                 description=""
+                 name="bundleFormat"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="12"
                  baseType="STRING"
                  description=""
                  name="clickedButton"
@@ -51,13 +83,87 @@
                 <FieldDefinition
                  aspect.bindingDirection="BOTH"
                  aspect.isMandatory="false"
-                 aspect.ordinal="1"
-                 baseType="INTEGER"
+                 aspect.ordinal="7"
+                 baseType="STRING"
                  description=""
-                 name="editedQuantity"
+                 name="foldedBoxFormat"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="1"
+                 baseType="STRING"
+                 description=""
+                 name="formatType"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="5"
+                 baseType="STRING"
+                 description=""
+                 name="groundFoil"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="10"
+                 baseType="BOOLEAN"
+                 description=""
+                 name="ifEditClicked"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="11"
+                 baseType="BOOLEAN"
+                 description=""
+                 name="ifOKClicked"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="3"
+                 baseType="STRING"
+                 description=""
+                 name="productDescription"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="2"
+                 baseType="STRING"
+                 description=""
+                 name="productId"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="13"
+                 baseType="STRING"
+                 description=""
+                 name="productType"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="14"
+                 baseType="STRING"
+                 description=""
+                 name="selectedKey"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="0"
+                 baseType="STRING"
+                 description=""
+                 name="taNumber"
                  ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
-            <Things></Things>
+            <Things>
+                <Thing>BayerTANumbersDataTable</Thing>
+            </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates></ThingTemplates>
             <mashupContent>
@@ -65,6 +171,13 @@
             {
               "CustomMashupCss" : "",
               "Data" : {
+                "DynamicThings_BayerDBDataProvider" : {
+                  "DataName" : "DynamicThings_BayerDBDataProvider",
+                  "EntityName" : "BayerDBDataProvider",
+                  "EntityType" : "DynamicThings",
+                  "Id" : "229ce7b1-11e6-408a-b96e-39ffac55b38c",
+                  "Services" : [ ]
+                },
                 "Session" : {
                   "DataName" : "Session",
                   "EntityName" : "",
@@ -78,6 +191,21 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerTANumbersDataTable" : {
+                  "DataName" : "Things_BayerTANumbersDataTable",
+                  "EntityName" : "BayerTANumbersDataTable",
+                  "EntityType" : "Things",
+                  "Id" : "8507eea3-fae1-4516-b13f-b5e1bde61234",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "c76c6325-8a61-4d23-a073-7aac95d4831d",
+                    "Name" : "GetDataTableEntryByKey",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetDataTableEntryByKey"
                   } ]
                 },
                 "UserExtensions" : {
@@ -129,7 +257,49 @@
                 "TargetId" : "eventsrouter-14",
                 "TargetSection" : ""
               }, {
-                "Id" : "525bac1b-4362-4820-8582-caaef85935f5",
+                "Id" : "c890db5f-a632-49b0-b0f3-721f25c6cff3",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Text",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "taNumber",
+                  "TargetPropertyBaseType" : "STRING"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "ptcstextfield-17",
+                "SourceSection" : "",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
+                "TargetSection" : ""
+              }, {
+                "Id" : "abf07522-588f-43d4-8015-9264d5152701",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Text",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "formatType",
+                  "TargetPropertyBaseType" : "STRING"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "ptcstextfield-19",
+                "SourceSection" : "",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
+                "TargetSection" : ""
+              }, {
+                "Id" : "8fdd658f-6cbd-49e2-a7a0-05326c76d879",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "ifEditClicked",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "TargetProperty" : "Disabled",
+                  "TargetPropertyBaseType" : "BOOLEAN"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "ptcstextfield-17",
+                "TargetSection" : ""
+              }, {
+                "Id" : "ff70540e-7f76-4831-8a85-e475d78a611d",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "Output",
                   "SourcePropertyBaseType" : "STRING",
@@ -143,20 +313,133 @@
                 "TargetId" : "mashup-root",
                 "TargetSection" : ""
               }, {
-                "Id" : "bc357c2f-97e0-49fc-9de8-91690efee9c4",
+                "Id" : "adc3f384-cdbf-4ca6-b59f-2ff6eae1a824",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "Output",
-                  "SourcePropertyBaseType" : "NUMBER",
+                  "SourcePropertyBaseType" : "STRING",
                   "SourcePropertyType" : "Property",
-                  "TargetProperty" : "editedQuantity",
-                  "TargetPropertyBaseType" : "INTEGER",
+                  "TargetProperty" : "Input3",
+                  "TargetPropertyBaseType" : "STRING",
                   "TargetPropertyType" : "property"
                 } ],
                 "SourceArea" : "UI",
-                "SourceId" : "expression-19",
+                "SourceId" : "expression-26",
                 "SourceSection" : "",
-                "TargetArea" : "Mashup",
-                "TargetId" : "mashup-root",
+                "TargetArea" : "UI",
+                "TargetId" : "eventsrouter-14",
+                "TargetSection" : ""
+              }, {
+                "Id" : "c1990b68-ac1a-40a1-af84-4e4feac860d9",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "selectedKey",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "key",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetDataTableEntryByKey",
+                "TargetSection" : "Things_BayerTANumbersDataTable"
+              }, {
+                "Id" : "7451bae3-1ee2-462f-8b35-d71cbccbe49d",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "ifEditClicked",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "ifEditClicked",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "validator-27",
+                "TargetSection" : ""
+              }, {
+                "Id" : "8d0372ab-90c2-4f7e-90ae-c4358733d99a",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "formatType",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetDataTableEntryByKey",
+                "SourceSection" : "Things_BayerTANumbersDataTable",
+                "TargetArea" : "UI",
+                "TargetId" : "ptcstextfield-19",
+                "TargetSection" : ""
+              }, {
+                "Id" : "649fcf6d-d080-4716-ac63-d48094a43c97",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "taNumber",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Text",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetDataTableEntryByKey",
+                "SourceSection" : "Things_BayerTANumbersDataTable",
+                "TargetArea" : "UI",
+                "TargetId" : "ptcstextfield-17",
+                "TargetSection" : ""
+              }, {
+                "Id" : "177d3546-c9f0-47e7-97af-4ba57de0790a",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Disabled",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-28",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "ptcsbutton-7",
+                "TargetSection" : ""
+              }, {
+                "Id" : "a684f049-cd30-4e4c-a310-40e854ff3dbb",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Text",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "formatTypeValue",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "ptcstextfield-19",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-28",
+                "TargetSection" : ""
+              }, {
+                "Id" : "e2b036a0-a256-4c35-b044-a2852a58a618",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Text",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "TANumberValue",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "ptcstextfield-17",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-28",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
@@ -190,27 +473,45 @@
                 "EventHandlerService" : "CloseIfPopup",
                 "EventTriggerArea" : "UI",
                 "EventTriggerEvent" : "Changed",
-                "EventTriggerId" : "eventsrouter-14",
+                "EventTriggerId" : "expression-15",
                 "EventTriggerSection" : "",
-                "Id" : "e9ea94e2-92b6-4a8b-993c-e2c8d8f494a7"
+                "Id" : "81642206-3333-43a6-bfde-23f3be690b9c"
+              }, {
+                "EventHandlerArea" : "Mashup",
+                "EventHandlerId" : "mashup-root",
+                "EventHandlerService" : "CloseIfPopup",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Changed",
+                "EventTriggerId" : "expression-16",
+                "EventTriggerSection" : "",
+                "Id" : "87de4ebc-6e06-442a-9992-a9325bf6e315"
               }, {
                 "EventHandlerArea" : "UI",
-                "EventHandlerId" : "expression-19",
+                "EventHandlerId" : "expression-26",
                 "EventHandlerService" : "Evaluate",
-                "EventTriggerArea" : "UI",
-                "EventTriggerEvent" : "Clicked",
-                "EventTriggerId" : "ptcsbutton-7",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
-                "Id" : "40ff62df-5978-4be8-b96b-71ff5fda93f0"
+                "Id" : "fef32eea-217f-4e66-839e-5df1f4212c32"
               }, {
                 "EventHandlerArea" : "UI",
-                "EventHandlerId" : "expression-19",
+                "EventHandlerId" : "validator-27",
                 "EventHandlerService" : "Evaluate",
-                "EventTriggerArea" : "UI",
-                "EventTriggerEvent" : "Clicked",
-                "EventTriggerId" : "ptcsbutton-6",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
-                "Id" : "7f5bc751-bd19-403f-96d5-e5059b3e4279"
+                "Id" : "bd36f9b3-1c20-4217-beb4-62eb6a8e1c69"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerTANumbersDataTable",
+                "EventHandlerService" : "GetDataTableEntryByKey",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "True",
+                "EventTriggerId" : "validator-27",
+                "EventTriggerSection" : " ",
+                "Id" : "1e0fc17a-1a52-41e9-a8a0-07d3314f404a"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -241,18 +542,7 @@
                   "ShowDataLoading" : true,
                   "Style" : "DefaultMashupStyle",
                   "StyleProperties" : {
-                    "data" : {
-                      "ptcslabel-21" : {
-                        "parts" : {
-                          "$" : {
-                            "$" : {
-                              "font-size" : "14px"
-                            }
-                          }
-                        },
-                        "widget" : "ptcs-label"
-                      }
-                    },
+                    "data" : { },
                     "meta" : {
                       "type" : "WidgetStyler",
                       "version" : "1.0"
@@ -279,18 +569,125 @@
                     },
                     "BaseType" : "STRING",
                     "Description" : "",
+                    "ParameterName" : "taNumber"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "formatType"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "productId"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "productDescription"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "blisterType"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "groundFoil"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "blisterSize"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "foldedBoxFormat"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "blistersPerFoldedBox"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "bundleFormat"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "BOOLEAN",
+                    "DefaultValue" : false,
+                    "Description" : "",
+                    "ParameterName" : "ifEditClicked"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "BOOLEAN",
+                    "DefaultValue" : false,
+                    "Description" : "",
+                    "ParameterName" : "ifOKClicked"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
                     "ParameterName" : "clickedButton"
                   }, {
                     "Aspects" : {
                       "bindingDirection" : "BOTH",
                       "isMandatory" : false
                     },
-                    "BaseType" : "INTEGER",
+                    "BaseType" : "STRING",
                     "Description" : "",
-                    "ParameterName" : "editedQuantity"
+                    "ParameterName" : "productType"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "selectedKey"
                   } ],
-                  "editedQuantity" : 0,
-                  "id_index" : 21,
+                  "id_index" : 28,
+                  "ifEditClicked" : false,
+                  "ifOKClicked" : false,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -400,7 +797,7 @@
                           "ContainerClass" : "",
                           "Description" : "Panel-Floating",
                           "DisplayName" : "Panel-Floating",
-                          "Height" : 50,
+                          "Height" : 180,
                           "HideScrollbars" : true,
                           "HorizontalAnchor" : "center",
                           "Id" : "panel-9",
@@ -413,34 +810,67 @@
                           "Type" : "panel",
                           "VerticalAnchor" : "middle",
                           "Visible" : true,
-                          "Width" : 200,
+                          "Width" : 335,
                           "Z-index" : 10,
                           "__TypeDisplayName" : "Panel"
                         },
                         "Widgets" : [ {
                           "Properties" : {
                             "Area" : "UI",
-                            "DisclosureControl" : "show-more",
-                            "DisplayName" : "Label-Message",
-                            "HorizontalAlignment" : "center",
-                            "Id" : "ptcslabel-21",
-                            "LabelText" : "[[Bayer.ConfirmComplete]]",
-                            "LabelType" : "label",
+                            "Counter" : false,
+                            "Description" : "Textfield-TANumber",
+                            "Disabled" : false,
+                            "DisplayName" : "Textfield-TANumber",
+                            "HasText" : false,
+                            "Id" : "ptcstextfield-17",
+                            "Label" : "[[Bayer.TANumber]]",
+                            "LabelAlignment" : "left",
                             "LastContainer" : false,
                             "Left" : 0,
-                            "MultiLine" : false,
+                            "MaxNumberOfCharacters" : 100,
+                            "Password" : false,
+                            "ReadOnly" : false,
                             "ResponsiveLayout" : false,
+                            "ShowClearText" : true,
                             "ShowDataLoading" : true,
-                            "Top" : 0,
-                            "Type" : "ptcslabel",
+                            "TabSequence" : 0,
+                            "TextAlignment" : "left",
+                            "Top" : 10,
+                            "Type" : "ptcstextfield",
                             "UseTheme" : true,
-                            "VerticalAlignment" : "flex-start",
                             "Visible" : true,
-                            "Width" : 200,
+                            "Width" : 320,
                             "Z-index" : 10,
-                            "__TypeDisplayName" : "Label",
-                            "overflowShowLessTxt" : "[[showLess]]",
-                            "overflowShowMoreTxt" : "[[showMore]]"
+                            "__TypeDisplayName" : "Text Field"
+                          },
+                          "Widgets" : [ ]
+                        }, {
+                          "Properties" : {
+                            "Area" : "UI",
+                            "Counter" : false,
+                            "Disabled" : false,
+                            "DisplayName" : "Textfield-FormatType",
+                            "HasText" : false,
+                            "Id" : "ptcstextfield-19",
+                            "Label" : "[[Bayer.FormatType]]",
+                            "LabelAlignment" : "left",
+                            "LastContainer" : false,
+                            "Left" : 0,
+                            "MaxNumberOfCharacters" : 100,
+                            "Password" : false,
+                            "ReadOnly" : false,
+                            "ResponsiveLayout" : false,
+                            "ShowClearText" : true,
+                            "ShowDataLoading" : true,
+                            "TabSequence" : 0,
+                            "TextAlignment" : "left",
+                            "Top" : 75,
+                            "Type" : "ptcstextfield",
+                            "UseTheme" : true,
+                            "Visible" : true,
+                            "Width" : 320,
+                            "Z-index" : 10,
+                            "__TypeDisplayName" : "Text Field"
                           },
                           "Widgets" : [ ]
                         } ]
@@ -481,6 +911,7 @@
                       "Properties" : {
                         "Area" : "UI",
                         "Columns" : 1,
+                        "Description" : "Footer-Layout",
                         "DisplayName" : "Footer-Layout",
                         "Footer" : false,
                         "FooterHeight" : 0,
@@ -677,7 +1108,7 @@
                     "Id" : "eventsrouter-14",
                     "LastContainer" : false,
                     "Left" : 0,
-                    "NumberOfInputs" : "2",
+                    "NumberOfInputs" : "3",
                     "ShowDataLoading" : true,
                     "Top" : 0,
                     "Type" : "eventsrouter",
@@ -692,7 +1123,7 @@
                     "AutoEvaluate" : false,
                     "DataChangeType" : "ALWAYS",
                     "DisplayName" : "clickedCancel",
-                    "Expression" : "\"cancel\";",
+                    "Expression" : "\"Cancel\";",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-15",
@@ -715,7 +1146,7 @@
                     "AutoEvaluate" : false,
                     "DataChangeType" : "ALWAYS",
                     "DisplayName" : "clickedOK",
-                    "Expression" : "\"ok\";",
+                    "Expression" : "\"OK\";",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-16",
@@ -737,14 +1168,14 @@
                     "Area" : "UI",
                     "AutoEvaluate" : false,
                     "DataChangeType" : "ALWAYS",
-                    "DisplayName" : "setQtyToZero",
-                    "Expression" : "0;",
+                    "DisplayName" : "clearButtonId",
+                    "Expression" : "\"\";",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
-                    "Id" : "expression-19",
+                    "Id" : "expression-26",
                     "LastContainer" : false,
                     "Left" : 0,
-                    "OutputBaseType" : "NUMBER",
+                    "OutputBaseType" : "STRING",
                     "ShowDataLoading" : true,
                     "Top" : 0,
                     "Type" : "expression",
@@ -753,6 +1184,81 @@
                     "Z-index" : 10,
                     "__TypeDisplayName" : "Expression",
                     "_currentParameterDefs" : [ ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DisplayName" : "editLoadEntry",
+                    "Expression" : "!!ifEditClicked;",
+                    "Height" : 28,
+                    "Id" : "validator-27",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "Output" : true,
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "validator",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Validator",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "BOOLEAN",
+                      "DefaultValue" : false,
+                      "Description" : "",
+                      "ParameterName" : "ifEditClicked",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "ifEditClicked"
+                    } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : true,
+                    "DataChangeType" : "ALWAYS",
+                    "DisplayName" : "buttonOKDisabled",
+                    "Expression" : "(!formatTypeValue || !TANumberValue) ? true : false;",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-28",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "BOOLEAN",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "STRING",
+                      "Description" : "",
+                      "ParameterName" : "formatTypeValue",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "formatTypeValue"
+                    }, {
+                      "BaseType" : "STRING",
+                      "Description" : "",
+                      "ParameterName" : "TANumberValue",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "TANumberValue"
+                    } ]
                   },
                   "Widgets" : [ ]
                 } ]

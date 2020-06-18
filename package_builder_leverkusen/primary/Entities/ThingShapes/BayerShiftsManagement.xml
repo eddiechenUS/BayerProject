@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-05-05T22:54:04.255Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-06-04T18:44:11.900Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="lastShiftsUpdate" ordinal="4"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="previousCycleCounter" ordinal="2"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="Shifts" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="Shifts" description="" isLocalOnly="false" name="lastShiftsUpdate" ordinal="4"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="Shifts" description="" isLocalOnly="false" name="previousCycleCounter" ordinal="2"/>
             </PropertyDefinitions>
             <ServiceDefinitions>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CalculateShiftsFromNow">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CalculateShiftsFromNow">
                     <ResultType aspect.dataShape="BayerShiftSchedulesDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.defaultValue="1" aspect.isRequired="true" baseType="STRING" description="" name="nrOfShifts" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetAvailability">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetAvailability">
                     <ResultType baseType="INTEGER" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" aspect.maximumValue="23" aspect.minimumValue="0" baseType="INTEGER" description="" name="hour" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformance">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformance">
                     <ResultType aspect.dataShape="BayerDailyPerformanceDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.defaultValue="6" baseType="INTEGER" description="" name="daysInThePast" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformanceForTimeframe">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformanceForTimeframe">
                     <ResultType aspect.dataShape="BayerDailyPerformanceDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="2"/>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNearestChangeoverFromSchedule">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNearestChangeoverFromSchedule">
                     <ResultType aspect.dataShape="BayerScheduleItemDbDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="fromTime" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetPcsPerShift">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetPcsPerShift">
                     <ResultType aspect.dataShape="PcsPerShiftDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="shiftStartTime" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftEvents">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftEvents">
                     <ResultType aspect.dataShape="ShiftEventsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="shiftScheduleId" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftsFromNow">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftsFromNow">
                     <ResultType aspect.dataShape="BayerShiftSchedulesDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.defaultValue="30" aspect.isRequired="true" aspect.maximumValue="60" aspect.minimumValue="6" aspect.units="minutes" baseType="INTEGER" description="MUST BE DIVISIBLE BY 6!!!!!" name="interval" ordinal="3"/>
@@ -59,15 +59,15 @@
                         <FieldDefinition aspect.defaultValue="0" aspect.isRequired="true" baseType="STRING" description="" name="nrOfPrevShifts" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="true" category="" description="Executed at the beginning of each shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ScheduleShifts">
+                <ServiceDefinition aspect.isAsync="true" category="Shifts" description="Executed at the beginning of each shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ScheduleShifts">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateCurrentShiftId">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateCurrentShiftId">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="true" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShift">
+                <ServiceDefinition aspect.isAsync="true" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShift">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="ScheduledEvent" aspect.isRequired="true" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
