@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2020-05-22T10:28:11.223Z"
+         lastModifiedDate="2020-06-06T22:12:06.398Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -1424,6 +1424,11 @@
                              description=""
                              name="tabletsPerBlister"
                              ordinal="23"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description="TA Number"
+                             name="taNumber"
+                             ordinal="25"></FieldDefinition>
                             <FieldDefinition
                              aspect.isRequired="true"
                              baseType="NUMBER"
@@ -3032,6 +3037,7 @@
                                         <![CDATA[
                                         SELECT TOP (1) [id]
                                               ,[productionLine]
+                                              ,[taNumber]
                                               ,[orderNr]
                                               ,[productId]
                                               ,[productDescription]
@@ -3380,6 +3386,7 @@
                                         <![CDATA[
                                         SELECT d.[id]
                                               ,d.[productionLine]
+                                              ,d.[taNumber]
                                               ,d.[orderNr]
                                               ,d.[productId]
                                               ,d.[productDescription]
@@ -3454,6 +3461,7 @@
                                         <![CDATA[
                                         SELECT d.[id]
                                               ,d.[productionLine]
+                                              ,d.[taNumber]
                                               ,d.[orderNr]
                                               ,d.[productId]
                                               ,d.[productDescription]
@@ -4276,6 +4284,7 @@
                                         <![CDATA[
                                         INSERT INTO [dbo].[ProductionPlan]
                                                    ([productionLine]
+                                                   ,[taNumber]
                                                    ,[orderNr]
                                                    ,[productId]
                                                    ,[productDescription]
@@ -4302,6 +4311,7 @@
                                              OUTPUT INSERTED.id
                                              VALUES
                                                    ([[productionLine]]
+                                                   ,[[taNumber]]
                                                    ,[[orderNr]]
                                                    ,[[productId]]
                                                    ,[[productDescription]]

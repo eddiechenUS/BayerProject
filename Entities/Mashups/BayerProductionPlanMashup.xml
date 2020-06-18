@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-05-20T06:25:33.668Z"
+         lastModifiedDate="2020-06-15T13:06:26.857Z"
          name="BayerProductionPlanMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -59,6 +59,7 @@
             </ParameterDefinitions>
             <Things>
                 <Thing>BayerProductionPlanPage</Thing>
+                <Thing>BayerUtilities</Thing>
                 <Thing>BayerDBDataProvider</Thing>
             </Things>
             <ThingShapes></ThingShapes>
@@ -91,6 +92,14 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "InsertStandbyBelow"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "286fd1d0-9b1e-4a7c-9dff-e2a5232e48a5",
+                    "Name" : "RecalculatePlanChangeovers",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "RecalculatePlanChangeovers"
                   } ]
                 },
                 "Session" : {
@@ -166,6 +175,24 @@
                     },
                     "RefreshInterval" : 0,
                     "Target" : "FilterProductionPlan"
+                  } ]
+                },
+                "Things_BayerUtilities" : {
+                  "DataName" : "Things_BayerUtilities",
+                  "EntityName" : "BayerUtilities",
+                  "EntityType" : "Things",
+                  "Id" : "1fb9e01c-ec98-4610-bf5d-36f18b56007e",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "c334e8ed-75a8-426d-b3bc-cd1b5ac20744",
+                    "Name" : "CheckUserInRole",
+                    "Parameters" : {
+                      "role" : "Role.BayerSuperUser",
+                      "role2" : "Role.BayerAdminUser"
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "CheckUserInRole"
                   } ]
                 },
                 "UserExtensions" : {
@@ -600,6 +627,57 @@
                 "TargetArea" : "UI",
                 "TargetId" : "validator-74",
                 "TargetSection" : ""
+              }, {
+                "Id" : "aa463d8d-0528-4411-98bc-0d95f2c118b1",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Visible",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CheckUserInRole",
+                "SourceSection" : "Things_BayerUtilities",
+                "TargetArea" : "UI",
+                "TargetId" : "button-61",
+                "TargetSection" : ""
+              }, {
+                "Id" : "0e4cf144-fff6-4f8d-a404-e6eb28ebfd93",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Visible",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CheckUserInRole",
+                "SourceSection" : "Things_BayerUtilities",
+                "TargetArea" : "UI",
+                "TargetId" : "button-65",
+                "TargetSection" : ""
+              }, {
+                "Id" : "8e3be11e-c58f-4c07-ab82-f30738420e96",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "userRoleEnabled",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CheckUserInRole",
+                "SourceSection" : "Things_BayerUtilities",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-66",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -653,15 +731,6 @@
                 "EventTriggerId" : "GetProductionPlanStatusFormatted",
                 "EventTriggerSection" : "Things_BayerProductionPlanPage",
                 "Id" : "ab8095e2-e87b-426e-ab02-94d6a8d7f383"
-              }, {
-                "EventHandlerArea" : "UI",
-                "EventHandlerId" : "expression-66",
-                "EventHandlerService" : "Evaluate",
-                "EventTriggerArea" : "Mashup",
-                "EventTriggerEvent" : "Loaded",
-                "EventTriggerId" : "mashup-root",
-                "EventTriggerSection" : "",
-                "Id" : "0e59e4f5-83b6-43b5-bf46-d78cf2c96891"
               }, {
                 "EventHandlerArea" : "UI",
                 "EventHandlerId" : "expression-67",
@@ -770,6 +839,42 @@
                 "EventTriggerId" : "UpdateProductionPlanTargetHours",
                 "EventTriggerSection" : "Things_BayerDBDataProvider",
                 "Id" : "1d6dd345-0c07-4f5a-9c0d-b74c508aef05"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "RecalculatePlanChangeovers",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-75",
+                "EventTriggerSection" : "",
+                "Id" : "06b1af90-c3c4-4a68-9dc0-2c153853ab25"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetProperties",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "RecalculatePlanChangeovers",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "2647f94b-d7d6-43cf-8a7d-ff2043616e40"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerUtilities",
+                "EventHandlerService" : "CheckUserInRole",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "5a2f7e28-6d34-49b2-8a31-b9d797efbb6a"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-66",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "CheckUserInRole",
+                "EventTriggerSection" : "Things_BayerUtilities",
+                "Id" : "2e8e9494-37c1-44f8-8168-437e2fa88cc7"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -830,7 +935,7 @@
                     "Description" : "",
                     "ParameterName" : "buttonClickedLabel"
                   } ],
-                  "id_index" : 74,
+                  "id_index" : 75,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -1485,7 +1590,7 @@
                                 "LastContainer" : false,
                                 "Left" : 325,
                                 "LeftSidebar" : true,
-                                "LeftSidebarWidth" : 440,
+                                "LeftSidebarWidth" : 600,
                                 "Orientation" : "horizontal",
                                 "PctColumn1" : 100,
                                 "PctColumn2" : 0,
@@ -1635,7 +1740,7 @@
                                       "Id" : "button-64",
                                       "Label" : "[[Bayer.EditStandby]]",
                                       "LastContainer" : false,
-                                      "Left" : 133.99307250976562,
+                                      "Left" : 135,
                                       "ResponsiveLayout" : false,
                                       "RoundedCorners" : true,
                                       "ShowDataLoading" : true,
@@ -1644,7 +1749,7 @@
                                       "TabSequence" : 0,
                                       "ToolTipField" : "",
                                       "ToolTipStyle" : "DefaultTooltipStyle",
-                                      "Top" : 10.44444465637207,
+                                      "Top" : 8,
                                       "Type" : "button",
                                       "Visible" : false,
                                       "Width" : 105,
@@ -1689,6 +1794,47 @@
                                       "Type" : "button",
                                       "Visible" : true,
                                       "Width" : 145,
+                                      "Z-index" : 10,
+                                      "__TypeDisplayName" : "Button",
+                                      "__supportsTooltip" : true
+                                    },
+                                    "Widgets" : [ ]
+                                  }, {
+                                    "Properties" : {
+                                      "ActiveStyle" : "DefaultButtonActiveStyle",
+                                      "Area" : "UI",
+                                      "CancelConfirmationButton" : "button2",
+                                      "ConfirmationButton1Label" : "Yes",
+                                      "ConfirmationButton2Label" : "No",
+                                      "ConfirmationPrompt" : "Do Action?",
+                                      "ConfirmationRequired" : false,
+                                      "ConfirmationTitle" : "Confirm Action",
+                                      "ContextId" : "",
+                                      "DefaultConfirmationButton" : "button1",
+                                      "Description" : "Button-Refresh",
+                                      "Disabled" : false,
+                                      "DisabledStyle" : "DefaultButtonDisabledStyle",
+                                      "DisplayName" : "Button-RefreshChangeovers",
+                                      "FocusStyle" : "DefaultButtonFocusStyle",
+                                      "Height" : 30,
+                                      "HoverStyle" : "Bayer_ButtonBlueHover",
+                                      "IconAlignment" : "left",
+                                      "Id" : "button-75",
+                                      "Label" : "[[Bayer.RefreshChangeovers]]",
+                                      "LastContainer" : false,
+                                      "Left" : 415,
+                                      "ResponsiveLayout" : false,
+                                      "RoundedCorners" : true,
+                                      "ShowDataLoading" : true,
+                                      "SingleClickSelectOnTablets" : true,
+                                      "Style" : "Bayer_ButtonBlue",
+                                      "TabSequence" : 0,
+                                      "ToolTipField" : "",
+                                      "ToolTipStyle" : "DefaultTooltipStyle",
+                                      "Top" : 8,
+                                      "Type" : "button",
+                                      "Visible" : true,
+                                      "Width" : 165,
                                       "Z-index" : 10,
                                       "__TypeDisplayName" : "Button",
                                       "__supportsTooltip" : true
@@ -3224,7 +3370,7 @@
                     "DataChangeType" : "ALWAYS",
                     "Description" : "",
                     "DisplayName" : "editStandbyInvisible",
-                    "Expression" : "intermediate = (tabValue == \"current\" && productDescription == \"standby\");\n(intermediate);",
+                    "Expression" : "if (!userRoleEnabled){\n    false;\n} else {\n    intermediate = (tabValue == \"current\" && productDescription == \"standby\");\n\t(intermediate);\n}",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-66",
@@ -3258,6 +3404,17 @@
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
                       "name" : "productDescription"
+                    }, {
+                      "BaseType" : "BOOLEAN",
+                      "DefaultValue" : false,
+                      "Description" : "",
+                      "ParameterName" : "userRoleEnabled",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "userRoleEnabled"
                     } ]
                   },
                   "Widgets" : [ ]
@@ -3267,13 +3424,13 @@
                     "AutoEvaluate" : true,
                     "DataChangeType" : "ALWAYS",
                     "DisplayName" : "addStandbyEnabled",
-                    "Expression" : "//console.log(\"Add standby value= \" + Output);\n//console.log(\"tabValue value= \" + tabValue);\n//console.log(\"productDescription value= \" + productDescription);\n//(!(tabValue == \"current\" && productDescription != \"standby\" && productDescription != undefined))\nintermediate=(tabValue == \"current\" && productDescription != \"standby\" && productDescription != undefined);\nconsole.log(\"addStandbyEnabled: \" + intermediate);\n(!intermediate);\n",
+                    "Expression" : "//console.log(\"Add standby value= \" + Output);\n//console.log(\"tabValue value= \" + tabValue);\n//console.log(\"productDescription value= \" + productDescription);\n//(!(tabValue == \"current\" && productDescription != \"standby\" && productDescription != undefined))\nintermediate=(tabValue == \"current\" && productDescription != \"standby\" && productDescription != undefined);\n(!intermediate);\n",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-67",
                     "LastContainer" : false,
                     "Left" : 0,
-                    "OutputBaseType" : "BOOLEAN",
+                    "OutputBaseType" : null,
                     "ShowDataLoading" : true,
                     "Top" : 0,
                     "Type" : "expression",
@@ -3420,8 +3577,10 @@
                     "Height" : 28,
                     "Id" : "validator-74",
                     "LastContainer" : false,
+                    "Left" : 0,
                     "Output" : true,
                     "ShowDataLoading" : true,
+                    "Top" : 0,
                     "Type" : "validator",
                     "Visible" : true,
                     "Width" : 200,

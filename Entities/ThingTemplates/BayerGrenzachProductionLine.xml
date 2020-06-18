@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2020-05-27T08:42:16.409Z"
+         lastModifiedDate="2020-06-06T18:03:22.503Z"
          name="BayerGrenzachProductionLine"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -189,6 +189,14 @@
                              name="allowManualAdjustment"
                              ordinal="8"></FieldDefinition>
                             <FieldDefinition
+                             aspect.defaultValue="BayerChangeoverDefaultCalculationThing"
+                             aspect.isPrimaryKey="true"
+                             aspect.thingShape="BayerChangeoverCalculationShape"
+                             baseType="THINGNAME"
+                             description="Changeover Calculation Thing Name"
+                             name="changeoverCalculationThing"
+                             ordinal="9"></FieldDefinition>
+                            <FieldDefinition
                              aspect.defaultValue="2.3"
                              aspect.isPrimaryKey="true"
                              aspect.units="minutes"
@@ -239,6 +247,11 @@
                         <Row>
                             <additionalChangeoverTime>90</additionalChangeoverTime>
                             <allowManualAdjustment>false</allowManualAdjustment>
+                            <changeoverCalculationThing>
+                            <![CDATA[
+                            BayerChangeoverDefaultCalculationThing
+                            ]]>
+                            </changeoverCalculationThing>
                             <delayMicrostopBreakdownThreshold>2.3</delayMicrostopBreakdownThreshold>
                             <delayMicrostopCountMax>3.0</delayMicrostopCountMax>
                             <delayMicrostopTimeMax>5.0</delayMicrostopTimeMax>
@@ -432,6 +445,7 @@
                                         // > BayerGrenzachProductionLine Thing Template
                                         // * data - INFOTABLE
                                         
+                                        var SERVICE_NAME = "LoadPlan(Grenzach)";
                                         var lineConfig = me.GetLineConfiguration();
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
                                         var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName: "BayerProductionPlanDataShape" });
@@ -546,7 +560,7 @@
                                                         result.AddRow(getChangeover(prev, newEntry));
                                                     }
                                                     prev = newEntry;
-                                                    DEBG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
+                                                    DEBUG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
                                                     result.AddRow(newEntry);
                                                 } catch (ex) {
                                                     ERROR("Error parsing row " + idx + ": " + ex + " " + ex.stack);
@@ -605,8 +619,6 @@
                                             return isNaN(parsedVal) ? undefined : parsedVal;
                                         } //> parseIntSafe(...)
                                         //>----------------------------------------------------------------------------
-                                        
-                                        var SERVICE_NAME = "LoadPlan(Grenzach)";
                                         
                                         function DEBUG(message) {
                                             logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);

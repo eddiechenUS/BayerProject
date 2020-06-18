@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="">
+    <Things>
+        <Thing
+         description="Bayer Changeover Leverkusen New Calculation Thing"
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2020-06-07T07:15:13.954Z"
+         name="BayerChangeoverLevNewCalculationThing"
+         projectName="BayerIoT"
+         published="false"
+         tags=""
+         thingTemplate="GenericThing"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:PerformanceDashboard"
+                     type="OrganizationalUnit"></Principal>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions></PropertyDefinitions>
+                <ServiceDefinitions></ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetChangeoverTime">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //
+                                        // GetChangeoverTime service
+                                        // * prevItem - JSON
+                                        // * nextItem - JSON
+                                        // * productionLine - THINGNAME
+                                        
+                                        if (!productionLine) {
+                                            throw "Input 'productionLine' is required!";
+                                        }
+                                        if (!prevItem || !nextItem) {
+                                            throw "Input 'prevItem' or 'nextItem' is required!";
+                                        }
+                                        var lineThing = Things[productionLine];
+                                        if (!lineThing) {
+                                            throw "Input Thing name '" + productionLine + "' is invalid!";
+                                        }
+                                        var lineConfig = lineThing.GetLineConfiguration();
+                                        var splitTimes = lineThing.GetConfigurationTable({ tableName: "Changeover_SplitTimes" });
+                                        var taDataTable = Things["BayerTANumbersDataTable"];
+                                        var formatsDataTable = Things["BayerProductFormatsDataTable"];
+                                        
+                                        var prevFormatType = getFormatType(prevItem.taNumber);
+                                        var nextFormatType = getFormatType(nextItem.taNumber);
+                                        
+                                        var prevProductFormat = getProductFormat(prevFormatType);
+                                        var nextProductFormat = getProductFormat(nextFormatType);
+                                        
+                                        var mapping = {
+                                            "blistersPerFoldedBox": "blisterAmountChange",
+                                            "blisterSize": "blisterSizeChange",
+                                            "blisterType": "blisterTypeChange",
+                                            "foldedBoxFormat": "boxFormatChange",
+                                            "bundleFormat": "bundleFormatChange",
+                                            "groundFoil": "groundFoilChange",
+                                            "ITEM-orderNr": "orderChange",
+                                            "productId": "productChange"
+                                        };
+                                        
+                                        var calculatedAmount = 0.0;
+                                        for (let fieldName in mapping) {
+                                            if (splitTimes.rows.length < 1) {
+                                                break;
+                                            }
+                                            if (fieldName.startsWith("XYZ")) {
+                                                continue;
+                                            }
+                                            let splitTimeField = mapping[fieldName];
+                                            let cmpA = prevProductFormat;
+                                            let cmpB = nextProductFormat;
+                                            if (fieldName.startsWith("ITEM-")) {
+                                                fieldName = fieldName.substr("ITEM-".length);
+                                                cmpA = prevItem;
+                                                cmpB = nextItem;
+                                            }
+                                            if (cmpA[fieldName] != cmpB[fieldName]) {
+                                                let splitTime = splitTimes.rows[0][splitTimeField];
+                                                calculatedAmount += splitTime;
+                                            }
+                                        } //# for each field in mapping
+                                        
+                                        var targetHours = calculatedAmount / 60.0;
+                                        targetHours = Math.round(targetHours * 100.0) / 100.0;
+                                        var result = targetHours;
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function getFormatType(taNumber) {
+                                            if (!taNumber) {
+                                                return "";
+                                            }
+                                            let formatType = "";
+                                            let entries = taDataTable.QueryDataTableEntries({
+                                                query: {
+                                                    filters: {
+                                                        type: "EQ",
+                                                        fieldName: "taNumber",
+                                                        value: taNumber + ""
+                                                    }
+                                                }
+                                            });
+                                            if (!!entries && !!entries.rows) {
+                                                if (entries.rows.length > 0) {
+                                                    formatType = entries.rows[0].formatType;
+                                                    if (!formatType) {
+                                                        formatType = "";
+                                                    }
+                                                }
+                                            }
+                                            return formatType;
+                                        } //> getFormatType(...)
+                                        
+                                        function getProductFormat(formatType) {
+                                            if (!formatType) {
+                                                return {}; // empty object
+                                            }
+                                            let productFormat = {};
+                                            let entries = formatsDataTable.QueryDataTableEntries({
+                                                query: {
+                                                    filters: {
+                                                        type: "EQ",
+                                                        fieldName: "formatType",
+                                                        value: formatType + ""
+                                                    }
+                                                }
+                                            });
+                                            if (!!entries && !!entries.rows) {
+                                                if (entries.rows.length > 0) {
+                                                    let entry = entries.rows[0];
+                                                    for (let fieldName in entries.dataShape.fields) {
+                                                        productFormat[fieldName] = entry[fieldName]; // copy
+                                                    }
+                                                }
+                                            }
+                                            return productFormat;
+                                        } //> getProductFormat(...)
+                                        
+                                        var oldMapping = {
+                                            "blistersPerFoldedBox": "blisterAmountChange",  // Umrechnung Faktor AME
+                                            "tabletsPerBlister": "blisterSizeChange",       // ?
+                                            "blisterType": "blisterTypeChange",             // ?
+                                            "foldedBoxFormat": "boxFormatChange",           // ?
+                                            "XYZ-1": "bundleFormatChange",                  // ?
+                                            "XYZ-2": "groundFoilChange",                    // ?
+                                            "orderNr": "orderChange",                       // Order Number
+                                            "productId": "productChange"                    // Product Number
+                                        };
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
+            <ImplementedShapes>
+                <ImplementedShape
+                 name="BayerChangeoverCalculationShape"
+                 type="ThingShape"></ImplementedShape>
+            </ImplementedShapes>
+            <ThingProperties></ThingProperties>
+        </Thing>
+    </Things>
+</Entities>

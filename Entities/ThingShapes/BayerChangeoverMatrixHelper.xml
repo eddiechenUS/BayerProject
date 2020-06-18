@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="">
+    <ThingShapes>
+        <ThingShape
+         className=""
+         description="Helper Services for Changeover Matrix Data Tables (new)"
+         documentationContent=""
+         homeMashup=""
+         lastModifiedDate="2020-06-18T05:23:40.109Z"
+         name="BayerChangeoverMatrixHelper"
+         projectName="BayerIoT"
+         tags="">
+            <PropertyDefinitions></PropertyDefinitions>
+            <ServiceDefinitions>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="AddRowsWrapper">
+                    <ResultType
+                     baseType="INTEGER"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="INFOTABLE"
+                         description="Input Data"
+                         name="data"
+                         ordinal="1"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="source"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.defaultValue="Thing"
+                         baseType="STRING"
+                         description=""
+                         name="sourceType"
+                         ordinal="3"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="FindProductionLineFromPattern">
+                    <ResultType
+                     baseType="THINGNAME"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="lineNumberPattern"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description="Get Columns Mapping as JSON Object (customized)"
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetColumnMappingJSON">
+                    <ResultType
+                     baseType="JSON"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="true"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="LoadFromCSV">
+                    <ResultType
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.defaultValue=","
+                         baseType="STRING"
+                         description="How to split the CSV file columns?"
+                         name="delimiter"
+                         ordinal="4"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description="Complete File Path"
+                         name="path"
+                         ordinal="1"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.thingTemplate="BayerProductionLine"
+                         baseType="THINGNAME"
+                         description="Production Line Thing Name (might be determined from data)"
+                         name="productionLine"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.defaultValue="BayerCSVRepository"
+                         aspect.thingTemplate="FileRepository"
+                         baseType="THINGNAME"
+                         description="File Repository to search"
+                         name="repository"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.defaultValue="false"
+                         baseType="BOOLEAN"
+                         description=""
+                         name="updateDataTable"
+                         ordinal="5"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+            </ServiceDefinitions>
+            <EventDefinitions></EventDefinitions>
+            <ServiceMappings></ServiceMappings>
+            <ServiceImplementations>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="AddRowsWrapper">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //
+                                    // AddRowsWrapper service 
+                                    // * data - INFOTABLE
+                                    // * source - source
+                                    // * sourceType - sourceType
+                                    
+                                    me.AddOrUpdateDataTableEntries({
+                                    	tags: [] /* TAGS */,
+                                    	location: {latitude:0, longitude:0, elevation:0, units:"WGS84"} /* LOCATION */,
+                                    	source: source /* STRING */,
+                                    	sourceType: sourceType /* STRING */,
+                                    	values: data /* INFOTABLE */
+                                    });
+                                    
+                                    var result = me.GetDataTableEntryCount();
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="FindProductionLineFromPattern">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //
+                                    // FindProductionLineFromPattern service
+                                    // * lineNumberPattern - STRING
+                                    if(!lineNumberPattern) {
+                                        throw "Input 'lineNumberPattern' is required!";
+                                    }
+                                    lineNumberPattern = lineNumberPattern.toLowerCase(); // if extra chars
+                                    var listThings = ThingTemplates["BayerProductionLine"].GetImplementingThings();
+                                    var result = "";
+                                    
+                                    if(listThings.rows.length == 1) {
+                                        let name = (listThings.rows[0].name+"");
+                                        if(name.toLowerCase().indexOf(lineNumberPattern) != -1) {
+                                            result = name;
+                                        }
+                                    } else if(listThings.rows.length > 1) {
+                                        for(let idx=0; idx<listThings.rows.length; idx++) {
+                                            let name = (listThings.rows[idx].name+"");
+                                            if(name.toLowerCase().indexOf(lineNumberPattern) != -1) {
+                                                result = name;
+                                                break;
+                                            }
+                                        } // for each row
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetColumnMappingJSON">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //
+                                    // GetColumnMappingJSON service
+                                    
+                                    // BayerProductFormatsInfoDataShape entry object
+                                    /*var result = {
+                                        "Format type": ["formatType"],
+                                        "Product type": ["productId", "productDescription"], // ?
+                                        "Blister type": ["blisterType"],
+                                        "Ground foil": ["groundFoil"],
+                                        "Blister size": ["blisterSize"],
+                                        "Box format": ["foldedBoxFormat"],
+                                        "Blister amount": ["blistersPerFoldedBox"],
+                                        "Bundle format": ["bundleFormat"]
+                                    };*/
+                                    
+                                    var mappingRow = me.GetConfigurationTable({
+                                        tableName: "ColumnMapping" /* STRING */
+                                    });
+                                    var numRows = mappingRow.rows.length;
+                                    var fields;
+                                    if (numRows > 0) {
+                                        fields = mappingRow.dataShape.fields;
+                                        mappingRow = mappingRow.rows[0];
+                                    }
+                                    var result = {};
+                                    for (let targetName in fields) {
+                                        let sourceName = mappingRow[targetName];
+                                        if (!sourceName) {
+                                            continue;
+                                        }
+                                        if (!result[sourceName]) {
+                                            result[sourceName] = [];
+                                        }
+                                        result[sourceName].push(targetName);
+                                    } //# for each field name
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="LoadFromCSV">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // 
+                                    // LoadFromCSV service
+                                    // * path - STRING
+                                    // * productionLine - THINGNAME
+                                    // * repository - THINGNAME (FileRepository)
+                                    // * delimiter - STRING
+                                    
+                                    if (!path) {
+                                        throw "Input 'path' is required!";
+                                    }
+                                    var determineLine = false;
+                                    if (!productionLine) {
+                                        determineLine = true;
+                                    }
+                                    if (!repository) {
+                                        throw "Input 'repository' is required!";
+                                    }
+                                    if (!delimiter) {
+                                        delimiter = ",";
+                                    }
+                                    var data = Things["BayerUtilities"].LoadCSVGeneric({
+                                        delimiter: delimiter /* STRING */,
+                                        filePath: path /* STRING */,
+                                        repository: repository /* THINGNAME */
+                                    });
+                                    var dataShapeName = me.GetDataShape();
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        infoTableName: "result",
+                                        dataShapeName: dataShapeName
+                                    });
+                                    var extractInfo = me.GetConfigurationTable({
+                                        tableName: "ProductionLineExtractColumn", // STRING - Configuration table name
+                                    });
+                                    if (!!extractInfo && extractInfo.rows.length > 0) {
+                                        // fieldName / partIndex / separator
+                                        extractInfo = extractInfo.rows[0];
+                                    } else {
+                                        extractInfo = undefined;
+                                    }
+                                    function getProductionLine(targetRow) {
+                                        if (!targetRow || !extractInfo) {
+                                            return undefined;
+                                        }
+                                        let value = targetRow[extractInfo.fieldName];
+                                        if (value === undefined || value === null) {
+                                            return undefined;
+                                        }
+                                        if (extractInfo.partIndex < 0) {
+                                            extractInfo.partIndex = 0;
+                                        }
+                                        if (!extractInfo.separator) {
+                                            extractInfo.separator = "-"; // default?
+                                        }
+                                        let splits = (value + "").split(extractInfo.separator);
+                                        if (!!splits.length && extractInfo.partIndex < splits.length) {
+                                            let partValue = splits[extractInfo.partIndex];
+                                            let matched = me.FindProductionLineFromPattern({
+                                                lineNumberPattern: partValue, // STRING
+                                            });
+                                            if (!!matched) {
+                                                if (!!Things[matched]) {
+                                                    return matched;
+                                                }
+                                            }
+                                        }
+                                        return undefined;
+                                    } //> getProductionLine(...)
+                                    var mapping = me.GetColumnMappingJSON();
+                                    var numRows = data.rows.length;
+                                    for (let idx = 0; idx < numRows; idx++) {
+                                        let source = data.rows[idx];
+                                        let target = {};
+                                        for (let sourceColumn in mapping) {
+                                            let value = source[sourceColumn];
+                                            if (value !== undefined && value !== null) {
+                                                let targetColumns = mapping[sourceColumn];
+                                                for (let tIdx = 0; tIdx < targetColumns.length; tIdx++) {
+                                                    let targetColumn = targetColumns[tIdx];
+                                                    target[targetColumn] = value; // map it!
+                                                } //# for each target column
+                                            }
+                                        } //# for each mapped column
+                                        if (Object.keys(target).length < 1) {
+                                            continue;
+                                        }
+                                        if (!!productionLine && !target.productionLine) {
+                                            target.productionLine = productionLine;
+                                        } else {
+                                            let matched = getProductionLine(target);
+                                            if (!!matched) {
+                                                target.productionLine = matched; // fallback
+                                            }
+                                        }
+                                        result.AddRow(target);
+                                    } //# for each parsed data row
+                                    
+                                    if (!!updateDataTable) {
+                                        var source;
+                                        var sourceType;
+                                        if (!!productionLine) {
+                                            source = productionLine;
+                                            sourceType = "Things";
+                                        }
+                                        me.AddRowsWrapper({
+                                            data: result /* INFOTABLE */,
+                                            source: source /* STRING */,
+                                            sourceType: sourceType /* STRING */
+                                        });
+                                    } //? updateDataTable
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+            </ServiceImplementations>
+            <Subscriptions></Subscriptions>
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions>
+                <ConfigurationTableDefinition
+                 category=""
+                 dataShapeName="BayerExtractColumnInfo"
+                 description="How to extract production line id from a given column (if needed)"
+                 isHidden="false"
+                 isMultiRow="false"
+                 name="ProductionLineExtractColumn"
+                 ordinal="5"
+                 source="IMPORT"></ConfigurationTableDefinition>
+            </ConfigurationTableDefinitions>
+            <ConfigurationTables>
+                <ConfigurationTable
+                 description="How to extract production line id from a given column (if needed)"
+                 isMultiRow="false"
+                 name="ProductionLineExtractColumn"
+                 ordinal="5">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="true"
+                             baseType="STRING"
+                             description="Name of the field to extract data from"
+                             name="fieldName"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.defaultValue="0"
+                             aspect.isPrimaryKey="true"
+                             aspect.minimumValue="0"
+                             baseType="INTEGER"
+                             description="Which splitted part to take as meaningful?"
+                             name="partIndex"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="true"
+                             baseType="STRING"
+                             description="Separator to use when splitting the field data"
+                             name="separator"
+                             ordinal="2"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <fieldName></fieldName>
+                            <partIndex>0</partIndex>
+                            <separator>
+                            <![CDATA[
+                            -
+                            ]]>
+                            </separator>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+            </ConfigurationTables>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
+            <InstanceRunTimePermissions>
+                <Permissions
+                 resourceName="*">
+                    <PropertyRead>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
+                         type="User"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="LoadFromCSV">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+            </InstanceRunTimePermissions>
+        </ThingShape>
+    </ThingShapes>
+</Entities>

@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-05-27T08:43:23.580Z"
+         lastModifiedDate="2020-06-06T18:02:27.067Z"
          name="BayerProductionLine_Linie37"
          projectName="BayerIoT"
          published="false"
@@ -191,6 +191,14 @@
                              name="allowManualAdjustment"
                              ordinal="8"></FieldDefinition>
                             <FieldDefinition
+                             aspect.defaultValue="BayerChangeoverDefaultCalculationThing"
+                             aspect.isPrimaryKey="true"
+                             aspect.thingShape="BayerChangeoverCalculationShape"
+                             baseType="THINGNAME"
+                             description="Changeover Calculation Thing Name"
+                             name="changeoverCalculationThing"
+                             ordinal="9"></FieldDefinition>
+                            <FieldDefinition
                              aspect.defaultValue="2.3"
                              aspect.isPrimaryKey="true"
                              aspect.units="minutes"
@@ -241,6 +249,11 @@
                         <Row>
                             <additionalChangeoverTime>90</additionalChangeoverTime>
                             <allowManualAdjustment>false</allowManualAdjustment>
+                            <changeoverCalculationThing>
+                            <![CDATA[
+                            BayerChangeoverDefaultCalculationThing
+                            ]]>
+                            </changeoverCalculationThing>
                             <delayMicrostopBreakdownThreshold>2.3</delayMicrostopBreakdownThreshold>
                             <delayMicrostopCountMax>3.0</delayMicrostopCountMax>
                             <delayMicrostopTimeMax>5.0</delayMicrostopTimeMax>
@@ -429,6 +442,7 @@
                                         // > BayerProductionLine_Linie37 Thing Template
                                         // * data - INFOTABLE
                                         
+                                        var SERVICE_NAME = "LoadPlan(Linie37)";
                                         var lineConfig = me.GetLineConfiguration();
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
                                         var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName: "BayerProductionPlanDataShape" });
@@ -550,7 +564,7 @@
                                                         result.AddRow(getChangeover(prev, newEntry));
                                                     }
                                                     prev = newEntry;
-                                                    DEBG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
+                                                    DEBUG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
                                                     result.AddRow(newEntry);
                                                 } catch (ex) {
                                                     ERROR("Error parsing row " + idx + ": " + ex + " " + ex.stack);
@@ -610,8 +624,6 @@
                                         } //> parseIntSafe(...)
                                         //>----------------------------------------------------------------------------
                                         
-                                        var SERVICE_NAME = "LoadPlan(Linie37)";
-                                        
                                         function DEBUG(message) {
                                             logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
                                         } //> DEBUG
@@ -666,12 +678,12 @@
                 </changeoverComingNotificationSent>
                 <productionAlertLevel>
                     <Value>3</Value>
-                    <Timestamp>2020-05-27T14:24:44.472Z</Timestamp>
+                    <Timestamp>2020-06-18T05:46:18.079Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </productionAlertLevel>
                 <changeoverAlertLevel>
                     <Value>0</Value>
-                    <Timestamp>2020-05-27T14:24:44.472Z</Timestamp>
+                    <Timestamp>2020-06-18T05:46:18.079Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </changeoverAlertLevel>
                 <nearMissesLastModified>
@@ -681,12 +693,12 @@
                 </nearMissesLastModified>
                 <accidentsCount>
                     <Value>0.0</Value>
-                    <Timestamp>2020-05-27T08:20:26.714Z</Timestamp>
+                    <Timestamp>2020-06-16T08:27:11.790Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </accidentsCount>
                 <nearMissesCount>
                     <Value>0.0</Value>
-                    <Timestamp>2020-05-27T08:20:26.714Z</Timestamp>
+                    <Timestamp>2020-06-16T08:27:11.790Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </nearMissesCount>
                 <accidentsLastModified>
@@ -696,7 +708,7 @@
                 </accidentsLastModified>
                 <productionRunning>
                     <Value>false</Value>
-                    <Timestamp>2020-05-27T14:25:00.003Z</Timestamp>
+                    <Timestamp>2020-06-18T05:46:00.001Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </productionRunning>
                 <delayMicrostopCountMax>
@@ -711,7 +723,7 @@
                 </changeoverStartTime>
                 <delayMicrostopTimeStart>
                     <Value>1970-01-01T00:00:00.000Z</Value>
-                    <Timestamp>2020-05-27T14:00:02.684Z</Timestamp>
+                    <Timestamp>2020-06-18T04:44:22.337Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </delayMicrostopTimeStart>
                 <delayMicrostopTimeMax>
@@ -736,12 +748,12 @@
                 </delayMicrostopTimeLessThan>
                 <delayMicrostopCount>
                     <Value>0</Value>
-                    <Timestamp>2020-05-27T14:00:02.684Z</Timestamp>
+                    <Timestamp>2020-06-18T04:44:22.337Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </delayMicrostopCount>
                 <delayMicrostopTime>
                     <Value>0.0</Value>
-                    <Timestamp>2020-05-27T14:00:02.684Z</Timestamp>
+                    <Timestamp>2020-06-18T04:44:22.337Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </delayMicrostopTime>
                 <currentProductKey>
@@ -751,17 +763,17 @@
                 </currentProductKey>
                 <productionsensorvalue>
                     <Value>1.9165799E7</Value>
-                    <Timestamp>2020-05-27T14:25:00.003Z</Timestamp>
+                    <Timestamp>2020-06-18T05:46:00.001Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </productionsensorvalue>
                 <lastProductionPlanUpdate>
-                    <Value>2020-05-26T09:26:03.960Z</Value>
-                    <Timestamp>2020-05-26T09:26:03.960Z</Timestamp>
+                    <Value>2020-06-07T07:16:04.968Z</Value>
+                    <Timestamp>2020-06-07T07:16:04.968Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </lastProductionPlanUpdate>
                 <kepwareCounter>
                     <Value>2264300.0</Value>
-                    <Timestamp>2020-05-27T14:25:00.003Z</Timestamp>
+                    <Timestamp>2020-06-18T05:46:00.001Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </kepwareCounter>
                 <previousProductCounter>
@@ -803,17 +815,17 @@
                 </type2Description>
                 <previousCycleCounter>
                     <Value>0.0</Value>
-                    <Timestamp>2020-05-27T14:23:02.004Z</Timestamp>
+                    <Timestamp>2020-06-18T05:41:02.007Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </previousCycleCounter>
                 <currentShiftId>
-                    <Value>4362</Value>
-                    <Timestamp>2020-05-27T14:00:02.668Z</Timestamp>
+                    <Value>4894</Value>
+                    <Timestamp>2020-06-18T04:44:22.290Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </currentShiftId>
                 <lastShiftsUpdate>
-                    <Value>2020-05-27T14:00:02.668Z</Value>
-                    <Timestamp>2020-05-27T14:00:02.668Z</Timestamp>
+                    <Value>2020-06-18T04:44:22.290Z</Value>
+                    <Timestamp>2020-06-18T04:44:22.290Z</Timestamp>
                     <Quality>GOOD</Quality>
                 </lastShiftsUpdate>
                 <displayName>
