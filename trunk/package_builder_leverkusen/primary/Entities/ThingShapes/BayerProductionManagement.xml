@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-06-10T10:52:14.545Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-06-18T08:22:12.889Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="Production" description="" isLocalOnly="false" name="counter" ordinal="2"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INTEGER" category="Production" description="" isLocalOnly="false" name="currentProductKey" ordinal="4"/>
@@ -1360,6 +1360,15 @@
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
+                <Permissions resourceName="RecalculatePlanChangeovers">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
                 <Permissions resourceName="currentProductKey">
                     <PropertyRead>
                         <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
@@ -1493,6 +1502,15 @@
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
+                <Permissions resourceName="SetChangeoverSplitTimes">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
                 <Permissions resourceName="UpdateCounter">
                     <PropertyRead/>
                     <PropertyWrite/>
@@ -1507,6 +1525,15 @@
                     <PropertyWrite/>
                     <ServiceInvoke>
                         <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetChangeoverSplitTimes">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
                         <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
                     </ServiceInvoke>
                     <EventInvoke/>
