@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-03-19T07:17:03.114Z" name="BayerProductionPlansParserTemplate" projectName="BayerIoT" tags="Applications:BayerProductionPlans;Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-06-06T19:07:09.673Z" name="BayerProductionPlansParserTemplate" projectName="BayerIoT" tags="Applications:BayerProductionPlans;Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -42,28 +42,29 @@
                 <ConfigurationTable description="" isMultiRow="false" name="ColumnMapping" ordinal="0">
                     <DataShape>
                         <FieldDefinitions>
-                            <FieldDefinition baseType="STRING" description="" name="activeMaterialNumber" ordinal="8"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="blistersPerFoldedBox" ordinal="12"/>
-                            <FieldDefinition baseType="STRING" description="" name="blisterType" ordinal="10"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="commentFirstLine" ordinal="9"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endDate" ordinal="21"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endTime" ordinal="19"/>
-                            <FieldDefinition baseType="STRING" description="" name="foldedBoxFormat" ordinal="11"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="manufProcess" ordinal="16"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="mdatOos" ordinal="14"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="mdatSaf" ordinal="13"/>
-                            <FieldDefinition baseType="STRING" description="" name="orderNr" ordinal="3"/>
-                            <FieldDefinition baseType="STRING" description="" name="productDescription" ordinal="4"/>
-                            <FieldDefinition baseType="STRING" description="" name="productId" ordinal="2"/>
+                            <FieldDefinition baseType="STRING" description="" name="activeMaterialNumber" ordinal="9"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="blistersPerFoldedBox" ordinal="13"/>
+                            <FieldDefinition baseType="STRING" description="" name="blisterType" ordinal="11"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="commentFirstLine" ordinal="10"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endDate" ordinal="22"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endTime" ordinal="20"/>
+                            <FieldDefinition baseType="STRING" description="" name="foldedBoxFormat" ordinal="12"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="manufProcess" ordinal="17"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="mdatOos" ordinal="15"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="mdatSaf" ordinal="14"/>
+                            <FieldDefinition baseType="STRING" description="" name="orderNr" ordinal="4"/>
+                            <FieldDefinition baseType="STRING" description="" name="productDescription" ordinal="5"/>
+                            <FieldDefinition baseType="STRING" description="" name="productId" ordinal="3"/>
                             <FieldDefinition aspect.isPrimaryKey="true" baseType="STRING" description="" name="productionLine" ordinal="1"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="ruestzeit" ordinal="17"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startDate" ordinal="20"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startTime" ordinal="18"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="tabletsPerBlister" ordinal="15"/>
-                            <FieldDefinition baseType="STRING" description="" name="targetQuantity" ordinal="6"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="targetQuantityPerHour" ordinal="22"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="uom" ordinal="7"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="version" ordinal="5"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="ruestzeit" ordinal="18"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startDate" ordinal="21"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startTime" ordinal="19"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="tabletsPerBlister" ordinal="16"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="TA Number" name="taNumber" ordinal="2"/>
+                            <FieldDefinition baseType="STRING" description="" name="targetQuantity" ordinal="7"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="targetQuantityPerHour" ordinal="23"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="uom" ordinal="8"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="version" ordinal="6"/>
                         </FieldDefinitions>
                     </DataShape>
                     <Rows>
@@ -85,6 +86,7 @@
                             <ruestzeit/>
                             <startDate/>
                             <startTime/>
+                            <taNumber/>
                             <tabletsPerBlister/>
                             <targetQuantity/>
                             <targetQuantityPerHour/>
@@ -339,76 +341,99 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        //
+                                        // ProcessData service
+                                        //> BayerProductionPlansParser Template (Main Implementation)
+                                        // * data - INFOTABLE
+                                        
+                                        var SERVICE_NAME = "ProcessData(Main)";
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
-                                        var parserSettings =  me.GetParserSettings();
-                                        
+                                        var parserSettings = me.GetParserSettings();
                                         // receive data pushed by the other instance of TWX and process it
-                                        logger.info(me.name + ".ProcessData received " + data.getRowCount() + " rows");
-                                        
+                                        INFO("received " + data.getRowCount() + " rows");
+                                        //
+                                        var noLineWarning = false;
+                                        var warningsForLine = {};
                                         var aggregatedData = {};
-                                        
                                         var tableLength = data.rows.length;
-                                        for (var x=0; x < tableLength; x++) {
-                                            var row = data.rows[x];
-                                            
+                                        for (let idx = 0; idx < tableLength; idx++) {
+                                            let row = data.rows[idx];
                                             if (!row.productionLine) {
-                                                logger.warn(me.name + ".ProcessData - no productionLine specified");
+                                                if (!noLineWarning) {
+                                                    noLineWarning = true;
+                                                    WARNING("no productionLine specified");
+                                                }
                                                 continue;
-                                            }
-                                            
+                                            } //? productionLine
                                             row.productionLine = me.ProcessLineIdentifier({ lineName: row.productionLine });
-                                            
-                                            var lineThing = "BayerProductionLine_" + row.productionLine;
-                                            if (!Things[lineThing]) {
-                                                logger.warn(me.name + ".ProcessData - line " + lineThing + " doesn't exist"); 
-                                            }
-                                            
+                                            let lineThing = "BayerProductionLine_" + row.productionLine;
+                                            if (!Things[lineThing] && !warningsForLine[lineThing]) {
+                                                warningsForLine[lineThing] = true;
+                                                WARNING("line " + lineThing + " doesn't exist");
+                                            } //? lineThing
                                             if (aggregatedData[lineThing] === undefined) {
-                                            	aggregatedData[lineThing] = Resources["InfoTableFunctions"].Clone({ t1: data });
+                                                aggregatedData[lineThing] = Resources["InfoTableFunctions"].Clone({ t1: data });
                                                 aggregatedData[lineThing].RemoveAllRows();
                                             }
                                             aggregatedData[lineThing].AddRow(row);
-                                        }
-                                        
+                                        } //# for each input data row
                                         // result: INFOTABLE dataShape: "RootEntityList"
-                                        var lines =  ThingTemplates["BayerProductionLine"].GetImplementingThings();
-                                        
-                                        var tableLength = lines.rows.length;
-                                        for (var x=0; x < tableLength; x++) {
-                                            var line = lines.rows[x];
-                                            var plan = null;
-                                            
-                                            try {    
+                                        var lines = ThingTemplates["BayerProductionLine"].GetImplementingThings();
+                                        var numLines = lines.rows.length;
+                                        for (let idx = 0; idx < numLines; idx++) {
+                                            let line = lines.rows[idx];
+                                            let plan = null;
+                                            try {
                                                 if (aggregatedData[line.name] === undefined) {
                                                     // no data for line was provided
                                                     if (parserSettings.useBlankItemIfNoDataForLine) {
                                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlansParserColumnMappingDataShape)
-                                                        plan = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerProductionPlansParserColumnMappingDataShape" });
+                                                        plan = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                                            dataShapeName: "BayerProductionPlansParserColumnMappingDataShape"
+                                                        });
                                                         // BayerProductionPlansParserColumnMappingDataShape entry object
                                                         var newEntry = new Object();
                                                         newEntry.productionLine = line.name; // STRING [Primary Key]
                                                         newEntry.productId = 'standby'; // STRING
                                                         plan.AddRow(newEntry);
-                                                        logger.debug(me.name + ".ProcessData - standby added for line " + line.name);
+                                                        DEBUG("standby added for line " + line.name);
                                                     }
-                                                }
-                                                else {
+                                                } else {
                                                     plan = aggregatedData[line.name];
                                                 }
-                                        
                                                 if (plan) {
-                                                    var result =  Things[line.name].LoadProductionPlan({
+                                                    var result = Things[line.name].LoadProductionPlan({
                                                         data: plan /* INFOTABLE */
                                                     });
+                                                } else {
+                                                    INFO("No production plan provided for line " + line.name);
                                                 }
-                                                else {
-                                                    logger.info(me.name + ".ProcessData - no production plan provided for line " + line.name);
-                                                }
+                                            } catch (ex) {
+                                                ERROR("Error loading plan for " + line.name + " | " + ex);
                                             }
-                                            catch (ex) {
-                                                logger.error(me.name + ".ProcessData - error loading plan for " + line.name + " | " + ex);
-                                            }
-                                        }
+                                        } //# for each production line
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function DEBUG(message) {
+                                            logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> DEBUG
+                                        
+                                        function TRACE(message) {
+                                            logger.trace(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> TRACE
+                                        
+                                        function ERROR(message) {
+                                            logger.error(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> ERROR
+                                        
+                                        function WARNING(message) {
+                                            logger.warn(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> WARNING
+                                        
+                                        function INFO(message) {
+                                            logger.info(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> INFO
+                                        //>----------------------------------------------------------------------------
                                         ]]>
                                         </code>
                                     </Row>
