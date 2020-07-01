@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="BayerProductionLine" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-02-10T14:21:40.629Z" name="BayerGrenzachProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="BayerProductionLine" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-06-06T18:03:22.503Z" name="BayerGrenzachProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -128,7 +128,9 @@
                     <DataShape>
                         <FieldDefinitions>
                             <FieldDefinition aspect.defaultValue="90" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="INTEGER" description="" name="additionalChangeoverTime" ordinal="1"/>
-                            <FieldDefinition aspect.defaultValue="5.0" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopBreakdownThreshold" ordinal="6"/>
+                            <FieldDefinition aspect.defaultValue="false" aspect.isPrimaryKey="true" baseType="BOOLEAN" description="" name="allowManualAdjustment" ordinal="8"/>
+                            <FieldDefinition aspect.defaultValue="BayerChangeoverDefaultCalculationThing" aspect.isPrimaryKey="true" aspect.thingShape="BayerChangeoverCalculationShape" baseType="THINGNAME" description="Changeover Calculation Thing Name" name="changeoverCalculationThing" ordinal="9"/>
+                            <FieldDefinition aspect.defaultValue="2.3" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopBreakdownThreshold" ordinal="6"/>
                             <FieldDefinition aspect.defaultValue="3.0" aspect.isPrimaryKey="true" aspect.units="occurences" baseType="NUMBER" description="" name="delayMicrostopCountMax" ordinal="5"/>
                             <FieldDefinition aspect.defaultValue="5.0" aspect.isPrimaryKey="true" aspect.units="minutes" baseType="NUMBER" description="" name="delayMicrostopTimeMax" ordinal="4"/>
                             <FieldDefinition aspect.defaultValue="0.6" aspect.isPrimaryKey="true" aspect.units="multiplier" baseType="NUMBER" description="" name="nominalRateCorrection" ordinal="2"/>
@@ -139,7 +141,13 @@
                     <Rows>
                         <Row>
                             <additionalChangeoverTime>90</additionalChangeoverTime>
-                            <delayMicrostopBreakdownThreshold>5.0</delayMicrostopBreakdownThreshold>
+                            <allowManualAdjustment>false</allowManualAdjustment>
+                            <changeoverCalculationThing>
+                            <![CDATA[
+                            BayerChangeoverDefaultCalculationThing
+                            ]]>
+                            </changeoverCalculationThing>
+                            <delayMicrostopBreakdownThreshold>2.3</delayMicrostopBreakdownThreshold>
                             <delayMicrostopCountMax>3.0</delayMicrostopCountMax>
                             <delayMicrostopTimeMax>5.0</delayMicrostopTimeMax>
                             <nominalRateCorrection>0.6</nominalRateCorrection>
@@ -164,6 +172,41 @@
                     </DataShape>
                     <Rows/>
                 </ConfigurationTable>
+                <ConfigurationTable description="" isMultiRow="true" name="SameProductChangeover" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.isPrimaryKey="true" baseType="STRING" description="" name="productCode" ordinal="1"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" aspect.units="minutes" baseType="INTEGER" description="" name="time" ordinal="2"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows/>
+                </ConfigurationTable>
+                <ConfigurationTable description="Changeover Split Times" isMultiRow="false" name="Changeover_SplitTimes" ordinal="10">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Blister Amount Change" name="blisterAmountChange" ordinal="7"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Blister Size Change" name="blisterSizeChange" ordinal="5"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Blister Type Change" name="blisterTypeChange" ordinal="3"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Box Format Change" name="boxFormatChange" ordinal="6"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Bundle Format Change" name="bundleFormatChange" ordinal="8"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Ground Foil Change" name="groundFoilChange" ordinal="4"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="" name="orderChange" ordinal="1"/>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.units="min" baseType="INTEGER" description="Product Change" name="productChange" ordinal="2"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <blisterAmountChange>0</blisterAmountChange>
+                            <blisterSizeChange>0</blisterSizeChange>
+                            <blisterTypeChange>0</blisterTypeChange>
+                            <boxFormatChange>0</boxFormatChange>
+                            <bundleFormatChange>0</bundleFormatChange>
+                            <groundFoilChange>0</groundFoilChange>
+                            <orderChange>0</orderChange>
+                            <productChange>0</productChange>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
             </ConfigurationTables>
             <PropertyBindings/>
             <RemotePropertyBindings/>
@@ -175,7 +218,227 @@
                 <ServiceDefinitions/>
                 <EventDefinitions/>
                 <ServiceMappings/>
-                <ServiceImplementations/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="LoadProductionPlan">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //
+                                        // LoadProductionPlan service
+                                        // > BayerGrenzachProductionLine Thing Template
+                                        // * data - INFOTABLE
+                                        
+                                        var SERVICE_NAME = "LoadPlan(Grenzach)";
+                                        var lineConfig = me.GetLineConfiguration();
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName: "BayerProductionPlanDataShape" });
+                                        Things["BayerDBDataProvider"].DeleteScheduledProduction({
+                                            productionLine: me.name /* THINGNAME */
+                                        });
+                                        if (data.rows.length === 1 && data.productId === 'standby') {
+                                            addStandby();
+                                        } else {
+                                            processInputData();
+                                        }
+                                        Things["BayerDBDataProvider"].AddProductionPlanItems({
+                                            items: result /* INFOTABLE */
+                                        });
+                                        me.lastProductionPlanUpdate = new Date();
+                                        INFO("Production Plan Loaded: OK");
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function addStandby() {
+                                            // BayerProductionPlanDataShape entry object
+                                            var newEntry = new Object();
+                                            newEntry.productId = "standby"; // STRING
+                                            newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                            newEntry.producedQuantity = 0; // NUMBER
+                                            newEntry.startTime = undefined; // DATETIME
+                                            newEntry.endTime = undefined; // DATETIME
+                                            newEntry.workedHours = 0; // NUMBER
+                                            newEntry.orderNr = ""; // STRING
+                                            newEntry.productDescription = "No scheduled production"; // STRING
+                                            newEntry.targetQuantity = 0; // NUMBER
+                                            newEntry.targetQuantityPerHour = 0; // NUMBER
+                                            newEntry.status = "PENDING"; // STRING
+                                            newEntry.targetHours = 168; // 7 days
+                                            newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                            result.AddRow(newEntry);
+                                        } //> addStandby()
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function processInputData() {
+                                            // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
+                                            var lastItem = Things["BayerDBDataProvider"].GetLastProductionPlanItem({
+                                                line: me.name /* THINGNAME */
+                                            });
+                                            var prev = lastItem.rows.length > 0 ? lastItem.rows[0] : undefined;
+                                            var tableLength = data.rows.length;
+                                            for (var idx = 0; idx < tableLength; idx++) {
+                                                var row = data.rows[idx];
+                                                try {
+                                                    // BayerProductionPlanDataShape entry object
+                                                    var newEntry = new Object();
+                                                    newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                                    newEntry.status = "PENDING"; // STRING
+                                                    //!---------------- FROM FILE -----------------
+                                                    newEntry.productId = row.productId; // STRING
+                                                    if (isNaN(parseInt(newEntry.productId))) {
+                                                        DEBUG("Skipping row " + idx + "; product id " + newEntry.productId);
+                                                        continue;
+                                                    }
+                                                    newEntry.orderNr = row.orderNr; // STRING
+                                                    newEntry.productDescription = row.productDescription; // STRING
+                                                    newEntry.version = row.version; // STRING
+                                                    newEntry.targetQuantity = parseFloat(row.targetQuantity.replace(',', '.').replace(' ', '')); // NUMBER
+                                                    newEntry.uom = row.uom;
+                                                    newEntry.activeMaterialNumber = row.activeMaterialNumber;
+                                                    newEntry.commentFirstLine = row.commentFirstLine;
+                                                    newEntry.blisterType = row.blisterType;
+                                                    newEntry.foldedBoxFormat = row.foldedBoxFormat;
+                                                    newEntry.blistersPerFoldedBox = parseIntSafe(row.blistersPerFoldedBox);
+                                                    newEntry.ruestzeit = row.ruestzeit;
+                                                    try {
+                                                        newEntry.mdatSaf = parseDate(row.mdatSaf, "yyyy-MM-dd");
+                                                    } catch (dateParseEx) {
+                                                        WARNING("Error parsing MDAT-SAF date. Value: " + row.mdatSaf);
+                                                    }
+                                                    try {
+                                                        newEntry.mdatOos = parseDate(row.mdatOos, "yyyy-MM-dd");
+                                                    } catch (dateParseEx) {
+                                                        WARNING("Error parsing MDAT-OOS date. Value: " + row.mdatOos);
+                                                    }
+                                                    newEntry.tabletsPerBlister = parseIntSafe(row.tabletsPerBlister);
+                                                    newEntry.manufProcess = row.manufProcess;
+                                                    //!---------------- CALCULATED ----------------
+                                                    var blitersPerBoxCorrection = 1;
+                                                    if (lineConfig.nominalRateInBlisters) {
+                                                        if (newEntry.blistersPerFoldedBox) {
+                                                            blitersPerBoxCorrection = newEntry.blistersPerFoldedBox;
+                                                        } else {
+                                                            ERROR("Error: nominalRateInBlisters but no blistersPerFoldedBox provided");
+                                                        }
+                                                    }
+                                                    //*****************TargetQuantityPerhourPreviousValue***********
+                                                    //newEntry.targetQuantityPerHour = (Things["BayerMaterialPerformanceTable"].GetNominalRate({code: newEntry.productId, productionLine: me.name}) / blitersPerBoxCorrection) * lineConfig.nominalRateCorrection; // NUMBER
+                                                    //if (!newEntry.targetQuantityPerHour) {
+                                                    //    WARNING("No 'NominalRate' for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
+                                                    //    newEntry.targetQuantityPerHour = 60;
+                                                    //}
+                                                    //newEntry.targetQuantityPerHour = Math.round(newEntry.targetQuantityPerHour);
+                                                    //*******changes made in target hour name **********
+                                                    if (row.targetQuantityPerHour == "N/A") {
+                                                        newEntry.targetQuantityPerHour = 0;
+                                                    } else {
+                                                        newEntry.targetQuantityPerHour = row.targetQuantityPerHour;
+                                                    }
+                                                    newEntry.targetHours = Math.round(newEntry.targetQuantity / newEntry.targetQuantityPerHour * 100) / 100; // NUMBER
+                                                    DEBUG("targetHours:" + newEntry.targetHours);
+                                                    newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                                    newEntry.producedQuantity = 0; // NUMBER
+                                                    newEntry.startTime = undefined; // DATETIME
+                                                    newEntry.endTime = undefined; // DATETIME
+                                                    newEntry.workedHours = 0; // NUMBER
+                                                    if (prev) {
+                                                        result.AddRow(getChangeover(prev, newEntry));
+                                                    }
+                                                    prev = newEntry;
+                                                    DEBUG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
+                                                    result.AddRow(newEntry);
+                                                } catch (ex) {
+                                                    ERROR("Error parsing row " + idx + ": " + ex + " " + ex.stack);
+                                                }
+                                            } //# for each input data row
+                                            //#DEBUG("Content: " + JSON.stringify(result.ToJSON()));
+                                        } //> processInputData()
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function getChangeover(prevItem, newItem) {
+                                            // BayerProductionPlanDataShape entry object
+                                            var newEntry = new Object();
+                                            newEntry.productId = "Cambio"; // STRING
+                                            newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
+                                            newEntry.producedQuantity = 0; // NUMBER
+                                            newEntry.startTime = undefined; // DATETIME
+                                            newEntry.endTime = undefined; // DATETIME
+                                            newEntry.workedHours = 0; // NUMBER
+                                            newEntry.orderNr = ""; // STRING
+                                            newEntry.productDescription = "Cambio"; // STRING
+                                            newEntry.targetQuantity = 0; // NUMBER
+                                            newEntry.targetQuantityPerHour = 0; // NUMBER
+                                            newEntry.status = "PENDING"; // STRING
+                                            // result: INTEGER
+                                            var activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
+                                                sourceCode: prevItem.activeMaterialNumber /* STRING */,
+                                                productionLine: me.name /* THINGNAME */,
+                                                targetCode: newItem.activeMaterialNumber /* STRING */
+                                            });
+                                            // result: INTEGER
+                                            var blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
+                                                sourceCode: prevItem.blisterType /* STRING */,
+                                                productionLine: me.name /* THINGNAME */,
+                                                targetCode: newItem.blisterType /* STRING */
+                                            });
+                                            // result: INTEGER
+                                            var fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({
+                                                sourceCode: prevItem.foldedBoxFormat /* STRING */,
+                                                productionLine: me.name /* THINGNAME */,
+                                                targetCode: newItem.foldedBoxFormat /* STRING */
+                                            });
+                                            //*********changes made in target hours
+                                            //WARNING("NewITEM: "+newItem.ruestzeit);
+                                            //newEntry.targetHour = (Math.max(activeMaterialTime, blisterTime, fbTime) + lineConfig.additionalChangeoverTime) / 60;
+                                            //newEntry.targetHour = Math.round(newEntry.targetHours * 100) / 100;
+                                            newEntry.targetHours = newItem.ruestzeit;
+                                            //newEntry.remainingHours = newEntry.targetHour; // NUMBER
+                                            newEntry.remainingHours = 0;
+                                            //INFO(newItem.reustzeit);
+                                            return newEntry;
+                                        } //> getChangeover(...)
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function parseIntSafe(value) {
+                                            var parsedVal = parseInt(value);
+                                            return isNaN(parsedVal) ? undefined : parsedVal;
+                                        } //> parseIntSafe(...)
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function DEBUG(message) {
+                                            logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> DEBUG
+                                        
+                                        function TRACE(message) {
+                                            logger.trace(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> TRACE
+                                        
+                                        function ERROR(message) {
+                                            logger.error(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> ERROR
+                                        
+                                        function WARNING(message) {
+                                            logger.warn(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> WARNING
+                                        
+                                        function INFO(message) {
+                                            logger.info(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> INFO
+                                        //>----------------------------------------------------------------------------
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
                 <Subscriptions/>
             </ThingShape>
             <ImplementedShapes>
@@ -190,6 +453,28 @@
                 <Metadata/>
             </InstanceDesignTimePermissions>
             <InstanceRunTimePermissions>
+                <Permissions resourceName="productionRunning">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="productionsensorvalue">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
                 <Permissions resourceName="kepwareCounter">
                     <PropertyRead>
                         <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
@@ -201,9 +486,32 @@
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="Administrators" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="Administrators" type="Group"/>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Administrators" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="Administrators" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </EventSubscribe>
+                </Permissions>
             </InstanceRunTimePermissions>
             <InstanceVisibilityPermissions>
-                <Visibility/>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
             </InstanceVisibilityPermissions>
         </ThingTemplate>
     </ThingTemplates>

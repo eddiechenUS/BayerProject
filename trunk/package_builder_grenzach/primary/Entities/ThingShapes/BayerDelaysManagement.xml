@@ -1,33 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-16T13:21:22.268Z" name="BayerDelaysManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-06-04T18:36:07.431Z" name="BayerDelaysManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="changeoverDelayStartTime" ordinal="11"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="changeoverStartTime" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - if a delay was longer, we register a breakdown" isLocalOnly="false" name="delayBreakDownTimeMoreThan" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0" baseType="INTEGER" category="" description="" isLocalOnly="false" name="delayMicrostopCount" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0" baseType="INTEGER" category="" description="Threshold count - nr of micro stops allowed. After that a delay will be recorded in DB." isLocalOnly="false" name="delayMicrostopCountMax" ordinal="13"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.units="min" baseType="NUMBER" category="" description="Total duration of micro-stops after with delay will trigger" isLocalOnly="false" name="delayMicrostopTime" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - if a delay was shorter, we register a microstop" isLocalOnly="false" name="delayMicrostopTimeLessThan" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="" description="Threshold time - total duration of micro-stops allowed. After that delay will be recorded in DB" isLocalOnly="false" name="delayMicrostopTimeMax" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="delayMicrostopTimeStart" ordinal="12"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="true" aspect.isLogged="false" aspect.isPersistent="true" baseType="BOOLEAN" category="" description="simulate production" isLocalOnly="false" name="productionRunning" ordinal="7"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="Changeover" description="" isLocalOnly="false" name="changeoverDelayStartTime" ordinal="11"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="Changeover" description="" isLocalOnly="false" name="changeoverStartTime" ordinal="12"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="Delays" description="Threshold time - if a delay was longer, we register a breakdown" isLocalOnly="false" name="delayBreakDownTimeMoreThan" ordinal="12"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0" baseType="INTEGER" category="Delays" description="" isLocalOnly="false" name="delayMicrostopCount" ordinal="12"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0" baseType="INTEGER" category="Delays" description="Threshold count - nr of micro stops allowed. After that a delay will be recorded in DB." isLocalOnly="false" name="delayMicrostopCountMax" ordinal="13"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.units="min" baseType="NUMBER" category="Delays" description="Total duration of micro-stops after with delay will trigger" isLocalOnly="false" name="delayMicrostopTime" ordinal="12"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="Delays" description="Threshold time - if a delay was shorter, we register a microstop" isLocalOnly="false" name="delayMicrostopTimeLessThan" ordinal="12"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" aspect.minimumValue="0.0" aspect.units="min" baseType="NUMBER" category="Delays" description="Threshold time - total duration of micro-stops allowed. After that delay will be recorded in DB" isLocalOnly="false" name="delayMicrostopTimeMax" ordinal="12"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="Delays" description="" isLocalOnly="false" name="delayMicrostopTimeStart" ordinal="12"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="true" aspect.isLogged="false" aspect.isPersistent="true" baseType="BOOLEAN" category="Production" description="simulate production" isLocalOnly="false" name="productionRunning" ordinal="7"/>
             </PropertyDefinitions>
             <ServiceDefinitions>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelayShiftDetails">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelayShiftDetails">
                     <ResultType aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelaysSummary">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelaysSummary">
                     <ResultType aspect.dataShape="BayerDelaysSummaryDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertDelayEntry">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertDelayEntry">
+                    <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="category" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="3"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="LONG" description="" name="totalDuration" ordinal="4"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertShiftEventEntry">
                     <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="category" ordinal="2"/>
@@ -35,41 +44,33 @@
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="2"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertShiftEventEntry">
-                    <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
-                    <ParameterDefinitions>
-                        <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="category" ordinal="2"/>
-                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="3"/>
-                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="2"/>
-                    </ParameterDefinitions>
-                </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessChangeoverDelayRules">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessChangeoverDelayRules">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="TimerEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessEventsOnShiftChange">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessEventsOnShiftChange">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="DataChangeEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessProductionDelayRules">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessProductionDelayRules">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="DataChangeEvent" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessSwitchShift">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessSwitchShift">
                     <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="executed after entry microstop and change shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ResetMicrostopDelayProperties">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="executed after entry microstop and change shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ResetMicrostopDelayProperties">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateDelayShift">
+                <ServiceDefinition aspect.isAsync="false" category="Delays" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateDelayShift">
                     <ResultType aspect.dataShape="BayerDelayDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="delayShift" ordinal="2"/>
@@ -78,7 +79,7 @@
                 </ServiceDefinition>
             </ServiceDefinitions>
             <EventDefinitions>
-                <EventDefinition category="" dataShape="BayerDelayEventDataShape" description="" name="ProductionDelayed"/>
+                <EventDefinition category="Delays" dataShape="BayerDelayEventDataShape" description="" name="ProductionDelayed"/>
             </EventDefinitions>
             <ServiceMappings/>
             <ServiceImplementations>
@@ -149,7 +150,8 @@
                                         category: category,
                                         shiftScheduleId: shiftScheduleId,
                                         startTime: startTime,
-                                        endTime: endTime
+                                        endTime: endTime,
+                                        totalDuration: totalDuration
                                     };
                                     
                                     var result = Things["BayerDBDataProvider"].InsertDelayEntry(delayEntry);
@@ -205,6 +207,10 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // ProcessChangeoverDelayRules service
+                                    // * eventData - INFOTABLE
+                                    
                                     // check id changeover
                                     var currentProduct = me.GetCurrentProduct();
                                     var isProductionTargetZero = (currentProduct.targetQuantity === 0);
@@ -218,12 +224,12 @@
                                     	});
                                     	var shouldUpdateLastTask = false;
                                     	var newTaskCategory = '';
-                                        // check if is any event on current shift 
+                                    	// check if is any event on current shift 
                                     	if (shiftEvents.getRowCount() !== 0) {
-                                            // find status of last event
+                                    		// find status of last event
                                     		var lastEvent = shiftEvents.rows[shiftEvents.getRowCount() - 1];
                                     		var lastStatus = lastEvent.category;
-                                            // decide if should update event or create new
+                                    		// decide if should update event or create new
                                     		if (isChangeover) {
                                     			if (lastStatus == 'changeover') {
                                     				shouldUpdateLastTask = true;
@@ -237,7 +243,7 @@
                                     				newTaskCategory = 'running';
                                     			}
                                     		}
-                                            // depending on decision create or update event
+                                    		// depending on decision create or update event
                                     		if (shouldUpdateLastTask) {
                                     			Things["BayerDBDataProvider"].UpdateShiftEvent({
                                     				endTime: Date.now(),
@@ -254,8 +260,8 @@
                                     			});
                                     		}
                                     	}
-                                        // if shift event list is empty create new task 
-                                        else {
+                                    	// if shift event list is empty create new task 
+                                    	else {
                                     		var shiftSchedule = Things["BayerDBDataProvider"].GetShiftScheduleById({
                                     			id: me.currentShiftId
                                     		});
@@ -323,90 +329,93 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // ProcessEventsOnShiftChange service
+                                    // * eventData - INFOTABLE
+                                    
                                     // get event from previous shift
                                     var prevShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
+                                    	shiftScheduleId: eventData.oldValue.value
+                                    });
                                     // get data about previous shift (id and timestamp may be needed)
                                     var prevShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
-                                            	id: eventData.oldValue.value
-                                            });
+                                    	id: eventData.oldValue.value
+                                    });
                                     var lastEvent;
                                     // get event from current (new) shift
                                     var currentShift = Things["BayerDBDataProvider"].GetShiftScheduleById({
-                                            	id: eventData.newValue.value
-                                            });
-                                    if(me.productionRunning){
-                                        	// finish last event from previous shift
-                                            lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
-                                            Things["BayerDBDataProvider"].UpdateShiftEvent({
-                                            	endTime: dateAddHours(prevShift.timestamp, 8),
-                                            	id: lastEvent.id,
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
-                                            //add first event to new shift
-                                                var category;
-                                            	var currentProduct = me.GetCurrentProduct();
-                                                var isProductionTargetZero = (currentProduct.targetQuantity === 0);
-                                                var isProductCambio = (currentProduct.productId === 'Cambio');
-                                    			var isChangeover = (isProductionTargetZero || isProductCambio);
-                                        		// select event catagory
-                                            	if (isChangeover) {
-                                            		category = "changeover";
-                                            	} else {
-                                            		category = "running";
-                                            	}
-                                            var result = Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: currentShift.timestamp,
-                                            	endTime: Date.now() ,
-                                            	shiftScheduleId: eventData.newValue.value,
-                                            	source: me.name,
-                                            	category: category
-                                            });
-                                    }
-                                    // cases when production isn't running
-                                    else{
-                                        // if there was any event on  previous shift, update endtime 
-                                        if(prevShiftEvents.getRowCount() !== 0){
-                                        	lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
-                                            // if previous event was breakdown, update event 
-                                            if(lastEvent.category === "breakdown"){
-                                                Things["BayerDBDataProvider"].UpdateShiftEvent({
-                                            	endTime: dateAddHours(prevShift.timestamp, 8),
-                                            	id: lastEvent.id,
-                                            	shiftScheduleId: eventData.oldValue.value
-                                            });
-                                            }
-                                            // insert new taks if previously other type of event occured
-                                            else{
-                                            	Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: lastEvent.endTime,
-                                            	endTime: dateAddHours(prevShift.timestamp, 8) ,
-                                            	shiftScheduleId: eventData.oldValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
-                                            }
-                                        }
-                                        // if previous shift event list is empty and previous shift exists,
-                                        // insert one shift-long event
-                                        else if (prevShift) {
-                                        	Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: prevShift.timestamp,
-                                            	endTime: dateAddHours(prevShift.timestamp, 8) ,
-                                            	shiftScheduleId: eventData.oldValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
-                                        }
-                                        //add first event to new shift
-                                        Things["BayerDBDataProvider"].InsertShiftEventEntry({
-                                            	startTime: currentShift.timestamp,
-                                            	endTime: Date.now() ,
-                                            	shiftScheduleId: eventData.newValue.value,
-                                            	source: me.name,
-                                            	category: 'breakdown'
-                                            });
+                                    	id: eventData.newValue.value
+                                    });
+                                    if (me.productionRunning) {
+                                    	// finish last event from previous shift
+                                    	lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
+                                    	Things["BayerDBDataProvider"].UpdateShiftEvent({
+                                    		endTime: dateAddHours(prevShift.timestamp, 8),
+                                    		id: lastEvent.id,
+                                    		shiftScheduleId: eventData.oldValue.value
+                                    	});
+                                    	//add first event to new shift
+                                    	var category;
+                                    	var currentProduct = me.GetCurrentProduct();
+                                    	var isProductionTargetZero = (currentProduct.targetQuantity === 0);
+                                    	var isProductCambio = (currentProduct.productId === 'Cambio');
+                                    	var isChangeover = (isProductionTargetZero || isProductCambio);
+                                    	// select event catagory
+                                    	if (isChangeover) {
+                                    		category = "changeover";
+                                    	} else {
+                                    		category = "running";
+                                    	}
+                                    	var result = Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                    		startTime: currentShift.timestamp,
+                                    		endTime: Date.now(),
+                                    		shiftScheduleId: eventData.newValue.value,
+                                    		source: me.name,
+                                    		category: category
+                                    	});
+                                    } else {
+                                    	// cases when production isn't running
+                                    	// if there was any event on  previous shift, update endtime 
+                                    	if (prevShiftEvents.getRowCount() !== 0) {
+                                    		lastEvent = prevShiftEvents.rows[prevShiftEvents.getRowCount() - 1];
+                                    		// if previous event was breakdown, update event 
+                                    		if (lastEvent.category === "breakdown") {
+                                    			Things["BayerDBDataProvider"].UpdateShiftEvent({
+                                    				endTime: dateAddHours(prevShift.timestamp, 8),
+                                    				id: lastEvent.id,
+                                    				shiftScheduleId: eventData.oldValue.value
+                                    			});
+                                    		}
+                                    		// insert new taks if previously other type of event occured
+                                    		else {
+                                    			Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                    				startTime: lastEvent.endTime,
+                                    				endTime: dateAddHours(prevShift.timestamp, 8),
+                                    				shiftScheduleId: eventData.oldValue.value,
+                                    				source: me.name,
+                                    				category: 'breakdown'
+                                    			});
+                                    		}
+                                    	}
+                                    	// if previous shift event list is empty and previous shift exists,
+                                    	// insert one shift-long event
+                                    	else if (prevShift) {
+                                    		Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                    			startTime: prevShift.timestamp,
+                                    			endTime: dateAddHours(prevShift.timestamp, 8),
+                                    			shiftScheduleId: eventData.oldValue.value,
+                                    			source: me.name,
+                                    			category: 'breakdown'
+                                    		});
+                                    	}
+                                    	//add first event to new shift
+                                    	Things["BayerDBDataProvider"].InsertShiftEventEntry({
+                                    		startTime: currentShift.timestamp,
+                                    		endTime: Date.now(),
+                                    		shiftScheduleId: eventData.newValue.value,
+                                    		source: me.name,
+                                    		category: 'breakdown'
+                                    	});
                                     }
                                     ]]>
                                     </code>
@@ -427,15 +436,17 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var lineConfig = me.GetLineConfiguration();
+                                    //
+                                    // ProcessProductionDelayRules service
+                                    // * eventData
                                     
+                                    var lineConfig = me.GetLineConfiguration();
                                     var currentProduct = me.GetCurrentProduct();
                                     
                                     var delayCategory = {
                                     	microstop: 'microstop',
                                     	breakdown: 'breakdown',
                                     };
-                                    
                                     var oldProductionRunning = {
                                     	value: eventData.oldValue.value,
                                     	time: eventData.oldValue.time,
@@ -444,10 +455,8 @@
                                     	value: eventData.newValue.value,
                                     	time: eventData.newValue.time,
                                     };
-                                    
                                     var now = new Date();
                                     var diffTime = dateDifference(newProductionRunning.time, oldProductionRunning.time) / 1000 / 60;
-                                    
                                     // - Green indicating when the machine was running
                                     //if (newProductionRunning.value === false) {
                                     //    me.InsertShiftEventEntry({
@@ -456,21 +465,18 @@
                                     //        endTime: now /* DATETIME */
                                     //   });
                                     //}
-                                    
                                     // comeback from not runing production
                                     if (newProductionRunning.value === true) {
                                     	if (diffTime < lineConfig.delayMicrostopBreakdownThreshold) {
                                     		//logger.debug('ProcessProductionDelayRules:microstopProcess:diffTime:'+ diffTime);
-                                    
                                     		// Orange indicating when there was an active production order with a
                                     		// target greater than zero (>0), but the machine stopped (based on “State” tag)
                                     		// for less than X minutes – value is configurable.
                                     		me.InsertShiftEventEntry({
-                                    			category: 'microstop' /* STRING */ ,
-                                    			startTime: oldProductionRunning.time /* DATETIME */ ,
+                                    			category: 'microstop' /* STRING */,
+                                    			startTime: oldProductionRunning.time /* DATETIME */,
                                     			endTime: now /* DATETIME */
                                     		});
-                                    
                                     		//count microstop
                                     		//me.delayMicrostopCount = me.delayMicrostopCount + 1;
                                     		me.delayMicrostopCount += 1;
@@ -481,33 +487,31 @@
                                     			me.delayMicrostopTimeStart = oldProductionRunning.time; //m
                                     			me.delayMicrostopTime = diffTime;
                                     		} else {
-                                    			me.delayMicrostopTime += me.delayMicrostopTime; //m
+                                    			me.delayMicrostopTime += diffTime; //m
                                     		}
                                     		//logger.debug('ProcessProductionDelayRules:me.delayMicrostopTime:' + me.delayMicrostopTime);
-                                    
                                     		//counter exeed
                                     		if (me.delayMicrostopCount > lineConfig.delayMicrostopCountMax ||
                                     			me.delayMicrostopTime > lineConfig.delayMicrostopTimeMax
                                     		) {
                                     			me.ProductionDelayed({
-                                    				startTime: me.delayMicrostopTimeStart /* DATETIME */ ,
-                                    				endTime: now /* DATETIME */ ,
-                                    				category: delayCategory.microstop /* STRING */
+                                    				startTime: me.delayMicrostopTimeStart /* DATETIME */,
+                                    				endTime: now /* DATETIME */,
+                                    				category: delayCategory.microstop /* STRING */,
+                                    				totalDuration: (me.delayMicrostopTime * 60 * 1000)
                                     			});
                                     			me.ResetMicrostopDelayProperties();
                                     		}
                                     	} else if (diffTime >= lineConfig.delayMicrostopBreakdownThreshold) {
                                     		me.ProductionDelayed({
-                                    			startTime: oldProductionRunning.time /* DATETIME */ ,
-                                    			endTime: newProductionRunning.time /* DATETIME */ ,
-                                    			category: delayCategory.breakdown /* STRING */
+                                    			startTime: oldProductionRunning.time /* DATETIME */,
+                                    			endTime: newProductionRunning.time /* DATETIME */,
+                                    			category: delayCategory.breakdown /* STRING */,
+                                    			totalDuration: (newProductionRunning.time.getTime() - oldProductionRunning.time.getTime())
                                     		});
-                                    
                                     		// Red indicates when there was an active production order with a target
                                     		// greater than zero (>0), but the machine stopped (based on “State” tag) for
                                     		// more than Y minutes – value is configurable.
-                                    
-                                    
                                     		//check if current shift has any shift event
                                     		var currentShiftEvents = Things["BayerDBDataProvider"].GetShiftEvents({
                                     			shiftScheduleId: me.currentShiftId
@@ -515,11 +519,10 @@
                                     		var finishTime;
                                     		if (currentShiftEvents.getRowCount() === 0) {
                                     			me.InsertShiftEventEntry({
-                                    				category: 'breakdown' /* STRING */ ,
-                                    				startTime: Things["BayerUtilities"].GetCurrentShiftTime().startTime /* DATETIME */ ,
+                                    				category: 'breakdown' /* STRING */,
+                                    				startTime: Things["BayerUtilities"].GetCurrentShiftTime().startTime /* DATETIME */,
                                     				endTime: Date.now()
                                     			});
-                                    
                                     		} else {
                                     			var lastEvent = currentShiftEvents.rows[currentShiftEvents.getRowCount() - 1];
                                     			if (lastEvent.category === 'breakdown') {
@@ -535,10 +538,9 @@
                                     					endTime: Date.now()
                                     				});
                                     			}
-                                    
                                     		}
-                                    	}
-                                    }
+                                    	} //* delayMicrostopBreakdownThreshold
+                                    } //? newProductionRunning true
                                     ]]>
                                     </code>
                                 </Row>
@@ -652,6 +654,7 @@
                                             category: eventData.category, /* STRING */
                                             startTime: eventData.startTime,
                                             endTime: eventData.endTime, /* DATETIME */
+                                            totalDuration: eventData.totalDuration,
                                         });
                                         ]]>
                                         </code>
@@ -797,6 +800,7 @@
                     </PropertyRead>
                     <PropertyWrite>
                         <Principal isPermitted="true" name="BayerDelaysSystemUser" type="User"/>
+                        <Principal isPermitted="true" name="System" type="User"/>
                     </PropertyWrite>
                     <ServiceInvoke/>
                     <EventInvoke/>

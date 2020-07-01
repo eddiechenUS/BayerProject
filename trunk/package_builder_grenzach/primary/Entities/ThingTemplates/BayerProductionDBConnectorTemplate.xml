@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2020-02-10T12:37:45.337Z" name="BayerProductionDBConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2020-02-24T10:29:23.247Z" name="BayerProductionDBConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -100,7 +100,30 @@
                         <ResultType aspect.dataShape="BayerProductionCounterDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions/>
                     </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetFactorValue">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.defaultValue="factor3" baseType="STRING" description="" name="factor" ordinal="1"/>
+                            <FieldDefinition aspect.defaultValue="81818525" baseType="STRING" description="" name="value" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMultiplierForCurrentProduct">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetSensorID">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetSensorStatusDB">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetValueNumber">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="testremote">
                         <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions/>
                     </ServiceDefinition>
@@ -164,6 +187,32 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetFactorValue">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT <<factor>> FROM [ProductionLineData]
+                                        LEFT JOIN [View_RemotecollectData] ON [View_RemotecollectData].[ValueText] = [ProductionLineData].[ProductName]
+                                        WHERE [ValueText] = <<value>>;
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="SQLQuery" name="GetMultiplierForCurrentProduct">
                         <ConfigurationTables>
                             <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
@@ -180,6 +229,102 @@
                                         <sql>
                                         <![CDATA[
                                         SELECT [[me.factorFieldname]] FROM [dbo].[ProductionLineData];
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetSensorID">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        Select [ValueNumber] From [View_RemotecollectData] where [sensorid]=2 ;
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetSensorStatusDB">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        Select [ValueNumber] From [View_RemotecollectData] where [sensorid]=1 ;
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetValueNumber">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT [ProductName] from [ProductionLineData] where [MachineID]=12
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="testremote">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        select * from [View_RemoteCollectData];
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -221,12 +366,19 @@
                 </Permissions>
                 <Permissions resourceName="*">
                     <PropertyRead>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
                         <Principal isPermitted="true" name="System" type="User"/>
                     </PropertyRead>
                     <PropertyWrite/>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventSubscribe>
                 </Permissions>
                 <Permissions resourceName="GetMultiplierForCurrentProduct">
                     <PropertyRead/>
