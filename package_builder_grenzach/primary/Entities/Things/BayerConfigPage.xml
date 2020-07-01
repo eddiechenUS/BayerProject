@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
+    <Things>
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-06-18T05:52:05.209Z" name="BayerConfigPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions resourceName="GetMenuContent">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="App.BayerPerformanceDashboard" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="navigationMenu">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="App.BayerPerformanceDashboard" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <ThingShape>
+                <PropertyDefinitions>
+                    <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.dataShape="BayerConfigItemsDataShape" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INFOTABLE" category="" description="" isLocalOnly="false" name="configMenu" ordinal="3"/>
+                </PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetConfigItems">
+                        <ResultType aspect.dataShape="BayerConfigItemsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="GetConfigItems">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE
+                                        var result = Resources["InfoTableFunctions"].Clone({
+                                        	t1: me.configMenu /* INFOTABLE */
+                                        });
+                                        
+                                        result.Sort({
+                                            name: "order",
+                                            ascending: true
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations>
+                <AlertDefinitions name="configMenu"/>
+            </AlertConfigurations>
+            <ImplementedShapes/>
+            <ThingProperties>
+                <configMenu>
+                    <Value>
+                        <infoTable>
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="IMAGELINK" description="" name="icon" ordinal="4"/>
+                                    <FieldDefinition baseType="MASHUPNAME" description="" name="mashup" ordinal="5"/>
+                                    <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="optionId" ordinal="2"/>
+                                    <FieldDefinition aspect.defaultValue="0.0" aspect.isPrimaryKey="false" baseType="NUMBER" description="" name="order" ordinal="1"/>
+                                    <FieldDefinition baseType="STRING" description="" name="title" ordinal="3"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <icon/>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerWrappedCustomChangeoverConfigMashup
+                                    ]]>
+                                    </mashup>
+                                    <optionId>
+                                    <![CDATA[
+                                    ChangeoverConfig
+                                    ]]>
+                                    </optionId>
+                                    <order>0.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    Changeover Configuration
+                                    ]]>
+                                    </title>
+                                </Row>
+                                <Row>
+                                    <icon/>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerShiftTrackingMashup
+                                    ]]>
+                                    </mashup>
+                                    <optionId>
+                                    <![CDATA[
+                                    CalculateShift
+                                    ]]>
+                                    </optionId>
+                                    <order>1.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    Recalculate Shift (reset)
+                                    ]]>
+                                    </title>
+                                </Row>
+                            </Rows>
+                        </infoTable>
+                    </Value>
+                    <Timestamp>2020-06-15T20:49:41.095Z</Timestamp>
+                    <Quality>GOOD</Quality>
+                </configMenu>
+            </ThingProperties>
+        </Thing>
+    </Things>
+</Entities>

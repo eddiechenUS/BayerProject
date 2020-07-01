@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-09-27T15:04:37.852Z" name="BayerShiftTrackingPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-03-31T08:01:20.653Z" name="BayerShiftTrackingPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -114,41 +114,43 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        // result: INFOTABLE dataShape: BayerDailyPerformanceDataShape
-                                        var result = Things[productionLine].GetDailyPerformance();
-                                        
-                                        var yAxisMin = 0;
-                                        var yAxisMax = 100;
-                                        
-                                        var tableLength = result.rows.length;
-                                        
-                                        for (var x = 0; x < tableLength; x++) {
-                                        	var day = result.rows[x];
-                                        	
-                                            var dayTableLength = day.dailyPerformance.rows.length;
-                                            
-                                            for (var y = 0; y < dayTableLength; y++) {
-                                                var row = day.dailyPerformance.rows[y];
-                                                
-                                                if (row.performance > yAxisMax) {
-                                                    yAxisMax = row.performance;
-                                                }
-                                            }
+                                        //logger.info(me.name+": productionLine='"+productionLine+"'");
+                                        if(!productionLine) {
+                                            throw "Input 'productionLine' is required!";
                                         }
+                                        if(!Things[productionLine]) {
+                                            throw "Input 'productionLine' is invalid ("+productionLine+")!";
+                                        }
+                                        try {
+                                            // result: INFOTABLE dataShape: BayerDailyPerformanceDataShape
+                                            var result = Things[productionLine].GetDailyPerformance();
+                                            var yAxisMin = 0;
+                                            var yAxisMax = 100;
                                         
-                                        var newField = new Object();
-                                        newField.name = "yAxisMin";
-                                        newField.baseType = 'NUMBER';
-                                        result.AddField(newField);
-                                        var newField = new Object();
-                                        newField.name = "yAxisMax";
-                                        newField.baseType = 'NUMBER';
-                                        result.AddField(newField);
+                                            var tableLength = result.rows.length;
+                                            for (let x = 0; x < tableLength; x++) {
+                                                let day = result.rows[x];
                                         
-                                        for (var x = 0; x < tableLength; x++) {
-                                        	var day = result.rows[x];
-                                            day.yAxisMin = yAxisMin;
-                                            day.yAxisMax = yAxisMax;
+                                                let dayTableLength = day.dailyPerformance.rows.length;    
+                                                for (let y = 0; y < dayTableLength; y++) {
+                                                    let row = day.dailyPerformance.rows[y];        
+                                                    if (row.performance > yAxisMax) {
+                                                        yAxisMax = row.performance;
+                                                    }
+                                                } // for each record
+                                            } // for each daily performance
+                                        
+                                            result.AddField({name: "yAxisMin", baseType: "NUMBER"});
+                                            result.AddField({name: "yAxisMax", baseType: "NUMBER"});
+                                        
+                                            for (let x = 0; x < tableLength; x++) {
+                                                let day = result.rows[x];
+                                                day.yAxisMin = yAxisMin;
+                                                day.yAxisMax = yAxisMax;
+                                            }
+                                        } catch(ex) {
+                                            logger.error(me.name + ": " + ex + " " + ex.stack);
+                                            throw ex;
                                         }
                                         ]]>
                                         </code>

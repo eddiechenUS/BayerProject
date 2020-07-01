@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
         <ThingTemplate baseThingTemplate="Database" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2019-09-06T11:18:50.548Z" name="BayerDBConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
@@ -102,7 +102,23 @@
                 <Delete/>
                 <Metadata/>
             </InstanceDesignTimePermissions>
-            <InstanceRunTimePermissions/>
+            <InstanceRunTimePermissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventSubscribe>
+                </Permissions>
+            </InstanceRunTimePermissions>
             <InstanceVisibilityPermissions>
                 <Visibility/>
             </InstanceVisibilityPermissions>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
+    <ThingShapes>
+        <ThingShape className="" description="Bayer Changeover Calculation Shape (base methods to retrieve changeover time). Wrapper around different methods of calculation (dedicated for specific lines)." documentationContent="" homeMashup="" lastModifiedDate="2020-06-18T05:22:38.689Z" name="BayerChangeoverCalculationShape" projectName="BayerIoT" tags="">
+            <PropertyDefinitions/>
+            <ServiceDefinitions>
+                <ServiceDefinition aspect.isAsync="false" category="Changeover" description="Prepare and return Changeover Item" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverPlanItem">
+                    <ResultType baseType="JSON" description="Calculated Changeover (Cambio) item JSON" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="JSON" description="Next Item (JSON)" name="nextItem" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="JSON" description="Previous Item (JSON)" name="prevItem" ordinal="1"/>
+                        <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="Production Line Thing Name" name="productionLine" ordinal="3"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Changeover" description="Prepare and return Changeover Item" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverPlanRecord">
+                    <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="Calculated Changeover (Cambio) item JSON" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="JSON" description="Next Item (JSON)" name="nextItem" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="JSON" description="Previous Item (JSON)" name="prevItem" ordinal="1"/>
+                        <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="Production Line Thing Name" name="productionLine" ordinal="3"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Changeover" description="Get Changeover Time based on previous &amp; next plan item (override)." isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangeoverTime">
+                    <ResultType baseType="NUMBER" description="Calculated Target Hours" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="JSON" description="Next Item (JSON)" name="nextItem" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="JSON" description="Previous Item (JSON)" name="prevItem" ordinal="1"/>
+                        <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="Production Line Thing Name" name="productionLine" ordinal="3"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+            </ServiceDefinitions>
+            <EventDefinitions/>
+            <ServiceMappings/>
+            <ServiceImplementations>
+                <ServiceImplementation description="" handlerName="Script" name="GetChangeoverPlanItem">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //
+                                    // GetChangeoverPlanItem service
+                                    // * prevItem - JSON
+                                    // * nextItem - JSON
+                                    // * productionLine - THINGNAME
+                                    
+                                    // BayerProductionPlanDataShape entry object
+                                    var newEntry = {};
+                                    newEntry.productId = "Cambio"; // STRING
+                                    newEntry.productionLine = productionLine; // THINGNAME - isPrimaryKey = true
+                                    newEntry.producedQuantity = 0; // NUMBER
+                                    newEntry.startTime = undefined; // DATETIME
+                                    newEntry.endTime = undefined; // DATETIME
+                                    newEntry.workedHours = 0; // NUMBER
+                                    newEntry.orderNr = ""; // STRING
+                                    newEntry.productDescription = "Cambio"; // STRING
+                                    newEntry.targetQuantity = 0; // NUMBER
+                                    newEntry.targetQuantityPerHour = 0; // NUMBER
+                                    newEntry.status = "PENDING"; // STRING
+                                    
+                                    newEntry.targetHours = me.GetChangeoverTime({
+                                        prevItem: prevItem /* JSON */,
+                                        nextItem: nextItem /* JSON */,
+                                        productionLine: productionLine
+                                    });
+                                    //newEntry.targetHours = Math.round(newEntry.targetHours * 100.0) / 100.0;
+                                    newEntry.remainingHours = newEntry.targetHours; // NUMBER
+                                    
+                                    var result = newEntry;
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetChangeoverPlanRecord">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    //
+                                    // GetChangeoverPlanRecord service
+                                    // * prevItem - JSON
+                                    // * nextItem - JSON
+                                    // * productionLine - THINGNAME
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                    	infoTableName: "result" /* STRING */,
+                                    	dataShapeName: "BayerProductionPlanDataShape" /* DATASHAPENAME */
+                                    });
+                                    var item = me.GetChangeoverPlanItem({
+                                    	prevItem: prevItem /* JSON */,
+                                    	nextItem: nextItem /* JSON */,
+                                        productionLine: productionLine
+                                    });
+                                    result.AddRow(item);
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="GetChangeoverTime">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    throw "Service not implemented";
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+            </ServiceImplementations>
+            <Subscriptions/>
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <InstanceRunTimePermissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </EventSubscribe>
+                </Permissions>
+            </InstanceRunTimePermissions>
+        </ThingShape>
+    </ThingShapes>
+</Entities>

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-12T10:25:01.206Z" name="BayerNotificationsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-06-04T18:42:09.482Z" name="BayerNotificationsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" aspect.maximumValue="3" aspect.minimumValue="0" baseType="INTEGER" category="" description="0 - no alert&#10;1 - blank&#10;2 - changeover duration more than 110% target&#10;3 - changeover duration more than 120% target" isLocalOnly="false" name="changeoverAlertLevel" ordinal="5"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="BOOLEAN" category="" description="" isLocalOnly="false" name="changeoverComingNotificationSent" ordinal="7"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" aspect.maximumValue="3" aspect.minimumValue="0" baseType="INTEGER" category="" description="0 - no alert&#10;1 - no production for last 5 min&#10;2 - no production for last 10 min&#10;3 - no production for last 30 min" isLocalOnly="false" name="productionAlertLevel" ordinal="4"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" aspect.maximumValue="3" aspect.minimumValue="0" baseType="INTEGER" category="Notifications" description="0 - no alert&#10;1 - blank&#10;2 - changeover duration more than 110% target&#10;3 - changeover duration more than 120% target" isLocalOnly="false" name="changeoverAlertLevel" ordinal="5"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="BOOLEAN" category="Notifications" description="" isLocalOnly="false" name="changeoverComingNotificationSent" ordinal="7"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" aspect.maximumValue="3" aspect.minimumValue="0" baseType="INTEGER" category="Notifications" description="0 - no alert&#10;1 - no production for last 5 min&#10;2 - no production for last 10 min&#10;3 - no production for last 30 min" isLocalOnly="false" name="productionAlertLevel" ordinal="4"/>
             </PropertyDefinitions>
             <ServiceDefinitions>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNotificationTargetGroupA">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNotificationTargetGroupA">
                     <ResultType aspect.dataShape="GenericStringList" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNotificationTargetGroupB">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNotificationTargetGroupB">
                     <ResultType aspect.dataShape="GenericStringList" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessNotificationRules">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessNotificationRules">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="TimerEvent" aspect.isRequired="true" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ResetNotifications">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ResetNotifications">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendActionAssignmentNotification">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendActionAssignmentNotification">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition baseType="STRING" description="" name="messageBody" ordinal="3"/>
@@ -34,31 +34,31 @@
                         <FieldDefinition baseType="STRING" description="" name="to" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendChangeoverAlertMessage">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendChangeoverAlertMessage">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="level" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendChangeoverComingMessage">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendChangeoverComingMessage">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="BayerScheduleItemDbDataShape" aspect.isRequired="true" baseType="INFOTABLE" description="" name="changeoverData" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendProductionAlertMessage">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="SendProductionAlertMessage">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="level" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="TriggerChangeoverComingEvent">
+                <ServiceDefinition aspect.isAsync="false" category="Notifications" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="TriggerChangeoverComingEvent">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
             </ServiceDefinitions>
             <EventDefinitions>
-                <EventDefinition category="" dataShape="BayerScheduleItemDbDataShape" description="" name="ChangeoverComing"/>
+                <EventDefinition category="Notifications" dataShape="BayerScheduleItemDbDataShape" description="Changeover Coming" name="ChangeoverComing"/>
             </EventDefinitions>
             <ServiceMappings/>
             <ServiceImplementations>

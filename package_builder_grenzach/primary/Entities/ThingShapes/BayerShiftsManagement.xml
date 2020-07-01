@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2019-12-19T10:47:38.090Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-06-04T18:44:11.900Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="" description="" isLocalOnly="false" name="lastShiftsUpdate" ordinal="4"/>
-                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="" description="" isLocalOnly="false" name="previousCycleCounter" ordinal="2"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="Shifts" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="Shifts" description="" isLocalOnly="false" name="lastShiftsUpdate" ordinal="4"/>
+                <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="Shifts" description="" isLocalOnly="false" name="previousCycleCounter" ordinal="2"/>
             </PropertyDefinitions>
             <ServiceDefinitions>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CalculateShiftsFromNow">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CalculateShiftsFromNow">
                     <ResultType aspect.dataShape="BayerShiftSchedulesDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.defaultValue="1" aspect.isRequired="true" baseType="STRING" description="" name="nrOfShifts" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetAvailability">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetAvailability">
                     <ResultType baseType="INTEGER" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" aspect.maximumValue="23" aspect.minimumValue="0" baseType="INTEGER" description="" name="hour" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformance">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformance">
                     <ResultType aspect.dataShape="BayerDailyPerformanceDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.defaultValue="6" baseType="INTEGER" description="" name="daysInThePast" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformanceForTimeframe">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDailyPerformanceForTimeframe">
                     <ResultType aspect.dataShape="BayerDailyPerformanceDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="endTime" ordinal="2"/>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startTime" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNearestChangeoverFromSchedule">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetNearestChangeoverFromSchedule">
                     <ResultType aspect.dataShape="BayerScheduleItemDbDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="fromTime" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetPcsPerShift">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetPcsPerShift">
                     <ResultType aspect.dataShape="PcsPerShiftDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="shiftStartTime" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftEvents">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftEvents">
                     <ResultType aspect.dataShape="ShiftEventsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="shiftScheduleId" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftsFromNow">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetShiftsFromNow">
                     <ResultType aspect.dataShape="BayerShiftSchedulesDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.defaultValue="30" aspect.isRequired="true" aspect.maximumValue="60" aspect.minimumValue="6" aspect.units="minutes" baseType="INTEGER" description="MUST BE DIVISIBLE BY 6!!!!!" name="interval" ordinal="3"/>
@@ -59,15 +59,15 @@
                         <FieldDefinition aspect.defaultValue="0" aspect.isRequired="true" baseType="STRING" description="" name="nrOfPrevShifts" ordinal="1"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="true" category="" description="Executed at the beginning of each shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ScheduleShifts">
+                <ServiceDefinition aspect.isAsync="true" category="Shifts" description="Executed at the beginning of each shift" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ScheduleShifts">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateCurrentShiftId">
+                <ServiceDefinition aspect.isAsync="false" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateCurrentShiftId">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions/>
                 </ServiceDefinition>
-                <ServiceDefinition aspect.isAsync="true" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShift">
+                <ServiceDefinition aspect.isAsync="true" category="Shifts" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShift">
                     <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.dataShape="ScheduledEvent" aspect.isRequired="true" baseType="INFOTABLE" description="" name="eventData" ordinal="1"/>
@@ -267,56 +267,91 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // GetDailyPerformanceForTimeframe service
+                                    // * startTime - DATETIME
+                                    // * endTime - DATETIME
+                                    function checkDay(d1, d2) {
+                                        return (d1.getDate() == d2.getDate() && d1.getMonth() == d2.getMonth() && d1.getFullYear() == d2.getFullYear());
+                                    }
                                     // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
-                                    var shifts =  Things["BayerDBDataProvider"].GetShiftSchedules({
-                                    	productionLine: me.name /* THINGNAME */,
-                                    	startTime: startTime /* DATETIME */,
-                                    	endTime: endTime /* DATETIME */
+                                    var shifts = Things["BayerDBDataProvider"].GetShiftSchedules({
+                                        productionLine: me.name /* THINGNAME */,
+                                        startTime: startTime /* DATETIME */,
+                                        endTime: endTime /* DATETIME */
+                                    });
+                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerDailyPerformanceDataShape)
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        dataShapeName: "BayerDailyPerformanceDataShape"
                                     });
                                     
-                                    // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerDailyPerformanceDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerDailyPerformanceDataShape" });
-                                    
                                     var tableLength = shifts.rows.length;
-                                    for (var x = 0; x < tableLength;) {	
+                                    for (var sIdx = 0; sIdx < tableLength;) {
                                         // BayerDailyPerformanceDataShape entry object
-                                        var newResultEntry = new Object();
-                                        newResultEntry.timestamp = shifts.rows[x].timestamp; // DATETIME
+                                        var newResultEntry = {};
+                                        newResultEntry.timestamp = shifts.rows[sIdx].timestamp; // DATETIME
                                     
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerPerformancePerShiftDataShape)
-                                        newResultEntry.dailyPerformance = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerPerformancePerShiftDataShape" });
-                                    
-                                        for (var i = 0; i < 3 && x < tableLength; i++) {
-                                            var shift = shifts.rows[x];
-                                                
+                                        newResultEntry.dailyPerformance = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            dataShapeName: "BayerPerformancePerShiftDataShape"
+                                        });
+                                        let previousDate = null;
+                                        for (var sub = 0; sub < 3 && sIdx < tableLength; sub++) {
+                                            var shift = shifts.rows[sIdx];
+                                            if (!previousDate) {
+                                                previousDate = new Date(shift.timestamp.getTime());
+                                            } else if (sIdx > 0) {
+                                                prevousDate = new Date(shifts.rows[sIdx - 1].timestamp.getTime());
+                                            }
+                                            if (!checkDay(previousDate, shift.timestamp)) {
+                                                // day is not the same, there is missing data
+                                                // should add remaining daily performance shift entries
+                                                //debugger; // should skip?
+                                                //console.log("Dates are not aligned! sub='" + sub + "' prev='" + previousDate.toISOString() + "' cur='" + shift.timestamp.toISOString() + "'");
+                                                // TODO ?
+                                            }
                                             // BayerPerformancePerShiftDataShape entry object
-                                            var newEntry = new Object();
-                                            newEntry.shift = "" + (i+1); // STRING
-                                            
-                                            if (shift.timestamp.getHours() == 6 + (i*8)) {
+                                            var newEntry = {};
+                                            newEntry.shift = "" + (sub + 1); // STRING
+                                            let hours = shift.timestamp.getHours();
+                                            // What if there is missing data in shift schedule?
+                                            // Then this condition would start to fail miserably, one after another,
+                                            // simply because dates are out of order - only one missing schedule record
+                                            // for 6:00 / 14:00 / 22:00 would cause all other entries to return false.
+                                            // Need to detect missing record and skip over it (increment sub, leave sIdx)
+                                            if (hours == 6 + (sub * 8)) {
+                                                //logger.debug("[" + me.name + ".GetDailyPerformance] Adding shift: (" + hours + " != 6 + (" + sub + "*8) | " + (6 + (sub * 8)) + "): '" +
+                                                //    shift.timestamp.toISOString() + "' produced='" + shift.totalQuantityProduced + "'");
                                                 newEntry.quantityProduced = shift.totalQuantityProduced; // NUMBER
                                                 newEntry.targetQuantity = shift.totalTargetQuantity; // NUMBER
-                                                
+                                    
                                                 // if target==0, then performance=quantity
                                                 newEntry.performance = newEntry.targetQuantity ? (newEntry.quantityProduced / newEntry.targetQuantity * 100) : newEntry.quantityProduced;
-                                                
                                                 newEntry.status = newEntry.quantityProduced >= newEntry.targetQuantity; // BOOLEAN
-                                            }
-                                            else {
-                                                //logger.debug("[" + me.name + ".GetDailyPerformance] Skipping shift");
+                                    
+                                                newResultEntry.dailyPerformance.AddRow(newEntry);
+                                            } else {
+                                                //logger.debug("[" + me.name + ".GetDailyPerformance] Skipping shift: (" + hours + " != 6 + (" + sub + "*8) | " + (6 + (sub * 8)) + "): '" +
+                                                //   shift.timestamp.toISOString() + "' produced='" + shift.totalQuantityProduced + "'");
                                                 newEntry.quantityProduced = 0; // NUMBER
                                                 newEntry.targetQuantity = 0; // NUMBER
                                                 newEntry.performance = 0;
                                                 newEntry.status = false; // BOOLEAN
+                                                newResultEntry.dailyPerformance.AddRow(newEntry);
+                                                continue; // need to skip in both cases (hold on current record until)
+                                                let cSubId = (hours - 6) / 8;
+                                                if (cSubId < sub) {
+                                                    continue;
+                                                    // based on id, it means that new hours are before
+                                                    // like in previous day shift (there is missing data?)
+                                                }
+                                                if (cSubId > sub) {
+                                                }
                                             }
-                                            
-                                            newResultEntry.dailyPerformance.AddRow(newEntry);
-                                            
-                                            x++;
-                                        }
-                                        
+                                            sIdx++;
+                                        } // for each 8h shift
                                         result.AddRow(newResultEntry);
-                                    }
+                                    } // for each shift schedule entry
                                     ]]>
                                     </code>
                                 </Row>
@@ -360,22 +395,34 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    // result: INFOTABLE dataShape: "BayerShiftScheduleDataShape"
-                                    var shift =  Things["BayerDBDataProvider"].GetSingleShiftByTimeWithTargetDiff({
-                                    	shiftTime: shiftStartTime /* DATETIME */,
-                                    	productionLine: me.name /* THINGNAME */
+                                    // GetPcsPerShift service
+                                    // * shiftStartTime - DATETIME
+                                    
+                                    // result: INFOTABLE dataShape: "PcsPerShiftDataShape"
+                                    var shift = Things["BayerDBDataProvider"].GetSingleShiftByTimeWithTargetDiff({
+                                        shiftTime: shiftStartTime /* DATETIME */,
+                                        productionLine: me.name /* THINGNAME */
                                     });
                                     // shift = 8h, result = shift / 8
                                     
                                     // result: INFOTABLE
                                     var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
-                                    	infoTableName: 'InfoTable' /* STRING */,
-                                    	dataShapeName: 'PcsPerShiftDataShape' /* DATASHAPENAME */
+                                        infoTableName: 'InfoTable' /* STRING */,
+                                        dataShapeName: 'PcsPerShiftDataShape' /* DATASHAPENAME */
                                     });
+                                    
+                                    var colorState;
+                                    if (shift.shiftTargetPercent >= 100) {
+                                        colorState = 100;
+                                    } else {
+                                        colorState = shift.actualDiffPerMinute;
+                                    }
                                     
                                     result.AddRow({
                                         shiftTargetPercent: shift.shiftTargetPercent,
                                         actualDiffPerMinute: shift.actualDiffPerMinute,
+                                        actualSpeedPerHour: shift.actualSpeedPerHour,
+                                        colorState: colorState,
                                     });
                                     ]]>
                                     </code>
@@ -604,6 +651,7 @@
                                     <code>
                                     <![CDATA[
                                     var qProd = me.counter - me.previousCycleCounter;
+                                    logger.debug(me.name+": UpdateShift: production="+qProd+"; counter="+me.counter+"; previous="+me.previousCycleCounter+";");
                                     me.previousCycleCounter = me.counter;
                                     
                                     // result: BOOLEAN

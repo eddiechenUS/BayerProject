@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2019-12-19T10:11:03.627Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="BayerDBConnectorTemplate" description="" documentationContent="" effectiveThingPackage="DatabaseThing" homeMashup="" lastModifiedDate="2020-06-06T22:12:06.398Z" name="BayerSqlServerConnectorTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -97,6 +97,18 @@
                             <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteFromProductionPlan">
+                        <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="INTEGER" description="" name="id" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteSafetyIssue">
+                        <ResultType aspect.dataShape="SafetyIssuesShape" baseType="NUMBER" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="INTEGER" description="" name="ID" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteScheduledProduction">
                         <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -157,6 +169,15 @@
                             <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="dateTime" ordinal="2"/>
                             <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="1"/>
                             <FieldDefinition aspect.defaultValue="0" aspect.maximumValue="0" aspect.minimumValue="-5" aspect.units="week" baseType="INTEGER" description="" name="week" ordinal="3"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelaysByDate">
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.defaultValue="breakdown" baseType="STRING" description="" name="category" ordinal="4"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="endTime" ordinal="2"/>
+                            <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="productionLine" ordinal="3"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="startTime" ordinal="1"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelayShiftDetails">
@@ -316,6 +337,7 @@
                             <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="7"/>
                             <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="source" ordinal="2"/>
                             <FieldDefinition baseType="DATETIME" description="" name="startTime" ordinal="3"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="LONG" description="" name="totalDuration" ordinal="8"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertMaintenanceTicket">
@@ -328,7 +350,7 @@
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertProductionPlan">
-                        <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
+                        <ResultType baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
                             <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="activeMaterialNumber" ordinal="14"/>
                             <FieldDefinition baseType="INTEGER" description="" name="blistersPerFoldedBox" ordinal="17"/>
@@ -348,12 +370,23 @@
                             <FieldDefinition baseType="DATETIME" description="" name="startTime" ordinal="12"/>
                             <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="status" ordinal="8"/>
                             <FieldDefinition baseType="INTEGER" description="" name="tabletsPerBlister" ordinal="23"/>
+                            <FieldDefinition baseType="STRING" description="TA Number" name="taNumber" ordinal="25"/>
                             <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetHours" ordinal="6"/>
                             <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetQuantity" ordinal="5"/>
                             <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetQuantityPerHour" ordinal="7"/>
                             <FieldDefinition baseType="STRING" description="" name="uom" ordinal="19"/>
                             <FieldDefinition baseType="STRING" description="" name="version" ordinal="18"/>
                             <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="workedHours" ordinal="10"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertProductionQuantityChange">
+                        <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="commentAdded" ordinal="4"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="originalTargetQuantity" ordinal="3"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="productionPlanId" ordinal="1"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="targetQuantity" ordinal="2"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="userName" ordinal="5"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="InsertSafetyIssue">
@@ -451,6 +484,13 @@
                             <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="status" ordinal="2"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateProductionPlanTargetHours">
+                        <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="1"/>
+                            <FieldDefinition baseType="NUMBER" description="" name="targetHours" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShiftEvent">
                         <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions>
@@ -466,6 +506,13 @@
                             <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="productionPlanId_actual" ordinal="3"/>
                             <FieldDefinition aspect.isRequired="true" baseType="NUMBER" description="" name="quantityProduced" ordinal="4"/>
                             <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="timestamp" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShiftScheduleItem">
+                        <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="INTEGER" description="" name="newProductionPlanId" ordinal="3"/>
+                            <FieldDefinition baseType="INTEGER" description="" name="oldProductionPlanId" ordinal="2"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="UpdateShiftTotalProduction">
@@ -538,6 +585,57 @@
                                         <![CDATA[
                                         DELETE FROM [dbo].[Action]
                                               WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLCommand" name="DeleteFromProductionPlan">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLCommand" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        DELETE FROM [dbo].[ProductionPlan]
+                                              WHERE [id] = [[id]] AND [status] = 'PENDING'
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLCommand" name="DeleteSafetyIssue">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>9.999999999E9</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        DELETE
+                                          FROM [dbo].[SafetyIssue]
+                                          WHERE [id] = [[ID]]
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -875,6 +973,45 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="GetDelaysByDate">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT d.[id]
+                                              ,d.[startTime]
+                                              ,d.[endTime]
+                                              ,d.[totalDurationMs]
+                                              ,ROUND(d.[totalDurationMs]/1000.0/60.0,2) as [totalDurationMins]
+                                              ,FORMAT(d.[endTime] - d.[startTime], 'HH:mm:ss') as [duration]
+                                              ,FORMAT(DATEADD(MILLISECOND, d.[totalDurationMs] % 1000, DATEADD(SECOND, d.[totalDurationMs] / 1000, 0)), 'HH:mm:ss') as [totalDuration]
+                                          FROM 
+                                        	[dbo].[Delay] as d
+                                          LEFT JOIN [dbo].[ShiftSchedule] as s ON d.[shiftScheduleId] = s.[id]
+                                          WHERE 
+                                            d.[startTime] >= [[startTime]] AND
+                                        	d.[endTime] <= [[endTime]] AND 
+                                            d.[category] != 'changeover' AND 
+                                            s.[productionLine] = [[productionLine]] AND
+                                            d.[category] = [[category]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="SQLQuery" name="GetDelayShiftDetails">
                         <ConfigurationTables>
                             <ConfigurationTable description="SQLQuery" isMultiRow="false" name="Query" ordinal="0">
@@ -898,10 +1035,12 @@
                                               ,[source]
                                               ,[startTime]
                                               ,[endTime]
-                                              ,FORMAT([endTime] - [startTime], 'mm:ss') as [duration]
+                                              ,FORMAT([endTime] - [startTime], 'HH:mm:ss') as [duration]
+                                              ,FORMAT(DATEADD(MILLISECOND, [totalDurationMs] % 1000, DATEADD(SECOND, [totalDurationMs] / 1000, 0)), 'HH:mm:ss') as [totalDuration]
                                               ,[reasonCode]
                                               ,[description]
                                               ,[shiftScheduleId]
+                                              
                                           FROM 
                                         	[dbo].[Delay]
                                           WHERE 
@@ -933,7 +1072,7 @@
                                         DECLARE @shiftScheduleId AS INT = [[shiftScheduleId]];  
                                         
                                         SELECT *
-                                        	,FORMAT([grouped].[durationDiff],'mm:ss') AS [duration]
+                                            ,FORMAT([grouped].[totalDurationDiff],'mm:ss') AS [duration]
                                         	,(SELECT TOP(1) [description] 
                                         		FROM [dbo].[Delay] AS [parent] 
                                         		WHERE 
@@ -947,9 +1086,9 @@
                                         		[category]
                                         		  ,COUNT(*) as [frequency]
                                         		  ,MAX(DATEDIFF(SECOND, [startTime], [endTime])) as [durationMax]
-                                        		  -- ,SUM((CAST((DATEDIFF(SECOND,[startTime], [endTime]) / 60.0) AS DECIMAL(6,2)))) AS [duration]
                                         		  ,CAST(SUM(CAST([endTime] - [startTime] AS FLOAT)) AS DATETIME) AS [durationDiff]
                                         		  ,SUM(DATEDIFF(SECOND, [startTime], [endTime])) as [durationSec]
+                                        		  ,CAST(SUM(CAST(DATEADD(MILLISECOND, [totalDurationMs] % 1000, DATEADD(SECOND, [totalDurationMs] / 1000, 0)) AS FLOAT)) AS DATETIME) AS [totalDurationDiff]
                                         	  FROM [dbo].[Delay]
                                         	  WHERE 
                                         		[shiftScheduleId] = @shiftScheduleId
@@ -980,6 +1119,7 @@
                                         <![CDATA[
                                         SELECT TOP (1) [id]
                                               ,[productionLine]
+                                              ,[taNumber]
                                               ,[orderNr]
                                               ,[productId]
                                               ,[productDescription]
@@ -1212,33 +1352,39 @@
                                         <maxItems>1.0</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT [id]
-                                              ,[productionLine]
-                                              ,[orderNr]
-                                              ,[productId]
-                                              ,[productDescription]
-                                              ,[version]
-                                              ,[targetQuantity]
-                                              ,[uom]
-                                              ,[targetHours]
-                                              ,[targetQuantityPerHour]
-                                              ,[status]
-                                              ,[remainingHours]
-                                              ,[workedHours]
-                                              ,[producedQuantity]
-                                              ,[startTime]
-                                              ,[endTime]
-                                              ,[activeMaterialNumber]
-                                              ,[blisterType]
-                                              ,[foldedBoxFormat]
-                                              ,[blistersPerFoldedBox]
-                                              ,[commentFirstLine]
-                                              ,[mdatSaf]
-                                              ,[mdatOos]
-                                              ,[tabletsPerBlister]
-                                              ,[manufProcess]
-                                          FROM [dbo].[ProductionPlan]
-                                          WHERE [id] = [[id]]
+                                        SELECT d.[id]
+                                              ,d.[productionLine]
+                                              ,d.[taNumber]
+                                              ,d.[orderNr]
+                                              ,d.[productId]
+                                              ,d.[productDescription]
+                                              ,d.[version]
+                                              ,d.[targetQuantity]
+                                              ,d.[uom]
+                                              ,d.[targetHours]
+                                              ,d.[targetQuantityPerHour]
+                                              ,d.[status]
+                                              ,d.[remainingHours]
+                                              ,d.[workedHours]
+                                              ,d.[producedQuantity]
+                                              ,d.[startTime]
+                                              ,d.[endTime]
+                                              ,d.[activeMaterialNumber]
+                                              ,d.[blisterType]
+                                              ,d.[foldedBoxFormat]
+                                              ,d.[blistersPerFoldedBox]
+                                              ,d.[commentFirstLine]
+                                              ,d.[mdatSaf]
+                                              ,d.[mdatOos]
+                                              ,d.[tabletsPerBlister]
+                                              ,d.[manufProcess]
+                                        	  ,p.[originalTargetQuantity]
+                                        	  ,p.[userName]
+                                        	  ,CAST((CASE WHEN p.[originalTargetQuantity] IS NULL THEN '0' ELSE '1' END) AS Bit) AS ifQuantityChanged
+                                          FROM [dbo].[ProductionPlan] as d
+                                          LEFT JOIN [dbo].[ProductionQuantityChanges] as p ON d.[id] = p.[productionPlanId]
+                                        
+                                          WHERE d.[id] = [[id]]
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -1262,38 +1408,44 @@
                                         <maxItems>9.99999999E8</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT [id]
-                                              ,[productionLine]
-                                              ,[orderNr]
-                                              ,[productId]
-                                              ,[productDescription]
-                                              ,[version]
-                                              ,[targetQuantity]
-                                              ,[uom]
-                                              ,[targetHours]
-                                              ,[targetQuantityPerHour]
-                                              ,[status]
-                                              ,[remainingHours]
-                                              ,[workedHours]
-                                              ,[producedQuantity]
-                                              ,[startTime]
-                                              ,[endTime]
-                                              ,[activeMaterialNumber]
-                                              ,[blisterType]
-                                              ,[foldedBoxFormat]
-                                              ,[blistersPerFoldedBox]
-                                              ,[commentFirstLine]
-                                              ,[mdatSaf]
-                                              ,[mdatOos]
-                                              ,[tabletsPerBlister]
-                                              ,[manufProcess]
-                                          FROM [dbo].[ProductionPlan]
-                                          WHERE [productionLine] = [[line]] AND 
+                                        SELECT d.[id]
+                                              ,d.[productionLine]
+                                              ,d.[taNumber]
+                                              ,d.[orderNr]
+                                              ,d.[productId]
+                                              ,d.[productDescription]
+                                              ,d.[version]
+                                              ,d.[targetQuantity]
+                                              ,d.[uom]
+                                              ,d.[targetHours]
+                                              ,d.[targetQuantityPerHour]
+                                              ,d.[status]
+                                              ,d.[remainingHours]
+                                              ,d.[workedHours]
+                                              ,d.[producedQuantity]
+                                              ,d.[startTime]
+                                              ,d.[endTime]
+                                              ,d.[activeMaterialNumber]
+                                              ,d.[blisterType]
+                                              ,d.[foldedBoxFormat]
+                                              ,d.[blistersPerFoldedBox]
+                                              ,d.[commentFirstLine]
+                                              ,d.[mdatSaf]
+                                              ,d.[mdatOos]
+                                              ,d.[tabletsPerBlister]
+                                              ,d.[manufProcess]
+                                        	  ,p.[originalTargetQuantity]
+                                        	  ,p.[userName]
+                                        	  ,CAST((CASE WHEN p.[originalTargetQuantity] IS NULL THEN '0' ELSE '1' END) AS Bit) AS ifQuantityChanged
+                                          FROM [dbo].[ProductionPlan] as d
+                                          LEFT JOIN [dbo].[ProductionQuantityChanges] as p ON d.[id] = p.[productionPlanId]
+                                        
+                                          WHERE d.[productionLine] = [[line]] AND 
                                            (
-                                        		[endTime] >= DATEADD(day, -7, GETDATE())
-                                        		OR ([endTime] IS NULL)
+                                        		d.[endTime] >= DATEADD(day, -7, GETDATE())
+                                        		OR (d.[endTime] IS NULL)
                                            )
-                                          ORDER BY [id] ASC
+                                          ORDER BY d.[id] ASC
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -1317,34 +1469,39 @@
                                         <maxItems>1.0</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT TOP 1 [id]
-                                              ,[productionLine]
-                                              ,[orderNr]
-                                              ,[productId]
-                                              ,[productDescription]
-                                              ,[version]
-                                              ,[targetQuantity]
-                                              ,[uom]
-                                              ,[targetHours]
-                                              ,[targetQuantityPerHour]
-                                              ,[status]
-                                              ,[remainingHours]
-                                              ,[workedHours]
-                                              ,[producedQuantity]
-                                              ,[startTime]
-                                              ,[endTime]
-                                              ,[activeMaterialNumber]
-                                              ,[blisterType]
-                                              ,[foldedBoxFormat]
-                                              ,[blistersPerFoldedBox]
-                                              ,[commentFirstLine]
-                                              ,[mdatSaf]
-                                              ,[mdatOos]
-                                              ,[tabletsPerBlister]
-                                              ,[manufProcess]
-                                          FROM [dbo].[ProductionPlan]
-                                          WHERE [productionLine] = [[productionLine]] AND [status] = [[status]]
-                                          ORDER BY [id] ASC
+                                        SELECT TOP 1 d.[id]
+                                              ,d.[productionLine]
+                                              ,d.[orderNr]
+                                              ,d.[productId]
+                                              ,d.[productDescription]
+                                              ,d.[version]
+                                              ,d.[targetQuantity]
+                                              ,d.[uom]
+                                              ,d.[targetHours]
+                                              ,d.[targetQuantityPerHour]
+                                              ,d.[status]
+                                              ,d.[remainingHours]
+                                              ,d.[workedHours]
+                                              ,d.[producedQuantity]
+                                              ,d.[startTime]
+                                              ,d.[endTime]
+                                              ,d.[activeMaterialNumber]
+                                              ,d.[blisterType]
+                                              ,d.[foldedBoxFormat]
+                                              ,d.[blistersPerFoldedBox]
+                                              ,d.[commentFirstLine]
+                                              ,d.[mdatSaf]
+                                              ,d.[mdatOos]
+                                              ,d.[tabletsPerBlister]
+                                              ,d.[manufProcess]
+                                        	  ,p.[originalTargetQuantity]
+                                        	  ,p.[userName]
+                                        	  ,CAST((CASE WHEN p.[originalTargetQuantity] IS NULL THEN '0' ELSE '1' END) AS Bit) AS ifQuantityChanged
+                                          FROM [dbo].[ProductionPlan] as d
+                                          LEFT JOIN [dbo].[ProductionQuantityChanges] as p ON d.[id] = p.[productionPlanId]
+                                        
+                                          WHERE d.[productionLine] = [[productionLine]] AND d.[status] = [[status]]
+                                          ORDER BY d.[id] ASC
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -1368,7 +1525,8 @@
                                         <maxItems>9.999999999E9</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT [productionLine]
+                                        SELECT [ID]
+                                        	   ,[productionLine]
                                                ,[type]
                                                ,[comment]
                                                ,[timestamp]
@@ -1529,7 +1687,7 @@
                                         <![CDATA[
                                         SELECT s.[id]
                                               ,i.[id] AS itemId
-                                        	  ,s.[totalQuantityProduced]
+                                              ,s.[totalQuantityProduced]
                                               ,s.[totalTargetQuantity]
                                               ,s.[timestamp]
                                               ,s.[productionLine]
@@ -1543,8 +1701,8 @@
                                               ,i.[targetQuantity] * COALESCE(p.[blistersPerFoldedBox], 1) AS targetQuantityBlisters
                                               ,i.[quantityTargetOk]
                                               ,i.[productionPlanId_actual]
-                                        	  ,p.[productId]
-                                        	  ,p.[productDescription]
+                                              ,p.[productId]
+                                              ,p.[productDescription]
                                           FROM [dbo].[ShiftSchedule] AS s
                                           JOIN [dbo].[ShiftScheduleItem] AS i ON (i.[scheduleId] = s.[id])
                                           JOIN [dbo].[ProductionPlan] AS p ON (p.[id] = i.[productionPlanId])
@@ -1610,9 +1768,10 @@
                                               ,[totalTargetQuantity]
                                               ,[timestamp]
                                               ,[productionLine]
-                                              ,COALESCE([totalQuantityProduced] / NULLIF([totalTargetQuantity],0), 0) * 100 as [shiftTargetPercent]
+                                              ,COALESCE([totalQuantityProduced] / NULLIF([totalTargetQuantity],0), 0) * 100 AS [shiftTargetPercent]
                                         	  ,([totalQuantityProduced] / DATEDIFF(MINUTE, [timestamp], GETDATE())) - ([totalTargetQuantity]/(8*60)) AS [actualDiffPerMinute]
-                                        	  , GETDATE() as actualTime
+                                        	  ,([totalQuantityProduced] / DATEDIFF(MINUTE, [timestamp], GETDATE())) * 60 AS [actualSpeedPerHour]
+                                              , GETDATE() AS [actualTime]
                                           FROM [dbo].[ShiftSchedule]
                                           WHERE [productionLine] = [[productionLine]] AND [timestamp] = [[shiftTime]]
                                           ORDER BY [timestamp] ASC
@@ -1736,7 +1895,8 @@
                                                    ,[endTime]
                                                    ,[reasonCode]
                                                    ,[description]
-                                                   ,[shiftScheduleId])
+                                                   ,[shiftScheduleId]
+                                                   ,[totalDurationMs])
                                              VALUES
                                                    ([[category]]
                                                    ,[[source]]
@@ -1744,7 +1904,8 @@
                                                    ,[[endTime]]
                                                    ,[[reasonCode]]
                                                    ,[[description]]
-                                                   ,[[shiftScheduleId]]);
+                                                   ,[[shiftScheduleId]]
+                                                   ,[[totalDuration]]);
                                         SELECT * FROM [dbo].[Delay] WHERE [id] = SCOPE_IDENTITY();
                                         ]]>
                                         </sql>
@@ -1789,7 +1950,7 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
-                    <ServiceImplementation description="" handlerName="SQLCommand" name="InsertProductionPlan">
+                    <ServiceImplementation description="" handlerName="SQLQuery" name="InsertProductionPlan">
                         <ConfigurationTables>
                             <ConfigurationTable description="SQLCommand" isMultiRow="false" name="Query" ordinal="0">
                                 <DataShape>
@@ -1806,6 +1967,7 @@
                                         <![CDATA[
                                         INSERT INTO [dbo].[ProductionPlan]
                                                    ([productionLine]
+                                                   ,[taNumber]
                                                    ,[orderNr]
                                                    ,[productId]
                                                    ,[productDescription]
@@ -1829,8 +1991,10 @@
                                                    ,[mdatOos]
                                                    ,[tabletsPerBlister]
                                                    ,[manufProcess])
+                                             OUTPUT INSERTED.id
                                              VALUES
                                                    ([[productionLine]]
+                                                   ,[[taNumber]]
                                                    ,[[orderNr]]
                                                    ,[[productId]]
                                                    ,[[productDescription]]
@@ -1854,6 +2018,43 @@
                                                    ,[[mdatOos]]
                                                    ,[[tabletsPerBlister]]
                                                    ,[[manufProcess]])
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLCommand" name="InsertProductionQuantityChange">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLCommand" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        INSERT INTO [dbo].[ProductionQuantityChanges]
+                                        		([productionPlanId]
+                                                 ,[targetQuantity]
+                                                 ,[originalTargetQuantity]
+                                                 ,[commentAdded]
+                                                 ,[userName]
+                                                 ,[modificationTime])
+                                        	VALUES
+                                        		([[productionPlanId]]
+                                                 ,[[targetQuantity]]
+                                                 ,[[originalTargetQuantity]]
+                                                 ,[[commentAdded]]
+                                                 ,[[userName]]
+                                                 ,GETDATE());
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -2174,6 +2375,33 @@
                             </ConfigurationTable>
                         </ConfigurationTables>
                     </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLCommand" name="UpdateProductionPlanTargetHours">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLCommand" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ProductionPlan]
+                                           SET [targetHours] = [[targetHours]]
+                                           	  ,[remainingHours] = [[targetHours]]
+                                         WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation description="" handlerName="SQLCommand" name="UpdateShiftEvent">
                         <ConfigurationTables>
                             <ConfigurationTable description="SQLCommand" isMultiRow="false" name="Query" ordinal="0">
@@ -2230,6 +2458,32 @@
                                         		  ) AS r
                                         	WHERE [[timestamp]] >= r.time AND (r.time_next IS NULL OR [[timestamp]] < r.time_next)
                                         )
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="SQLCommand" name="UpdateShiftScheduleItem">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="SQLCommand" isMultiRow="false" name="Query" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="NUMBER" description="maxItems" name="maxItems" ordinal="0"/>
+                                        <FieldDefinition baseType="STRING" description="sql" name="sql" ordinal="0"/>
+                                        <FieldDefinition baseType="NUMBER" description="timeout" name="timeout" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ShiftScheduleItem]
+                                           SET [productionPlanId] = [[newProductionPlanId]]
+                                        WHERE [productionPlanId] = [[oldProductionPlanId]]
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>

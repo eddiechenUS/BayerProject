@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Entities build="b2319" majorVersion="8" minorVersion="4" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1041" universal="">
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="BayerDataProviderTemplate" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-02-11T12:19:29.685Z" name="BayerProductionDBDataProviderTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="BayerDataProviderTemplate" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-03-20T09:25:34.993Z" name="BayerProductionDBDataProviderTemplate" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -10,7 +10,21 @@
                 <Delete/>
                 <Metadata/>
             </DesignTimePermissions>
-            <RunTimePermissions/>
+            <RunTimePermissions>
+                <Permissions resourceName="*">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
             <VisibilityPermissions>
                 <Visibility>
                     <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
@@ -40,17 +54,30 @@
             <RemoteServiceBindings/>
             <RemoteEventBindings/>
             <AlertConfigurations>
+                <AlertDefinitions name="factor"/>
                 <AlertDefinitions name="mockCounterData"/>
                 <AlertDefinitions name="mockedValue"/>
             </AlertConfigurations>
             <ThingShape>
                 <PropertyDefinitions>
+                    <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="STRING" category="" description="" isLocalOnly="false" name="factor" ordinal="4"/>
                     <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="false" aspect.isPersistent="true" baseType="BOOLEAN" category="" description="" isLocalOnly="false" name="mockCounterData" ordinal="2"/>
                     <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="" description="" isLocalOnly="false" name="mockedValue" ordinal="3"/>
                 </PropertyDefinitions>
                 <ServiceDefinitions>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetCurrentCounterValue">
                         <ResultType baseType="NUMBER" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetCurrentCounterValueFromDB">
+                        <ResultType baseType="STRING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="STRING" description="" name="connector" ordinal="2"/>
+                            <FieldDefinition baseType="STRING" description="" name="factor" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetSensorStatusValueFromDB">
+                        <ResultType baseType="STRING" description="" name="result" ordinal="0"/>
                         <ParameterDefinitions/>
                     </ServiceDefinition>
                 </ServiceDefinitions>
@@ -70,6 +97,59 @@
                                         <code>
                                         <![CDATA[
                                         var result = me.mockCounterData ? me.mockedValue : Things[me.GetConnector()].GetCurrentCounterValue().ValueNumber;
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetCurrentCounterValueFromDB">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        factor = me.factor;
+                                        connector =me.GetConnector();
+                                        var sensorVal=  Things[connector].GetSensorID()["ValueNumber"];
+                                          //  me.valuetext=test;
+                                            var lookupVal=  Things[connector].GetValueNumber()["ProductName"];
+                                          //  me.machineID = test1;
+                                        
+                                            
+                                             
+                                          var factorVal=Things[connector].GetFactorValue({value:lookupVal,factor: factor})[factor];
+                                         
+                                        var result =sensorVal * factorVal;
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetSensorStatusValueFromDB">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var val = Things[me.GetConnector()].GetSensorStatusDB()["ValueNumber"];
+                                        
+                                        var result = val;
                                         ]]>
                                         </code>
                                     </Row>
@@ -104,9 +184,15 @@
                         <Principal isPermitted="true" name="System" type="User"/>
                     </PropertyRead>
                     <PropertyWrite/>
-                    <ServiceInvoke/>
-                    <EventInvoke/>
-                    <EventSubscribe/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventSubscribe>
                 </Permissions>
             </InstanceRunTimePermissions>
             <InstanceVisibilityPermissions>
