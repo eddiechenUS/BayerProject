@@ -11,7 +11,7 @@ CREATE TABLE [dbo].[Delay](
 	[source] [varchar](255) NULL,
 	[startTime] [datetime] NOT NULL,
 	[endTime] [datetime] NOT NULL,
-	[totalDurationMs] [long] NULL,
+	[totalDurationMs] [bigint] NULL,
 	[reasonCode] [varchar](100) NULL,
 	[description] [nvarchar](2000) NULL,
 	[shiftScheduleId] [int] NULL,

@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-04-21T10:08:01.149Z"
+         lastModifiedDate="2020-07-23T06:39:31.901Z"
          name="BayerMainMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -50,6 +50,7 @@
                  ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
             <Things>
+                <Thing>BayerUtilities</Thing>
                 <Thing>BayerMainPage</Thing>
             </Things>
             <ThingShapes></ThingShapes>
@@ -102,6 +103,24 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetMenuContent"
+                  } ]
+                },
+                "Things_BayerUtilities" : {
+                  "DataName" : "Things_BayerUtilities",
+                  "EntityName" : "BayerUtilities",
+                  "EntityType" : "Things",
+                  "Id" : "4eb0044e-aba2-4568-a450-20b55f563378",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "6de06a97-ce72-439f-99fd-040bfb5ae8dd",
+                    "Name" : "CheckUserInRole",
+                    "Parameters" : {
+                      "role" : "Role.BayerSuperUser",
+                      "role2" : "Role.BayerAdminUser"
+                    },
+                    "RefreshInterval" : 0,
+                    "Target" : "CheckUserInRole"
                   } ]
                 },
                 "UserExtensions" : {
@@ -378,6 +397,15 @@
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
                 "Id" : "d3880ad8-8de7-4ded-9209-1b0bfe70d58f"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerUtilities",
+                "EventHandlerService" : "CheckUserInRole",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "100b8242-fd23-4435-a5fd-3b330eefc20e"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -1010,7 +1038,7 @@
                                   "ToolTipStyle" : "DefaultTooltipStyle",
                                   "Top" : 20,
                                   "Type" : "radiobuttonlist",
-                                  "Visible" : true,
+                                  "Visible" : false,
                                   "Width" : 85,
                                   "Z-index" : 10,
                                   "__TypeDisplayName" : "Button Bar",
@@ -1102,7 +1130,8 @@
                         "Visible" : true,
                         "Width" : 400,
                         "Z-index" : 10,
-                        "__TypeDisplayName" : "Contained Mashup"
+                        "__TypeDisplayName" : "Contained Mashup",
+                        "subject" : "blisters"
                       },
                       "Widgets" : [ ]
                     } ]
@@ -1369,7 +1398,7 @@
                     "AutoEvaluate" : false,
                     "DataChangeType" : "VALUE",
                     "DisplayName" : "getBoxesState",
-                    "Expression" : "Output = \"boxes\";",
+                    "Expression" : "Output = \"blisters\";",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-78",
@@ -1409,7 +1438,8 @@
                       "BaseType" : "STRING",
                       "Description" : "",
                       "ParameterName" : "mashup",
-                      "isValid" : true
+                      "isValid" : true,
+                      "name" : "mashup"
                     } ],
                     "editMode" : "edit",
                     "helperType" : "validator",

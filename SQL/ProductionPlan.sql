@@ -8,6 +8,7 @@ GO
 CREATE TABLE [dbo].[ProductionPlan](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[productionLine] [varchar](255) NOT NULL,
+	[taNumber] [varchar](20) NULL,
 	[orderNr] [varchar](50) NULL,
 	[productId] [nvarchar](50) NOT NULL,
 	[productDescription] [nvarchar](255) NULL,
