@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-06-18T08:22:12.889Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-07-23T07:46:29.840Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="Production" description="" isLocalOnly="false" name="counter" ordinal="2"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INTEGER" category="Production" description="" isLocalOnly="false" name="currentProductKey" ordinal="4"/>
@@ -959,12 +959,14 @@
                                                 newEntry.startTime = undefined; // DATETIME
                                                 newEntry.endTime = undefined; // DATETIME
                                                 newEntry.workedHours = 0; // NUMBER
-                                                if (prev) {
+                                                if (prev && newEntry.productId != 'standby') {
                                                     let changeoverItem = getChangeover(prev, newEntry);
-                                                    //DEBUG("Changeover time: '" + changeoverItem.targetHours + "' for prev='" + prev.taNumber + "' next='" + newEntry.taNumber + "'")
+                                                    //DEBUG("Changeover time: '" + changeoverItem.targetHours + "' for prev='" + prev.taNumber + "' next='" + newEntry.taNumber + "'");
                                                     result.AddRow(changeoverItem);
                                                 }
-                                                prev = newEntry;
+                                                if (newEntry.productId != 'stanby') {
+                                                    prev = newEntry;
+                                                }
                                                 DEBUG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
                                                 result.AddRow(newEntry);
                                             } catch (ex) {
@@ -977,7 +979,7 @@
                                     
                                     function getChangeover(prevItem, nextItem) {
                                         if (!changeoverCalculationThing) {
-                                            DEBUG("Changeover time calculated with OLD method for prev='" + prevItem.taNumber + "' next='" + nextItem.taNumber + "'")
+                                            DEBUG("Changeover time calculated with OLD method for prev='" + prevItem.taNumber + "' next='" + nextItem.taNumber + "'");
                                             return getChangeoverFallback(prevItem, nextItem);
                                         }
                                         return changeoverCalculationThing.GetChangeoverPlanItem({
@@ -1079,6 +1081,9 @@
                                     var SERVICE_NAME = "RecalculatePlanChangeovers";
                                     var lineConfig = me.GetLineConfiguration();
                                     var changeoverCalculationThingName = lineConfig.changeoverCalculationThing;
+                                    if (!changeoverCalculationThingName) {
+                                        changeoverCalculationThingName = "BayerChangeoverDefaultCalculationThing";
+                                    }
                                     var changeoverCalculationThing = null;
                                     if (!!changeoverCalculationThingName) {
                                         changeoverCalculationThing = Things[changeoverCalculationThingName];
@@ -1090,15 +1095,17 @@
                                     var changeover = null, prev = null, next = null;
                                     for (let idx = 0; idx < numRows; idx++) {
                                         let current = productionPlan.rows[idx];
-                                        if (!idx && current.productId == 'Cambio') {
+                                        if (!idx && (current.productId == 'Cambio' || current.productId == 'stanby')) {
                                             continue; // skip!
                                         }
-                                        if (!prev && current.productId != 'Cambio') {
+                                        let isProductLike = (current.productId != 'Cambio' && current.productId != 'standby');
+                                        let isChangeover = (current.productId == 'Cambio');
+                                        if (!prev && isProductLike) {
                                             changeover = null;
                                             prev = current;
-                                        } else if (!!prev && !changeover && !next && current.productId == 'Cambio') {
+                                        } else if (!!prev && !changeover && !next && isChangeover) {
                                             changeover = current;
-                                        } else if (!next && current.productId != 'Cambio') {
+                                        } else if (!next && isProductLike) {
                                             next = current;
                                         }
                                         if (!!prev && !!changeover && !!next) {

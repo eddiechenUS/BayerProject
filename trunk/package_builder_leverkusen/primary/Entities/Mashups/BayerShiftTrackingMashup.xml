@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-06-16T03:44:08.042Z"
+         lastModifiedDate="2020-07-23T06:50:56.847Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -192,6 +192,14 @@
                     "Parameters" : {
                       "token" : "Bayer.Speed"
                     },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetEffectiveToken"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "2bbabeab-6915-4698-83b7-e73ff132eca7",
+                    "Name" : "GetEffectiveToken1",
+                    "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetEffectiveToken"
                   } ]
@@ -1524,22 +1532,6 @@
                 "TargetId" : "validator-535",
                 "TargetSection" : ""
               }, {
-                "Id" : "2638dec8-2610-4b49-8dab-81889a67b827",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "Output",
-                  "SourcePropertyBaseType" : "STRING",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "PopupTitle",
-                  "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "UI",
-                "SourceId" : "expression-536",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "navigation-529",
-                "TargetSection" : ""
-              }, {
                 "Id" : "8b7e46fc-cafd-435e-9239-21b22a0f720d",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "Output",
@@ -1733,6 +1725,38 @@
                 "SourceSection" : "",
                 "TargetArea" : "UI",
                 "TargetId" : "navigationfunction-544",
+                "TargetSection" : ""
+              }, {
+                "Id" : "19821841-4831-4f20-b7f8-9b528c4660f5",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "token",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-536",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetEffectiveToken1",
+                "TargetSection" : "Resources_RuntimeLocalizationFunctions"
+              }, {
+                "Id" : "63f10439-43ae-457f-9a4a-87842b4780c9",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "PopupTitle",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetEffectiveToken1",
+                "SourceSection" : "Resources_RuntimeLocalizationFunctions",
+                "TargetArea" : "UI",
+                "TargetId" : "navigation-529",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
@@ -2138,6 +2162,15 @@
                 "EventTriggerId" : "button-31",
                 "EventTriggerSection" : "",
                 "Id" : "9d9e1554-8bc2-4380-a34f-856b573fe798"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Resources_RuntimeLocalizationFunctions",
+                "EventHandlerService" : "GetEffectiveToken1",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Changed",
+                "EventTriggerId" : "expression-536",
+                "EventTriggerSection" : " ",
+                "Id" : "97f397ca-51f6-4e18-8ad2-07122850836f"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -6254,7 +6287,8 @@
                                         "Visible" : true,
                                         "Width" : 400,
                                         "Z-index" : 10,
-                                        "__TypeDisplayName" : "Contained Mashup"
+                                        "__TypeDisplayName" : "Contained Mashup",
+                                        "subject" : "blisters"
                                       },
                                       "Widgets" : [ ]
                                     } ]
@@ -10639,7 +10673,7 @@
                     "AutoEvaluate" : true,
                     "DataChangeType" : "VALUE",
                     "DisplayName" : "convertBlistersBoxes",
-                    "Expression" : "Output = subject === \"blisters\" ? counterBoxes * blistersPerBox : counterBoxes;",
+                    "Expression" : "//Output = (subject === \"blisters\" ? counterBoxes * blistersPerBox : counterBoxes);\nOutput = (subject === \"boxes\" ? counterBoxes : counterBoxes * blistersPerBox);",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-490",
@@ -10657,19 +10691,31 @@
                       "BaseType" : "NUMBER",
                       "Description" : "",
                       "ParameterName" : "counterBoxes",
-                      "isValid" : true,
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
                       "name" : "counterBoxes"
                     }, {
                       "BaseType" : "NUMBER",
                       "Description" : "",
                       "ParameterName" : "blistersPerBox",
-                      "isValid" : true,
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
                       "name" : "blistersPerBox"
                     }, {
                       "BaseType" : "STRING",
                       "Description" : "",
                       "ParameterName" : "subject",
-                      "isValid" : true,
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
                       "name" : "subject"
                     } ],
                     "editMode" : "edit",
@@ -10699,7 +10745,7 @@
                     "AutoEvaluate" : true,
                     "DataChangeType" : "VALUE",
                     "DisplayName" : "convertBlistersBoxesTarget",
-                    "Expression" : "Output = subject === \"blisters\" ? targetBoxes * blistersPerBox : targetBoxes;",
+                    "Expression" : "//Output = (subject === \"blisters\" ? targetBoxes * blistersPerBox : targetBoxes);\nOutput = (subject === \"boxes\" ? targetBoxes : targetBoxes * blistersPerBox);",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-491",
@@ -10987,7 +11033,7 @@
                     "AutoEvaluate" : false,
                     "DataChangeType" : "ALWAYS",
                     "DisplayName" : "popupTitleSelect",
-                    "Expression" : "if (!isChangeover && allowAdjustment){\n    Output = \"Overwrite produced quantity\";\n} else {\n    Output = \"Confirmation Required\";}",
+                    "Expression" : "if (!isChangeover && allowAdjustment) {\n    Output = \"[[Bayer.OverwriteProducedQuantityTitle]]\"/*\"Overwrite produced quantity\"*/;\n} else {\n    Output = \"[[Bayer.ConfirmationRequired]]\"/*\"Confirmation Required\"*/;\n}",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-536",
@@ -11007,7 +11053,7 @@
                       "Description" : "",
                       "ParameterName" : "isChangeover",
                       "bindingDirection" : "Target",
-                      "bindingStatus" : false,
+                      "bindingStatus" : true,
                       "bindingType" : "Property",
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
@@ -11018,7 +11064,7 @@
                       "Description" : "",
                       "ParameterName" : "allowAdjustment",
                       "bindingDirection" : "Target",
-                      "bindingStatus" : false,
+                      "bindingStatus" : true,
                       "bindingType" : "Property",
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
@@ -11143,6 +11189,7 @@
                     "DisplayName" : "Nav-ConfigOptions",
                     "Id" : "navigationfunction-544",
                     "LastContainer" : false,
+                    "Left" : 0,
                     "MissingMashupMessage" : "",
                     "PopupHeight" : "0",
                     "PopupScrollbar" : "auto",
@@ -11154,6 +11201,7 @@
                     "TargetWindow" : "new",
                     "TargetWindowType" : "replace",
                     "Text" : "tw.navigationfunction-ide.properties.text.default-value",
+                    "Top" : 0,
                     "Type" : "navigationfunction",
                     "Visible" : true,
                     "Z-index" : 10,
