@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-06-19T08:26:29.429Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-07-27T19:48:53.857Z" name="BayerProductionLine" projectName="BayerIoT" tags="Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -385,26 +385,30 @@
                                         <Row>
                                             <code>
                                             <![CDATA[
+                                            //
+                                            // OnSchedulerTickGlobal subscription
+                                            //
                                             var minutesMod6 = eventData.timestamp.getMinutes() % 6;
                                             
                                             if (minutesMod6 == 5) {
-                                                // UPDATE PRODUCT AND SHIFT AT THE 5th MINUTE OF EACH 6 MINUTES CYCLE (e.g. 1:05:02|1:11:02|1:17:02 etc)
+                                                // UPDATE PRODUCT AND SHIFT AT THE 5th MINUTE OF EACH 6 MINUTES CYCLE
+                                                // (e.g. 1:05:02|1:11:02|1:17:02 etc)
                                                 logger.debug(me.name + " Update shift and product event");
                                             
-                                                me.UpdateShift({eventData: eventData});
-                                                me.UpdateProduct({eventData: eventData});
-                                            }
+                                                me.UpdateShift({ eventData: eventData });
+                                                me.UpdateProduct({ eventData: eventData });
+                                            } //? got 5th minute
                                             
                                             if (eventData.timestamp.getMinutes() == 0) {
                                                 // SCHEDULE SHIFTS AT 6:00:02|14:00:02|22:00:02
-                                                
-                                                if (eventData.timestamp.getHours() == 6 || eventData.timestamp.getHours() == 14 || eventData.timestamp.getHours() == 22) {
+                                                if (eventData.timestamp.getHours() == 6 ||
+                                                    eventData.timestamp.getHours() == 14 ||
+                                                    eventData.timestamp.getHours() == 22) {
                                                     logger.debug(me.name + " Schedule shifts event");
-                                                           
                                                     // no return
                                                     me.ScheduleShifts();
                                                 }
-                                            }
+                                            } // got minutes?
                                             ]]>
                                             </code>
                                         </Row>

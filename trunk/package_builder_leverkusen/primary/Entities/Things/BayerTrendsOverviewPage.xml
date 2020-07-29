@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-05-20T14:31:17.457Z" name="BayerTrendsOverviewPage" projectName="BayerIoT" published="false" tags="" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-07-28T04:50:55.302Z" name="BayerTrendsOverviewPage" projectName="BayerIoT" published="false" tags="" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -264,7 +264,7 @@
                                         // timestamp
                                         // totalMicrostopsMins totalBreakdownsMins totalChangeoverMins
                                         // totalMicrostopsStr totalBreakdownsStr totalChangeoverStr
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        var output = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
                                         	infoTableName: "result" /* STRING */,
                                         	dataShapeName: "BayerTrendsCombinedDataShape" /* DATASHAPENAME */
                                         });
@@ -337,13 +337,13 @@
                                         		if (tsStart.getTime() >= endDate.getTime()) {
                                         			break;
                                         		}
-                                        	} // while(...)
+                                        	} //# while(...)
                                         	return transformed;
-                                        } // transformChangeoversToHourly(...)
+                                        } //> transformChangeoversToHourly(...)
                                         
                                         var changeoversHourly = transformChangeoversToHourly(changeoversDirect);
                                         
-                                        function myDateFormat(date) {
+                                        function myDateFormat(date, isNegative) {
                                         	let hours = ("00" + date.getUTCHours()).slice(-2);
                                         	let minutes = ("00" + date.getUTCMinutes()).slice(-2);
                                         	let seconds = ("00" + date.getUTCSeconds()).slice(-2);
@@ -351,21 +351,33 @@
                                         	if (hours == "00" && minutes == "00" && seconds == "00") {
                                         		return ""; // force empty!
                                         	}
-                                        	return hours + ":" + minutes + ":" + seconds;
-                                        } // myDateFormat(...)
+                                        	return (isNegative ? "-" : "") + hours + ":" + minutes + ":" + seconds;
+                                        } //> myDateFormat(...)
+                                        
+                                        function getTimestampStr(date) {
+                                        	if (!date) {
+                                        		return "";
+                                        	}
+                                        	// new Date().toISOString().replace("T"," ").replace("Z"," ").split(".").slice(0,-1).join(".")
+                                        	if (aggregateBy != "hourly") {
+                                        		return new Date(date).toLocaleDateString();
+                                        	} else {
+                                        		return new Date(date).toLocaleString();
+                                        	}
+                                        } //> getTimestampStr(...)
                                         
                                         var numRows = microstopsHourly.rows.length;
                                         for (var tIdx = 0; tIdx < numRows; tIdx++) {
                                         	let microstop = microstopsHourly.rows[tIdx];
                                         	let breakdown = breakdownsHourly.rows[tIdx];
-                                            let changeover = {
-                                                timestamp: microstop.timestamp,
-                                                totalDurationMs: undefined,
-                                                totalDurationMins: undefined
-                                            };
-                                        	if(tIdx < changeoversHourly.length) {
-                                            	changeover = changeoversHourly.rows[tIdx];
-                                            }
+                                        	let changeover = {
+                                        		timestamp: microstop.timestamp,
+                                        		totalDurationMs: undefined,
+                                        		totalDurationMins: undefined
+                                        	};
+                                        	if (tIdx < changeoversHourly.length) {
+                                        		changeover = changeoversHourly.rows[tIdx];
+                                        	}
                                         	let timestamp = microstop.timestamp;
                                         
                                         	if (!microstop.totalDurationMins) {
@@ -382,12 +394,13 @@
                                         	let bMs = breakdown.totalDurationMs;
                                         	let cMs = changeover.totalDurationMs;
                                         
-                                        	let microstopStr = myDateFormat(new Date(mMs > 0 ? mMs : 0));//, "HH:mm:ss");
-                                        	let breakdownStr = myDateFormat(new Date(bMs > 0 ? bMs : 0));//, "HH:mm:ss");
-                                        	let changeoverStr = myDateFormat(new Date(cMs > 0 ? cMs : 0));//, "HH:mm:ss");
+                                        	let microstopStr = myDateFormat(new Date(Math.abs(mMs)), mMs < 0);
+                                        	let breakdownStr = myDateFormat(new Date(Math.abs(bMs)), bMs < 0);
+                                        	let changeoverStr = myDateFormat(new Date(Math.abs(cMs)), cMs < 0);
                                         
-                                        	result.AddRow({
+                                        	output.AddRow({
                                         		timestamp: timestamp,
+                                        		timestampStr: "" + getTimestampStr(timestamp),
                                         		totalMicrostopsMins: microstop.totalDurationMins,
                                         		totalBreakdownsMins: breakdown.totalDurationMins,
                                         		totalChangeoverMins: changeover.totalDurationMins,
@@ -398,9 +411,9 @@
                                         } //# for each main row
                                         
                                         if (aggregateBy != "hourly") {
-                                        	var oldResult = result;
-                                        	// new result
-                                        	result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        	var oldResult = output;
+                                        	// new ouput
+                                        	output = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
                                         		infoTableName: "result" /* STRING */,
                                         		dataShapeName: "BayerTrendsCombinedDataShape" /* DATASHAPENAME */
                                         	});
@@ -422,8 +435,9 @@
                                         	var curIdx = 0;
                                         	var numRows = oldResult.rows.length;
                                         	while (true) {
-                                        		result.AddRow({
+                                        		output.AddRow({
                                         			timestamp: tsStart,
+                                        			timestampStr: "" + getTimestampStr(tsStart),
                                         			totalMicrostopsMins: 0.0,
                                         			totalBreakdownsMins: 0.0,
                                         			totalChangeoverMins: 0.0,
@@ -431,7 +445,7 @@
                                         			totalBreakdownsStr: "",
                                         			totalChangeoverStr: ""
                                         		});
-                                        		let current = result.rows[result.rows.length - 1];
+                                        		let current = output.rows[output.rows.length - 1];
                                         		for (let idx = curIdx; idx < numRows; idx++, curIdx++) {
                                         			let row = oldResult.rows[idx];
                                         			if (row.timestamp.getTime() >= tsEnd.getTime()) {
@@ -455,20 +469,19 @@
                                         			break;
                                         		}
                                         	} // while(...)
-                                        	numRows = result.rows.length;
+                                        	numRows = output.rows.length;
                                         	for (let idx = 0; idx < numRows; idx++) {
-                                        		let row = result.rows[idx];
+                                        		let row = output.rows[idx];
                                         		let mMs = row.totalMicrostopsMins * 60.0 * 1000.0;
                                         		let bMs = row.totalBreakdownsMins * 60.0 * 1000.0;
                                         		let cMs = row.totalChangeoverMins * 60.0 * 1000.0;
-                                        		mMs = mMs > 0 ? mMs : 0;
-                                        		bMs = bMs > 0 ? bMs : 0;
-                                        		cMs = cMs > 0 ? cMs : 0;
-                                        		row.totalMicrostopsStr = myDateFormat(new Date(mMs));
-                                        		row.totalBreakdownsStr = myDateFormat(new Date(bMs));
-                                        		row.totalChangeoverStr = myDateFormat(new Date(cMs));
+                                        		row.totalMicrostopsStr = myDateFormat(new Date(Math.abs(mMs)), mMs < 0);
+                                        		row.totalBreakdownsStr = myDateFormat(new Date(Math.abs(bMs)), bMs < 0);
+                                        		row.totalChangeoverStr = myDateFormat(new Date(Math.abs(cMs)), cMs < 0);
                                         	} //# for each combined row
                                         } //? forceDaily
+                                        
+                                        var result = output;
                                         ]]>
                                         </code>
                                     </Row>

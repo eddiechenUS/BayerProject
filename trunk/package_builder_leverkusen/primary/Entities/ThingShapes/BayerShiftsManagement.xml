@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-06-04T18:44:11.900Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-07-28T16:04:06.663Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="Shifts" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="Shifts" description="" isLocalOnly="false" name="lastShiftsUpdate" ordinal="4"/>
@@ -650,73 +650,102 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var qProd = me.counter - me.previousCycleCounter;
-                                    logger.debug(me.name+": UpdateShift: production="+qProd+"; counter="+me.counter+"; previous="+me.previousCycleCounter+";");
+                                    //
+                                    // UpdateShift service
+                                    // * eventData - Event
+                                    // * eventData.timestamp - DATETIME
+                                    
+                                    var SERVICE_NAME = "UpdateShift";
+                                    var quantityProduced = me.counter - me.previousCycleCounter;
+                                    if (quantityProduced < 0) {
+                                    	WARNING("Production snapshot is below zero! Probable issue with counter value: counter=" + me.counter + "; previous=" + me.previousCycleCounter + ";");
+                                    	// this is an edge case where the quantity produced is malformed
+                                    	// the fallback would require to retrieve a previous 6-minute window
+                                    	let shiftTimestamp = Things["BayerDBDataProvider"].GetShiftScheduleById({
+                                    		id: me.currentShiftId
+                                    	}).timestamp;
+                                    	let shiftSchedule = Things["BayerDBDataProvider"].GetShiftSchedules({
+                                    		productionLine: me.name,
+                                    		startTime: shiftTimestamp,
+                                    		endTime: dateAddHours(shiftTimestamp, 8)
+                                    	}).shiftSchedule;
+                                    	let numRows = shiftSchedule.rows.length;
+                                    	let foundIdx = -1;
+                                    	for (let idx = 1; idx < numRows; idx++) {
+                                    		if (idx + 1 == numRows) {
+                                    			break;
+                                    		}
+                                    		let prev = shiftSchedule.rows[idx];
+                                    		let next = shiftSchedule.rows[idx + 1];
+                                    		if (prev.time <= eventData.timestamp && eventData.timestamp < next.time) {
+                                    			foundIdx = idx - 1;
+                                    			DEBUG("foundIdx='" + foundIdx + "'; prev='" + getTimeString(prev.time) + "' >= '" + getTimeString(eventData.timestamp) + "' < next='" + getTimeString(next.time) + "'");
+                                    			break;
+                                    		}
+                                    	} //# for each shift schedule row
+                                    	if (foundIdx > 0) {
+                                    		quantityProduced = shiftSchedule.rows[foundIdx].quantityProduced;
+                                    		DEBUG("production='" + quantityProduced + "'; foundIdx='" + foundIdx + "'; counter=" + me.counter + ";  previous=" + me.previousCycleCounter + ";")
+                                    	} else {
+                                    		// hard reset (need a message for that)
+                                    		ERROR("Unable to determine previous produced value for shiftId=" + me.currentShiftId + "; counter=" + me.counter + "; previous=" + me.previousCycleCounter + ";");
+                                    		quantityProduced = 0;
+                                    	}
+                                    } else {
+                                    	DEBUG("production=" + quantityProduced + "; counter=" + me.counter + "; previous=" + me.previousCycleCounter + ";");
+                                    } //? quantity less then zero
                                     me.previousCycleCounter = me.counter;
                                     
                                     // result: BOOLEAN
-                                    var shiftItemUpdated =  Things["BayerDBDataProvider"].UpdateShiftProduction({
+                                    var shiftItemUpdated = Things["BayerDBDataProvider"].UpdateShiftProduction({
                                     	productionPlanId_actual: me.currentProductKey /* INTEGER */,
                                     	productionLine: me.name /* THINGNAME */,
-                                    	quantityProduced: qProd /* NUMBER */,
+                                    	quantityProduced: quantityProduced /* NUMBER */,
                                     	timestamp: eventData.timestamp /* DATETIME */
                                     });
                                     
                                     if (!shiftItemUpdated) {
-                                        logger.warn(me.name + ".UpdateShift - unable to update shift production");
+                                    	logger.warn(me.name + ".UpdateShift - unable to update shift production");
                                     }
                                     
                                     // result: BOOLEAN
-                                    var shiftTotalUpdated =  Things["BayerDBDataProvider"].UpdateShiftTotalProduction({
+                                    var shiftTotalUpdated = Things["BayerDBDataProvider"].UpdateShiftTotalProduction({
                                     	productionLine: me.name /* THINGNAME */,
-                                    	quantityProduced: qProd /* NUMBER */,
+                                    	quantityProduced: quantityProduced /* NUMBER */,
                                     	timestamp: eventData.timestamp /* DATETIME */
                                     });
                                     
                                     if (!shiftTotalUpdated) {
-                                        logger.warn(me.name + ".UpdateShift - unable to update shift total production");
+                                    	logger.warn(me.name + ".UpdateShift - unable to update shift total production");
                                     }
-                                    //
-                                    //// result: STRING
-                                    //var shiftId = Things["BayerUtilities"].GetCurrentShiftStreamId({ lineName: me.name });
-                                    //
-                                    //var params = {
-                                    //	streamEntryId: shiftId /* STRING */
-                                    //};
-                                    //
-                                    //// result: INFOTABLE
-                                    //var shift = Things["BayerShiftSchedules"].GetStreamEntry(params);
-                                    //shift.totalQuantityProduced = 0;
-                                    //
-                                    //var tableLength = shift.shiftSchedule.rows.length;
-                                    //
-                                    //for (var x = 0; x < tableLength; x++) {
-                                    //	var row = shift.shiftSchedule.rows[x];
-                                    //    var nextRow = x < tableLength-1 ? shift.shiftSchedule.rows[x+1] : undefined;
-                                    //	
-                                    //    if (eventData.timestamp >= row.time && (!nextRow || eventData.timestamp < nextRow.time)) {
-                                    //        if (me.previousCycleCounter > me.counter) {
-                                    //            me.previousCycleCounter = 0;
-                                    //        }
-                                    //        row.quantityProduced = me.counter - me.previousCycleCounter;
-                                    //        me.previousCycleCounter = me.counter;
-                                    //        row.productionPlanKey_actual = me.currentProductKey;
-                                    //        row.quantityTargetOk = row.quantityProduced >= row.targetQuantity;
-                                    //    }
-                                    //    
-                                    //    shift.totalQuantityProduced += row.quantityProduced;
-                                    //}
-                                    //
-                                    //var params = {
-                                    //	values: shift /* INFOTABLE*/,
-                                    //	streamEntryId: shiftId /* STRING */,
-                                    //	location: undefined /* LOCATION */,
-                                    //	source: me.name /* STRING */,
-                                    //	tags: undefined /* TAGS */
-                                    //};
-                                    //
-                                    //// no return
-                                    //Things["BayerShiftSchedules"].UpdateStreamEntry(params);
+                                    //>----------------------------------------------------------------------------
+                                    
+                                    function getTimeString(date) {
+                                    	if (!date) { return "" }
+                                    	return new Date(date).toTimeString().split(" ")[0];
+                                    	//return new Date(date).toISOString().split("T")[1].split(".")[0];
+                                    } //> getTimeString(...)
+                                    
+                                    function DEBUG(message) {
+                                    	logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> DEBUG
+                                    
+                                    function TRACE(message) {
+                                    	logger.trace(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> TRACE
+                                    
+                                    function ERROR(message) {
+                                    	logger.error(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> ERROR
+                                    
+                                    function WARNING(message) {
+                                    	logger.warn(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> WARNING
+                                    
+                                    function INFO(message) {
+                                    	logger.info(me.name + ":" + SERVICE_NAME + ": " + message);
+                                    } //> INFO
+                                    //>----------------------------------------------------------------------------
                                     ]]>
                                     </code>
                                 </Row>
