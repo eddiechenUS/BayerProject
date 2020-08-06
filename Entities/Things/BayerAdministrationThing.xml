@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2019-11-29T12:47:59.653Z"
+         lastModifiedDate="2020-08-05T17:39:55.380Z"
          name="BayerAdministrationThing"
          projectName="BayerIoT"
          published="false"
@@ -113,6 +113,142 @@
                                         	type: 'ServiceInvoke' /* STRING */,
                                         	principalType: 'User' /* STRING */
                                         });
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        var entityTypes = [
+                                        	//	'StyleTheme',
+                                        	//	'Thing',
+                                        	//	'Mashup',
+                                        	//	'MediaEntity',
+                                        	//	'StyleDefinition',
+                                        	//	'DataShape',
+                                        	'Resource',
+                                        	//	'LocalizationTable',
+                                        	//	'Subsystem',
+                                        	//	'StateDefinition',
+                                        	//	'ThingTemplate',
+                                        	//	'ThingShape'
+                                        ]; //! entity types
+                                        
+                                        var principalAllowInfo = {
+                                        	allow: true,
+                                        	principalType: "Group",
+                                        	principal: "App.BayerPerformanceDashboard",
+                                        	resource: "*",
+                                        	type: "ServiceInvoke"
+                                        };
+                                        
+                                        //* Design Time Permissions (Read)
+                                        [
+                                        	"StyleTheme",
+                                        	"Mashup",
+                                        	"DataShape"
+                                        ].forEach(entityType => {
+                                        	let entities = Resources["EntityServices"].GetEntityList({
+                                        		maxItems: 10000 /* NUMBER */,
+                                        		nameMask: undefined /* STRING */,
+                                        		type: entityType /* STRING */,
+                                        		tags: undefined /* TAGS */
+                                        	});
+                                        	let numEntities = entities.rows.length;
+                                        	for (let mIdx = 0; mIdx < numEntities; mIdx++) {
+                                        		let entityName = entities.rows[mIdx].name;
+                                        		let entity = getEntity(entityName, entityType);
+                                        		entity.AddDesignTimePermission({
+                                        			allow: true,
+                                        			principalType: principalAllowInfo.principalType,
+                                        			principal: principalAllowInfo.principal,
+                                        			type: "Read"
+                                        		});
+                                        	} //# for each entity
+                                        }); //> Mashup, StyleTheme, ... (Design Time)
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        //* Single Entity Targets (customized)
+                                        var targets = {
+                                        	"Subsystems/PlatformSubsystem": {
+                                        		"ServiceInvoke": [
+                                        			"GetAllStyleDefinitions",
+                                        			"GetAllStateDefinitions",
+                                        			"GetAllStyleThemes"
+                                        		]
+                                        	},
+                                        	"Resources/RuntimeLocalizationFunctions": {
+                                        		"ServiceInvoke": [
+                                        			"GetEffectiveTokens",
+                                        			"GetEffectiveToken"
+                                        		]
+                                        	},
+                                        	"Resources/CurrentSessionInfo": {
+                                        		"ServiceInvoke": [
+                                        			"GetCurrentUser",
+                                        			"SetGlobalSessionStringValue",
+                                        			"SetGlobalSessionDateTimeValue",
+                                        			"GetGlobalSessionValues",
+                                        			"GetCurrentUserExtensionProperties"
+                                        		]
+                                        	},
+                                        	"Resources/InfoTableFunctions": {
+                                        		"ServiceInvoke": ["*"]
+                                        	},
+                                        	"Resources/EntityServices": {
+                                        		"ServiceInvoke": [
+                                        			"GetClientApplicationKey"
+                                        		]
+                                        	}
+                                        };
+                                        
+                                        Object.keys(targets).forEach(target => {
+                                        	let [entityType, entityName] = target.split("/");
+                                        	let entity = getEntity(entityName, entityType);
+                                        	let permissions = targets[target];
+                                        	for (let permissionType in permissions) {
+                                        		let resources = permissions[permissionType];
+                                        		let numResources = resources.length;
+                                        		for (let rIdx = 0; rIdx < numResources; rIdx++) {
+                                        			let resource = resources[rIdx];
+                                        			let allowParams = {
+                                        				allow: true,
+                                        				principalType: principalAllowInfo.principalType,
+                                        				principal: principalAllowInfo.principal,
+                                        				resource: resource, // can be "*"
+                                        				type: permissionType // ServiceInvoke? PropertyRead?
+                                        			};
+                                        			entity.AddRunTimePermission(allowParams);
+                                        		} //# for each resource
+                                        	} //# for each target permission type 
+                                        }); //# for each target entity
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function getEntity(name, type) {
+                                        	if (type.startsWith('Thing')) {
+                                        		return Things[name];
+                                        	} else if (type.startsWith('Mashup')) {
+                                        		return Mashups[name];
+                                        	} else if (type.startsWith('MediaEntity')) {
+                                        		return MediaEntities[name];
+                                        	} else if (type.startsWith('StyleDefinition')) {
+                                        		return StyleDefinitions[name];
+                                        	} else if (type.startsWith('DataShape')) {
+                                        		return DataShapes[name];
+                                        	} else if (type.startsWith('Resource')) {
+                                        		return Resources[name];
+                                        	} else if (type.startsWith('LocalizationTable')) {
+                                        		return LocalizationTables[name];
+                                        	} else if (type.startsWith('Subsystem')) {
+                                        		return Subsystems[name];
+                                        	} else if (type.startsWith('StateDefinition')) {
+                                        		return StateDefinitions[name];
+                                        	} else if (type.startsWith('ThingTemplate')) {
+                                        		return ThingTemplates[name];
+                                        	} else if (type.startsWith('ThingShape')) {
+                                        		return ThingShapes[name];
+                                        	} else if (type.startsWith('StyleTheme')) {
+                                        		return StyleThemes[name];
+                                        	}
+                                        	return undefined;
+                                        } //> getEntity(...)
+                                        //>----------------------------------------------------------------------------
                                         ]]>
                                         </code>
                                     </Row>
