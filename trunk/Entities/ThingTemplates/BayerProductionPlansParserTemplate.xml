@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2020-06-06T19:07:09.673Z"
+         lastModifiedDate="2020-08-05T09:57:34.049Z"
          name="BayerProductionPlansParserTemplate"
          projectName="BayerIoT"
          tags="Applications:BayerProductionPlans;Applications:Bayer"
@@ -555,7 +555,7 @@
                                         // parse the file and push it to the other instance of TWX
                                         
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
-                                        var settings =  me.GetParserSettings();
+                                        var settings = me.GetParserSettings();
                                         var result = null;
                                         
                                         /////////////// PARSE FILE //////////////////
@@ -563,7 +563,7 @@
                                         var data = null;
                                         try {
                                             // result: INFOTABLE dataShape: ""
-                                            data =  Resources["TTPSC.Utilities.UtilityServices"].ParseCSV({
+                                            data = Resources["TTPSC.Utilities.UtilityServices"].ParseCSV({
                                                 path: path /* STRING */,
                                                 delimiter: settings.csvDelimiter /* STRING */,
                                                 repository: settings.repository /* THINGNAME */
@@ -577,7 +577,7 @@
                                         /////////////// MAP COLUMN NAMES //////////////
                                         
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserColumnMappingDataShape"
-                                        var mapping =  me.GetColumnMapping();
+                                        var mapping = me.GetColumnMapping();
                                         
                                         function getCsvColumnName(fName) {
                                             return mapping.rows[0][fName];
@@ -589,20 +589,20 @@
                                         var dataShapeFields = mappedData.dataShape.fields;
                                         
                                         var tableLength = data.rows.length;
-                                        for (var x=0; x < tableLength; x++) {
+                                        for (var x = 0; x < tableLength; x++) {
                                             var row = data.rows[x];
-                                            
+                                        
                                             var newEntry = new Object();
                                             for (var fieldName in dataShapeFields) {
                                                 var csvColumnName = getCsvColumnName(fieldName);
                                                 if (csvColumnName) {
-                                                	newEntry[fieldName] = row[csvColumnName];
+                                                    newEntry[fieldName] = row[csvColumnName];
                                                 }
                                             }
-                                            
+                                        
                                             if (!newEntry.productId || !newEntry.productionLine)
                                                 continue;
-                                            
+                                        
                                             mappedData.AddRow(newEntry);
                                         }
                                         
@@ -616,11 +616,11 @@
                                                 "Content-Type": "application/json",
                                                 "appKey": settings.appKey
                                             };
-                                            
+                                        
                                             var postParams = {
                                                 "data": mappedData.ToJSON()
                                             };
-                                            
+                                        
                                             try {
                                                 var params = {
                                                     proxyScheme: undefined /* STRING */,
@@ -706,7 +706,8 @@
                                                 }
                                                 continue;
                                             } //? productionLine
-                                            row.productionLine = me.ProcessLineIdentifier({ lineName: row.productionLine });
+                                            //row.productionLine = me.ProcessLineIdentifier({ lineName: row.productionLine });
+                                            row.productionLine = processLineIdentifier(row.productionLine);
                                             let lineThing = "BayerProductionLine_" + row.productionLine;
                                             if (!Things[lineThing] && !warningsForLine[lineThing]) {
                                                 warningsForLine[lineThing] = true;
@@ -754,6 +755,18 @@
                                             }
                                         } //# for each production line
                                         //>----------------------------------------------------------------------------
+                                        
+                                        function processLineIdentifier(lineName) {
+                                            return zeroFill(lineName.replace(/^0*/gm, ''), 3);
+                                        }
+                                        
+                                        function zeroFill(number, width) {
+                                            width -= number.length;
+                                            if (width > 0) {
+                                                return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number;
+                                            }
+                                            return number + ""; // always return a string
+                                        }
                                         
                                         function DEBUG(message) {
                                             logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
