@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-07-24T20:54:18.502Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="Implemented on BayerProductionLine" documentationContent="" homeMashup="" lastModifiedDate="2020-08-05T09:50:08.423Z" name="BayerProductionManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0.0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="NUMBER" category="Production" description="" isLocalOnly="false" name="counter" ordinal="2"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INTEGER" category="Production" description="" isLocalOnly="false" name="currentProductKey" ordinal="4"/>
@@ -89,6 +89,7 @@
                     <ResultType aspect.dataShape="BayerProductionPlanDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
                     <ParameterDefinitions>
                         <FieldDefinition aspect.isRequired="true" baseType="INFOTABLE" description="" name="data" ordinal="1"/>
+                        <FieldDefinition baseType="BOOLEAN" description="" name="simulate" ordinal="2"/>
                     </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition aspect.isAsync="false" category="Changeover" description="Recalculate Plan Changeovers" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="RecalculatePlanChangeovers">
@@ -850,7 +851,10 @@
                                     // LoadProductionPlan service
                                     // > BayerProductionManagement Thing Shape (Main Implementation)
                                     // * data - INFOTABLE
-                                    
+                                    // * simulate - BOOLEAN
+                                    if (!simulate) {
+                                        simulate = false;
+                                    }
                                     var SERVICE_NAME = "LoadPlan(Base)";
                                     var lineConfig = me.GetLineConfiguration();
                                     var changeoverCalculationThingName = lineConfig.changeoverCalculationThing;
@@ -858,26 +862,35 @@
                                     if (!!changeoverCalculationThingName) {
                                         changeoverCalculationThing = Things[changeoverCalculationThingName];
                                     }
+                                    var completedPlan = me.GetProductionPlan();
+                                    completedPlan.Filter({ status: "COMPLETED" });
+                                    var numCompletedItems = completedPlan.rows.length;
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
                                     var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName: "BayerProductionPlanDataShape" });
-                                    Things["BayerDBDataProvider"].DeleteScheduledProduction({
-                                        productionLine: me.name /* THINGNAME */
-                                    });
+                                    if (!simulate) {
+                                        Things["BayerDBDataProvider"].DeleteScheduledProduction({
+                                            productionLine: me.name /* THINGNAME */
+                                        });
+                                    }
                                     if (data.rows.length === 1 && data.productId === 'standby') {
                                         addStandby();
                                     } else {
                                         processInputData();
                                     }
-                                    Things["BayerDBDataProvider"].AddProductionPlanItems({
-                                        items: result /* INFOTABLE */
-                                    });
-                                    me.lastProductionPlanUpdate = new Date();
-                                    INFO("Production Plan Loaded: OK");
+                                    if (!simulate) {
+                                        Things["BayerDBDataProvider"].AddProductionPlanItems({
+                                            items: result /* INFOTABLE */
+                                        });
+                                        me.lastProductionPlanUpdate = new Date();
+                                        INFO("Production Plan Loaded: OK");
+                                    } else {
+                                        INFO("Production Plan Loaded: OK (simulated)");
+                                    }
                                     //>----------------------------------------------------------------------------
                                     
                                     function addStandby() {
                                         // BayerProductionPlanDataShape entry object
-                                        var newEntry = new Object();
+                                        let newEntry = new Object();
                                         newEntry.productId = "standby"; // STRING
                                         newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                         newEntry.producedQuantity = 0; // NUMBER
@@ -897,22 +910,33 @@
                                     
                                     function processInputData() {
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
-                                        var lastItem = Things["BayerDBDataProvider"].GetLastProductionPlanItem({
+                                        let lastItem = Things["BayerDBDataProvider"].GetLastProductionPlanItem({
                                             line: me.name /* THINGNAME */
                                         });
-                                        var prev = lastItem.rows.length > 0 ? lastItem.rows[0] : undefined;
-                                        var tableLength = data.rows.length;
-                                        for (var idx = 0; idx < tableLength; idx++) {
-                                            var row = data.rows[idx];
+                                        let prev = lastItem.rows.length > 0 ? lastItem.rows[0] : undefined;
+                                        let tableLength = data.rows.length;
+                                        for (let idx = 0; idx < tableLength; idx++) {
+                                            let row = data.rows[idx];
                                             try {
                                                 // BayerProductionPlanDataShape entry object
-                                                var newEntry = new Object();
+                                                let newEntry = new Object();
                                                 newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                                 newEntry.status = "PENDING"; // STRING
+                                                //? Check if the production plan item is already marked as complete
+                                                let existingItem = completedPlan.Find({
+                                                    productId: row.productId,
+                                                    orderNr: row.orderNr,
+                                                    productDescription: row.productDescription
+                                                });
+                                                if (!!existingItem) {
+                                                    // found? skip?
+                                                    DEBUG("Skipping row " + idx + "; product id '" + newEntry.productId + "'; Already produced.");
+                                                    continue;
+                                                }
                                                 //!---------------- FROM FILE -----------------
                                                 newEntry.productId = row.productId; // STRING
                                                 if (isNaN(parseInt(newEntry.productId))) {
-                                                    DEBUG("Skipping row " + idx + "; product id " + newEntry.productId);
+                                                    DEBUG("Skipping row " + idx + "; product id '" + newEntry.productId + "'; Wrong productId.");
                                                     continue;
                                                 }
                                                 newEntry.taNumber = row.taNumber; // STRING
@@ -939,7 +963,7 @@
                                                 newEntry.tabletsPerBlister = parseIntSafe(row.tabletsPerBlister);
                                                 newEntry.manufProcess = row.manufProcess;
                                                 //!---------------- CALCULATED ----------------
-                                                var blitersPerBoxCorrection = 1;
+                                                let blitersPerBoxCorrection = 1;
                                                 if (lineConfig.nominalRateInBlisters) {
                                                     if (newEntry.blistersPerFoldedBox) {
                                                         blitersPerBoxCorrection = newEntry.blistersPerFoldedBox;
@@ -992,7 +1016,7 @@
                                     
                                     function getChangeoverFallback(prevItem, newItem) {
                                         // BayerProductionPlanDataShape entry object
-                                        var newEntry = new Object();
+                                        let newEntry = new Object();
                                         newEntry.productId = "Cambio"; // STRING
                                         newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                         newEntry.producedQuantity = 0; // NUMBER
@@ -1005,19 +1029,19 @@
                                         newEntry.targetQuantityPerHour = 0; // NUMBER
                                         newEntry.status = "PENDING"; // STRING
                                         // result: INTEGER
-                                        var activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
+                                        let activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
                                             sourceCode: prevItem.activeMaterialNumber /* STRING */,
                                             productionLine: me.name /* THINGNAME */,
                                             targetCode: newItem.activeMaterialNumber /* STRING */
                                         });
                                         // result: INTEGER
-                                        var blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
+                                        let blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
                                             sourceCode: prevItem.blisterType /* STRING */,
                                             productionLine: me.name /* THINGNAME */,
                                             targetCode: newItem.blisterType /* STRING */
                                         });
                                         // result: INTEGER
-                                        var fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({
+                                        let fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({
                                             sourceCode: prevItem.foldedBoxFormat /* STRING */,
                                             productionLine: me.name /* THINGNAME */,
                                             targetCode: newItem.foldedBoxFormat /* STRING */
@@ -1030,7 +1054,7 @@
                                     //>----------------------------------------------------------------------------
                                     
                                     function parseIntSafe(value) {
-                                        var parsedVal = parseInt(value);
+                                        let parsedVal = parseInt(value);
                                         return isNaN(parsedVal) ? undefined : parsedVal;
                                     } //> parseIntSafe(...)
                                     //>----------------------------------------------------------------------------
