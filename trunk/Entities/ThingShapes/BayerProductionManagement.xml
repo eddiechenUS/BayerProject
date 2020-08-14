@@ -13,7 +13,7 @@
          description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-08-05T09:50:08.423Z"
+         lastModifiedDate="2020-08-14T07:40:18.632Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -1443,10 +1443,17 @@
                                         changeoverCalculationThing = Things[changeoverCalculationThingName];
                                     }
                                     var completedPlan = me.GetProductionPlan();
+                                    var runningPlan = Resources["InfoTableFunctions"].Clone({ t1: completedPlan });
                                     completedPlan.Filter({ status: "COMPLETED" });
+                                    runningPlan.Filter({ status: "INPROGRESS" });
+                                    if (!!runningPlan.rows.length) {
+                                        completedPlan.AddRow(runningPlan.rows[0]);
+                                    }
                                     var numCompletedItems = completedPlan.rows.length;
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName: "BayerProductionPlanDataShape" });
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        dataShapeName: "BayerProductionPlanDataShape"
+                                    });
                                     if (!simulate) {
                                         Things["BayerDBDataProvider"].DeleteScheduledProduction({
                                             productionLine: me.name /* THINGNAME */
@@ -1510,13 +1517,13 @@
                                                 });
                                                 if (!!existingItem) {
                                                     // found? skip?
-                                                    DEBUG("Skipping row " + idx + "; product id '" + newEntry.productId + "'; Already produced.");
+                                                    DEBUG("Skipping row " + idx + "; product id '" + row.productId + "'; Already produced.");
                                                     continue;
                                                 }
                                                 //!---------------- FROM FILE -----------------
                                                 newEntry.productId = row.productId; // STRING
                                                 if (isNaN(parseInt(newEntry.productId))) {
-                                                    DEBUG("Skipping row " + idx + "; product id '" + newEntry.productId + "'; Wrong productId.");
+                                                    DEBUG("Skipping row " + idx + "; product id '" + row.productId + "'; Wrong productId.");
                                                     continue;
                                                 }
                                                 newEntry.taNumber = row.taNumber; // STRING
