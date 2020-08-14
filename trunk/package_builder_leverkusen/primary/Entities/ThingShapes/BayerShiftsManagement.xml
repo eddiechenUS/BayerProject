@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-07-28T16:04:06.663Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-08-11T07:14:29.575Z" name="BayerShiftsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="INTEGER" category="Shifts" description="" isLocalOnly="false" name="currentShiftId" ordinal="4"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="DATETIME" category="Shifts" description="" isLocalOnly="false" name="lastShiftsUpdate" ordinal="4"/>
@@ -664,10 +664,11 @@
                                     	let shiftTimestamp = Things["BayerDBDataProvider"].GetShiftScheduleById({
                                     		id: me.currentShiftId
                                     	}).timestamp;
+                                    	DEBUG("shiftTimestamp='" + shiftTimestamp + "'; currentShiftId='" + me.currentShiftId + "';");
                                     	let shiftSchedule = Things["BayerDBDataProvider"].GetShiftSchedules({
                                     		productionLine: me.name,
                                     		startTime: shiftTimestamp,
-                                    		endTime: dateAddHours(shiftTimestamp, 8)
+                                    		endTime: new Date(shiftTimestamp.getTime() + 8 * 60 * 60 * 1000)
                                     	}).shiftSchedule;
                                     	let numRows = shiftSchedule.rows.length;
                                     	let foundIdx = -1;
