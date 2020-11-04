@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup="DataTableEditor"
          identifier=""
-         lastModifiedDate="2020-05-28T18:11:45.378Z"
+         lastModifiedDate="2020-10-05T09:12:27.454Z"
          name="BayerMaterialPerformanceTable"
          projectName="BayerIoT"
          published="false"
@@ -209,7 +209,8 @@
                      isPrivate="false"
                      name="LoadCSV">
                         <ResultType
-                         baseType="NOTHING"
+                         aspect.dataShape="BayerMaterialPerformanceDataShape"
+                         baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
@@ -227,6 +228,11 @@
                              description=""
                              name="productionLine"
                              ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="BOOLEAN"
+                             description=""
+                             name="simulate"
+                             ordinal="3"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
@@ -368,42 +374,71 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var params = {
-                                        	delimiter: ";" /* STRING */,
-                                        	filePath: filePath /* STRING */,
-                                        	repository: "BayerCSVRepository" /* THINGNAME */
-                                        };
+                                        //
+                                        // LoadCSV service
+                                        // * filePath - STRING
+                                        // * productionLine - THINGNAME
+                                        // * simulate - BOOLEAN
+                                        if (!simulate) {
+                                            simulate = false;
+                                        }
                                         
                                         // result: INFOTABLE
-                                        var data = Things["BayerUtilities"].LoadCSVGeneric(params);
-                                        
+                                        var data = Things["BayerUtilities"].LoadCSVGeneric({
+                                            delimiter: ";" /* STRING */,
+                                            filePath: filePath /* STRING */,
+                                            repository: "BayerCSVRepository" /* THINGNAME */
+                                        });
                                         var tableLength = data.rows.length;
-                                        
+                                        var dataShapeName = me.GetDataShape();
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName: "result",
+                                            dataShapeName: dataShapeName
+                                        });
                                         for (var x = 0; x < tableLength; x++) {
-                                        	var row = data.rows[x];
-                                        	
-                                            if (!row["Code"]) {
-                                                continue;
-                                            }
-                                            
+                                            var row = data.rows[x];
                                             var values = me.CreateValues();
-                                        
-                                            values.code = row["Code"]; //STRING [Primary Key]
                                             values.productionLine = productionLine; //THINGNAME [Primary Key]
-                                            values.description = row["Description"]; //STRING
-                                            values.nominalRate = parseFloat(row["Nominal rate"]); //NUMBER
                                         
-                                            var params = {
-                                                sourceType: undefined /* STRING */,
-                                                values: values /* INFOTABLE*/,
-                                                location: undefined /* LOCATION */,
-                                                source: undefined /* STRING */,
-                                                tags: undefined /* TAGS */
-                                            };
+                                            // STRING [Primary Key]
+                                            values.code = getAtLeastOneField(row, "Code", "Product Item",
+                                                "Product item", "Product Code", "Product code");
+                                            if (values.code === undefined)
+                                                continue;
+                                            // STRING
+                                            values.description = getAtLeastOneField(row, "Product family",
+                                                "Product Family", "Description", "description", "desc") || "";
+                                            // NUMBER    
+                                            values.nominalRate = getAtLeastOneField(row, "Nominal Rate", "Nominal rate",
+                                                "Speed", "speed");
                                         
                                             // result: STRING
-                                            me.AddOrUpdateDataTableEntry(params);
-                                        }
+                                            if (!simulate) {
+                                                me.AddOrUpdateDataTableEntry({
+                                                    sourceType: undefined /* STRING */,
+                                                    values: values /* INFOTABLE*/,
+                                                    location: undefined /* LOCATION */,
+                                                    source: undefined /* STRING */,
+                                                    tags: undefined /* TAGS */
+                                                });
+                                            } //? simulate
+                                            result.AddRow(values.rows[0]);
+                                        } //# for each parsed row
+                                        
+                                        function getAtLeastOneField(row, args) {
+                                            if (!row || !fields || fields.length == 0)
+                                                return undefined;
+                                            var value = undefined;
+                                            for (var _idx = 0; _idx < fields.length; _idx++) {
+                                                var _field = fields[_idx];
+                                                value = row[_field];
+                                                if (value != undefined && value != null) {
+                                                    return value;
+                                                }
+                                            } //# for each input field
+                                            value = undefined; // force it
+                                            return value;
+                                        } //> getAtLeastOneField(...)
                                         ]]>
                                         </code>
                                     </Row>
