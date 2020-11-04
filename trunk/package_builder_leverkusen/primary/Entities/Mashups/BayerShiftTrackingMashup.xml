@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-08-05T17:23:50.646Z"
+         lastModifiedDate="2020-11-04T19:56:51.008Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -182,6 +182,21 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetLineConfiguration"
+                  } ]
+                },
+                "Resources_CurrentSessionInfo" : {
+                  "DataName" : "Resources_CurrentSessionInfo",
+                  "EntityName" : "CurrentSessionInfo",
+                  "EntityType" : "Resources",
+                  "Id" : "200e75bd-9969-42e0-b861-12e3fed03da2",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "db589172-8c3b-47dd-8508-3104c8817ad0",
+                    "Name" : "GetCurrentUserGroups",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetCurrentUserGroups"
                   } ]
                 },
                 "Resources_RuntimeLocalizationFunctions" : {
@@ -1796,12 +1811,49 @@
                 "TargetArea" : "UI",
                 "TargetId" : "expression-556",
                 "TargetSection" : ""
+              }, {
+                "Id" : "46055b48-02cd-4db1-ad42-a39db97524a6",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "subject",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "subject",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-539",
+                "TargetSection" : ""
+              }, {
+                "Id" : "c6d93223-cd4b-436c-8f6c-8d393ee4232b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "blistersPerFoldedBox",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "blistersPerBox",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetCurrentProduct",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-539",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
                 "Delete" : [ ],
                 "Metadata" : [ ],
-                "Read" : [ ],
+                "Read" : [ {
+                  "isPermitted" : true,
+                  "name" : "App.BayerPerformanceDashboard",
+                  "type" : "Group"
+                } ],
                 "Update" : [ ]
               },
               "Events" : [ {
@@ -2227,6 +2279,15 @@
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
                 "Id" : "7d49757b-d37c-42eb-b4eb-f70bb714c9fb"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Resources_CurrentSessionInfo",
+                "EventHandlerService" : "GetCurrentUserGroups",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "e7067352-418d-4fa6-92f4-cec34c6f4904"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -10867,7 +10928,7 @@
                     "AutoEvaluate" : false,
                     "DataChangeType" : "VALUE",
                     "DisplayName" : "getCurrentDateString",
-                    "Expression" : "Output = String(new Date()).substring(0,21);",
+                    "Expression" : "//Output = String(new Date()).substring(0,21);\nOutput = \"\"+(new Date().toLocaleString());",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-484",
@@ -10962,7 +11023,7 @@
                     "AutoEvaluate" : true,
                     "DataChangeType" : "VALUE",
                     "DisplayName" : "convertBlistersBoxes",
-                    "Expression" : "//Output = (subject === \"blisters\" ? counterBoxes * blistersPerBox : counterBoxes);\nOutput = (subject === \"boxes\" ? counterBoxes : counterBoxes * blistersPerBox);",
+                    "Expression" : "//Output = (subject === \"blisters\" ? counterBoxes * blistersPerBox : counterBoxes);\n//Output = (subject === \"boxes\" ? counterBoxes : counterBoxes * blistersPerBox);\n\ncounterBoxes = subject === \"blisters\" ? counterBoxes * blistersPerBox : counterBoxes;\ncounterBoxes = isNaN(counterBoxes) || !isFinite(counterBoxes) ? 0 : counterBoxes;\nOutput = \"\" + Math.round(counterBoxes.toFixed(2)).toFixed(0);\n",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-490",
@@ -11034,7 +11095,7 @@
                     "AutoEvaluate" : true,
                     "DataChangeType" : "VALUE",
                     "DisplayName" : "convertBlistersBoxesTarget",
-                    "Expression" : "//Output = (subject === \"blisters\" ? targetBoxes * blistersPerBox : targetBoxes);\nOutput = (subject === \"boxes\" ? targetBoxes : targetBoxes * blistersPerBox);",
+                    "Expression" : "//console.log(\"subject = '\"+subject+\"' targetBoxes=\"+targetBoxes);\n//Output = (subject === \"blisters\" ? targetBoxes * blistersPerBox : targetBoxes);\nOutput = (subject === \"boxes\" ? targetBoxes : targetBoxes * blistersPerBox);\n\ntargetBoxes = (subject === \"boxes\" ? targetBoxes : targetBoxes * blistersPerBox);\ntargetBoxes = isNaN(targetBoxes) || !isFinite(targetBoxes) ? 0 : targetBoxes;\nOutput = \"\" + Math.round(targetBoxes.toFixed(2)).toFixed(0);\n",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-491",
@@ -11106,7 +11167,7 @@
                     "AutoEvaluate" : true,
                     "DataChangeType" : "ALWAYS",
                     "DisplayName" : "parsedTargetHours",
-                    "Expression" : "let date = new Date(targetHours *3600*1000);\nlet hours = (\"00\"+ date.getUTCHours()).slice(-2);\nlet minutes = (\"00\"+ date.getUTCMinutes()).slice(-2);\n\"\"+ hours +\":\"+ minutes;\n\n",
+                    "Expression" : "targetHours = (!targetHours || isNaN(targetHours) || !isFinite(targetHours)) ? 0 : targetHours;\nlet date = new Date(targetHours * 3600 * 1000);\nlet hours = (\"00\"+ date.getUTCHours()).slice(-2);\nlet minutes = (\"00\"+ date.getUTCMinutes()).slice(-2);\n\"\"+ hours +\":\"+ minutes;\n\n",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-496",
@@ -11367,7 +11428,7 @@
                     "AutoEvaluate" : true,
                     "DataChangeType" : "ALWAYS",
                     "DisplayName" : "disiplayLineVelocity",
-                    "Expression" : "//Output = subject === \"blisters\" ? counterBoxes * blistersPerBox : counterBoxes;\nOutput = textPrefix + \": \" + Math.round(velocity.toFixed(2)).toFixed(0) + \"p/H\";",
+                    "Expression" : "velocity = subject === \"blisters\" ? velocity * blistersPerBox : velocity;\nvelocity = isNaN(velocity) || !isFinite(velocity) ? 0 : velocity;\nOutput = textPrefix + \": \" + Math.round(velocity.toFixed(2)).toFixed(0) + (subject === \"blisters\" ? \"b/H\" : \"p/H\");",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-539",
@@ -11407,7 +11468,7 @@
                       "Description" : "",
                       "ParameterName" : "blistersPerBox",
                       "bindingDirection" : "Target",
-                      "bindingStatus" : false,
+                      "bindingStatus" : true,
                       "bindingType" : "Property",
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
@@ -11417,7 +11478,7 @@
                       "Description" : "",
                       "ParameterName" : "subject",
                       "bindingDirection" : "Target",
-                      "bindingStatus" : false,
+                      "bindingStatus" : true,
                       "bindingType" : "Property",
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
@@ -11431,7 +11492,7 @@
                     "AutoEvaluate" : true,
                     "DataChangeType" : "ALWAYS",
                     "DisplayName" : "ifCompleteButtonVisible",
-                    "Expression" : "(checkUserInRoleOutput1 && checkUserInRoleOutput2);",
+                    "Expression" : "(checkUserInRoleOutput1 || checkUserInRoleOutput2);",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-543",
@@ -11451,7 +11512,7 @@
                       "Description" : "",
                       "ParameterName" : "checkUserInRoleOutput1",
                       "bindingDirection" : "Target",
-                      "bindingStatus" : false,
+                      "bindingStatus" : true,
                       "bindingType" : "Property",
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
@@ -11462,7 +11523,7 @@
                       "Description" : "",
                       "ParameterName" : "checkUserInRoleOutput2",
                       "bindingDirection" : "Target",
-                      "bindingStatus" : false,
+                      "bindingStatus" : true,
                       "bindingType" : "Property",
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
@@ -11537,8 +11598,10 @@
                     "Height" : 28,
                     "Id" : "expression-556",
                     "LastContainer" : false,
+                    "Left" : 0,
                     "OutputBaseType" : "STRING",
                     "ShowDataLoading" : true,
+                    "Top" : 0,
                     "Type" : "expression",
                     "Visible" : true,
                     "Width" : 200,

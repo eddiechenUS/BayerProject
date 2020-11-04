@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-05-18T16:25:38.374Z" name="BayerShiftsProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-10-25T21:14:02.756Z" name="BayerShiftsProviderShape" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions/>
             <ServiceDefinitions>
                 <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddShiftSchedule">
@@ -502,39 +502,48 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // GetShiftSchedules service
+                                    // * startTime - DATETIME
+                                    // * endTime - DATETIME
+                                    // * productionLine - THINGNAME
+                                    
                                     // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerShiftSchedulesDataShape)
-                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerShiftSchedulesDataShape" });
+                                    var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        dataShapeName: "BayerShiftSchedulesDataShape"
+                                    });
                                     
                                     // result: INFOTABLE dataShape: "BayerShiftScheduleItemDataShape"
-                                    var items =  Things[me.GetConnector()].GetShiftsScheduleByTime({
-                                    	productionLine: productionLine /* THINGNAME */,
-                                    	startTime: startTime /* DATETIME */,
-                                    	endTime: endTime /* DATETIME */
+                                    var items = Things[me.GetConnector()].GetShiftsScheduleByTime({
+                                        productionLine: productionLine /* THINGNAME */,
+                                        startTime: startTime /* DATETIME */,
+                                        endTime: endTime /* DATETIME */
                                     });
                                     
                                     var lastShiftId = null;
                                     var shiftEntry = null;
                                     
                                     var tableLength = items.rows.length;
-                                    for (var x=0; x < tableLength; x++) {
-                                        var row = items.rows[x];
-                                        
+                                    for (var idx = 0; idx < tableLength; idx++) {
+                                        var row = items.rows[idx];
+                                    
                                         if (row.id !== lastShiftId) {
                                             lastShiftId = row.id;
                                             if (shiftEntry) {
                                                 result.AddRow(shiftEntry);
                                             }
-                                            shiftEntry = new Object();
-                                            shiftEntry.shiftSchedule = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerScheduleDataShape" }); // INFOTABLE
+                                            shiftEntry = {};
+                                            shiftEntry.shiftSchedule = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                                dataShapeName: "BayerScheduleDataShape"
+                                            }); // INFOTABLE
                                             shiftEntry.totalQuantityProduced = row.totalQuantityProduced; // NUMBER
                                             shiftEntry.totalTargetQuantity = row.totalTargetQuantity; // NUMBER
                                             shiftEntry.id = row.id;
                                             shiftEntry.timestamp = row.timestamp;
                                             shiftEntry.source = row.productionLine;
                                         }
-                                        
                                         // BayerScheduleDataShape entry object
-                                        var newEntry = new Object();
+                                        var newEntry = {};
                                         newEntry.duration = row.duration; // INTEGER
                                         newEntry.productionPlanId = row.productionPlanId; // INTEGER
                                         newEntry.productionPlanId_actual = row.productionPlanId_actual; // INTEGER
@@ -547,8 +556,13 @@
                                         newEntry.productDescription = row.productDescription; // STRING
                                         newEntry.targetQuantity = row.targetQuantity; // NUMBER
                                         newEntry.targetQuantityBlisters = row.targetQuantityBlisters;
+                                        newEntry.performance = newEntry.targetQuantity / newEntry.quantityProduced * 100.0;
+                                        if (isNaN(newEntry.performance) || !isFinite(newEntry.performance) || !newEntry.quantityProduced)
+                                            newEntry.performance = 0;
+                                        else
+                                            newEntry.performance = newEntry.performance.toFixed(0);
                                         shiftEntry.shiftSchedule.AddRow(newEntry);
-                                    }
+                                    } //# for each shifts schedule entry
                                     if (shiftEntry) {
                                         result.AddRow(shiftEntry);
                                     }
