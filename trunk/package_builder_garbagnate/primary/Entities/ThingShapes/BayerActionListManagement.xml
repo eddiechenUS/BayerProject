@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
+    <ThingShapes>
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-06-04T18:30:43.644Z" name="BayerActionListManagement" projectName="BayerIoT" tags="Applications:Bayer">
+            <PropertyDefinitions/>
+            <ServiceDefinitions>
+                <ServiceDefinition aspect.isAsync="false" category="Action List" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="AddAction">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="false" baseType="USERNAME" description="" name="assignedTo" ordinal="2"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="dueDate" ordinal="2"/>
+                        <FieldDefinition baseType="STRING" description="" name="problemDescription" ordinal="3"/>
+                        <FieldDefinition baseType="STRING" description="" name="solutionDescription" ordinal="4"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Action List" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteAction">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="1"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Action List" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="EditAction">
+                    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="USERNAME" description="" name="assignedTo" ordinal="4"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="dueDate" ordinal="5"/>
+                        <FieldDefinition aspect.isRequired="true" baseType="INTEGER" description="" name="id" ordinal="7"/>
+                        <FieldDefinition baseType="STRING" description="" name="problemDescription" ordinal="6"/>
+                        <FieldDefinition baseType="STRING" description="" name="solutionDescription" ordinal="7"/>
+                        <FieldDefinition baseType="STRING" description="" name="status" ordinal="5"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition aspect.isAsync="false" category="Action List" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="QueryActions">
+                    <ResultType aspect.dataShape="BayerActionListDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                    <ParameterDefinitions>
+                        <FieldDefinition baseType="USERNAME" description="" name="assignedTo" ordinal="4"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="createdTimeFrom" ordinal="5"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="createdTimeTo" ordinal="6"/>
+                        <FieldDefinition baseType="DATETIME" description="" name="dueDate" ordinal="3"/>
+                        <FieldDefinition baseType="STRING" description="" name="status" ordinal="2"/>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+            </ServiceDefinitions>
+            <EventDefinitions>
+                <EventDefinition category="" dataShape="BayerActionListItemChangeDataShape" description="" name="ActionListItemChanged"/>
+            </EventDefinitions>
+            <ServiceMappings/>
+            <ServiceImplementations>
+                <ServiceImplementation description="" handlerName="Script" name="AddAction">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    Things["BayerDBDataProvider"].AddAction({
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	solutionDescription: solutionDescription /* STRING */,
+                                    	problemDescription: problemDescription /* STRING */,
+                                    	dueDate: dueDate /* DATETIME */,
+                                    	assignedTo: assignedTo /* USERNAME */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="DeleteAction">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    Things["BayerDBDataProvider"].DeleteAction({
+                                    	id: id /* INTEGER */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="EditAction">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var oldValues = Things["BayerDBDataProvider"].GetActionById({ id: id });
+                                    
+                                    if(oldValues.assignedTo != assignedTo){
+                                        var newValues = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape( { dataShapeName : "BayerActionListDataShape" });
+                                        newValues.productionLine=me.name;
+                                        newValues.assignedTo=assignedTo;
+                                        newValues.status=status;
+                                        newValues.dueDate=dueDate;
+                                        newValues.problemDescription=problemDescription;
+                                        newValues.solutionDescription=solutionDescription;
+                                        newValues.id=id;
+                                    
+                                       me.ActionListItemChanged({
+                                            newValues: newValues,
+                                            oldValues: oldValues
+                                        });
+                                    }
+                                    
+                                    Things["BayerDBDataProvider"].UpdateAction({
+                                    	solutionDescription: solutionDescription /* STRING */,
+                                    	dueDate: dueDate /* DATETIME */,
+                                    	problemDescription: problemDescription /* STRING */,
+                                    	id: id /* INTEGER */,
+                                    	assignedTo: assignedTo /* STRING */,
+                                    	status: status /* STRING */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation description="" handlerName="Script" name="QueryActions">
+                    <ConfigurationTables>
+                        <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: "BayerActionListDataShape"
+                                    var result =  Things["BayerDBDataProvider"].GetActions({
+                                    	productionLine: me.name /* THINGNAME */,
+                                    	dueDate: dueDate /* DATETIME */,
+                                    	createdTimeFrom: createdTimeFrom /* DATETIME */,
+                                    	assignedTo: assignedTo /* USERNAME */,
+                                    	status: status /* STRING */,
+                                    	createdTimeTo: createdTimeTo /* DATETIME */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+            </ServiceImplementations>
+            <Subscriptions/>
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions/>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <InstanceRunTimePermissions>
+                <Permissions resourceName="QueryActions">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="DeleteAction">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="EditAction">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="AddAction">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </InstanceRunTimePermissions>
+        </ThingShape>
+    </ThingShapes>
+</Entities>

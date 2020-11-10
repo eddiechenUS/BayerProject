@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
+    <Things>
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-19T14:41:04.225Z" name="BayerExportPage" projectName="BayerIoT" published="false" tags="" thingTemplate="GenericThing" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions resourceName="GetPerformanceData">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetChangoverData">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetActionsData">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="ExportToCSV">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetDelaysData">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetMaintenanceTicketsData">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="ExportToCSV">
+                        <ResultType aspect.dataShape="FileSystemFileWithLinks" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="STRING" description="" name="dataType" ordinal="1"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="5"/>
+                            <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="2"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="4"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetActionsData">
+                        <ResultType aspect.dataShape="BayerActionListDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                            <FieldDefinition baseType="THINGNAME" description="" name="line" ordinal="3"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetChangoverData">
+                        <ResultType aspect.dataShape="BayerChangeoverTrendDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="3"/>
+                            <FieldDefinition aspect.isRequired="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="3"/>
+                            <FieldDefinition aspect.isRequired="true" baseType="DATETIME" description="" name="startDate" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelaysData">
+                        <ResultType aspect.dataShape="GetDelayShiftDetailsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                            <FieldDefinition baseType="THINGNAME" description="" name="line" ordinal="3"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMaintenanceTicketsData">
+                        <ResultType aspect.dataShape="BayerMaintenanceTicketsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                            <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="3"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetPerformanceData">
+                        <ResultType aspect.dataShape="BayerScheduleDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition baseType="DATETIME" description="" name="endDate" ordinal="2"/>
+                            <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="1"/>
+                            <FieldDefinition baseType="DATETIME" description="" name="startDate" ordinal="3"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="ExportToCSV">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var data;
+                                        switch (dataType) {
+                                        	case "performance":
+                                        		data = Things[line].GetPerformanceDataForExport({
+                                        			endDate: endDate,
+                                        			startDate: startDate
+                                        		});
+                                        		break;
+                                        	case "delays":
+                                        		data = me.GetDelaysData({
+                                        			startDate: startDate,
+                                        			endDate: endDate,
+                                        			line: line
+                                        		});
+                                        		break;
+                                        	case "changeover":
+                                        		data = me.GetChangoverData({
+                                        			startDate: startDate,
+                                        			endDate: endDate,
+                                        			line: line
+                                        		});
+                                        		break;
+                                        	case "actions":
+                                        		data = me.GetActionsData({
+                                        			startDate: startDate,
+                                        			endDate: endDate,
+                                        			line: line
+                                        		});
+                                        		break;
+                                                case "maintenance":
+                                        		data = me.GetMaintenanceTicketsData({
+                                        			startDate: startDate,
+                                        			endDate: endDate,
+                                        			line: line
+                                        		});
+                                        		break;
+                                        
+                                        }
+                                        var result = Things[line].ExportToCSV({
+                                        	data: data,
+                                        	type: dataType
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetActionsData">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result =  Things[line].GetActionsDataForExport({
+                                        	endDate: endDate /* DATETIME */,
+                                        	startDate: startDate /* DATETIME */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetChangoverData">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerChangeoverTrendDetailsDataShape" });
+                                        
+                                        var changeoverTrendData = Things[line].GetChangeoverTrendByDate({
+                                        	endDate: endDate ,
+                                        	startDate: startDate
+                                        });
+                                        
+                                        var changeoverTrendDataLength = changeoverTrendData.rows.length;
+                                        for (var x=0; x < changeoverTrendDataLength; x++) {
+                                            var row = changeoverTrendData.rows[x];
+                                            
+                                            var chnageover = new Object();
+                                            chnageover.id = row.id;
+                                            
+                                            var prevAndNextOrder =  Things["BayerDBDataProvider"].GetPrevAndNextOrder({
+                                                productionLine: line,
+                                                shiftIdMin: parseInt(row.id,10),
+                                                shiftIdMax: parseInt(row.id,10),
+                                            });
+                                        
+                                            chnageover.fromId = prevAndNextOrder.rows[0].fromId;
+                                            chnageover.fromOrderNr = prevAndNextOrder.rows[0].fromOrderNr;
+                                            chnageover.fromProductName = prevAndNextOrder.rows[0].fromProductName;
+                                            chnageover.toId = prevAndNextOrder.rows[0].toId;
+                                            chnageover.toOrderNr = prevAndNextOrder.rows[0].toOrderNr;
+                                            chnageover.toProductName = prevAndNextOrder.rows[0].toProductName;
+                                            
+                                        	chnageover.dayStart = row.dayStart; // DATETIME
+                                            chnageover.weekStart = row.weekStart; // DATETIME
+                                            chnageover.start = row.start; // DATETIME
+                                            chnageover.end = row.end; // DATETIME
+                                            chnageover.target = row.targetHours;
+                                            chnageover.actual = row.workedHours;
+                                            chnageover.delta = row.delta;
+                                            
+                                            result.AddRow(chnageover);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetDelaysData">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result =  Things[line].GetDelaysDataForExport({
+                                        	startTime: startDate,
+                                        	endTime: endDate 
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetMaintenanceTicketsData">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result =  Things[line].GetMaintenanceTicketsByDate({
+                                        	endDate: endDate,
+                                        	startDate: startDate 
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetPerformanceData">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result =  Things[line].GetPerformanceDataForExport({
+                                        	endDate: endDate,
+                                        	startDate: startDate
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ImplementedShapes/>
+            <ThingProperties/>
+        </Thing>
+    </Things>
+</Entities>
