@@ -13,7 +13,7 @@
          description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-08-14T07:40:18.632Z"
+         lastModifiedDate="2020-11-09T22:55:15.573Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -1506,7 +1506,7 @@
                                             let row = data.rows[idx];
                                             try {
                                                 // BayerProductionPlanDataShape entry object
-                                                let newEntry = new Object();
+                                                let newEntry = {};
                                                 newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                                 newEntry.status = "PENDING"; // STRING
                                                 //? Check if the production plan item is already marked as complete
@@ -1528,6 +1528,12 @@
                                                 }
                                                 newEntry.taNumber = row.taNumber; // STRING
                                                 newEntry.orderNr = row.orderNr; // STRING
+                                                if (!newEntry.orderNr ||
+                                                    newEntry.orderNr.indexOf("=") != -1 ||
+                                                    newEntry.orderNr.indexOf("#") != -1 ||
+                                                    newEntry.orderNr.indexOf("-") != -1) {
+                                                    continue;
+                                                }
                                                 newEntry.productDescription = row.productDescription; // STRING
                                                 newEntry.version = row.version; // STRING
                                                 newEntry.targetQuantity = parseFloat(row.targetQuantity.replace(',', '.').replace(' ', '')); // NUMBER
@@ -1537,15 +1543,19 @@
                                                 newEntry.blisterType = row.blisterType;
                                                 newEntry.foldedBoxFormat = row.foldedBoxFormat;
                                                 newEntry.blistersPerFoldedBox = parseIntSafe(row.blistersPerFoldedBox);
-                                                try {
-                                                    newEntry.mdatSaf = parseDate(row.mdatSaf, "yyyy-MM-dd");
-                                                } catch (dateParseEx) {
-                                                    WARNING("Error parsing MDAT-SAF date. Value: " + row.mdatSaf);
+                                                if (row.mdatSaf != undefined) {
+                                                    try {
+                                                        newEntry.mdatSaf = parseDate(row.mdatSaf, "yyyy-MM-dd");
+                                                    } catch (dateParseEx) {
+                                                        WARNING("Error parsing MDAT-SAF date. Value: " + row.mdatSaf);
+                                                    }
                                                 }
-                                                try {
-                                                    newEntry.mdatOos = parseDate(row.mdatOos, "yyyy-MM-dd");
-                                                } catch (dateParseEx) {
-                                                    WARNING("Error parsing MDAT-OOS date. Value: " + row.mdatOos);
+                                                if (row.mdatOos != undefined) {
+                                                    try {
+                                                        newEntry.mdatOos = parseDate(row.mdatOos, "yyyy-MM-dd");
+                                                    } catch (dateParseEx) {
+                                                        WARNING("Error parsing MDAT-OOS date. Value: " + row.mdatOos);
+                                                    }
                                                 }
                                                 newEntry.tabletsPerBlister = parseIntSafe(row.tabletsPerBlister);
                                                 newEntry.manufProcess = row.manufProcess;
@@ -1558,7 +1568,10 @@
                                                         ERROR("Error: nominalRateInBlisters but no blistersPerFoldedBox provided");
                                                     }
                                                 }
-                                                newEntry.targetQuantityPerHour = (Things["BayerMaterialPerformanceTable"].GetNominalRate({ code: newEntry.productId, productionLine: me.name }) / blitersPerBoxCorrection) * lineConfig.nominalRateCorrection; // NUMBER
+                                                newEntry.targetQuantityPerHour = (Things["BayerMaterialPerformanceTable"].GetNominalRate({
+                                                    code: newEntry.productId,
+                                                    productionLine: me.name
+                                                }) / blitersPerBoxCorrection) * lineConfig.nominalRateCorrection; // NUMBER
                                                 if (!newEntry.targetQuantityPerHour) {
                                                     WARNING("No 'NominalRate' for product " + newEntry.productId + ". Setting default 60 PCE per hour.");
                                                     newEntry.targetQuantityPerHour = 60;
@@ -1570,12 +1583,13 @@
                                                 newEntry.startTime = undefined; // DATETIME
                                                 newEntry.endTime = undefined; // DATETIME
                                                 newEntry.workedHours = 0; // NUMBER
+                                                newEntry.changeoverTime = row.changeoverTime; // might be undefined
                                                 if (prev && newEntry.productId != 'standby') {
                                                     let changeoverItem = getChangeover(prev, newEntry);
                                                     //DEBUG("Changeover time: '" + changeoverItem.targetHours + "' for prev='" + prev.taNumber + "' next='" + newEntry.taNumber + "'");
                                                     result.AddRow(changeoverItem);
                                                 }
-                                                if (newEntry.productId != 'stanby') {
+                                                if (newEntry.productId != 'standby') {
                                                     prev = newEntry;
                                                 }
                                                 DEBUG("Row nr: " + idx + ": " + JSON.stringify(newEntry));
@@ -1589,21 +1603,32 @@
                                     //>----------------------------------------------------------------------------
                                     
                                     function getChangeover(prevItem, nextItem) {
-                                        if (!changeoverCalculationThing) {
-                                            DEBUG("Changeover time calculated with OLD method for prev='" + prevItem.taNumber + "' next='" + nextItem.taNumber + "'");
-                                            return getChangeoverFallback(prevItem, nextItem);
+                                        let changeoverItem = undefined;
+                                        if (!!changeoverCalculationThing && !nextItem.changeoverTime) {
+                                            try {
+                                                changeoverItem = changeoverCalculationThing.GetChangeoverPlanItem({
+                                                    prevItem: prevItem,
+                                                    nextItem: nextItem,
+                                                    productionLine: me.name
+                                                });
+                                            } catch (ex) {
+                                                ERROR("Changeover exception prev='" + (prevItem.taNumber || prevItem.productId) +
+                                                    "' next='" + (nextItem.taNumber || nextItem.productId) + "': " + ex + " " + ex.stack);
+                                                changeoverItem = undefined;
+                                            }
                                         }
-                                        return changeoverCalculationThing.GetChangeoverPlanItem({
-                                            prevItem: prevItem,
-                                            nextItem: nextItem,
-                                            productionLine: me.name
-                                        });
+                                        if (!changeoverCalculationThing || !changeoverItem) {
+                                            DEBUG("Changeover time calculated with OLD method for prev='" + (prevItem.taNumber || prevItem.productId) +
+                                                "' next='" + (nextItem.taNumber || nextItem.productId) + "'");
+                                            changeoverItem = getChangeoverFallback(prevItem, nextItem);
+                                        }
+                                        return changeoverItem;
                                     } //> getChangeover(...)
                                     //>----------------------------------------------------------------------------
                                     
                                     function getChangeoverFallback(prevItem, newItem) {
                                         // BayerProductionPlanDataShape entry object
-                                        let newEntry = new Object();
+                                        let newEntry = {};
                                         newEntry.productId = "Cambio"; // STRING
                                         newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                         newEntry.producedQuantity = 0; // NUMBER
@@ -1615,25 +1640,35 @@
                                         newEntry.targetQuantity = 0; // NUMBER
                                         newEntry.targetQuantityPerHour = 0; // NUMBER
                                         newEntry.status = "PENDING"; // STRING
-                                        // result: INTEGER
-                                        let activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
-                                            sourceCode: prevItem.activeMaterialNumber /* STRING */,
-                                            productionLine: me.name /* THINGNAME */,
-                                            targetCode: newItem.activeMaterialNumber /* STRING */
-                                        });
-                                        // result: INTEGER
-                                        let blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
-                                            sourceCode: prevItem.blisterType /* STRING */,
-                                            productionLine: me.name /* THINGNAME */,
-                                            targetCode: newItem.blisterType /* STRING */
-                                        });
-                                        // result: INTEGER
-                                        let fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({
-                                            sourceCode: prevItem.foldedBoxFormat /* STRING */,
-                                            productionLine: me.name /* THINGNAME */,
-                                            targetCode: newItem.foldedBoxFormat /* STRING */
-                                        });
-                                        newEntry.targetHours = (Math.max(activeMaterialTime, blisterTime, fbTime) + lineConfig.additionalChangeoverTime) / 60;
+                                        if (!newItem.changeoverTime) {
+                                            // result: INTEGER
+                                            let activeMaterialTime = Things["BayerChangeoverTimeMatrix_ActiveMaterial"].GetChangeoverTime({
+                                                sourceCode: prevItem.activeMaterialNumber /* STRING */,
+                                                productionLine: me.name /* THINGNAME */,
+                                                targetCode: newItem.activeMaterialNumber /* STRING */
+                                            });
+                                            // result: INTEGER
+                                            let blisterTime = Things["BayerChangeoverTimeMatrix_BlisterType"].GetChangeoverTime({
+                                                sourceCode: prevItem.blisterType /* STRING */,
+                                                productionLine: me.name /* THINGNAME */,
+                                                targetCode: newItem.blisterType /* STRING */
+                                            });
+                                            // result: INTEGER
+                                            let fbTime = Things["BayerChangeoverTimeMatrix_FB"].GetChangeoverTime({
+                                                sourceCode: prevItem.foldedBoxFormat /* STRING */,
+                                                productionLine: me.name /* THINGNAME */,
+                                                targetCode: newItem.foldedBoxFormat /* STRING */
+                                            });
+                                            newEntry.targetHours = (Math.max(activeMaterialTime, blisterTime, fbTime) + lineConfig.additionalChangeoverTime) / 60;
+                                        } else {
+                                            // default fallback - changeover time is coming from the production plan
+                                            newEntry.targetHours = parseFloat(newItem.changeoverTime + "") + lineConfig.additionalChangeoverTime / 60.0;
+                                            delete newItem.changeoverTime;
+                                        }
+                                        if (isNaN(newEntry.targetHours) || !isFinite(newEntry.targetHours))
+                                            newEntry.targetHours = lineConfig.additionalChangeoverTime;
+                                        if (!newEntry.targetHours)
+                                            newEntry.targetHours = 0.0;
                                         newEntry.targetHours = Math.round(newEntry.targetHours * 100) / 100;
                                         newEntry.remainingHours = newEntry.targetHours; // NUMBER
                                         return newEntry;

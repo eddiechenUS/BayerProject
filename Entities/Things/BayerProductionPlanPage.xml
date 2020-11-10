@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-06-18T05:25:16.059Z"
+         lastModifiedDate="2020-11-10T06:53:47.732Z"
          name="BayerProductionPlanPage"
          projectName="BayerIoT"
          published="false"
@@ -318,9 +318,70 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var cambioTransl = Resources["RuntimeLocalizationFunctions"].GetEffectiveToken({token:"Bayer.Cambio"});
+                                        //
+                                        // GetProductionPlanStatusFormatted service
+                                        // * productionLine - THINGNAME
+                                        // * filterOnlyCompleted - BOOLEAN
                                         
-                                        var result =  Things["BayerDBDataProvider"].GetProductionPlanForLine({line: productionLine});
+                                        var cambioTransl = Resources["RuntimeLocalizationFunctions"].GetEffectiveToken({ token: "Bayer.Cambio" });
+                                        
+                                        var result = Things["BayerDBDataProvider"].GetProductionPlanForLine({
+                                            line: productionLine
+                                        });
+                                        
+                                        var stringFields = values(result.dataShape.fields).filter(item => item.baseType == 'STRING').map(item => item.name);
+                                        var numFields = stringFields.length;
+                                        
+                                        for (var idx = 0; idx < result.rows.length; idx++) {
+                                            var row = result.rows[idx];
+                                            for (var _f = 0; _f < numFields; _f++) {
+                                                var fieldName = stringFields[_f];
+                                                if (row[fieldName] == undefined)
+                                                    row[fieldName] = '';
+                                            } //# for each field
+                                        } //# for each result row
+                                        
+                                        function values(object) {
+                                            let _values = [];
+                                            for (let key in object)
+                                                _values.push(object[key]);
+                                            return _values;
+                                        }
+                                        
+                                        var params = {
+                                            types: "STRING,STRING,STRING,STRING,STRING" /* STRING */,
+                                            t: result /* INFOTABLE */,
+                                            columns: "statusFormatted,statusState,productDescriptionTranslated,productIdTranslated,statusForColoring" /* STRING */,
+                                            expressions:
+                                                "status === 'COMPLETED' ? 'Completed' :" +
+                                                "status === 'INPROGRESS' ? 'Running' : " +
+                                                "status === 'PENDING' ? 'Scheduled' : ''," + // statusFormatted
+                                        
+                                                "productId === 'Cambio' ? 'Cambio' : status === 'COMPLETED' ? 'Completed' :" +
+                                                "status === 'INPROGRESS' ? 'Running' : " +
+                                                "status === 'PENDING' ? 'Scheduled' : ''," + // statusState
+                                        
+                                                "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," + // productDescriptionTranslated
+                                                "productId === 'Cambio' ? '' : productId," + // productIdTranslated
+                                        
+                                                "status === 'COMPLETED' && productId === 'Cambio' ? 'CompletedChangeover' :" +
+                                                "status === 'PENDING' && productId === 'Cambio' ? 'ScheduledChangeover' :" +
+                                                "status === 'PENDING' ? 'Scheduled' :" +
+                                                "status === 'INPROGRESS' ? 'Running' : 'Completed'" // statusForColoring
+                                        };
+                                        
+                                        result = Resources["InfoTableFunctions"].DeriveFields(params);
+                                        
+                                        /*result = Resources["InfoTableFunctions"].Query({
+                                            t: result,
+                                            query: {
+                                                "filters": {
+                                                    "fieldName": "status",
+                                                    "type": (!filterOnlyCompleted ? "NE" : "EQ"),
+                                                    "value": "COMPLETED"
+                                                }
+                                            }
+                                        });*/
                                         
                                         //var params = {
                                         //	types: "STRING,STRING,STRING,STRING" /* STRING */,
@@ -336,41 +397,6 @@
                                         //    "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," +
                                         //    "productId === 'Cambio' ? '' : productId"
                                         //};
-                                        
-                                        var params = {
-                                        	types: "STRING,STRING,STRING,STRING,STRING" /* STRING */,
-                                        	t: result /* INFOTABLE */,
-                                        	columns: "statusFormatted,statusState,productDescriptionTranslated,productIdTranslated,statusForColoring" /* STRING */,
-                                        	expressions:
-                                            "status === 'COMPLETED' ? 'Completed' :" +
-                                            	"status === 'INPROGRESS' ? 'Running' : " +
-                                            	"status === 'PENDING' ? 'Scheduled' : ''," + /* 2nd column */
-                                            
-                                            "productId === 'Cambio' ? 'Cambio' : status === 'COMPLETED' ? 'Completed' :" +
-                                            	"status === 'INPROGRESS' ? 'Running' : " +
-                                            	"status === 'PENDING' ? 'Scheduled' : ''," + /* 3rd column */
-                                            
-                                            "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," +
-                                            "productId === 'Cambio' ? '' : productId," +
-                                            
-                                            "status === 'COMPLETED' && productId === 'Cambio' ? 'CompletedChangeover' :" +
-                                            	"status === 'PENDING' && productId === 'Cambio' ? 'ScheduledChangeover' :" +
-                                        		"status === 'PENDING' ? 'Scheduled' :" +
-                                            	"status === 'INPROGRESS' ? 'Running' : 'Completed'"
-                                        };
-                                        
-                                        result = Resources["InfoTableFunctions"].DeriveFields(params);
-                                        
-                                        /*result = Resources["InfoTableFunctions"].Query({
-                                            t: result,                                 
-                                            query: {                                            
-                                                "filters": {                                    
-                                                    "fieldName": "status",                   
-                                                    "type": (!filterOnlyCompleted ? "NE" : "EQ"),                               
-                                                    "value": "COMPLETED"                               
-                                                }                                               
-                                            }                                                   
-                                        });*/
                                         ]]>
                                         </code>
                                     </Row>

@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup="DataTableEditor"
          identifier=""
-         lastModifiedDate="2020-10-05T09:12:27.454Z"
+         lastModifiedDate="2020-11-10T07:58:27.116Z"
          name="BayerMaterialPerformanceTable"
          projectName="BayerIoT"
          published="false"
@@ -229,6 +229,12 @@
                              name="productionLine"
                              ordinal="2"></FieldDefinition>
                             <FieldDefinition
+                             aspect.thingTemplate="FileRepository"
+                             baseType="THINGNAME"
+                             description=""
+                             name="repository"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
                              baseType="BOOLEAN"
                              description=""
                              name="simulate"
@@ -262,36 +268,39 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        //
+                                        // GetNominalRate service
+                                        // * productionLine - THINGNAME
+                                        // * code - STRING
+                                        
                                         var result = 0;
                                         
                                         var query = {
-                                          "filters": {
-                                            "type": "AND",
-                                            "filters": [
-                                              {
-                                                "fieldName": "productionLine",
-                                                "type": "EQ",
-                                                "value": productionLine
-                                              },
-                                              {
-                                                "fieldName": "code",
-                                                "type": "EQ",
-                                                "value": code
-                                              }
-                                            ]
-                                          }
-                                        };
-                                        
-                                        var params = {
-                                        	maxItems: undefined /* NUMBER */,
-                                        	values: undefined /* INFOTABLE*/,
-                                        	query: query /* QUERY */,
-                                        	source: undefined /* STRING */,
-                                        	tags: undefined /* TAGS */
+                                            "filters": {
+                                                "type": "AND",
+                                                "filters": [
+                                                    {
+                                                        "fieldName": "productionLine",
+                                                        "type": "EQ",
+                                                        "value": productionLine
+                                                    },
+                                                    {
+                                                        "fieldName": "code",
+                                                        "type": "EQ",
+                                                        "value": code
+                                                    }
+                                                ]
+                                            }
                                         };
                                         
                                         // result: INFOTABLE dataShape: "undefined"
-                                        var entry = me.QueryDataTableEntries(params);
+                                        var entry = me.QueryDataTableEntries({
+                                            maxItems: undefined /* NUMBER */,
+                                            values: undefined /* INFOTABLE*/,
+                                            query: query /* QUERY */,
+                                            source: undefined /* STRING */,
+                                            tags: undefined /* TAGS */
+                                        });
                                         
                                         if (entry.rows.length > 0) {
                                             result = entry.nominalRate;
@@ -326,6 +335,10 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        //
+                                        //  GetTable service
+                                        // * productionLine - THINGNAME
+                                        
                                         var query = {
                                           "filters": {
                                             "fieldName": "productionLine",
@@ -335,7 +348,7 @@
                                         };
                                         
                                         var params = {
-                                        	maxItems: undefined /* NUMBER */,
+                                        	maxItems: 1000 /* NUMBER */,
                                         	values: undefined /* INFOTABLE*/,
                                         	query: query /* QUERY */,
                                         	source: undefined /* STRING */,
@@ -379,16 +392,20 @@
                                         // * filePath - STRING
                                         // * productionLine - THINGNAME
                                         // * simulate - BOOLEAN
+                                        // * repository - THINGNAME
                                         if (!simulate) {
                                             simulate = false;
                                         }
-                                        
+                                        if (!repository) {
+                                            repository = "BayerCSVRepository";
+                                        }
                                         // result: INFOTABLE
                                         var data = Things["BayerUtilities"].LoadCSVGeneric({
                                             delimiter: ";" /* STRING */,
                                             filePath: filePath /* STRING */,
-                                            repository: "BayerCSVRepository" /* THINGNAME */
+                                            repository: repository /* THINGNAME */
                                         });
+                                        
                                         var tableLength = data.rows.length;
                                         var dataShapeName = me.GetDataShape();
                                         var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
@@ -399,18 +416,17 @@
                                             var row = data.rows[x];
                                             var values = me.CreateValues();
                                             values.productionLine = productionLine; //THINGNAME [Primary Key]
-                                        
                                             // STRING [Primary Key]
                                             values.code = getAtLeastOneField(row, "Code", "Product Item",
-                                                "Product item", "Product Code", "Product code");
+                                                "Product item", "Product Code", "Product code", "Materialnummer");
                                             if (values.code === undefined)
                                                 continue;
                                             // STRING
                                             values.description = getAtLeastOneField(row, "Product family",
-                                                "Product Family", "Description", "description", "desc") || "";
+                                                "Product Family", "Description", "description", "desc", "Beschreibung") || "";
                                             // NUMBER    
                                             values.nominalRate = getAtLeastOneField(row, "Nominal Rate", "Nominal rate",
-                                                "Speed", "speed");
+                                                "Speed", "speed", "Blisters per minute");
                                         
                                             // result: STRING
                                             if (!simulate) {
@@ -425,7 +441,8 @@
                                             result.AddRow(values.rows[0]);
                                         } //# for each parsed row
                                         
-                                        function getAtLeastOneField(row, args) {
+                                        function getAtLeastOneField(row) {
+                                            var fields = Array.from(arguments).slice(1);
                                             if (!row || !fields || fields.length == 0)
                                                 return undefined;
                                             var value = undefined;
