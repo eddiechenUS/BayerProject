@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-12-12T13:45:49.077Z" name="BayerActionListPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-10-25T21:14:05.131Z" name="BayerActionListPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -348,21 +348,29 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        //
+                                        // GetActionList Service
+                                        // * assignedTo - USERNAME
+                                        // * status - STRING
+                                        // * createdFrom - DATETIME
+                                        // * productionLine - THINGNAME
+                                        // * dueDate - DATETIME
+                                        // * createdTo - DATETIME
+                                        
                                         var currentDate = new Date();
-                                        if(status && status !== "undefined"){
+                                        if (!status || status == "undefined") {
                                         	status = " ";
                                         }
-                                        if(assignedTo && assignedTo !== "undefined"){
+                                        if (!assignedTo || assignedTo == "undefined") {
                                         	assignedTo = " ";
                                         }
-                                        var result =  Things[productionLine].QueryActions({
-                                        	dueDate: dueDate ,
+                                        var result = Things[productionLine].QueryActions({
+                                        	dueDate: dueDate,
                                         	createdTimeFrom: createdFrom /* DATETIME */,
-                                        	assignedTo: " " /* USERNAME */,
+                                        	assignedTo: assignedTo /* USERNAME */,
                                         	createdTimeTo: createdTo /* DATETIME */,
                                         	status: status
                                         });
-                                        
                                         
                                         //for (var i = 0; i < result.rows.length; i++) {
                                         //    if(result[i].status === "Open") {

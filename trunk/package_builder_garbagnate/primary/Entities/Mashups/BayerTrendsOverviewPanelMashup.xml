@@ -16,7 +16,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-06-08T15:21:27.346Z"
+         lastModifiedDate="2020-08-05T17:23:51.833Z"
          name="BayerTrendsOverviewPanelMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -24,7 +24,12 @@
             <avatar></avatar>
             <DesignTimePermissions>
                 <Create></Create>
-                <Read></Read>
+                <Read>
+                    <Principal
+                     isPermitted="true"
+                     name="App.BayerPerformanceDashboard"
+                     type="Group"></Principal>
+                </Read>
                 <Update></Update>
                 <Delete></Delete>
                 <Metadata></Metadata>
@@ -736,7 +741,7 @@
                           "Left" : 160,
                           "NumberOfTabs" : 3,
                           "ResponsiveLayout" : true,
-                          "SelectedTab" : 0,
+                          "SelectedTab" : 2,
                           "ShowDataLoading" : true,
                           "Tab10Disabled" : false,
                           "Tab10Name" : "Tab Name 10",
@@ -1507,7 +1512,7 @@
                                   },
                                   "FieldName" : "timestamp",
                                   "FormatOptions" : {
-                                    "FormatString" : "[[dateTimeFormat_Default]]",
+                                    "FormatString" : "[[dateTimeFormat_LongDate]]",
                                     "formatInfo" : {
                                       "FieldName" : "",
                                       "StateDefinition" : "",
@@ -1687,10 +1692,27 @@
                                   "headerTextAlignment" : "left",
                                   "hidden" : false,
                                   "inLayout" : true
+                                }, {
+                                  "Align" : "left",
+                                  "AllowEdit" : true,
+                                  "EditorOptions" : {
+                                    "Type" : "string",
+                                    "Validators" : [ "None", "NotEmpty", "Empty", "Custom", "ValidAlphaNumeric", "ValidEmail", "ValidIPv4", "ValidSIN", "ValidSSN" ]
+                                  },
+                                  "FieldName" : "timestampStr",
+                                  "FormatOptions" : {
+                                    "FormatString" : "full",
+                                    "renderer" : "STRING"
+                                  },
+                                  "Title" : "timestampStr",
+                                  "Width" : "auto",
+                                  "headerTextAlignment" : "left",
+                                  "hidden" : true,
+                                  "inLayout" : false
                                 } ]
                               },
                               "Configuration" : "",
-                              "ConfigurationId" : 2,
+                              "ConfigurationId" : 4,
                               "CookiePersistence" : true,
                               "DataOverflow" : "clipped",
                               "DataServiceBindingDef" : {
@@ -1792,6 +1814,33 @@
                           "ColumnFormat" : {
                             "formatInfo" : [ {
                               "Align" : "left",
+                              "AllowEdit" : true,
+                              "EditorOptions" : {
+                                "Type" : "string",
+                                "Validators" : [ "None", "NotEmpty", "Empty", "Custom", "ValidAlphaNumeric", "ValidEmail", "ValidIPv4", "ValidSIN", "ValidSSN" ]
+                              },
+                              "FieldName" : "timestampStr",
+                              "FormatOptions" : {
+                                "FormatString" : "full",
+                                "formatInfo" : {
+                                  "FieldName" : "",
+                                  "StateDefinition" : "",
+                                  "StateDefinitionType" : "fixed",
+                                  "StateFormats" : [ {
+                                    "state" : "",
+                                    "stateName" : "fixed"
+                                  } ]
+                                },
+                                "renderer" : "STRING",
+                                "roundingEnabled" : true
+                              },
+                              "Title" : "[[timestamp]]",
+                              "Width" : "auto",
+                              "headerTextAlignment" : "left",
+                              "hidden" : false,
+                              "inLayout" : true
+                            }, {
+                              "Align" : "left",
                               "AllowEdit" : false,
                               "EditorOptions" : {
                                 "Type" : "date",
@@ -1815,7 +1864,7 @@
                               "Title" : "[[timestamp]]",
                               "Width" : "auto",
                               "headerTextAlignment" : "left",
-                              "hidden" : false,
+                              "hidden" : true,
                               "inLayout" : true
                             }, {
                               "Align" : "right",
@@ -1982,7 +2031,7 @@
                             } ]
                           },
                           "Configuration" : "",
-                          "ConfigurationId" : 2,
+                          "ConfigurationId" : 3,
                           "CookiePersistence" : true,
                           "DataOverflow" : "clipped",
                           "DataServiceBindingDef" : {
