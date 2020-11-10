@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-06-18T05:24:25.281Z" name="BayerUtilities" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-11-08T18:26:40.145Z" name="BayerUtilities" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -603,25 +603,35 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var result = { dataShape: { fieldDefinitions : {} }, rows: [] };
+                                        //
+                                        // LoadCSVGeneric service
+                                        // * filePath - STRING
+                                        // * repository - THINGNAME
+                                        // * delimiter - STRING
                                         
-                                        var params = {
-                                        	path: filePath /* STRING */
-                                        };
+                                        if (!repository) {
+                                            repository = "SystemRepository"; // fallback
+                                        }
+                                        
+                                        var result = { dataShape: { fieldDefinitions: {} }, rows: [] };
                                         
                                         // result: STRING
-                                        var content = Things[repository].LoadText(params);
+                                        var content = Things[repository].LoadText({ path: filePath });
                                         
                                         var lines = content.match(/[^\r\n]+/g);
-                                        
+                                        if (!!delimiter && lines[0].indexOf(delimiter) < 0 || !delimiter)
+                                            delimiter = checkLineSplits(lines[0]);
+                                        if (!delimiter) {
+                                            throw new Error("Unable to process selected CSV file - can't properly detect a CSV separator. (" + filePath + ")");
+                                        }
                                         var fields = lines[0].split(delimiter);
                                         
                                         for (var i = 0; i < fields.length; i++) {
-                                            result.dataShape.fieldDefinitions[fields[i]] = { name: fields[i], baseType: 'STRING', ordinal: i+1 };
+                                            result.dataShape.fieldDefinitions[fields[i]] = { name: fields[i], baseType: 'STRING', ordinal: i + 1 };
                                         }
                                         
                                         var params = {
-                                        	json: result /* JSON */
+                                            json: result /* JSON */
                                         };
                                         
                                         // result: INFOTABLE
@@ -629,13 +639,29 @@
                                         
                                         for (var x = 1; x < lines.length; x++) {
                                             var values = lines[x].split(delimiter);
-                                            
+                                        
                                             var newEntry = new Object();
                                             for (var i = 0; i < fields.length; i++) {
                                                 newEntry[fields[i]] = values[i];
                                             }
-                                            
+                                        
                                             result.AddRow(newEntry);
+                                        }
+                                        
+                                        function checkLineSplits(line) {
+                                            var _delims = [
+                                                ";", ",", "|"
+                                            ];
+                                            var _matched = undefined;
+                                            for (var _i = 0; _i < _delims.length; _i++) {
+                                                _delim = _delims[_i];
+                                                //var _splits = line.split(_delim);
+                                                if (line.indexOf(_delim) != -1) {
+                                                    _matched = _delim;
+                                                    break;
+                                                }
+                                            }
+                                            return _matched;
                                         }
                                         ]]>
                                         </code>
