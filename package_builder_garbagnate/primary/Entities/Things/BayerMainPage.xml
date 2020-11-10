@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
+    <Things>
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-05-20T12:11:49.218Z" name="BayerMainPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions resourceName="GetMenuContent">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="App.BayerPerformanceDashboard" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="navigationMenu">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="App.BayerPerformanceDashboard" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                    </PropertyRead>
+                    <PropertyWrite/>
+                    <ServiceInvoke/>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <ThingShape>
+                <PropertyDefinitions>
+                    <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.dataShape="BayerNavigationMenuDataShape" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" baseType="INFOTABLE" category="" description="" isLocalOnly="false" name="navigationMenu" ordinal="1"/>
+                </PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetMenuContent">
+                        <ResultType aspect.dataShape="BayerNavigationMenuDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="GetMenuContent">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="Script" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var params = {
+                                        	t1: me.navigationMenu /* INFOTABLE */
+                                        };
+                                        
+                                        // result: INFOTABLE
+                                        var result = Resources["InfoTableFunctions"].Clone(params);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations>
+                <AlertDefinitions name="navigationMenu"/>
+            </AlertConfigurations>
+            <ImplementedShapes/>
+            <ThingProperties>
+                <navigationMenu>
+                    <Value>
+                        <infoTable>
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition baseType="IMAGELINK" description="" name="icon" ordinal="2"/>
+                                    <FieldDefinition baseType="IMAGELINK" description="" name="iconSelected" ordinal="3"/>
+                                    <FieldDefinition baseType="MASHUPNAME" description="" name="mashup" ordinal="4"/>
+                                    <FieldDefinition aspect.defaultValue="0.0" aspect.isPrimaryKey="false" baseType="NUMBER" description="" name="order" ordinal="5"/>
+                                    <FieldDefinition baseType="STRING" description="" name="title" ordinal="1"/>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <icon>
+                                    <![CDATA[
+                                    Bayer_Safety_ico
+                                    ]]>
+                                    </icon>
+                                    <iconSelected>
+                                    <![CDATA[
+                                    Bayer_Safety_ico_h
+                                    ]]>
+                                    </iconSelected>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerActionListMashup
+                                    ]]>
+                                    </mashup>
+                                    <order>2.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    [[Bayer.ActionList]]
+                                    ]]>
+                                    </title>
+                                </Row>
+                                <Row>
+                                    <icon>
+                                    <![CDATA[
+                                    Bayer_Quality_ico
+                                    ]]>
+                                    </icon>
+                                    <iconSelected>
+                                    <![CDATA[
+                                    Bayer_Quality_ico_h
+                                    ]]>
+                                    </iconSelected>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerExportMashup
+                                    ]]>
+                                    </mashup>
+                                    <order>6.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    [[Bayer.Reports]]
+                                    ]]>
+                                    </title>
+                                </Row>
+                                <Row>
+                                    <icon>
+                                    <![CDATA[
+                                    Bayer_Delivery_ico
+                                    ]]>
+                                    </icon>
+                                    <iconSelected>
+                                    <![CDATA[
+                                    Bayer_Delivery_ico_h
+                                    ]]>
+                                    </iconSelected>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerDelaysTrendsMainMashup
+                                    ]]>
+                                    </mashup>
+                                    <order>4.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    [[Bayer.Delays]]
+                                    ]]>
+                                    </title>
+                                </Row>
+                                <Row>
+                                    <icon>
+                                    <![CDATA[
+                                    Bayer_Home_ico
+                                    ]]>
+                                    </icon>
+                                    <iconSelected>
+                                    <![CDATA[
+                                    Bayer_Home_ico_h
+                                    ]]>
+                                    </iconSelected>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerShiftTrackingMashup
+                                    ]]>
+                                    </mashup>
+                                    <order>1.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    [[Bayer.Home]]
+                                    ]]>
+                                    </title>
+                                </Row>
+                                <Row>
+                                    <icon>
+                                    <![CDATA[
+                                    Bayer_Line_ico
+                                    ]]>
+                                    </icon>
+                                    <iconSelected>
+                                    <![CDATA[
+                                    Bayer_Line_ico_h
+                                    ]]>
+                                    </iconSelected>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerProductionPlanMashup
+                                    ]]>
+                                    </mashup>
+                                    <order>5.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    [[Bayer.ProductionPlan]]
+                                    ]]>
+                                    </title>
+                                </Row>
+                                <Row>
+                                    <icon>
+                                    <![CDATA[
+                                    Bayer_Trend_ico
+                                    ]]>
+                                    </icon>
+                                    <iconSelected>
+                                    <![CDATA[
+                                    Bayer_Trend_ico_h
+                                    ]]>
+                                    </iconSelected>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerChangeoverTrendMashup
+                                    ]]>
+                                    </mashup>
+                                    <order>3.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    [[Bayer.ChangeoverTrend]]
+                                    ]]>
+                                    </title>
+                                </Row>
+                                <Row>
+                                    <icon>
+                                    <![CDATA[
+                                    Bayer_Costs_ico
+                                    ]]>
+                                    </icon>
+                                    <iconSelected>
+                                    <![CDATA[
+                                    Bayer_Costs_ico_h
+                                    ]]>
+                                    </iconSelected>
+                                    <mashup>
+                                    <![CDATA[
+                                    BayerMaintenanceTicketsMashup
+                                    ]]>
+                                    </mashup>
+                                    <order>7.0</order>
+                                    <title>
+                                    <![CDATA[
+                                    [[Bayer.MaintenanceTickets]]
+                                    ]]>
+                                    </title>
+                                </Row>
+                            </Rows>
+                        </infoTable>
+                    </Value>
+                    <Timestamp>2020-05-20T12:11:45.890Z</Timestamp>
+                    <Quality>GOOD</Quality>
+                </navigationMenu>
+            </ThingProperties>
+        </Thing>
+    </Things>
+</Entities>

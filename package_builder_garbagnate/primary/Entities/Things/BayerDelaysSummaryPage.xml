@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
+    <Things>
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2019-11-04T18:50:55.837Z" name="BayerDelaysSummaryPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions resourceName="GetDelaysSummary">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
+                        <Principal isPermitted="true" name="Role.BayerProductionLine.Any" type="Group"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions/>
+            <ConfigurationTables/>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetDelaysSummary">
+                        <ResultType aspect.dataShape="BayerDelaysSummaryDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="line" ordinal="2"/>
+                            <FieldDefinition baseType="INTEGER" description="" name="shiftScheduleId" ordinal="2"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="GetDelaysSummary">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var delaysSummary =  Things[line].GetDelaysSummary({
+                                            shiftScheduleId: shiftScheduleId,
+                                        });
+                                        var delaysSummaryLength = delaysSummary.rows.length;
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTrendDetailsDataShape)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "BayerDelaysSummaryDataShape"
+                                        });
+                                        // var delaysCategories = ['microstop', 'breakdown', 'changeover'];
+                                        
+                                        // BayerDelaysSummaryDataShape entry object
+                                        var delayCategory = new Object();
+                                        delayCategory.microstopDuration = '0';
+                                        delayCategory.microstopFrequency = 0; // INTEGER
+                                        delayCategory.microstopMajorProblem = ''; // STRING
+                                        
+                                        for (var x=0; x < delaysSummaryLength; x++) {
+                                            var row = delaysSummary.rows[x];
+                                            if (row.category === 'microstop') {
+                                        		delayCategory.microstopDuration = row.duration; // NUMBER
+                                                delayCategory.microstopFrequency = row.frequency; // INTEGER
+                                                delayCategory.microstopMajorProblem = row.majorProblem ; // STRING
+                                            }
+                                        }
+                                        
+                                        delayCategory.breakdownDuration = '0';
+                                        delayCategory.breakdownFrequency = 0; // INTEGER
+                                        delayCategory.breakdownMajorProblem = ''; // STRING
+                                        
+                                        for (x=0; x < delaysSummaryLength; x++) {
+                                            var rowBreakdown = delaysSummary.rows[x];
+                                            if (rowBreakdown.category === 'breakdown') {
+                                        		delayCategory.breakdownDuration = rowBreakdown.duration; // NUMBER
+                                                delayCategory.breakdownFrequency = rowBreakdown.frequency; // INTEGER
+                                                delayCategory.breakdownMajorProblem = rowBreakdown.majorProblem ; // STRING
+                                            }
+                                        }
+                                        
+                                        delayCategory.changeoverDuration = '0'; 
+                                        delayCategory.changeoverFrequency = 0; // INTEGER
+                                        delayCategory.changeoverMajorProblem = ''; // STRING
+                                        
+                                        for (x=0; x < delaysSummaryLength; x++) {
+                                            var rowChangeover = delaysSummary.rows[x];
+                                            if (rowChangeover.category === 'changeover') {
+                                        		delayCategory.changeoverDuration = rowChangeover.duration; // NUMBER
+                                                delayCategory.changeoverFrequency = rowChangeover.frequency; // INTEGER
+                                                delayCategory.changeoverMajorProblem = rowChangeover.majorProblem ; // STRING
+                                            }
+                                        }
+                                        result.AddRow(delayCategory);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions/>
+            </ThingShape>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ImplementedShapes/>
+            <ThingProperties/>
+        </Thing>
+    </Things>
+</Entities>

@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
+    <ThingTemplates>
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-06-06T19:07:09.673Z" name="BayerProductionPlansParserTemplate" projectName="BayerIoT" tags="Applications:BayerProductionPlans;Applications:Bayer" thingPackage="" valueStream="">
+            <avatar/>
+            <DesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </DesignTimePermissions>
+            <RunTimePermissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="BayerProductionDbSchedulerUser" type="User"/>
+                    </EventSubscribe>
+                </Permissions>
+            </RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions>
+                <ConfigurationTableDefinition category="" dataShapeName="BayerProductionPlansParserSettingsDataShape" description="" isHidden="false" isMultiRow="false" name="ParserSettings" ordinal="0" source="IMPORT"/>
+                <ConfigurationTableDefinition category="" dataShapeName="BayerProductionPlansParserColumnMappingDataShape" description="" isHidden="false" isMultiRow="false" name="ColumnMapping" ordinal="0" source="IMPORT"/>
+            </ConfigurationTableDefinitions>
+            <ConfigurationTables>
+                <ConfigurationTable description="" isMultiRow="false" name="ColumnMapping" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition baseType="STRING" description="" name="activeMaterialNumber" ordinal="9"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="blistersPerFoldedBox" ordinal="13"/>
+                            <FieldDefinition baseType="STRING" description="" name="blisterType" ordinal="11"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="commentFirstLine" ordinal="10"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endDate" ordinal="22"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endTime" ordinal="20"/>
+                            <FieldDefinition baseType="STRING" description="" name="foldedBoxFormat" ordinal="12"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="manufProcess" ordinal="17"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="mdatOos" ordinal="15"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="mdatSaf" ordinal="14"/>
+                            <FieldDefinition baseType="STRING" description="" name="orderNr" ordinal="4"/>
+                            <FieldDefinition baseType="STRING" description="" name="productDescription" ordinal="5"/>
+                            <FieldDefinition baseType="STRING" description="" name="productId" ordinal="3"/>
+                            <FieldDefinition aspect.isPrimaryKey="true" baseType="STRING" description="" name="productionLine" ordinal="1"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="ruestzeit" ordinal="18"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startDate" ordinal="21"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startTime" ordinal="19"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="tabletsPerBlister" ordinal="16"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="TA Number" name="taNumber" ordinal="2"/>
+                            <FieldDefinition baseType="STRING" description="" name="targetQuantity" ordinal="7"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="targetQuantityPerHour" ordinal="23"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="uom" ordinal="8"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="version" ordinal="6"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <activeMaterialNumber/>
+                            <blisterType/>
+                            <blistersPerFoldedBox/>
+                            <commentFirstLine/>
+                            <endDate/>
+                            <endTime/>
+                            <foldedBoxFormat/>
+                            <manufProcess/>
+                            <mdatOos/>
+                            <mdatSaf/>
+                            <orderNr/>
+                            <productDescription/>
+                            <productId/>
+                            <productionLine/>
+                            <ruestzeit/>
+                            <startDate/>
+                            <startTime/>
+                            <taNumber/>
+                            <tabletsPerBlister/>
+                            <targetQuantity/>
+                            <targetQuantityPerHour/>
+                            <uom/>
+                            <version/>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+                <ConfigurationTable description="" isMultiRow="false" name="ParserSettings" ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" baseType="PASSWORD" description="" name="appKey" ordinal="4"/>
+                            <FieldDefinition aspect.defaultValue=";" aspect.isPrimaryKey="true" baseType="STRING" description="" name="csvDelimiter" ordinal="5"/>
+                            <FieldDefinition aspect.defaultValue="false" aspect.isPrimaryKey="true" baseType="BOOLEAN" description="" name="isSource" ordinal="6"/>
+                            <FieldDefinition aspect.defaultValue="BayerCSVRepository" aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.thingTemplate="FileRepository" baseType="THINGNAME" description="" name="repository" ordinal="1"/>
+                            <FieldDefinition aspect.defaultValue="http://localhost:8080/Thingworx/Things/BayerProductionPlansParser/Services/ProcessData" aspect.friendlyName="" aspect.isPrimaryKey="true" baseType="STRING" description="" name="targetServiceUrl" ordinal="3"/>
+                            <FieldDefinition aspect.defaultValue="false" aspect.isPrimaryKey="true" baseType="BOOLEAN" description="If selected, will add a blank production item in case no production plan update is provided for line (line is standing-by)" name="useBlankItemIfNoDataForLine" ordinal="7"/>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <appKey/>
+                            <csvDelimiter>
+                            <![CDATA[
+                            ;
+                            ]]>
+                            </csvDelimiter>
+                            <isSource>false</isSource>
+                            <repository/>
+                            <targetServiceUrl/>
+                            <useBlankItemIfNoDataForLine>false</useBlankItemIfNoDataForLine>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+            </ConfigurationTables>
+            <PropertyBindings/>
+            <RemotePropertyBindings/>
+            <RemoteServiceBindings/>
+            <RemoteEventBindings/>
+            <AlertConfigurations/>
+            <ThingShape>
+                <PropertyDefinitions/>
+                <ServiceDefinitions>
+                    <ServiceDefinition aspect.isAsync="false" category="Configuration" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetColumnMapping">
+                        <ResultType aspect.dataShape="BayerProductionPlansParserColumnMappingDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="Configuration" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetParserSettings">
+                        <ResultType aspect.dataShape="BayerProductionPlansParserSettingsDataShape" baseType="INFOTABLE" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="Files parser" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="ParseFileAndPushData">
+                        <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="path" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="true" category="Data processor" description="TargetEndpoint, that receives data from CSV file and processes it." isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessData">
+                        <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" baseType="INFOTABLE" description="" name="data" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="ProcessLineIdentifier">
+                        <ResultType baseType="STRING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions>
+                            <FieldDefinition aspect.isRequired="true" baseType="STRING" description="" name="lineName" ordinal="1"/>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition aspect.isAsync="false" category="Files parser" description="" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="ScanFiles">
+                        <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+                        <ParameterDefinitions/>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions/>
+                <ServiceMappings/>
+                <ServiceImplementations>
+                    <ServiceImplementation description="" handlerName="Script" name="GetColumnMapping">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // table: INFOTABLE dataShape: ""
+                                        var result =  me.GetConfigurationTable({
+                                        	tableName: "ColumnMapping" /* STRING */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="GetParserSettings">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // table: INFOTABLE dataShape: ""
+                                        var result =  me.GetConfigurationTable({
+                                        	tableName: "ParserSettings" /* STRING */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="ParseFileAndPushData">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // parse the file and push it to the other instance of TWX
+                                        
+                                        // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
+                                        var settings =  me.GetParserSettings();
+                                        var result = null;
+                                        
+                                        /////////////// PARSE FILE //////////////////
+                                        
+                                        var data = null;
+                                        try {
+                                            // result: INFOTABLE dataShape: ""
+                                            data =  Resources["TTPSC.Utilities.UtilityServices"].ParseCSV({
+                                                path: path /* STRING */,
+                                                delimiter: settings.csvDelimiter /* STRING */,
+                                                repository: settings.repository /* THINGNAME */
+                                            });
+                                        }
+                                        catch (ex) {
+                                            logger.error(me.name + ".ParseFileAndPushData error parsing file " + path + " | " + ex);
+                                            throw ex;
+                                        }
+                                        
+                                        /////////////// MAP COLUMN NAMES //////////////
+                                        
+                                        // result: INFOTABLE dataShape: "BayerProductionPlansParserColumnMappingDataShape"
+                                        var mapping =  me.GetColumnMapping();
+                                        
+                                        function getCsvColumnName(fName) {
+                                            return mapping.rows[0][fName];
+                                        }
+                                        
+                                        // result: INFOTABLE
+                                        var mappedData = Resources["InfoTableFunctions"].Clone({ t1: mapping });
+                                        mappedData.RemoveAllRows();
+                                        var dataShapeFields = mappedData.dataShape.fields;
+                                        
+                                        var tableLength = data.rows.length;
+                                        for (var x=0; x < tableLength; x++) {
+                                            var row = data.rows[x];
+                                            
+                                            var newEntry = new Object();
+                                            for (var fieldName in dataShapeFields) {
+                                                var csvColumnName = getCsvColumnName(fieldName);
+                                                if (csvColumnName) {
+                                                	newEntry[fieldName] = row[csvColumnName];
+                                                }
+                                            }
+                                            
+                                            if (!newEntry.productId || !newEntry.productionLine)
+                                                continue;
+                                            
+                                            mappedData.AddRow(newEntry);
+                                        }
+                                        
+                                        
+                                        
+                                        /////////////// PUSH DATA ////////////////
+                                        
+                                        if (data) {
+                                            var postHeaders = {
+                                                "Accept": "application/json",
+                                                "Content-Type": "application/json",
+                                                "appKey": settings.appKey
+                                            };
+                                            
+                                            var postParams = {
+                                                "data": mappedData.ToJSON()
+                                            };
+                                            
+                                            try {
+                                                var params = {
+                                                    proxyScheme: undefined /* STRING */,
+                                                    headers: postHeaders /* JSON */,
+                                                    ignoreSSLErrors: true /* BOOLEAN */,
+                                                    useNTLM: undefined /* BOOLEAN */,
+                                                    workstation: undefined /* STRING */,
+                                                    useProxy: undefined /* BOOLEAN */,
+                                                    withCookies: undefined /* BOOLEAN */,
+                                                    proxyHost: undefined /* STRING */,
+                                                    url: settings.targetServiceUrl /* STRING */,
+                                                    content: postParams /* JSON */,
+                                                    timeout: undefined /* NUMBER */,
+                                                    proxyPort: undefined /* INTEGER */,
+                                                    password: undefined /* STRING */,
+                                                    domain: undefined /* STRING */,
+                                                    username: undefined /* STRING */
+                                                };
+                                        
+                                                // result: JSON
+                                                result = Resources["ContentLoaderFunctions"].PostJSON(params);
+                                            }
+                                            catch (ex) {
+                                                logger.error(me.name + ".ParseFileAndPushData error pushing data from file " + path + " | " + ex);
+                                                throw ex;
+                                            }
+                                        }
+                                        
+                                        //var result = mappedData;
+                                        
+                                        logger.info(me.name + ".ParseFileAndPushData - file " + path + " processed. Response from target: " + result);
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="ProcessData">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //
+                                        // ProcessData service
+                                        //> BayerProductionPlansParser Template (Main Implementation)
+                                        // * data - INFOTABLE
+                                        
+                                        var SERVICE_NAME = "ProcessData(Main)";
+                                        // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
+                                        var parserSettings = me.GetParserSettings();
+                                        // receive data pushed by the other instance of TWX and process it
+                                        INFO("received " + data.getRowCount() + " rows");
+                                        //
+                                        var noLineWarning = false;
+                                        var warningsForLine = {};
+                                        var aggregatedData = {};
+                                        var tableLength = data.rows.length;
+                                        for (let idx = 0; idx < tableLength; idx++) {
+                                            let row = data.rows[idx];
+                                            if (!row.productionLine) {
+                                                if (!noLineWarning) {
+                                                    noLineWarning = true;
+                                                    WARNING("no productionLine specified");
+                                                }
+                                                continue;
+                                            } //? productionLine
+                                            row.productionLine = me.ProcessLineIdentifier({ lineName: row.productionLine });
+                                            let lineThing = "BayerProductionLine_" + row.productionLine;
+                                            if (!Things[lineThing] && !warningsForLine[lineThing]) {
+                                                warningsForLine[lineThing] = true;
+                                                WARNING("line " + lineThing + " doesn't exist");
+                                            } //? lineThing
+                                            if (aggregatedData[lineThing] === undefined) {
+                                                aggregatedData[lineThing] = Resources["InfoTableFunctions"].Clone({ t1: data });
+                                                aggregatedData[lineThing].RemoveAllRows();
+                                            }
+                                            aggregatedData[lineThing].AddRow(row);
+                                        } //# for each input data row
+                                        // result: INFOTABLE dataShape: "RootEntityList"
+                                        var lines = ThingTemplates["BayerProductionLine"].GetImplementingThings();
+                                        var numLines = lines.rows.length;
+                                        for (let idx = 0; idx < numLines; idx++) {
+                                            let line = lines.rows[idx];
+                                            let plan = null;
+                                            try {
+                                                if (aggregatedData[line.name] === undefined) {
+                                                    // no data for line was provided
+                                                    if (parserSettings.useBlankItemIfNoDataForLine) {
+                                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlansParserColumnMappingDataShape)
+                                                        plan = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                                            dataShapeName: "BayerProductionPlansParserColumnMappingDataShape"
+                                                        });
+                                                        // BayerProductionPlansParserColumnMappingDataShape entry object
+                                                        var newEntry = new Object();
+                                                        newEntry.productionLine = line.name; // STRING [Primary Key]
+                                                        newEntry.productId = 'standby'; // STRING
+                                                        plan.AddRow(newEntry);
+                                                        DEBUG("standby added for line " + line.name);
+                                                    }
+                                                } else {
+                                                    plan = aggregatedData[line.name];
+                                                }
+                                                if (plan) {
+                                                    var result = Things[line.name].LoadProductionPlan({
+                                                        data: plan /* INFOTABLE */
+                                                    });
+                                                } else {
+                                                    INFO("No production plan provided for line " + line.name);
+                                                }
+                                            } catch (ex) {
+                                                ERROR("Error loading plan for " + line.name + " | " + ex);
+                                            }
+                                        } //# for each production line
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function DEBUG(message) {
+                                            logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> DEBUG
+                                        
+                                        function TRACE(message) {
+                                            logger.trace(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> TRACE
+                                        
+                                        function ERROR(message) {
+                                            logger.error(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> ERROR
+                                        
+                                        function WARNING(message) {
+                                            logger.warn(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> WARNING
+                                        
+                                        function INFO(message) {
+                                            logger.info(me.name + ":" + SERVICE_NAME + ": " + message);
+                                        } //> INFO
+                                        //>----------------------------------------------------------------------------
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="ProcessLineIdentifier">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // output the identifier as 3-digits number (e.g. 086)
+                                        
+                                        var result = zeroFill(lineName.replace(/^0*/gm, ''), 3);
+                                        
+                                        function zeroFill( number, width )
+                                        {
+                                          width -= number.length;
+                                          if ( width > 0 )
+                                          {
+                                            return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+                                          }
+                                          return number + ""; // always return a string
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation description="" handlerName="Script" name="ScanFiles">
+                        <ConfigurationTables>
+                            <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var settings =  me.GetParserSettings();
+                                        
+                                        // result: INFOTABLE dataShape: "FileSystemFile"
+                                        var files =  Things[settings.repository].GetFileListing({
+                                        	path: "/" /* STRING */,
+                                        	nameMask: "*.csv" /* STRING */
+                                        });
+                                        
+                                        var sort = new Object();
+                                        sort.name = "lastModifiedDate";
+                                        sort.ascending = false;
+                                        files.Sort(sort);
+                                        
+                                        var tableLength = files.rows.length;
+                                        if(tableLength > 0) {
+                                            logger.debug(me.name+": ScanFiles: found '"+tableLength+"' files and beginning processing now...");
+                                        }
+                                        for (var x=0; x < tableLength; x++) {
+                                            var file = files.rows[x];
+                                            
+                                            var targetPath = "";
+                                            
+                                            if (x > 0) {
+                                                // we take only one, latest file, others are ignored because when processing data, we remove all scheduled orders
+                                                targetPath = "/ignored/" + file.name;
+                                                logger.warn(me.name + ".ScanFiles file ignored: " + file.path);
+                                            }
+                                            else {
+                                                try {
+                                                    me.ParseFileAndPushData({
+                                                        path: file.path /* STRING */
+                                                    });
+                                                    targetPath = "/processed/" + file.name;
+                                                }
+                                                catch (ex) {
+                                                    targetPath = "/failed/" + file.name;
+                                                    logger.error(me.name + ".ScanFiles file processing failed " + file.path + " Reason: " + ex);
+                                                }
+                                        
+                                                // pause():INTEGER
+                                                var milliseconds = pause(5000);
+                                            }
+                                            
+                                            Things[settings.repository].MoveFile({
+                                                targetPath: targetPath /* STRING */,
+                                                overwrite: true /* BOOLEAN */,
+                                                sourcePath: file.path /* STRING */
+                                            });
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions>
+                    <Subscription description="" enabled="true" eventName="ScheduledEvent" name="OnScheduledEvent" source="BayerProductionPlansScheduler" sourceProperty="">
+                        <ServiceImplementation description="" handlerName="Script" name="OnScheduledEvent">
+                            <ConfigurationTables>
+                                <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+                                    <DataShape>
+                                        <FieldDefinitions>
+                                            <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+                                        </FieldDefinitions>
+                                    </DataShape>
+                                    <Rows>
+                                        <Row>
+                                            <code>
+                                            <![CDATA[
+                                            // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
+                                            var settings =  me.GetParserSettings();
+                                            
+                                            if (settings.isSource) {
+                                            	me.ScanFiles();
+                                            }
+                                            ]]>
+                                            </code>
+                                        </Row>
+                                    </Rows>
+                                </ConfigurationTable>
+                            </ConfigurationTables>
+                        </ServiceImplementation>
+                    </Subscription>
+                </Subscriptions>
+            </ThingShape>
+            <ImplementedShapes/>
+            <SharedConfigurationTables/>
+            <InstanceDesignTimePermissions>
+                <Create/>
+                <Read/>
+                <Update/>
+                <Delete/>
+                <Metadata/>
+            </InstanceDesignTimePermissions>
+            <InstanceRunTimePermissions>
+                <Permissions resourceName="GetConfigurationTable">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="ProcessLineIdentifier">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetParserSettings">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="GetColumnMapping">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="*">
+                    <PropertyRead>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                        <Principal isPermitted="true" name="System" type="User"/>
+                    </PropertyRead>
+                    <PropertyWrite>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </EventInvoke>
+                    <EventSubscribe>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </EventSubscribe>
+                </Permissions>
+                <Permissions resourceName="ScanFiles">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="ParseFileAndPushData">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+                <Permissions resourceName="ProcessData">
+                    <PropertyRead/>
+                    <PropertyWrite/>
+                    <ServiceInvoke>
+                        <Principal isPermitted="true" name="BayerProductionPlansProcessingUser" type="User"/>
+                    </ServiceInvoke>
+                    <EventInvoke/>
+                    <EventSubscribe/>
+                </Permissions>
+            </InstanceRunTimePermissions>
+            <InstanceVisibilityPermissions>
+                <Visibility>
+                    <Principal isPermitted="true" name="Bayer:PerformanceDashboard" type="OrganizationalUnit"/>
+                </Visibility>
+            </InstanceVisibilityPermissions>
+        </ThingTemplate>
+    </ThingTemplates>
+</Entities>
