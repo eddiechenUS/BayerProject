@@ -13,7 +13,7 @@ for folder in ${folders_list[@]}; do
         status=(`svn status ./Entities/${folder}/${fileName}`)
         if [[ ${#status[@]} > 1 ]]; then
             modified=${status[0]}
-            if [ "$modified" != "M" ] && [ "$modified" != "D" ]; then
+            if [ "$modified" != "M" ] && [ "$modified" != "D" ] && [ "$modified" != "A" ]; then
                 echo "REMOVE 'Entities/${folder}/${fileName}'"
                 rm "./Entities/${folder}/${fileName}"
             fi

@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-10-25T21:20:08.755Z"
+         lastModifiedDate="2020-12-06T21:41:20.377Z"
          name="BayerActionListMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -408,6 +408,52 @@
                 "TargetArea" : "UI",
                 "TargetId" : "dhxlist-275",
                 "TargetSection" : ""
+              }, {
+                "Id" : "99953dd9-ee21-4cf7-9acc-be7958cf2991",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "DateTime",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "dueDate",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "datetimepicker-378",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetActionList",
+                "TargetSection" : "Things_BayerActionListPage"
+              }, {
+                "Id" : "c1e6a147-33df-4c5c-bf58-b5cac2fea94c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "TargetProperty" : "uiTimeOffset",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-428",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetActionList",
+                "TargetSection" : "Things_BayerActionListPage"
+              }, {
+                "Id" : "9e1e5f8c-af6a-4bc0-9b0f-8343f0e6424e",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "DateTime",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "selectedDate",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "datetimepicker-378",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-428",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -555,6 +601,15 @@
                 "EventTriggerId" : "button-402",
                 "EventTriggerSection" : "",
                 "Id" : "00d0aa3a-3cd5-4f84-aa0e-4a2afe322f3d"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-428",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Changed",
+                "EventTriggerId" : "datetimepicker-378",
+                "EventTriggerSection" : "",
+                "Id" : "2cf7993b-21d1-4d65-a2b2-8dfd5bf7dc8a"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -609,7 +664,7 @@
                   } ],
                   "flex-grow" : 0,
                   "flex-shrink" : 0,
-                  "id_index" : 427,
+                  "id_index" : 428,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -3253,6 +3308,39 @@
                     "__TypeDisplayName" : "Expression",
                     "_currentParameterDefs" : [ ],
                     "parameters" : [ ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "ALWAYS",
+                    "DisplayName" : "timezoneOffset",
+                    "Expression" : "!selectedDate ? 0 : new Date(selectedDate).getTimezoneOffset()",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-428",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "NUMBER",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "DATETIME",
+                      "Description" : "",
+                      "ParameterName" : "selectedDate",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "selectedDate"
+                    } ]
                   },
                   "Widgets" : [ ]
                 } ]
