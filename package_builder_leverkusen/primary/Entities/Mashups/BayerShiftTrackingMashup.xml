@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-11-04T19:56:51.008Z"
+         lastModifiedDate="2021-01-28T13:28:39.221Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -197,6 +197,14 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetCurrentUserGroups"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "05fd8a1e-33cd-4829-98ee-b392e8f65287",
+                    "Name" : "GetCurrentUser",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetCurrentUser"
                   } ]
                 },
                 "Resources_RuntimeLocalizationFunctions" : {
@@ -1779,39 +1787,6 @@
                 "TargetId" : "valuedisplay-551",
                 "TargetSection" : ""
               }, {
-                "Id" : "1f6c5c14-7cad-4ebd-84c0-5121992974c3",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "Output",
-                  "SourcePropertyBaseType" : "STRING",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "ANYSCALAR",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "UI",
-                "SourceId" : "expression-556",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "valuedisplay-557",
-                "TargetSection" : ""
-              }, {
-                "Id" : "7fab9239-a405-413f-9ede-3062fa37ee79",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "name",
-                  "SourcePropertyBaseType" : "STRING",
-                  "SourcePropertyType" : "Field",
-                  "TargetProperty" : "userName",
-                  "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "UserExtensions",
-                "SourceDetails" : "AllData",
-                "SourceId" : "UserExtensions",
-                "SourceSection" : "UserExtensions",
-                "TargetArea" : "UI",
-                "TargetId" : "expression-556",
-                "TargetSection" : ""
-              }, {
                 "Id" : "46055b48-02cd-4db1-ad42-a39db97524a6",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "subject",
@@ -1843,6 +1818,39 @@
                 "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
                 "TargetArea" : "UI",
                 "TargetId" : "expression-539",
+                "TargetSection" : ""
+              }, {
+                "Id" : "7f0d7b4a-569e-4619-a952-661f5da25265",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-556",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-557",
+                "TargetSection" : ""
+              }, {
+                "Id" : "c68efbe6-2884-4335-81d2-d7eb4ab2f1bb",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "userName",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetCurrentUser",
+                "SourceSection" : "Resources_CurrentSessionInfo",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-556",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
@@ -2271,15 +2279,6 @@
                 "EventTriggerSection" : "",
                 "Id" : "8a5d8cec-26a4-495d-bd9a-877443b3f2bf"
               }, {
-                "EventHandlerArea" : "UI",
-                "EventHandlerId" : "expression-556",
-                "EventHandlerService" : "Evaluate",
-                "EventTriggerArea" : "Mashup",
-                "EventTriggerEvent" : "Loaded",
-                "EventTriggerId" : "mashup-root",
-                "EventTriggerSection" : "",
-                "Id" : "7d49757b-d37c-42eb-b4eb-f70bb714c9fb"
-              }, {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "Resources_CurrentSessionInfo",
                 "EventHandlerService" : "GetCurrentUserGroups",
@@ -2288,6 +2287,42 @@
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
                 "Id" : "e7067352-418d-4fa6-92f4-cec34c6f4904"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Resources_CurrentSessionInfo",
+                "EventHandlerService" : "GetCurrentUser",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "1c67fd1d-19cd-4401-a079-025032340998"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Resources_CurrentSessionInfo",
+                "EventHandlerService" : "GetCurrentUser",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Refresh",
+                "EventTriggerId" : "autorefresh-384",
+                "EventTriggerSection" : "",
+                "Id" : "96e0a06e-5dd7-47a3-bcc4-28a075b639d2"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-556",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "GetCurrentUser",
+                "EventTriggerSection" : "Resources_CurrentSessionInfo",
+                "Id" : "7a9045a6-abeb-4424-9eb3-d168f97ab275"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetProperties",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "PopupClosed",
+                "EventTriggerId" : "navigation-421",
+                "EventTriggerSection" : "",
+                "Id" : "71fe0827-8afd-47de-90e9-0e4923883adf"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -10791,7 +10826,7 @@
                             "Label" : "Refresh Now",
                             "LastContainer" : false,
                             "Left" : 10,
-                            "RefreshInterval" : 180,
+                            "RefreshInterval" : 120,
                             "RefreshNowTabSequence" : 0,
                             "RefreshToggleLabel" : "On",
                             "RefreshToggleLabelOff" : "Off",
@@ -11383,7 +11418,7 @@
                     "AutoEvaluate" : false,
                     "DataChangeType" : "ALWAYS",
                     "DisplayName" : "popupTitleSelect",
-                    "Expression" : "if (!isChangeover && allowAdjustment) {\n    Output = \"[[Bayer.OverwriteProducedQuantityTitle]]\"/*\"Overwrite produced quantity\"*/;\n} else {\n    Output = \"[[Bayer.ConfirmationRequired]]\"/*\"Confirmation Required\"*/;\n}",
+                    "Expression" : "if (!isChangeover && allowAdjustment) {\n    Output = \"Bayer.OverwriteProducedQuantityTitle\"/*\"Overwrite produced quantity\"*/;\n} else {\n    Output = \"Bayer.ConfirmationRequired\"/*\"Confirmation Required\"*/;\n}",
                     "FireOnFirstValue" : false,
                     "Height" : 28,
                     "Id" : "expression-536",
@@ -11612,7 +11647,7 @@
                       "Description" : "",
                       "ParameterName" : "userName",
                       "bindingDirection" : "Target",
-                      "bindingStatus" : false,
+                      "bindingStatus" : true,
                       "bindingType" : "Property",
                       "isBindingSource" : false,
                       "isBindingTarget" : true,

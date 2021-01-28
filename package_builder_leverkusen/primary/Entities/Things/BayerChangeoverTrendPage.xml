@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-04-26T09:30:21.218Z" name="BayerChangeoverTrendPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-12-09T10:20:20.992Z" name="BayerChangeoverTrendPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -115,39 +115,49 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var now = new Date();
+                                        //
+                                        // GetChangeOverDetails service
+                                        // * dateTime - DATETIME
+                                        // * productionLine - THINGNAME
+                                        // * week - INTEGER
                                         
-                                        var changeoverTrendData =  Things[productionLine].GetChangeoverTrendForLine({
+                                        if (!productionLine) {
+                                            throw new Error("Input 'productionLine' is required!");
+                                        }
+                                        
+                                        var now = new Date();
+                                        var changeoverTrendData = Things[productionLine].GetChangeoverTrendForLine({
                                             dateTime: dateTime,
                                             week: week,
                                         });
                                         var changeoverTrendDataLength = changeoverTrendData.rows.length;
                                         
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTrendDetailsDataShape)
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
-                                            infoTableName : "InfoTable",
-                                            dataShapeName : "BayerChangeoverTrendDetailsDataShape"
+                                        var result_cotd = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName: "InfoTable",
+                                            dataShapeName: "BayerChangeoverTrendDetailsDataShape"
                                         });
                                         
-                                        for (var i=0; i<7; i++) {
-                                            var date = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate()+i);
-                                            var day = new Object();
-                                            day.id = i+1;
-                                            day.dayStart = date;
-                                            for (var x=0; x < changeoverTrendDataLength; x++) {
-                                                var row = changeoverTrendData.rows[x];
+                                        for (let dId = 0; dId < 7; dId++) {
+                                            let day = {};
+                                            day.dayStart = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate() + dId);
+                                            day.id = dId + 1;
+                                            for (let rowIdx = 0; rowIdx < changeoverTrendDataLength; rowIdx++) {
+                                                let row = changeoverTrendData.rows[rowIdx];
                                                 if (day.dayStart.getDate() == row.dayStart.getDate()) {
                                                     day.dayStart = row.dayStart; // DATETIME
                                                     day.weekStart = row.weekStart; // DATETIME
                                                     day.start = row.start; // DATETIME
                                                     day.end = row.end; // DATETIME
-                                                    day.target = row.targetHours;
-                                                    day.actual = row.workedHours;
-                                                    day.delta = row.delta;
+                                                    day.target = row.targetHours; //> this is now in minutes (changed in SQL query)
+                                                    day.actual = row.workedHours; //> minutes!
+                                                    day.delta = row.delta; //> delta is in minutes
                                                 }
-                                            }
-                                            result.AddRow(day);
-                                        }
+                                            } //# for each changeover trend
+                                            result_cotd.AddRow(day);
+                                        } //# for each day of the week
+                                        
+                                        var result = result_cotd;
                                         ]]>
                                         </code>
                                     </Row>

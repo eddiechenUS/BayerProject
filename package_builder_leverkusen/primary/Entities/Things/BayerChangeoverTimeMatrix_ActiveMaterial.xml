@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="DataTableThing" enabled="true" homeMashup="DataTableEditor" identifier="" lastModifiedDate="2020-05-18T12:05:53.783Z" name="BayerChangeoverTimeMatrix_ActiveMaterial" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerChangeoverTimeMatrixTemplate" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="DataTableThing" enabled="true" homeMashup="DataTableEditor" identifier="" lastModifiedDate="2021-01-25T17:34:59.600Z" name="BayerChangeoverTimeMatrix_ActiveMaterial" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerChangeoverTimeMatrixTemplate" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -83,13 +83,18 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var params = {
-                                        	infoTableName : "InfoTable",
-                                        	dataShapeName : "BayerChangeoverTimeMatrixDataShape"
-                                        };
+                                        //
+                                        // LoadFromCSV service
+                                        // BayerChangeoverTimeMatrix_ActiveMaterial
+                                        // * path - STRING
+                                        // * productionLine - THINGNAME
+                                        // * repository - THINGNAME
                                         
                                         // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerChangeoverTimeMatrixDataShape)
-                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                        	infoTableName : "InfoTable",
+                                        	dataShapeName : "BayerChangeoverTimeMatrixDataShape"
+                                        });
                                         
                                         var params = {
                                         	delimiter: ";" /* STRING */,

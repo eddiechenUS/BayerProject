@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingShapes>
-        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2020-06-04T18:42:09.482Z" name="BayerNotificationsManagement" projectName="BayerIoT" tags="Applications:Bayer">
+        <ThingShape className="" description="" documentationContent="" homeMashup="" lastModifiedDate="2021-01-28T12:43:43.544Z" name="BayerNotificationsManagement" projectName="BayerIoT" tags="Applications:Bayer">
             <PropertyDefinitions>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeThreshold="0.0" aspect.dataChangeType="VALUE" aspect.defaultValue="0" aspect.isLogged="false" aspect.isPersistent="true" aspect.isReadOnly="false" aspect.maximumValue="3" aspect.minimumValue="0" baseType="INTEGER" category="Notifications" description="0 - no alert&#10;1 - blank&#10;2 - changeover duration more than 110% target&#10;3 - changeover duration more than 120% target" isLocalOnly="false" name="changeoverAlertLevel" ordinal="5"/>
                 <PropertyDefinition aspect.cacheTime="0.0" aspect.dataChangeType="VALUE" aspect.isPersistent="true" baseType="BOOLEAN" category="Notifications" description="" isLocalOnly="false" name="changeoverComingNotificationSent" ordinal="7"/>
@@ -118,18 +118,22 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    eventData = { timestamp: new Date() };
+                                    
+                                    //
+                                    // ProcessNotificationRules service
+                                    
                                     var covAlertLevel = 0;
                                     var prodAlertLevel = 0;
                                     
                                     // result: INFOTABLE dataShape: BayerProductionPlanDataShape
                                     var currentProduct = me.GetCurrentProduct();
-                                    
                                     if (currentProduct && currentProduct.getRowCount() > 0) {
                                         if (currentProduct.productId === "Cambio") {
                                             try {
                                                 // Test if changeover time exceeded
                                     
-                                                var targetMinutes = currentProduct.targetHours * 60; 
+                                                var targetMinutes = currentProduct.targetHours * 60;
                                                 var difference = dateDifference(eventData.timestamp, currentProduct.startTime) / 1000 / 60;
                                     
                                                 // Bayer wants to be able to exceed the target by 10%      
@@ -149,8 +153,8 @@
                                         else {
                                             try {
                                                 // Test if no production active
-                                                
-                                                var counterTimestamp = me.GetPropertyTime({propertyName: "counter"});
+                                    
+                                                var counterTimestamp = me.GetPropertyTime({ propertyName: "counter" });
                                     
                                     
                                                 var productionTime = dateDifference(eventData.timestamp, currentProduct.startTime) / 1000 / 60;
@@ -166,14 +170,14 @@
                                             catch (ex) {
                                                 logger.error(me.name + ".ProcessNotificationRules error validating production time: " + ex);
                                             }
-                                            
+                                    
                                             try {
                                                 // Test if changeover coming in 30 min
                                                 if (!me.changeoverComingNotificationSent) {
                                                     var nearestChangeover = me.GetNearestChangeoverFromSchedule({ fromTime: eventData.timestamp });
-                                                    
+                                    
                                                     if (nearestChangeover && nearestChangeover.getRowCount() > 0) {
-                                                    	var timeToNearestChangeover = dateDifference(nearestChangeover.time, eventData.timestamp) / 1000 / 60;
+                                                        var timeToNearestChangeover = dateDifference(nearestChangeover.time, eventData.timestamp) / 1000 / 60;
                                                         if (timeToNearestChangeover <= 30) {
                                                             me.changeoverComingNotificationSent = true;
                                                             me.ChangeoverComing({
@@ -192,8 +196,7 @@
                                                     }
                                                 }
                                             }
-                                            catch (ex)
-                                            {
+                                            catch (ex) {
                                                 logger.error(me.name + ".ProcessNotificationRules error validating incoming changeover: " + ex);
                                             }
                                         }
@@ -279,6 +282,9 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // SendChangeoverAlerMessage service
+                                    
                                     var lineConfig = me.GetLineConfiguration();
                                     var sender = lineConfig.notificationSender;
                                     
@@ -289,37 +295,37 @@
                                     if (sender && recipients && recipients.getRowCount() > 0) {
                                         // result: INFOTABLE dataShape: BayerProductionPlanDataShape
                                         var current = me.GetCurrentProduct();
-                                        
+                                    
                                         if (current && current.getRowCount() > 0) {
-                                    //        var params = {
-                                    //            oldestFirst: true /* BOOLEAN */,
-                                    //            maxItems: undefined /* NUMBER */,
-                                    //            sourceTags: undefined /* TAGS */,
-                                    //            endDate: undefined /* DATETIME */,
-                                    //            query: undefined /* QUERY */,
-                                    //            source: me.name /* STRING */,
-                                    //            startDate: current.startTime /* DATETIME */,
-                                    //            tags: undefined /* TAGS */
-                                    //        };
-                                    //
-                                    //        // result: INFOTABLE
-                                    //        var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
-                                    //
-                                    //        var tableLength = issues.rows.length;
-                                    //
-                                    //        if (tableLength>0) {
-                                    //            body += " Issues: ";
-                                    //        }
-                                    //
-                                    //        for (var x = 0; x < tableLength; x++) {
-                                    //            var row = issues.rows[x];
-                                    //
-                                    //            body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
-                                    //
-                                    //        }
-                                    //
+                                            //        var params = {
+                                            //            oldestFirst: true /* BOOLEAN */,
+                                            //            maxItems: undefined /* NUMBER */,
+                                            //            sourceTags: undefined /* TAGS */,
+                                            //            endDate: undefined /* DATETIME */,
+                                            //            query: undefined /* QUERY */,
+                                            //            source: me.name /* STRING */,
+                                            //            startDate: current.startTime /* DATETIME */,
+                                            //            tags: undefined /* TAGS */
+                                            //        };
+                                            //
+                                            //        // result: INFOTABLE
+                                            //        var issues = Things["BayerIssues"].QueryStreamEntriesWithData(params);
+                                            //
+                                            //        var tableLength = issues.rows.length;
+                                            //
+                                            //        if (tableLength>0) {
+                                            //            body += " Issues: ";
+                                            //        }
+                                            //
+                                            //        for (var x = 0; x < tableLength; x++) {
+                                            //            var row = issues.rows[x];
+                                            //
+                                            //            body += "(" + (x+1) + ") " + dateFormat(row.timestamp, "") + " " + row.category + " ";
+                                            //
+                                            //        }
+                                            //
                                             var tableLength = recipients.rows.length;
-                                            for (var x=0; x < tableLength; x++) {
+                                            for (var x = 0; x < tableLength; x++) {
                                                 var row = recipients.rows[x];
                                                 logger.debug("Sending email notification to " + row.item + ". BODY: " + body);
                                     
@@ -341,8 +347,7 @@
                                                 }
                                             }
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         logger.warn(me.name + ".SendChangeoverAlertMessage - no sender/recipient provided");
                                     }
                                     ]]>
