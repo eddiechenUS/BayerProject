@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-08-05T09:57:34.049Z" name="BayerProductionPlansParserTemplate" projectName="BayerIoT" tags="Applications:BayerProductionPlans;Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-11-16T08:12:40.286Z" name="BayerProductionPlansParserTemplate" projectName="BayerIoT" tags="Applications:BayerProductionPlans;Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -45,9 +45,10 @@
                             <FieldDefinition baseType="STRING" description="" name="activeMaterialNumber" ordinal="9"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="blistersPerFoldedBox" ordinal="13"/>
                             <FieldDefinition baseType="STRING" description="" name="blisterType" ordinal="11"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="changeoverTime" ordinal="19"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="commentFirstLine" ordinal="10"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endDate" ordinal="22"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endTime" ordinal="20"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endDate" ordinal="23"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="endTime" ordinal="21"/>
                             <FieldDefinition baseType="STRING" description="" name="foldedBoxFormat" ordinal="12"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="manufProcess" ordinal="17"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="mdatOos" ordinal="15"/>
@@ -57,12 +58,12 @@
                             <FieldDefinition baseType="STRING" description="" name="productId" ordinal="3"/>
                             <FieldDefinition aspect.isPrimaryKey="true" baseType="STRING" description="" name="productionLine" ordinal="1"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="ruestzeit" ordinal="18"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startDate" ordinal="21"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startTime" ordinal="19"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startDate" ordinal="22"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="startTime" ordinal="20"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="tabletsPerBlister" ordinal="16"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="TA Number" name="taNumber" ordinal="2"/>
                             <FieldDefinition baseType="STRING" description="" name="targetQuantity" ordinal="7"/>
-                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="targetQuantityPerHour" ordinal="23"/>
+                            <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="targetQuantityPerHour" ordinal="24"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="uom" ordinal="8"/>
                             <FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="version" ordinal="6"/>
                         </FieldDefinitions>
@@ -72,6 +73,7 @@
                             <activeMaterialNumber/>
                             <blisterType/>
                             <blistersPerFoldedBox/>
+                            <changeoverTime/>
                             <commentFirstLine/>
                             <endDate/>
                             <endTime/>
@@ -100,6 +102,7 @@
                         <FieldDefinitions>
                             <FieldDefinition aspect.friendlyName="" aspect.isPrimaryKey="true" baseType="PASSWORD" description="" name="appKey" ordinal="4"/>
                             <FieldDefinition aspect.defaultValue=";" aspect.isPrimaryKey="true" baseType="STRING" description="" name="csvDelimiter" ordinal="5"/>
+                            <FieldDefinition aspect.isPrimaryKey="true" aspect.thingTemplate="BayerProductionLine" baseType="THINGNAME" description="" name="defaultProductionLine" ordinal="8"/>
                             <FieldDefinition aspect.defaultValue="false" aspect.isPrimaryKey="true" baseType="BOOLEAN" description="" name="isSource" ordinal="6"/>
                             <FieldDefinition aspect.defaultValue="BayerCSVRepository" aspect.friendlyName="" aspect.isPrimaryKey="true" aspect.thingTemplate="FileRepository" baseType="THINGNAME" description="" name="repository" ordinal="1"/>
                             <FieldDefinition aspect.defaultValue="http://localhost:8080/Thingworx/Things/BayerProductionPlansParser/Services/ProcessData" aspect.friendlyName="" aspect.isPrimaryKey="true" baseType="STRING" description="" name="targetServiceUrl" ordinal="3"/>
@@ -114,6 +117,7 @@
                             ;
                             ]]>
                             </csvDelimiter>
+                            <defaultProductionLine/>
                             <isSource>false</isSource>
                             <repository/>
                             <targetServiceUrl/>
@@ -222,6 +226,10 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        // 
+                                        // ParseFileAndPushData service
+                                        // * path - STRING
+                                        
                                         // parse the file and push it to the other instance of TWX
                                         
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
@@ -247,12 +255,13 @@
                                         /////////////// MAP COLUMN NAMES //////////////
                                         
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserColumnMappingDataShape"
-                                        var mapping = me.GetColumnMapping();
+                                        var mapping = Things["BayerProductionPlansParser"].GetColumnMapping();
                                         
                                         function getCsvColumnName(fName) {
-                                            return mapping.rows[0][fName];
+                                            let row0 = mapping.rows[0];
+                                            let mapped = row0[fName] || row0[fName.trim()];
+                                            return !mapped ? '' : mapped.replace(":", "_");
                                         }
-                                        
                                         // result: INFOTABLE
                                         var mappedData = Resources["InfoTableFunctions"].Clone({ t1: mapping });
                                         mappedData.RemoveAllRows();
@@ -261,22 +270,43 @@
                                         var tableLength = data.rows.length;
                                         for (var x = 0; x < tableLength; x++) {
                                             var row = data.rows[x];
-                                        
+                                            //newEntry.productionLine = "IMA 90C";
                                             var newEntry = new Object();
                                             for (var fieldName in dataShapeFields) {
                                                 var csvColumnName = getCsvColumnName(fieldName);
                                                 if (csvColumnName) {
-                                                    newEntry[fieldName] = row[csvColumnName];
+                                                    // mostly used for DEBUG
+                                                    if (fieldName == 'targetQuantity' && row[csvColumnName] == undefined) {
+                                                        csvColumnName = 'Operation Quantity'; // default fallback / 'Total Quantity'
+                                                    }
+                                                    // mostly used for DEBUG
+                                                    if (fieldName == 'productDescription' && row[csvColumnName] == undefined) {
+                                                        csvColumnName = 'Product Description'; // default fallback / 'Product Short Description'
+                                                    }
+                                                    let _value = row[csvColumnName];
+                                                    if (fieldName == 'targetQuantity' || fieldName == 'targetQuantityPerHour' ||
+                                                        fieldName == 'blistersPerFoldedBox' || fieldName == 'changeoverTime') {
+                                                        if (typeof _value == 'string' && _value != undefined) {
+                                                            _value = _value.replace(/ /g, ''); // normal space (32)
+                                                            _value = _value.replace(/\u00A0/g, ''); // non-breaking space (160)
+                                                            _value = _value.replace(/,00$/, '');
+                                                            _value = _value.replace(/,000$/, '000');
+                                                            _value = _value.replace(/,([0-9]{1,2})$/, '.$1');
+                                                        }
+                                                    }
+                                                    newEntry[fieldName] = _value;
                                                 }
+                                            } //# for each field
+                                            if (mappedData.rows.length > 0 && !newEntry.productionLine) {
+                                                // fall-back to previous value
+                                                newEntry.productionLine = mappedData.rows[mappedData.rows.length - 1].productionLine;
                                             }
-                                        
+                                            if (!newEntry.productionLine && !!settings.defaultProductionLine)
+                                                newEntry.productionLine = settings.defaultProductionLine;
                                             if (!newEntry.productId || !newEntry.productionLine)
                                                 continue;
-                                        
                                             mappedData.AddRow(newEntry);
-                                        }
-                                        
-                                        
+                                        } //# for each incoming data row
                                         
                                         /////////////// PUSH DATA ////////////////
                                         
@@ -309,7 +339,6 @@
                                                     domain: undefined /* STRING */,
                                                     username: undefined /* STRING */
                                                 };
-                                        
                                                 // result: JSON
                                                 result = Resources["ContentLoaderFunctions"].PostJSON(params);
                                             }
@@ -318,10 +347,18 @@
                                                 throw ex;
                                             }
                                         }
+                                        var resultProcessed = "{} ";
+                                        if (result != undefined) {
+                                            resultProcessed = JSON.stringify(result);
+                                            if (result.rows != undefined && result.dataShape != undefined) {
+                                                if (!!result.dataShape.fieldDefinitions) {
+                                                }
+                                                resultProcessed = "InfoTable(rows=" + result.rows.length + ")";
+                                            }
+                                        }
                                         
-                                        //var result = mappedData;
-                                        
-                                        logger.info(me.name + ".ParseFileAndPushData - file " + path + " processed. Response from target: " + result);
+                                        logger.info(me.name + ".ParseFileAndPushData - file " + path +
+                                            " processed. Response from target: " + resultProcessed);
                                         ]]>
                                         </code>
                                     </Row>
@@ -347,10 +384,12 @@
                                         // * data - INFOTABLE
                                         
                                         var SERVICE_NAME = "ProcessData(Main)";
+                                        var lines = ThingTemplates["BayerProductionLine"].GetImplementingThings();
+                                        var numLines = lines.rows.length;
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
                                         var parserSettings = me.GetParserSettings();
                                         // receive data pushed by the other instance of TWX and process it
-                                        INFO("received " + data.getRowCount() + " rows");
+                                        INFO("received on input " + data.getRowCount() + " rows");
                                         //
                                         var noLineWarning = false;
                                         var warningsForLine = {};
@@ -367,7 +406,7 @@
                                             } //? productionLine
                                             //row.productionLine = me.ProcessLineIdentifier({ lineName: row.productionLine });
                                             row.productionLine = processLineIdentifier(row.productionLine);
-                                            let lineThing = "BayerProductionLine_" + row.productionLine;
+                                            let lineThing = matchLineName(row.productionLine);
                                             if (!Things[lineThing] && !warningsForLine[lineThing]) {
                                                 warningsForLine[lineThing] = true;
                                                 WARNING("line " + lineThing + " doesn't exist");
@@ -379,8 +418,7 @@
                                             aggregatedData[lineThing].AddRow(row);
                                         } //# for each input data row
                                         // result: INFOTABLE dataShape: "RootEntityList"
-                                        var lines = ThingTemplates["BayerProductionLine"].GetImplementingThings();
-                                        var numLines = lines.rows.length;
+                                        
                                         for (let idx = 0; idx < numLines; idx++) {
                                             let line = lines.rows[idx];
                                             let plan = null;
@@ -415,9 +453,36 @@
                                         } //# for each production line
                                         //>----------------------------------------------------------------------------
                                         
+                                        function matchLineName(substring) {
+                                            if (!substring)
+                                                return undefined;
+                                            // incoming string to match can be with spaces (search for each part separately)
+                                            substring = (substring + "").toLowerCase().trim();
+                                            substring = substring.split(" ");
+                                            for (let idx = 0; idx < numLines; idx++) {
+                                                let line = lines.rows[idx];
+                                                if (!!line.name && line.name == substring)
+                                                    return line.name; // short-cut - full name match
+                                                let _target = substring.length;
+                                                let _matched = 0;
+                                                for (let partIdx = 0; partIdx < _target; partIdx++) {
+                                                    if (line.name.toLowerCase().indexOf(substring[partIdx]) != -1) {
+                                                        _matched++;
+                                                    }
+                                                } //# for each partial name
+                                                if (_matched == _target)
+                                                    return line.name;
+                                            } //# for each thing line
+                                            return undefined;
+                                        } //> matchLineName(...)
+                                        //>----------------------------------------------------------------------------
+                                        
                                         function processLineIdentifier(lineName) {
+                                            if (!!matchLineName(lineName))
+                                                return lineName;
                                             return zeroFill(lineName.replace(/^0*/gm, ''), 3);
-                                        }
+                                        } //> processLineIdentifier(...)
+                                        //>----------------------------------------------------------------------------
                                         
                                         function zeroFill(number, width) {
                                             width -= number.length;
@@ -425,7 +490,8 @@
                                                 return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number;
                                             }
                                             return number + ""; // always return a string
-                                        }
+                                        } //> zeroFill(...)
+                                        //>----------------------------------------------------------------------------
                                         
                                         function DEBUG(message) {
                                             logger.debug(me.name + ":" + SERVICE_NAME + ": " + message);
