@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-06-07T07:15:13.954Z"
+         lastModifiedDate="2021-01-25T18:55:21.600Z"
          name="BayerChangeoverLevNewCalculationThing"
          projectName="BayerIoT"
          published="false"
@@ -110,6 +110,13 @@
                                         
                                         var calculatedAmount = 0.0;
                                         for (let fieldName in mapping) {
+                                            if(!nextFormatType || !nextItem.taNumber) {
+                                                let fallbackTime = splitTimes.rows[0].taNumberMissing;
+                                                if(fallbackTime > 0) {
+                                                    calculatedAmount = fallbackTime;
+                                                    break;
+                                                }
+                                            }
                                             if (splitTimes.rows.length < 1) {
                                                 break;
                                             }

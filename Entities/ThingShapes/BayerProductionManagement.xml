@@ -13,7 +13,7 @@
          description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-11-09T22:55:15.573Z"
+         lastModifiedDate="2021-01-28T12:43:42.497Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -719,12 +719,21 @@
                                     // GetChangeoverSplitTimes service
                                     
                                     var splitTimes = me.GetConfigurationTable({ tableName: "Changeover_SplitTimes" });
-                                    var output = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                    var output2 = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
                                     	infoTableName: "result" /* STRING */,
                                     	dataShapeName: "BayerChangeoverSplitTimeValue" /* DATASHAPENAME */
                                     });
-                                    var result = output;
-                                    var fieldList = [
+                                    var result = output2;
+                                    //var values = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                    //	dataShapeName: "BayerChangeoversSplitTimeDelays"
+                                    //});
+                                    var fieldList = [];
+                                    var fieldListIT = DataShapes["BayerChangeoversSplitTimeDelays"].GetFieldDefinitions();
+                                    for (let fidx = 0; fidx < fieldListIT.rows.length; fidx++) {
+                                    	fieldList.push(fieldListIT.rows[fidx].name);
+                                    } //# for each field row
+                                    
+                                    /*var fieldList = [
                                     	"orderChange",
                                     	"productChange",
                                     	"blisterTypeChange",
@@ -733,7 +742,7 @@
                                     	"boxFormatChange",
                                     	"blisterAmountChange",
                                     	"bundleFormatChange"
-                                    ];
+                                    ];*/
                                     /*[
                                     	"Bayer.OrderChange",
                                     	"Bayer.ProductChange",
@@ -747,16 +756,16 @@
                                     
                                     splitTimes = splitTimes.rows[0];
                                     var localization = Resources["RuntimeLocalizationFunctions"];
-                                    for(let idx=0; idx<fieldList.length; idx++) {
-                                        let fieldName = fieldList[idx];
-                                        let token = "Bayer." + fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+                                    for (let idx = 0; idx < fieldList.length; idx++) {
+                                    	let fieldName = fieldList[idx];
+                                    	let token = "Bayer." + fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
                                     	let tokenValue = localization.GetEffectiveToken({ token: token });
                                     
-                                        output.AddRow({
-                                        	fieldName: fieldName,
-                                            description: tokenValue,
-                                            value: splitTimes[fieldName]
-                                        });
+                                    	result.AddRow({
+                                    		fieldName: fieldName,
+                                    		description: tokenValue,
+                                    		value: splitTimes[fieldName]
+                                    	});
                                     } //# for each field to convert
                                     ]]>
                                     </code>
@@ -994,12 +1003,14 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var result = null;
+                                    //
+                                    // GetCurrentProduct service
                                     
+                                    var result = null;
                                     if (me.currentProductKey) {
                                         try {
                                             // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
-                                            result =  Things["BayerDBDataProvider"].GetProductionPlan({
+                                            result = Things["BayerDBDataProvider"].GetProductionPlan({
                                                 id: me.currentProductKey /* INTEGER */
                                             });
                                         }
@@ -1010,26 +1021,29 @@
                                     
                                     if (!result || result.rows.length === 0) {
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
-                                        result =  Things["BayerDBDataProvider"].GetProductionPlanItemByStatus({
+                                        result = Things["BayerDBDataProvider"].GetProductionPlanItemByStatus({
                                             productionLine: me.name /* THINGNAME */,
                                             status: 'INPROGRESS' /* STRING */
                                         });
                                     
                                         if (result && result.rows.length > 0) {
                                             me.currentProductKey = result.id;
-                                        }
-                                        else {
+                                        } else {
                                             // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerProductionPlanDataShape)
-                                            result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({ dataShapeName : "BayerProductionPlanDataShape" });
+                                            result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                                dataShapeName: "BayerProductionPlanDataShape"
+                                            });
                                         }
                                     }
                                     
                                     if (result && result.rows.length > 0) {
                                         // result: STRING
-                                        result.productDescription =  Things["BayerUtilities"].GetProductDescriptionTranslated({
+                                        result.productDescription = Things["BayerUtilities"].GetProductDescriptionTranslated({
                                             productId: result.productId /* STRING */,
                                             productDescription: result.productDescription /* STRING */
                                         });
+                                        if (!result.blistersPerFoldedBox)
+                                            result.blistersPerFoldedBox = 1; //! fallback
                                     }
                                     ]]>
                                     </code>
@@ -1435,6 +1449,10 @@
                                     if (!simulate) {
                                         simulate = false;
                                     }
+                                    if (!data) {
+                                        throw new Error("Invalid input - missing 'data' InfoTable (required)!");
+                                    }
+                                    var numDataRows = data.rows.length;
                                     var SERVICE_NAME = "LoadPlan(Base)";
                                     var lineConfig = me.GetLineConfiguration();
                                     var changeoverCalculationThingName = lineConfig.changeoverCalculationThing;
@@ -1469,7 +1487,7 @@
                                             items: result /* INFOTABLE */
                                         });
                                         me.lastProductionPlanUpdate = new Date();
-                                        INFO("Production Plan Loaded: OK");
+                                        INFO("Production Plan Loaded: OK (countInputRows=" + numDataRows + ")");
                                     } else {
                                         INFO("Production Plan Loaded: OK (simulated)");
                                     }
@@ -1477,7 +1495,7 @@
                                     
                                     function addStandby() {
                                         // BayerProductionPlanDataShape entry object
-                                        let newEntry = new Object();
+                                        let newEntry = {};
                                         newEntry.productId = "standby"; // STRING
                                         newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                         newEntry.producedQuantity = 0; // NUMBER
@@ -1566,6 +1584,7 @@
                                                         blitersPerBoxCorrection = newEntry.blistersPerFoldedBox;
                                                     } else {
                                                         ERROR("Error: nominalRateInBlisters but no blistersPerFoldedBox provided");
+                                                        newEntry.blistersPerFoldedBox = 1; //! fallback
                                                     }
                                                 }
                                                 newEntry.targetQuantityPerHour = (Things["BayerMaterialPerformanceTable"].GetNominalRate({
@@ -1943,22 +1962,27 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    //
+                                    // UpdateProduct service
+                                    
                                     if (!me.updateProductLock) {
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
                                         var currentProduct = me.GetCurrentProduct();
                                     
-                                        // dateDifference(date1:DATETIME,date2:DATETIME):NUMBER
-                                        var difference = dateDifference(eventData.timestamp, currentProduct.startTime);
+                                        if (!!currentProduct && !!currentProduct.rows.length) {
+                                            // dateDifference(date1:DATETIME,date2:DATETIME):NUMBER
+                                            var difference = dateDifference(eventData.timestamp, currentProduct.startTime);
                                     
-                                        currentProduct.workedHours = difference / 1000.0 / 60.0 / 60.0;
-                                        currentProduct.remainingHours = currentProduct.targetHours - currentProduct.workedHours;
-                                        if (currentProduct.remainingHours < 0) {
-                                            currentProduct.remainingHours = 0;
+                                            currentProduct.workedHours = difference / 1000.0 / 60.0 / 60.0;
+                                            currentProduct.remainingHours = currentProduct.targetHours - currentProduct.workedHours;
+                                            if (currentProduct.remainingHours < 0) {
+                                                currentProduct.remainingHours = 0;
+                                            }
+                                    
+                                            Things["BayerDBDataProvider"].UpdateProductionPlanHours({
+                                                data: currentProduct /* INFOTABLE */
+                                            });
                                         }
-                                        
-                                         Things["BayerDBDataProvider"].UpdateProductionPlanHours({
-                                            data: currentProduct /* INFOTABLE */
-                                        });
                                     }
                                     ]]>
                                     </code>
@@ -2301,6 +2325,19 @@
                          type="User"></Principal>
                     </PropertyWrite>
                     <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="InsertStandbyBelow">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite></PropertyWrite>
+                    <ServiceInvoke>
+                        <Principal
+                         isPermitted="true"
+                         name="Role.BayerProductionLine.Any"
+                         type="Group"></Principal>
+                    </ServiceInvoke>
                     <EventInvoke></EventInvoke>
                     <EventSubscribe></EventSubscribe>
                 </Permissions>

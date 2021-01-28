@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-11-10T06:53:47.732Z"
+         lastModifiedDate="2021-01-28T12:43:46.544Z"
          name="BayerProductionPlanPage"
          projectName="BayerIoT"
          published="false"
@@ -323,17 +323,22 @@
                                         // * productionLine - THINGNAME
                                         // * filterOnlyCompleted - BOOLEAN
                                         
-                                        var cambioTransl = Resources["RuntimeLocalizationFunctions"].GetEffectiveToken({ token: "Bayer.Cambio" });
-                                        
-                                        var result = Things["BayerDBDataProvider"].GetProductionPlanForLine({
+                                        var localization = Resources["RuntimeLocalizationFunctions"];
+                                        var cambioToken = localization.GetEffectiveToken({ token: "Bayer.Cambio" });
+                                        var statusTokens = {
+                                            'Running': localization.GetEffectiveToken({ token: "Bayer.State.running" }),
+                                            'Scheduled': localization.GetEffectiveToken({ token: "Bayer.State.scheduled" }),
+                                            'Completed': localization.GetEffectiveToken({ token: "Bayer.State.completed" })
+                                        };
+                                        var resultPlan = Things["BayerDBDataProvider"].GetProductionPlanForLine({
                                             line: productionLine
                                         });
                                         
-                                        var stringFields = values(result.dataShape.fields).filter(item => item.baseType == 'STRING').map(item => item.name);
+                                        var stringFields = values(resultPlan.dataShape.fields).filter(item => item.baseType == 'STRING').map(item => item.name);
                                         var numFields = stringFields.length;
                                         
-                                        for (var idx = 0; idx < result.rows.length; idx++) {
-                                            var row = result.rows[idx];
+                                        for (var idx = 0; idx < resultPlan.rows.length; idx++) {
+                                            var row = resultPlan.rows[idx];
                                             for (var _f = 0; _f < numFields; _f++) {
                                                 var fieldName = stringFields[_f];
                                                 if (row[fieldName] == undefined)
@@ -350,18 +355,18 @@
                                         
                                         var params = {
                                             types: "STRING,STRING,STRING,STRING,STRING" /* STRING */,
-                                            t: result /* INFOTABLE */,
+                                            t: resultPlan /* INFOTABLE */,
                                             columns: "statusFormatted,statusState,productDescriptionTranslated,productIdTranslated,statusForColoring" /* STRING */,
                                             expressions:
-                                                "status === 'COMPLETED' ? 'Completed' :" +
-                                                "status === 'INPROGRESS' ? 'Running' : " +
-                                                "status === 'PENDING' ? 'Scheduled' : ''," + // statusFormatted
+                                                "status === 'COMPLETED' ? '" + statusTokens['Completed'] + "' :" +
+                                                "status === 'INPROGRESS' ? '" + statusTokens['Running'] + "' : " +
+                                                "status === 'PENDING' ? '" + statusTokens['Scheduled'] + "' : ''," + // statusFormatted
                                         
                                                 "productId === 'Cambio' ? 'Cambio' : status === 'COMPLETED' ? 'Completed' :" +
                                                 "status === 'INPROGRESS' ? 'Running' : " +
                                                 "status === 'PENDING' ? 'Scheduled' : ''," + // statusState
                                         
-                                                "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," + // productDescriptionTranslated
+                                                "productId === 'Cambio' ? '" + cambioToken + "' : productDescription," + // productDescriptionTranslated
                                                 "productId === 'Cambio' ? '' : productId," + // productIdTranslated
                                         
                                                 "status === 'COMPLETED' && productId === 'Cambio' ? 'CompletedChangeover' :" +
@@ -370,7 +375,7 @@
                                                 "status === 'INPROGRESS' ? 'Running' : 'Completed'" // statusForColoring
                                         };
                                         
-                                        result = Resources["InfoTableFunctions"].DeriveFields(params);
+                                        resultPlan = Resources["InfoTableFunctions"].DeriveFields(params);
                                         
                                         /*result = Resources["InfoTableFunctions"].Query({
                                             t: result,
@@ -394,9 +399,11 @@
                                         //    "productId === 'Cambio' ? 'Cambio' : status === 'COMPLETED' ? 'Completed' :" +
                                         //    	"status === 'INPROGRESS' ? 'Running' : " +
                                         //    	"status === 'PENDING' ? 'Scheduled' : ''," + /* 3rd column */
-                                        //    "productId === 'Cambio' ? '" + cambioTransl + "' : productDescription," +
+                                        //    "productId === 'Cambio' ? '" + cambioToken + "' : productDescription," +
                                         //    "productId === 'Cambio' ? '' : productId"
                                         //};
+                                        
+                                        var result = resultPlan; // shadow
                                         ]]>
                                         </code>
                                     </Row>

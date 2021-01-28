@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-06-19T08:27:32.834Z"
+         lastModifiedDate="2021-01-26T18:54:25.051Z"
          name="BayerSafetyManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -141,7 +141,7 @@
                  isPrivate="false"
                  name="GetSafetyIssues">
                     <ResultType
-                     aspect.dataShape="SafetyIssuesShape"
+                     aspect.dataShape="Bayer.SafetyIssuesShapeExtended"
                      baseType="INFOTABLE"
                      description=""
                      name="result"
@@ -296,9 +296,34 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var result =  Things["BayerDBDataProvider"].GetSafetyIssues({
+                                    //
+                                    // GetSafetyIssues service
+                                    // * productionLine - THINGNAME
+                                    
+                                    if (!productionLine)
+                                        productionLine = me.name;
+                                    
+                                    var localization = Resources["RuntimeLocalizationFunctions"];
+                                    
+                                    var result = Things["BayerDBDataProvider"].GetSafetyIssues({
                                         productionLine: productionLine,
                                     });
+                                    result.AddField({
+                                        name: "typeText",
+                                        baseType: "STRING",
+                                        description: "Type Text (translated)"
+                                    });
+                                    for (let idx = 0; idx < result.rows.length; idx++) {
+                                        let row = result.rows[idx];
+                                        let title = row.type;
+                                        title = title.charAt(0).toUpperCase() + title.slice(1);
+                                        let token = "Bayer." + title;
+                                        let tokenValue = localization.GetEffectiveToken({ token: token });
+                                        //tokenValue = localization.GetEffectiveTokenForLanguage({ token: token, language: "de" });
+                                        if (!tokenValue || tokenValue.includes("??"))
+                                            tokenValue = title;
+                                        row.typeText = tokenValue;
+                                    } //# for each result row
                                     ]]>
                                     </code>
                                 </Row>

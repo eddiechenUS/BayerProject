@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2020-11-10T06:49:44.067Z"
+         lastModifiedDate="2020-11-16T08:12:40.286Z"
          name="BayerProductionPlansParserTemplate"
          projectName="BayerIoT"
          tags="Applications:BayerProductionPlans;Applications:Bayer"
@@ -688,10 +688,18 @@
                                                 throw ex;
                                             }
                                         }
+                                        var resultProcessed = "{} ";
+                                        if (result != undefined) {
+                                            resultProcessed = JSON.stringify(result);
+                                            if (result.rows != undefined && result.dataShape != undefined) {
+                                                if (!!result.dataShape.fieldDefinitions) {
+                                                }
+                                                resultProcessed = "InfoTable(rows=" + result.rows.length + ")";
+                                            }
+                                        }
                                         
-                                        //var result = mappedData;
-                                        
-                                        logger.info(me.name + ".ParseFileAndPushData - file " + path + " processed. Response from target: " + result);
+                                        logger.info(me.name + ".ParseFileAndPushData - file " + path +
+                                            " processed. Response from target: " + resultProcessed);
                                         ]]>
                                         </code>
                                     </Row>
@@ -733,7 +741,7 @@
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
                                         var parserSettings = me.GetParserSettings();
                                         // receive data pushed by the other instance of TWX and process it
-                                        INFO("received " + data.getRowCount() + " rows");
+                                        INFO("received on input " + data.getRowCount() + " rows");
                                         //
                                         var noLineWarning = false;
                                         var warningsForLine = {};
