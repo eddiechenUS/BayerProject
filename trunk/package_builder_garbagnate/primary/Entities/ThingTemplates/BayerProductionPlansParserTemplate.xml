@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <ThingTemplates>
-        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-11-10T06:49:44.067Z" name="BayerProductionPlansParserTemplate" projectName="BayerIoT" tags="Applications:BayerProductionPlans;Applications:Bayer" thingPackage="" valueStream="">
+        <ThingTemplate baseThingTemplate="GenericThing" description="" documentationContent="" effectiveThingPackage="ConfiguredThing" homeMashup="" lastModifiedDate="2020-11-16T08:12:40.286Z" name="BayerProductionPlansParserTemplate" projectName="BayerIoT" tags="Applications:BayerProductionPlans;Applications:Bayer" thingPackage="" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -347,10 +347,18 @@
                                                 throw ex;
                                             }
                                         }
+                                        var resultProcessed = "{} ";
+                                        if (result != undefined) {
+                                            resultProcessed = JSON.stringify(result);
+                                            if (result.rows != undefined && result.dataShape != undefined) {
+                                                if (!!result.dataShape.fieldDefinitions) {
+                                                }
+                                                resultProcessed = "InfoTable(rows=" + result.rows.length + ")";
+                                            }
+                                        }
                                         
-                                        //var result = mappedData;
-                                        
-                                        logger.info(me.name + ".ParseFileAndPushData - file " + path + " processed. Response from target: " + result);
+                                        logger.info(me.name + ".ParseFileAndPushData - file " + path +
+                                            " processed. Response from target: " + resultProcessed);
                                         ]]>
                                         </code>
                                     </Row>
@@ -381,7 +389,7 @@
                                         // result: INFOTABLE dataShape: "BayerProductionPlansParserSettingsDataShape"
                                         var parserSettings = me.GetParserSettings();
                                         // receive data pushed by the other instance of TWX and process it
-                                        INFO("received " + data.getRowCount() + " rows");
+                                        INFO("received on input " + data.getRowCount() + " rows");
                                         //
                                         var noLineWarning = false;
                                         var warningsForLine = {};

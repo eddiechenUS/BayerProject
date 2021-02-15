@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-10-25T21:14:05.131Z" name="BayerActionListPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-12-06T21:12:59.464Z" name="BayerActionListPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -149,6 +149,7 @@
                             <FieldDefinition baseType="DATETIME" description="" name="dueDate" ordinal="6"/>
                             <FieldDefinition aspect.isRequired="true" baseType="THINGNAME" description="" name="productionLine" ordinal="6"/>
                             <FieldDefinition baseType="STRING" description="" name="status" ordinal="4"/>
+                            <FieldDefinition baseType="NUMBER" description="" name="uiTimeOffset" ordinal="7"/>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="GetActionListStatus">
@@ -356,6 +357,7 @@
                                         // * productionLine - THINGNAME
                                         // * dueDate - DATETIME
                                         // * createdTo - DATETIME
+                                        // * uiTimeOffset - NUMBER
                                         
                                         var currentDate = new Date();
                                         if (!status || status == "undefined") {
@@ -364,8 +366,15 @@
                                         if (!assignedTo || assignedTo == "undefined") {
                                         	assignedTo = " ";
                                         }
+                                        if (!uiTimeOffset)
+                                        	uiTimeOffset = 0;
+                                        if (!!dueDate) {
+                                        	var newDueDate = new Date(dueDate);
+                                        	newDueDate.setHours(newDueDate.getHours() + (uiTimeOffset / -60))
+                                        	dueDate = newDueDate;
+                                        }
                                         var result = Things[productionLine].QueryActions({
-                                        	dueDate: dueDate,
+                                        	dueDate: dueDate /* DATETIME */,
                                         	createdTimeFrom: createdFrom /* DATETIME */,
                                         	assignedTo: assignedTo /* USERNAME */,
                                         	createdTimeTo: createdTo /* DATETIME */,
@@ -436,13 +445,44 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        result = Groups["Role.BayerProductionLine.Operator"].GetGroupMembers();
-                                        result.AddRow({ name: " ", description: "", type: "User" });
+                                        //
+                                        // GetActionListUsers service
                                         
-                                        var sort = new Object();
-                                        sort.name = "name";
-                                        sort.ascending = true;
-                                        result.Sort(sort);
+                                        var members1 = Groups["Role.BayerProductionLine.Operator"].GetGroupMembers();
+                                        members1.Filter({ type: "User" });
+                                        var members2 = Groups["Role.BayerEndUser"].GetGroupMembers();
+                                        members2.Filter({ type: "User" });
+                                        var allUsers = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName: "result",
+                                            dataShapeName: "GroupMember"
+                                        });
+                                        allUsers.AddField({
+                                            name: "groupName",
+                                            description: "Group Name",
+                                            baseType: "STRING"
+                                        });
+                                        allUsers.AddRow({ name: " ", description: "", type: "User" });
+                                        AppendToInfoTable(allUsers, members1, "Role.BayerProductionLine.Operator");
+                                        AppendToInfoTable(allUsers, members2, "Role.BayerEndUser");
+                                        allUsers.Sort({ name: "name", ascending: true });
+                                        result = allUsers;
+                                        
+                                        function AppendToInfoTable(target, source, groupName) {
+                                            if (!target || !source)
+                                                return;
+                                            let numRows = source.rows.length;
+                                            for (let idx = 0; idx < numRows; idx++) {
+                                                let row = source.rows[idx];
+                                                if (!!target.Find(row))
+                                                    continue; //! skip existing
+                                                target.AddRow({
+                                                    name: row.name,
+                                                    description: row.description,
+                                                    type: row.type,
+                                                    groupName: groupName
+                                                });
+                                            } //# for each row
+                                        } //> AppendToInfoTable(...)
                                         ]]>
                                         </code>
                                     </Row>

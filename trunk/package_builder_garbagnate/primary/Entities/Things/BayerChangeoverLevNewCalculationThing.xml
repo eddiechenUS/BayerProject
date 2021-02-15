@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="Bayer Changeover Leverkusen New Calculation Thing" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-06-07T07:15:13.954Z" name="BayerChangeoverLevNewCalculationThing" projectName="BayerIoT" published="false" tags="" thingTemplate="GenericThing" valueStream="">
+        <Thing description="Bayer Changeover Leverkusen New Calculation Thing" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2021-01-25T18:55:21.600Z" name="BayerChangeoverLevNewCalculationThing" projectName="BayerIoT" published="false" tags="" thingTemplate="GenericThing" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -76,6 +76,13 @@
                                         
                                         var calculatedAmount = 0.0;
                                         for (let fieldName in mapping) {
+                                            if(!nextFormatType || !nextItem.taNumber) {
+                                                let fallbackTime = splitTimes.rows[0].taNumberMissing;
+                                                if(fallbackTime > 0) {
+                                                    calculatedAmount = fallbackTime;
+                                                    break;
+                                                }
+                                            }
                                             if (splitTimes.rows.length < 1) {
                                                 break;
                                             }
