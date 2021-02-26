@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-08-05T17:39:55.380Z"
+         lastModifiedDate="2021-02-23T04:55:09.473Z"
          name="BayerAdministrationThing"
          projectName="BayerIoT"
          published="false"
@@ -42,6 +42,28 @@
                     <ServiceDefinition
                      aspect.isAsync="false"
                      category=""
+                     description="Return the list of entities with corresponding visibility permissions"
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetVisibilityPermissionsForProjectEntities">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="entityType"
+                             ordinal="0"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
                      description=""
                      isAllowOverride="false"
                      isLocalOnly="false"
@@ -65,16 +87,184 @@
                      isPrivate="false"
                      name="SetVisibilityPermissions">
                         <ResultType
-                         baseType="NOTHING"
+                         aspect.dataShape="EntityList"
+                         baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
-                        <ParameterDefinitions></ParameterDefinitions>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="BOOLEAN"
+                             description=""
+                             name="simulate"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
+                    <ServiceImplementation
+                     description="Return the list of entities with corresponding visibility permissions"
+                     handlerName="Script"
+                     name="GetVisibilityPermissionsForProjectEntities">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //
+                                        // GetVisiblityPermissionsForProjectEntities
+                                        //
+                                        
+                                        var outputList = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName: "result",
+                                            dataShapeName: "EntityList"
+                                        });
+                                        
+                                        /*var entityTypes = [
+                                            'Thing',
+                                            'ThingTemplate',
+                                            'ThingShape',
+                                            'DataShape',
+                                            'Mashup',
+                                            'Resource',
+                                            'StyleDefinition',
+                                            'StateDefinition',
+                                            'MediaEntity',
+                                            'StyleTheme',
+                                            'LocalizationTable'
+                                        ];
+                                        */
+                                        
+                                        var entityMapping = {
+                                            'Thing': Things,
+                                            'Things': Things,
+                                            'ThingTemplate': ThingTemplates,
+                                            'ThingTemplates': ThingTemplates,
+                                            'ThingShape': ThingShapes,
+                                            'ThingShapes': ThingShapes,
+                                            'DataShape': DataShapes,
+                                            'DataShapes': DataShapes,
+                                            'Mashup': Mashups,
+                                            'Mashups': Mashups,
+                                            'Subsystem': Subsystems,
+                                            'Subsystems': Subsystems,
+                                            'Resource': Resources,
+                                            'Resources': Resources,
+                                            'StyleDefinition': StyleDefinitions,
+                                            'StyleDefinitions': StyleDefinitions,
+                                            'StateDefinition': StateDefinitions,
+                                            'StateDefinitions': StateDefinitions,
+                                            'MediaEntity': MediaEntities,
+                                            'MediaEntities': MediaEntities,
+                                            'StyleTheme': StyleThemes,
+                                            'StyleThemes': StyleThemes,
+                                            'LocalizationTable': LocalizationTables,
+                                            'LocalizationTables': LocalizationTables
+                                        };
+                                        
+                                        function getEntity(name, type) {
+                                            var entities = entityMapping[type];
+                                            if (!entities)
+                                                return undefined;
+                                            return entities[name]
+                                        } //> getEntity(...)
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        var projectName = "BayerIoT"
+                                        
+                                        if (!entityType) {
+                                            entityType = "Thing"; // default value
+                                        }
+                                        
+                                        //* result: INFOTABLE dataShape: SpotlightSearch
+                                        var searchResults = Resources["SearchFunctions"].SpotlightSearch({
+                                            searchExpression: undefined, // STRING - Search expression
+                                            tags: undefined, // TAGS - Tags
+                                            types: { "items": [entityType] }, // JSON - Entity types
+                                            thingTemplates: undefined, // JSON - Thing templates
+                                            thingShapes: undefined, // JSON - Thing shapes
+                                            aspects: undefined, // JSON - Aspects to match
+                                            excludedAspects: undefined, // JSON - Aspects to exclude
+                                            startDate: undefined, // DATETIME - Only return entities modified since this date
+                                            endDate: undefined, // DATETIME - Only return entities modified before this date
+                                            searchDescriptions: true, // BOOLEAN - Search descriptions in addition to names
+                                            withPermissions: false, // BOOLEAN - Include user permissions
+                                            sortBy: "name", // STRING - Sort mode
+                                            isAscending: true, // BOOLEAN - Ascending search
+                                            maxItems: 1000, // NUMBER - Maximum number of items to return
+                                            maxSearchItems: 100000, // NUMBER - Maximum number of items to search
+                                            projectName: projectName, // PROJECTNAME - Project Name
+                                        });
+                                        
+                                        var extraColumnsCnt = 0;
+                                        function applyExtraColumns(newCounter) {
+                                            if (newCounter <= extraColumnsCnt)
+                                                return;
+                                            for (var _cnt = extraColumnsCnt + 1; _cnt <= newCounter; _cnt++) {
+                                                outputList.AddField({
+                                                    name: "permission_" + _cnt,
+                                                    description: "",
+                                                    baseType: "STRING",
+                                                    ordinal: _cnt + 2
+                                                });
+                                                extraColumnsCnt++;
+                                            }
+                                        } //> applyExtraColumns(...)
+                                        
+                                        function applyPermissionsToRow(permissions, target) {
+                                            if (!permissions || !permissions.Visibility || !target)
+                                                return;
+                                            if (typeof target != "object")
+                                                return;
+                                            var table = permissions.Visibility;
+                                            if (!table.length)
+                                                return;
+                                            for (var _cnt = 0; _cnt < table.length; _cnt++) {
+                                                var perm = table[_cnt];
+                                                target["permission_" + (_cnt + 1)] = perm.type + "::" + perm.name + " -> " + (perm.isPermitted ? "YES" : "NO");
+                                            } //# for each permission
+                                        } //> applyPermissionsToRow(...)
+                                        
+                                        for (var _idx = 0; _idx < searchResults.rows.length; _idx++) {
+                                            var itemInfo = searchResults.rows[_idx];
+                                            var entity = getEntity(itemInfo.name, itemInfo.type);
+                                            try {
+                                                if (!entity.IsEnabled()) {
+                                                    outputList.AddRow({ name: itemInfo.type + "." + itemInfo.name, description: "isEnabled: false" });
+                                                    continue;
+                                                }
+                                            } catch (ex) { }
+                                            var infoRow = { name: itemInfo.type + "." + itemInfo.name };
+                                            var permissions = entity.GetVisibilityPermissionsAsJSON();
+                                            applyExtraColumns(permissions.Visibility.length);
+                                            applyPermissionsToRow(permissions, infoRow);
+                                            outputList.AddRow(infoRow);
+                                        } //# for each result row
+                                        
+                                        var result = outputList;
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
@@ -115,20 +305,33 @@
                                         });
                                         //>----------------------------------------------------------------------------
                                         
-                                        var entityTypes = [
-                                        	//	'StyleTheme',
-                                        	//	'Thing',
-                                        	//	'Mashup',
-                                        	//	'MediaEntity',
-                                        	//	'StyleDefinition',
-                                        	//	'DataShape',
-                                        	'Resource',
-                                        	//	'LocalizationTable',
-                                        	//	'Subsystem',
-                                        	//	'StateDefinition',
-                                        	//	'ThingTemplate',
-                                        	//	'ThingShape'
-                                        ]; //! entity types
+                                        
+                                        var entityMapping = {
+                                        	'Thing': Things,
+                                        	'Things': Things,
+                                        	'ThingTemplate': ThingTemplates,
+                                        	'ThingTemplates': ThingTemplates,
+                                        	'ThingShape': ThingShapes,
+                                        	'ThingShapes': ThingShapes,
+                                        	'DataShape': DataShapes,
+                                        	'DataShapes': DataShapes,
+                                        	'Mashup': Mashups,
+                                        	'Mashups': Mashups,
+                                        	'Subsystem': Subsystems,
+                                        	'Subsystems': Subsystems,
+                                        	'Resource': Resources,
+                                        	'Resources': Resources,
+                                        	'StyleDefinition': StyleDefinitions,
+                                        	'StyleDefinitions': StyleDefinitions,
+                                        	'StateDefinition': StateDefinitions,
+                                        	'StateDefinitions': StateDefinitions,
+                                        	'MediaEntity': MediaEntities,
+                                        	'MediaEntities': MediaEntities,
+                                        	'StyleTheme': StyleThemes,
+                                        	'StyleThemes': StyleThemes,
+                                        	'LocalizationTable': LocalizationTables,
+                                        	'LocalizationTables': LocalizationTables
+                                        };
                                         
                                         var principalAllowInfo = {
                                         	allow: true,
@@ -160,6 +363,15 @@
                                         			principal: principalAllowInfo.principal,
                                         			type: "Read"
                                         		});
+                                        		if (entityType == 'DataShape') {
+                                        			entity.AddRunTimePermission({
+                                        				allow: true,
+                                        				principalType: principalAllowInfo.principalType,
+                                        				principal: principalAllowInfo.principal,
+                                        				type: "ServiceInvoke",
+                                        				resource: "GetFieldDefinitions"
+                                        			});
+                                        		}
                                         	} //# for each entity
                                         }); //> Mashup, StyleTheme, ... (Design Time)
                                         //>----------------------------------------------------------------------------
@@ -221,32 +433,10 @@
                                         //>----------------------------------------------------------------------------
                                         
                                         function getEntity(name, type) {
-                                        	if (type.startsWith('Thing')) {
-                                        		return Things[name];
-                                        	} else if (type.startsWith('Mashup')) {
-                                        		return Mashups[name];
-                                        	} else if (type.startsWith('MediaEntity')) {
-                                        		return MediaEntities[name];
-                                        	} else if (type.startsWith('StyleDefinition')) {
-                                        		return StyleDefinitions[name];
-                                        	} else if (type.startsWith('DataShape')) {
-                                        		return DataShapes[name];
-                                        	} else if (type.startsWith('Resource')) {
-                                        		return Resources[name];
-                                        	} else if (type.startsWith('LocalizationTable')) {
-                                        		return LocalizationTables[name];
-                                        	} else if (type.startsWith('Subsystem')) {
-                                        		return Subsystems[name];
-                                        	} else if (type.startsWith('StateDefinition')) {
-                                        		return StateDefinitions[name];
-                                        	} else if (type.startsWith('ThingTemplate')) {
-                                        		return ThingTemplates[name];
-                                        	} else if (type.startsWith('ThingShape')) {
-                                        		return ThingShapes[name];
-                                        	} else if (type.startsWith('StyleTheme')) {
-                                        		return StyleThemes[name];
-                                        	}
-                                        	return undefined;
+                                        	var entities = entityMapping[type];
+                                        	if (!entities)
+                                        		return undefined;
+                                        	return entities[name];
                                         } //> getEntity(...)
                                         //>----------------------------------------------------------------------------
                                         ]]>
@@ -279,76 +469,164 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var entityTypes = ['StyleTheme', 'Thing', 'Mashup', 'MediaEntity', 'StyleDefinition', 'DataShape', 'Resource', 'LocalizationTable', 'Subsystem', 'StateDefinition', 'ThingTemplate', 'ThingShape'];
+                                        //
+                                        // SetVisibityPermissions service
+                                        //* simulate - BOOLEAN
+                                        
+                                        var entityTypes = [
+                                            'Thing',
+                                            'ThingTemplate',
+                                            'ThingShape',
+                                            'DataShape',
+                                            'Mashup',
+                                            'Subsystem',
+                                            'Resource',
+                                            'StyleDefinition',
+                                            'StateDefinition',
+                                            'MediaEntity',
+                                            'StyleTheme',
+                                            'LocalizationTable'
+                                        ];
+                                        
+                                        var entityMapping = {
+                                            'Thing': Things,
+                                            'Things': Things,
+                                            'ThingTemplate': ThingTemplates,
+                                            'ThingTemplates': ThingTemplates,
+                                            'ThingShape': ThingShapes,
+                                            'ThingShapes': ThingShapes,
+                                            'DataShape': DataShapes,
+                                            'DataShapes': DataShapes,
+                                            'Mashup': Mashups,
+                                            'Mashups': Mashups,
+                                            'Subsystem': Subsystems,
+                                            'Subsystems': Subsystems,
+                                            'Resource': Resources,
+                                            'Resources': Resources,
+                                            'StyleDefinition': StyleDefinitions,
+                                            'StyleDefinitions': StyleDefinitions,
+                                            'StateDefinition': StateDefinitions,
+                                            'StateDefinitions': StateDefinitions,
+                                            'MediaEntity': MediaEntities,
+                                            'MediaEntities': MediaEntities,
+                                            'StyleTheme': StyleThemes,
+                                            'StyleThemes': StyleThemes,
+                                            'LocalizationTable': LocalizationTables,
+                                            'LocalizationTables': LocalizationTables
+                                        };
+                                        
+                                        function getEntity(name, type) {
+                                            var entities = entityMapping[type];
+                                            if (!entities)
+                                                return undefined;
+                                            return entities[name]
+                                        } //> getEntity(...)
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        var affectedList = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName: "result",
+                                            dataShapeName: "EntityList"
+                                        });
                                         
                                         var paramsForVisibility = {
                                             principal: 'Bayer:PerformanceDashboard' /* STRING */,
                                             principalType: 'OrganizationalUnit' /* STRING */
                                         };
                                         
+                                        function checkPermissions(permissions) {
+                                            if (!permissions)
+                                                return undefined;
+                                            if (!permissions.Visibility)
+                                                return undefined;
+                                            if (typeof permissions.Visibility != "object")
+                                                return undefined;
+                                            if (!permissions.Visibility.length)
+                                                return undefined;
+                                            for (var _idx = 0; _idx < permissions.Visibility.length; _idx++) {
+                                                var permission = permissions.Visibility[_idx];
+                                                if (permission.name == paramsForVisibility.principal &&
+                                                    permission.type == paramsForVisibility.principalType) {
+                                                    return permission.isPermitted;
+                                                }
+                                            } //# for each permission
+                                            return undefined;
+                                        } //> checkPermissions(...)
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function getEntityListForProject(entityType, projectName) {
+                                            //* result: INFOTABLE dataShape: SpotlightSearch
+                                            return Resources["SearchFunctions"].SpotlightSearch({
+                                                searchExpression: undefined, // STRING - Search expression
+                                                tags: undefined, // TAGS - Tags
+                                                types: { "items": [entityType] }, // JSON - Entity types
+                                                thingTemplates: undefined, // JSON - Thing templates
+                                                thingShapes: undefined, // JSON - Thing shapes
+                                                aspects: undefined, // JSON - Aspects to match
+                                                excludedAspects: undefined, // JSON - Aspects to exclude
+                                                startDate: undefined, // DATETIME - Only return entities modified since this date
+                                                endDate: undefined, // DATETIME - Only return entities modified before this date
+                                                searchDescriptions: true, // BOOLEAN - Search descriptions in addition to names
+                                                withPermissions: false, // BOOLEAN - Include user permissions
+                                                sortBy: "name", // STRING - Sort mode
+                                                isAscending: true, // BOOLEAN - Ascending search
+                                                maxItems: 1000, // NUMBER - Maximum number of items to return
+                                                maxSearchItems: 100000, // NUMBER - Maximum number of items to search
+                                                projectName: projectName, // PROJECTNAME - Project Name
+                                            });
+                                        } //> getEntityListForProject(...)
+                                        //>----------------------------------------------------------------------------
+                                        
+                                        function applyPermissionsForEntity(eInfo, type) {
+                                            var entity = getEntity(eInfo.name, type);
+                                            try {
+                                                if (!entity.IsEnabled()) {
+                                                    affectedList.AddRow({ name: type + "." + eInfo.name, description: "isEnabled: false" });
+                                                    return;
+                                                }
+                                            } catch (ex) { }
+                                            var permissions = entity.GetVisibilityPermissionsAsJSON();
+                                            var allowed = checkPermissions(permissions);
+                                            if (!simulate) {
+                                                try {
+                                                    // no return
+                                                    entity.AddVisibilityPermission(paramsForVisibility);
+                                                    affectedList.AddRow({ name: type + "." + eInfo.name, description: eInfo.description });
+                                                } catch (ex) {
+                                                    logger.error("AddVisibilityToSystemObjects [" + eInfo.name + "] " + ex);
+                                                    affectedList.AddRow({ name: type + "." + eInfo.name, description: "" + ex });
+                                                }
+                                            } else {
+                                                affectedList.AddRow({ name: type + "." + eInfo.name, description: "isPermitted: " + allowed });
+                                            }
+                                            return entity;
+                                        } //> applyPermissionsForEntity(...)
+                                        //>----------------------------------------------------------------------------
+                                        
                                         for (var x = 0; x < entityTypes.length; x++) {
                                             var type = entityTypes[x];
-                                            
-                                        	var params = {
+                                            var params = {
                                                 maxItems: 999999999 /* NUMBER */,
                                                 nameMask: undefined /* STRING */,
                                                 type: type /* STRING */,
                                                 tags: undefined /* TAGS */
                                             };
-                                        
                                             // result: INFOTABLE dataShape: RootEntityList
                                             var entities = Resources["EntityServices"].GetEntityList(params);
-                                        
                                             for (var y = 0; y < entities.rows.length; y++) {
-                                                var row = entities.rows[y];
-                                                if (row.isSystemObject || type == 'Subsystem') {
-                                                    var entity;
-                                                    
-                                                    if (type == 'Thing') {
-                                                        entity = Things[row.name];
-                                                    }
-                                                    else if (type == 'Mashup') {
-                                                        entity = Mashups[row.name];
-                                                    }
-                                                    else if (type == 'MediaEntity') {
-                                                        entity = MediaEntities[row.name];
-                                                    }
-                                                    else if (type == 'StyleDefinition') {
-                                                        entity = StyleDefinitions[row.name];
-                                                    }
-                                                    else if (type == 'DataShape') {
-                                                        entity = DataShapes[row.name];
-                                                    }
-                                                    else if (type == 'Resource') {
-                                                        entity = Resources[row.name];                
-                                                    }
-                                                    else if (type == 'LocalizationTable') {
-                                                        entity = LocalizationTables[row.name];
-                                                    }
-                                                    else if (type == 'Subsystem') {
-                                                        entity = Subsystems[row.name];
-                                                    }
-                                                    else if (type == 'StateDefinition') {
-                                                        entity = StateDefinitions[row.name];
-                                                    }
-                                                    else if (type == 'ThingTemplate') {
-                                                        entity = ThingTemplates[row.name];
-                                                    }
-                                                    else if (type == 'ThingShape') {
-                                                        entity = ThingShapes[row.name];
-                                                    }
+                                                var eInfo = entities.rows[y];
+                                                if (eInfo.isSystemObject || type == 'Subsystem') {
+                                                    applyPermissionsForEntity(eInfo, type);
+                                                } //? proper type
+                                            } //# for each entity
+                                        } //# for each entity type
                                         
-                                                    try {
-                                                        // no return
-                                                        entity.AddVisibilityPermission(paramsForVisibility);
-                                                    }
-                                                    catch (ex) {
-                                                        logger.error("AddVisibilityToSystemObjects [" + row.name + "] " + ex);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
+                                        ['DataShape', 'Mashup', 'StyleDefinition', 'StateDefinition', 'MediaEntity'].forEach(entityType => {
+                                            var pEntities = getEntityListForProject(entityType, 'BayerIoT');
+                                            for (var x = 0; x < pEntities.rows.length; x++) {
+                                                var pInfo = pEntities.rows[x];
+                                                var entity = applyPermissionsForEntity(pInfo, entityType);
+                                            } //# for each data shape entity
+                                        });
                                         
                                         /////////////// ADVANCED TREE GRID ////////////////////
                                         //MediaEntities["GridRowIcon"].AddVisibilityPermission(paramsForVisibility);
@@ -360,9 +638,14 @@
                                         //MediaEntities["GridSortDescendingArrowNav"].AddVisibilityPermission(paramsForVisibility);
                                         //MediaEntities["GridRowCollapseIconNav"].AddVisibilityPermission(paramsForVisibility);
                                         //MediaEntities["GridSortAscendingArrowNav"].AddVisibilityPermission(paramsForVisibility);
-                                        Resources["TTPSC.Utilities.UtilityServices"].AddVisibilityPermission(paramsForVisibility);
-                                        PersistenceProviders["ThingworxPersistenceProvider"].AddVisibilityPermission(paramsForVisibility);
-                                        Resources["PDFExport"].AddVisibilityPermission(paramsForVisibility);
+                                        
+                                        if (!simulate) {
+                                            Resources["TTPSC.Utilities.UtilityServices"].AddVisibilityPermission(paramsForVisibility);
+                                            PersistenceProviders["ThingworxPersistenceProvider"].AddVisibilityPermission(paramsForVisibility);
+                                            Resources["PDFExport"].AddVisibilityPermission(paramsForVisibility);
+                                        }
+                                        
+                                        var result = affectedList;
                                         ]]>
                                         </code>
                                     </Row>
