@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Entities build="b222" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="4" schemaVersion="1053" universal="">
     <Things>
-        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2020-06-18T05:52:05.209Z" name="BayerConfigPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
+        <Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" lastModifiedDate="2021-03-12T11:37:34.244Z" name="BayerConfigPage" projectName="BayerIoT" published="false" tags="Applications:Bayer" thingTemplate="BayerPageController" valueStream="">
             <avatar/>
             <DesignTimePermissions>
                 <Create/>
@@ -14,10 +14,7 @@
                 <Permissions resourceName="GetMenuContent">
                     <PropertyRead/>
                     <PropertyWrite/>
-                    <ServiceInvoke>
-                        <Principal isPermitted="true" name="App.BayerPerformanceDashboard" type="Group"/>
-                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
-                    </ServiceInvoke>
+                    <ServiceInvoke/>
                     <EventInvoke/>
                     <EventSubscribe/>
                 </Permissions>
@@ -41,10 +38,7 @@
                     <EventSubscribe/>
                 </Permissions>
                 <Permissions resourceName="navigationMenu">
-                    <PropertyRead>
-                        <Principal isPermitted="true" name="App.BayerPerformanceDashboard" type="Group"/>
-                        <Principal isPermitted="true" name="Role.BayerOffice" type="Group"/>
-                    </PropertyRead>
+                    <PropertyRead/>
                     <PropertyWrite/>
                     <ServiceInvoke/>
                     <EventInvoke/>
@@ -83,11 +77,22 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
+                                        //
+                                        // GetConfigItems service
+                                        
+                                        var localization = Resources["RuntimeLocalizationFunctions"];
+                                        
                                         // result: INFOTABLE
-                                        var result = Resources["InfoTableFunctions"].Clone({
-                                        	t1: me.configMenu /* INFOTABLE */
+                                        var configItems = Resources["InfoTableFunctions"].Clone({
+                                            t1: me.configMenu /* INFOTABLE */
                                         });
                                         
+                                        for (var idx = 0; idx < configItems.rows.length; idx++) {
+                                            let row = configItems.rows[idx];
+                                            row.title = localization.GetEffectiveToken({ token: row.title });
+                                        } //# for each row
+                                        
+                                        var result = configItems;
                                         result.Sort({
                                             name: "order",
                                             ascending: true
@@ -139,7 +144,7 @@
                                     <order>0.0</order>
                                     <title>
                                     <![CDATA[
-                                    Changeover Configuration
+                                    Bayer.ChangeoverConfiguration
                                     ]]>
                                     </title>
                                 </Row>
@@ -158,7 +163,7 @@
                                     <order>1.0</order>
                                     <title>
                                     <![CDATA[
-                                    Recalculate Shift (reset)
+                                    Bayer.ResetShift
                                     ]]>
                                     </title>
                                 </Row>
