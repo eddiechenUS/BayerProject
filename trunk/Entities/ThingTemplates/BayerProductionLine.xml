@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2021-05-24T17:15:37.814Z"
+         lastModifiedDate="2021-05-31T07:30:02.844Z"
          name="BayerProductionLine"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -186,6 +186,15 @@
                  source="IMPORT"></ConfigurationTableDefinition>
                 <ConfigurationTableDefinition
                  category=""
+                 dataShapeName="Bayer.RTOD.ProductionLineShiftConfigurationDataShape"
+                 description=""
+                 isHidden="false"
+                 isMultiRow="false"
+                 name="ShiftConfiguration"
+                 ordinal="0"
+                 source="IMPORT"></ConfigurationTableDefinition>
+                <ConfigurationTableDefinition
+                 category=""
                  dataShapeName="BayerSameProductChangeoverDataShape"
                  description=""
                  isHidden="false"
@@ -225,26 +234,26 @@
                              baseType="INTEGER"
                              description=""
                              name="defaultNumberOfOperators"
-                             ordinal="2"></FieldDefinition>
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="true"
+                             baseType="BOOLEAN"
+                             description=""
+                             name="isAutomaticLine"
+                             ordinal="1"></FieldDefinition>
                             <FieldDefinition
                              aspect.isPrimaryKey="false"
                              baseType="BOOLEAN"
                              description=""
                              name="isManualCountAllowed"
-                             ordinal="3"></FieldDefinition>
-                            <FieldDefinition
-                             aspect.isPrimaryKey="true"
-                             baseType="STRING"
-                             description=""
-                             name="lineType"
-                             ordinal="1"></FieldDefinition>
+                             ordinal="4"></FieldDefinition>
                         </FieldDefinitions>
                     </DataShape>
                     <Rows>
                         <Row>
                             <defaultNumberOfOperators>0</defaultNumberOfOperators>
+                            <isAutomaticLine>false</isAutomaticLine>
                             <isManualCountAllowed>false</isManualCountAllowed>
-                            <lineType></lineType>
                         </Row>
                     </Rows>
                 </ConfigurationTable>
@@ -396,7 +405,7 @@
                              baseType="BOOLEAN"
                              description=""
                              name="allowManualAdjustment"
-                             ordinal="8"></FieldDefinition>
+                             ordinal="11"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="BayerChangeoverDefaultCalculationThing"
                              aspect.isPrimaryKey="true"
@@ -404,7 +413,7 @@
                              baseType="THINGNAME"
                              description="Changeover Calculation Thing Name"
                              name="changeoverCalculationThing"
-                             ordinal="9"></FieldDefinition>
+                             ordinal="12"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="2.3"
                              aspect.isPrimaryKey="true"
@@ -412,7 +421,7 @@
                              baseType="NUMBER"
                              description=""
                              name="delayMicrostopBreakdownThreshold"
-                             ordinal="6"></FieldDefinition>
+                             ordinal="9"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="3.0"
                              aspect.isPrimaryKey="true"
@@ -420,7 +429,7 @@
                              baseType="NUMBER"
                              description=""
                              name="delayMicrostopCountMax"
-                             ordinal="5"></FieldDefinition>
+                             ordinal="7"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="5.0"
                              aspect.isPrimaryKey="true"
@@ -428,7 +437,7 @@
                              baseType="NUMBER"
                              description=""
                              name="delayMicrostopTimeMax"
-                             ordinal="4"></FieldDefinition>
+                             ordinal="5"></FieldDefinition>
                             <FieldDefinition
                              aspect.defaultValue="0.6"
                              aspect.isPrimaryKey="true"
@@ -443,7 +452,7 @@
                              baseType="BOOLEAN"
                              description="Select &quot;true&quot; if Material Performance Table contains value of blisters per hour (instead of boxes per hour)"
                              name="nominalRateInBlisters"
-                             ordinal="7"></FieldDefinition>
+                             ordinal="10"></FieldDefinition>
                             <FieldDefinition
                              aspect.isPrimaryKey="true"
                              baseType="STRING"
@@ -513,24 +522,32 @@
                         <FieldDefinitions>
                             <FieldDefinition
                              aspect.isPrimaryKey="false"
+                             aspect.maximumValue="100.0"
+                             aspect.minimumValue="0.0"
                              baseType="NUMBER"
                              description=""
                              name="availabilityTarget"
                              ordinal="3"></FieldDefinition>
                             <FieldDefinition
                              aspect.isPrimaryKey="true"
+                             aspect.maximumValue="100.0"
+                             aspect.minimumValue="0.0"
                              baseType="NUMBER"
                              description=""
                              name="overallOeeTarget"
                              ordinal="1"></FieldDefinition>
                             <FieldDefinition
                              aspect.isPrimaryKey="false"
+                             aspect.maximumValue="100.0"
+                             aspect.minimumValue="0.0"
                              baseType="NUMBER"
                              description=""
                              name="performanceTarget"
                              ordinal="2"></FieldDefinition>
                             <FieldDefinition
                              aspect.isPrimaryKey="false"
+                             aspect.maximumValue="100.0"
+                             aspect.minimumValue="0.0"
                              baseType="NUMBER"
                              description=""
                              name="qualityTarget"
@@ -569,6 +586,35 @@
                         </FieldDefinitions>
                     </DataShape>
                     <Rows></Rows>
+                </ConfigurationTable>
+                <ConfigurationTable
+                 description=""
+                 isMultiRow="false"
+                 name="ShiftConfiguration"
+                 ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.dataShape="Bayer.RTOD.ProductionLineShiftDataShape"
+                             aspect.isPrimaryKey="true"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="shifts"
+                             ordinal="1"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <shifts>
+                                <infoTable>
+                                    <DataShape>
+                                        <FieldDefinitions></FieldDefinitions>
+                                    </DataShape>
+                                    <Rows></Rows>
+                                </infoTable>
+                            </shifts>
+                        </Row>
+                    </Rows>
                 </ConfigurationTable>
                 <ConfigurationTable
                  description="Changeover Split Times"
