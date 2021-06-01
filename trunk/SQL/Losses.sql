@@ -5,7 +5,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE Losses (
-	id int NOT NULL,
+	id int IDENTITY(1,1) NOT NULL,
 	name VARCHAR(255) NOT NULL,
 	[comment] NVARCHAR(2000),
 	category VARCHAR(20),
