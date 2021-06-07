@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="password">
+ universal="">
     <ThingTemplates>
         <ThingTemplate
          baseThingTemplate="GenericThing"
@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2021-06-01T08:49:27.765Z"
+         lastModifiedDate="2021-06-06T23:27:28.902Z"
          name="Bayer.RTOD.SqlServerProviderTemplate"
          projectName="BayerRTOD"
          tags="Applications:Bayer"
@@ -79,10 +79,122 @@
             <AlertConfigurations></AlertConfigurations>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
-                <ServiceDefinitions></ServiceDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetEventDataById">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.DelayEventDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="eventId"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetSQLServerConnector">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.SqlServerProviderConfigurationDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
-                <ServiceImplementations></ServiceImplementations>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetEventDataById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: "Bayer.RTOD.SqlServerProviderConfigurationDataShape"
+                                        var sqlServerConnector =  me.GetSQLServerConnector();
+                                        
+                                        // result: INFOTABLE dataShape: ""
+                                        var result =  Things[sqlServerConnector.connector].GetDelayDetailsById({
+                                        	delayId: eventId /* INTEGER */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetSQLServerConnector">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = me.GetConfigurationTable({
+                                        	tableName: "SqlServerConnector" /* STRING */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
                 <Subscriptions></Subscriptions>
             </ThingShape>
             <ImplementedShapes></ImplementedShapes>

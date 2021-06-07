@@ -13,7 +13,7 @@
          description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-01-29T08:46:27.878Z"
+         lastModifiedDate="2021-06-06T00:53:35.390Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -62,6 +62,16 @@
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
                  aspect.isPersistent="true"
+                 baseType="NUMBER"
+                 category="Production"
+                 description=""
+                 isLocalOnly="false"
+                 name="kepwareRejectCounter"
+                 ordinal="11"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
                  baseType="DATETIME"
                  category="Production"
                  description=""
@@ -85,6 +95,16 @@
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="NUMBER"
+                 category="Production"
+                 description=""
+                 isLocalOnly="false"
+                 name="previousProductRejectCounter"
+                 ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
                  baseType="STRING"
                  category="Production"
                  description=""
@@ -101,6 +121,17 @@
                  isLocalOnly="false"
                  name="productionsensorvalue"
                  ordinal="9"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="0.0"
+                 aspect.isPersistent="true"
+                 baseType="NUMBER"
+                 category="Production"
+                 description=""
+                 isLocalOnly="false"
+                 name="rejectCounter"
+                 ordinal="10"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
@@ -548,6 +579,29 @@
                         <FieldDefinition
                          aspect.dataShape="ScheduledEvent"
                          aspect.isRequired="true"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="eventData"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category="Production"
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="UpdateRejectCounter">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.dataShape="DataChangeEvent"
                          baseType="INFOTABLE"
                          description=""
                          name="eventData"
@@ -1994,6 +2048,45 @@
                         </ConfigurationTable>
                     </ConfigurationTables>
                 </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="UpdateRejectCounter">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var incomingValue = eventData.newValue.value;
+                                    
+                                    if (me.previousProductRejectCounter <= incomingValue) {
+                                        me.rejectCounter = incomingValue - me.previousProductRejectCounter;
+                                    }
+                                    else {
+                                        me.previousProductRejectCounter = 0;
+                                        me.rejectCounter = incomingValue;
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
             </ServiceImplementations>
             <Subscriptions>
                 <Subscription
@@ -2040,6 +2133,48 @@
                         </ConfigurationTables>
                     </ServiceImplementation>
                 </Subscription>
+                <Subscription
+                 description=""
+                 enabled="true"
+                 eventName="DataChange"
+                 name="OnKepwareRejectCounterChanged"
+                 source=""
+                 sourceProperty="kepwareRejectCounter"
+                 sourceType="Thing">
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="OnKepwareRejectCounterChanged">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        me.UpdateRejectCounter({
+                                        	eventData: eventData /* INFOTABLE */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </Subscription>
             </Subscriptions>
             <avatar></avatar>
             <DesignTimePermissions>
@@ -2072,13 +2207,19 @@
                 <AlertDefinitions
                  name="kepwareCounter"></AlertDefinitions>
                 <AlertDefinitions
+                 name="kepwareRejectCounter"></AlertDefinitions>
+                <AlertDefinitions
                  name="lastProductionPlanUpdate"></AlertDefinitions>
                 <AlertDefinitions
                  name="previousProductCounter"></AlertDefinitions>
                 <AlertDefinitions
+                 name="previousProductRejectCounter"></AlertDefinitions>
+                <AlertDefinitions
                  name="productionlinestatus"></AlertDefinitions>
                 <AlertDefinitions
                  name="productionsensorvalue"></AlertDefinitions>
+                <AlertDefinitions
+                 name="rejectCounter"></AlertDefinitions>
                 <AlertDefinitions
                  name="updateProductLock"></AlertDefinitions>
             </AlertConfigurations>

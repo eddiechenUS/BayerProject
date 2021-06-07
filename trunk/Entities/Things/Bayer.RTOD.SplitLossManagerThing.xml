@@ -7,18 +7,20 @@
  revision="4"
  schemaVersion="1053"
  universal="">
-    <ThingTemplates>
-        <ThingTemplate
-         baseThingTemplate="GenericThing"
+    <Things>
+        <Thing
          description=""
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
+         enabled="true"
          homeMashup=""
-         lastModifiedDate="2021-06-07T00:44:19.616Z"
-         name="Bayer.RTOD.SqlServerManagerTemplate"
+         identifier=""
+         lastModifiedDate="2021-06-07T00:13:12.442Z"
+         name="Bayer.RTOD.SplitLossManagerThing"
          projectName="BayerRTOD"
+         published="false"
          tags="Applications:Bayer"
-         thingPackage=""
+         thingTemplate="GenericThing"
          valueStream="">
             <avatar></avatar>
             <DesignTimePermissions>
@@ -32,51 +34,8 @@
             <VisibilityPermissions>
                 <Visibility></Visibility>
             </VisibilityPermissions>
-            <ConfigurationTableDefinitions>
-                <ConfigurationTableDefinition
-                 category=""
-                 dataShapeName="Bayer.RTOD.SqlServerProviderConfigurationDataShape"
-                 description=""
-                 isHidden="false"
-                 isMultiRow="false"
-                 name="SqlServerProvider"
-                 ordinal="0"
-                 source="IMPORT"></ConfigurationTableDefinition>
-            </ConfigurationTableDefinitions>
-            <ConfigurationTables>
-                <ConfigurationTable
-                 description=""
-                 isMultiRow="false"
-                 name="SqlServerProvider"
-                 ordinal="0">
-                    <DataShape>
-                        <FieldDefinitions>
-                            <FieldDefinition
-                             aspect.defaultValue="Bayer.RTOD.SqlServerProviderThing"
-                             aspect.isPrimaryKey="true"
-                             aspect.thingTemplate="Bayer.RTOD.SqlServerProviderTemplate"
-                             baseType="THINGNAME"
-                             description=""
-                             name="provider"
-                             ordinal="1"></FieldDefinition>
-                        </FieldDefinitions>
-                    </DataShape>
-                    <Rows>
-                        <Row>
-                            <provider>
-                            <![CDATA[
-                            Bayer.RTOD.SqlServerProviderThing
-                            ]]>
-                            </provider>
-                        </Row>
-                    </Rows>
-                </ConfigurationTable>
-            </ConfigurationTables>
-            <PropertyBindings></PropertyBindings>
-            <RemotePropertyBindings></RemotePropertyBindings>
-            <RemoteServiceBindings></RemoteServiceBindings>
-            <RemoteEventBindings></RemoteEventBindings>
-            <AlertConfigurations></AlertConfigurations>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
                 <ServiceDefinitions>
@@ -88,14 +47,20 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
-                     name="GetSqlServerProvider">
+                     name="GetEventData">
                         <ResultType
-                         aspect.dataShape="Bayer.RTOD.SqlServerProviderConfigurationDataShape"
+                         aspect.dataShape="Bayer.RTOD.DelayEventDataShape"
                          baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
-                        <ParameterDefinitions></ParameterDefinitions>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="eventId"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
                      aspect.isAsync="false"
@@ -107,6 +72,7 @@
                      isPrivate="false"
                      name="SplitEvent">
                         <ResultType
+                         aspect.dataShape="Bayer.RTOD.DelayEventDataShape"
                          baseType="NOTHING"
                          description=""
                          name="result"
@@ -146,7 +112,7 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="GetSqlServerProvider">
+                     name="GetEventData">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description=""
@@ -166,8 +132,9 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var result = me.GetConfigurationTable({
-                                        	tableName: "SqlServerProvider" /* STRING */
+                                        // result: INFOTABLE dataShape: "Bayer.RTOD.DelayEventDataShape"
+                                        var result =  Things["Bayer.RTOD.SqlServerProviderThing"].GetEventDataById({
+                                        	eventId: eventId /* INTEGER */
                                         });
                                         ]]>
                                         </code>
@@ -199,37 +166,12 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        // result: INFOTABLE dataShape: "Bayer.RTOD.SqlServerProviderConfigurationDataShape"
-                                        var provider =  me.GetSqlServerProvider().provider;
-                                        
-                                        // result: INFOTABLE dataShape: "Bayer.RTOD.SqlServerProviderConfigurationDataShape"
-                                        var connector =  Things[provider].GetSQLServerConnector().connector;
-                                        
-                                        // result: INFOTABLE dataShape: "Bayer.RTOD.DelayEventDataShape"
-                                        var current =  Things["BayerSqlServerConnector"].GetDelayDetailsById({
-                                        	delayId: eventId /* INTEGER */
-                                        });
-                                        
-                                        var splitTime = dateAddMinutes(current.startTime, minute);
-                                        
-                                        Things[connector].UpdateDelayShiftDurationMs({
-                                        	id: eventId /* INTEGER */,
-                                        	description: current.description /* TEXT */,
-                                        	endTime: splitTime /* DATETIME */,
-                                        	reasonCode: current.reasonCode /* STRING */,
-                                        	source: current.source /* STRING */,
-                                            totalDurationMs: dateDifference(splitTime, current.startTime) /* LONG */
-                                        });
-                                        
-                                        Things[connector].InsertDelayEntry({
-                                        	totalDuration: dateDifference(current.endTime, splitTime) /* LONG */,
-                                        	description: description /* TEXT */,
-                                        	startTime: splitTime /* DATETIME */,
-                                        	endTime: current.endTime /* DATETIME */,
+                                        Things["Bayer.RTOD.SqlServerManagerThing"].SplitEvent({
+                                        	eventId: eventId /* INTEGER */,
+                                        	description: description /* STRING */,
                                         	reasonCode: reasonCode /* STRING */,
-                                        	shiftScheduleId: current.shiftScheduleId /* INTEGER */,
-                                        	source: current.source /* THINGNAME */,
-                                        	category: category /* STRING */
+                                        	category: category /* STRING */,
+                                        	minute: minute /* NUMBER */
                                         });
                                         ]]>
                                         </code>
@@ -241,19 +183,13 @@
                 </ServiceImplementations>
                 <Subscriptions></Subscriptions>
             </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
             <ImplementedShapes></ImplementedShapes>
-            <SharedConfigurationTables></SharedConfigurationTables>
-            <InstanceDesignTimePermissions>
-                <Create></Create>
-                <Read></Read>
-                <Update></Update>
-                <Delete></Delete>
-                <Metadata></Metadata>
-            </InstanceDesignTimePermissions>
-            <InstanceRunTimePermissions></InstanceRunTimePermissions>
-            <InstanceVisibilityPermissions>
-                <Visibility></Visibility>
-            </InstanceVisibilityPermissions>
-        </ThingTemplate>
-    </ThingTemplates>
+            <ThingProperties></ThingProperties>
+        </Thing>
+    </Things>
 </Entities>
