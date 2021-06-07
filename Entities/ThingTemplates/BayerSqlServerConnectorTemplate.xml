@@ -14,7 +14,6 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2021-06-03T06:09:39.003Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -685,6 +684,29 @@
                              description=""
                              name="week"
                              ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetDelayDetailsById">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.DelayEventDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="delayId"
+                             ordinal="2"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -2450,6 +2472,56 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="UpdateDelayShiftDurationMs">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="TEXT"
+                             description="is a `problem` in ui"
+                             name="description"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endTime"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="false"
+                             baseType="STRING"
+                             description=""
+                             name="reasonCode"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="STRING"
+                             description=""
+                             name="source"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="LONG"
+                             description=""
+                             name="totalDurationMs"
+                             ordinal="6"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="UpdateLoss">
                         <ResultType
                          baseType="NUMBER"
@@ -4031,6 +4103,59 @@
                                         GROUP BY 
                                         	DATEADD(WEEK, DATEDIFF(WEEK, 0, [startTime]), 0), 
                                         	DATEADD(DAY, DATEDIFF(DAY, 0, [startTime]), 0);
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="GetDelayDetailsById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT [id]
+                                              ,[category]
+                                              ,[source]
+                                              ,[startTime]
+                                              ,[endTime]
+                                              ,[reasonCode]
+                                              ,[description]
+                                              ,[shiftScheduleId]      
+                                          FROM 
+                                        	[dbo].[Delay]
+                                          WHERE 
+                                          	[id] = [[delayId]];
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -6808,6 +6933,56 @@
                                               ,[description] = [[description]]
                                               ,[source] = [[source]]
                                               ,[endTime] = [[endTime]]
+                                         WHERE [id] = [[id]];
+                                        SELECT * FROM [dbo].[Delay] WHERE [id] = SCOPE_IDENTITY();
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
+                     name="UpdateDelayShiftDurationMs">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[Delay]
+                                           SET [reasonCode] = [[reasonCode]]
+                                              ,[description] = [[description]]
+                                              ,[source] = [[source]]
+                                              ,[endTime] = [[endTime]]
+                                              ,[totalDurationMs] = [[totalDurationMs]]
                                          WHERE [id] = [[id]];
                                         SELECT * FROM [dbo].[Delay] WHERE [id] = SCOPE_IDENTITY();
                                         ]]>
