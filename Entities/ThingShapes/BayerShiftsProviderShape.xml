@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-11-16T08:12:39.223Z"
+         lastModifiedDate="2021-06-07T11:17:27.427Z"
          name="BayerShiftsProviderShape"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -1428,19 +1428,23 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    //    source: me.name,
-                                    //    category: category,
-                                    //    shiftScheduleId: shiftScheduleId,
-                                    //    startTime: startTime,
-                                    //    endTime: endTime
+                                    try {
+                                    	//    source: me.name,
+                                    	//    category: category,
+                                    	//    shiftScheduleId: shiftScheduleId,
+                                    	//    startTime: startTime,
+                                    	//    endTime: endTime
                                     
-                                    var result =  Things[me.GetConnector()].InsertShiftEventEntry({
-                                        source: source,
-                                        category: category,
-                                        shiftScheduleId: shiftScheduleId,
-                                        startTime: startTime,
-                                        endTime: endTime
-                                    });
+                                    	var result = Things[me.GetConnector()].InsertShiftEventEntry({
+                                    		source: source,
+                                    		category: category,
+                                    		shiftScheduleId: shiftScheduleId,
+                                    		startTime: startTime,
+                                    		endTime: endTime
+                                    	});
+                                    } catch (e) {
+                                    	logger.error("BayerShiftsProviderShape _ InsertShiftEventEntry: Error in line " + e.lineNumber + ": " + e);
+                                    }
                                     ]]>
                                     </code>
                                 </Row>

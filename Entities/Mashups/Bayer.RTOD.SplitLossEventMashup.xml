@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-06T23:05:03.701Z"
+         lastModifiedDate="2021-06-07T10:42:22.345Z"
          name="Bayer.RTOD.SplitLossEventMashup"
          projectName="BayerRTOD"
          rows="0.0"
@@ -365,6 +365,21 @@
                 "TargetArea" : "Data",
                 "TargetId" : "SplitEvent",
                 "TargetSection" : "Things_Bayer.RTOD.SplitLossEventMashupHelperThing"
+              }, {
+                "Id" : "cd33eb60-ecbc-49bd-b0eb-5839adf6802c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "actionListRefreshTrigger",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Field"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-165",
+                "SourceSection" : "",
+                "TargetArea" : "Session",
+                "TargetId" : "Session",
+                "TargetSection" : "Session"
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -446,14 +461,23 @@
                 "EventTriggerSection" : " ",
                 "Id" : "46420dac-183a-4415-9f77-830be2782884"
               }, {
-                "EventHandlerArea" : "Mashup",
-                "EventHandlerId" : "mashup-root",
-                "EventHandlerService" : "CloseIfPopup",
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-165",
+                "EventHandlerService" : "Evaluate",
                 "EventTriggerArea" : "Data",
                 "EventTriggerEvent" : "ServiceInvokeCompleted",
                 "EventTriggerId" : "SplitEvent",
                 "EventTriggerSection" : "Things_Bayer.RTOD.SplitLossEventMashupHelperThing",
-                "Id" : "1cc88935-e5d1-44fe-aa98-3cc62e9147a2"
+                "Id" : "04c6c1a8-72b2-4681-99e9-cbfa7e417481"
+              }, {
+                "EventHandlerArea" : "Mashup",
+                "EventHandlerId" : "mashup-root",
+                "EventHandlerService" : "CloseIfPopup",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Changed",
+                "EventTriggerId" : "expression-165",
+                "EventTriggerSection" : "",
+                "Id" : "dc9723de-1574-4d3c-b9c0-15cbbea92052"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -513,7 +537,7 @@
                     "Description" : "",
                     "ParameterName" : "eventId"
                   } ],
-                  "id_index" : 164,
+                  "id_index" : 165,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -3473,8 +3497,10 @@
                     "Height" : 28,
                     "Id" : "expression-164",
                     "LastContainer" : false,
+                    "Left" : 0,
                     "OutputBaseType" : "NUMBER",
                     "ShowDataLoading" : true,
+                    "Top" : 0,
                     "Type" : "expression",
                     "Visible" : true,
                     "Width" : 200,
@@ -3491,6 +3517,29 @@
                       "isBindingTarget" : true,
                       "name" : "value"
                     } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "ALWAYS",
+                    "DisplayName" : "TriggerRefresh",
+                    "Expression" : "Output = new Date();",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-165",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "DATETIME",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ ]
                   },
                   "Widgets" : [ ]
                 } ]
