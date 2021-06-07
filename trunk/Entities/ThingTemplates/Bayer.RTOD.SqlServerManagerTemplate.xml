@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2021-06-07T00:44:19.616Z"
+         lastModifiedDate="2021-06-07T11:18:33.943Z"
          name="Bayer.RTOD.SqlServerManagerTemplate"
          projectName="BayerRTOD"
          tags="Applications:Bayer"
@@ -199,38 +199,42 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        // result: INFOTABLE dataShape: "Bayer.RTOD.SqlServerProviderConfigurationDataShape"
-                                        var provider =  me.GetSqlServerProvider().provider;
+                                        try {
+                                        	// result: INFOTABLE dataShape: "Bayer.RTOD.SqlServerProviderConfigurationDataShape"
+                                        	var provider = me.GetSqlServerProvider().provider;
                                         
-                                        // result: INFOTABLE dataShape: "Bayer.RTOD.SqlServerProviderConfigurationDataShape"
-                                        var connector =  Things[provider].GetSQLServerConnector().connector;
+                                        	// result: INFOTABLE dataShape: "Bayer.RTOD.SqlServerProviderConfigurationDataShape"
+                                        	var connector = Things[provider].GetSQLServerConnector().connector;
                                         
-                                        // result: INFOTABLE dataShape: "Bayer.RTOD.DelayEventDataShape"
-                                        var current =  Things["BayerSqlServerConnector"].GetDelayDetailsById({
-                                        	delayId: eventId /* INTEGER */
-                                        });
+                                        	// result: INFOTABLE dataShape: "Bayer.RTOD.DelayEventDataShape"
+                                        	var current = Things["BayerSqlServerConnector"].GetDelayDetailsById({
+                                        		delayId: eventId /* INTEGER */
+                                        	});
                                         
-                                        var splitTime = dateAddMinutes(current.startTime, minute);
+                                        	var splitTime = dateAddMinutes(current.startTime, minute);
                                         
-                                        Things[connector].UpdateDelayShiftDurationMs({
-                                        	id: eventId /* INTEGER */,
-                                        	description: current.description /* TEXT */,
-                                        	endTime: splitTime /* DATETIME */,
-                                        	reasonCode: current.reasonCode /* STRING */,
-                                        	source: current.source /* STRING */,
-                                            totalDurationMs: dateDifference(splitTime, current.startTime) /* LONG */
-                                        });
+                                        	Things[connector].UpdateDelayShiftDurationMs({
+                                        		id: eventId /* INTEGER */ ,
+                                        		description: current.description /* TEXT */ ,
+                                        		endTime: splitTime /* DATETIME */ ,
+                                        		reasonCode: current.reasonCode /* STRING */ ,
+                                        		source: current.source /* STRING */ ,
+                                        		totalDurationMs: dateDifference(splitTime, current.startTime) /* LONG */
+                                        	});
                                         
-                                        Things[connector].InsertDelayEntry({
-                                        	totalDuration: dateDifference(current.endTime, splitTime) /* LONG */,
-                                        	description: description /* TEXT */,
-                                        	startTime: splitTime /* DATETIME */,
-                                        	endTime: current.endTime /* DATETIME */,
-                                        	reasonCode: reasonCode /* STRING */,
-                                        	shiftScheduleId: current.shiftScheduleId /* INTEGER */,
-                                        	source: current.source /* THINGNAME */,
-                                        	category: category /* STRING */
-                                        });
+                                        	Things[connector].InsertDelayEntry({
+                                        		totalDuration: dateDifference(current.endTime, splitTime) /* LONG */ ,
+                                        		description: description /* TEXT */ ,
+                                        		startTime: splitTime /* DATETIME */ ,
+                                        		endTime: current.endTime /* DATETIME */ ,
+                                        		reasonCode: reasonCode /* STRING */ ,
+                                        		shiftScheduleId: current.shiftScheduleId /* INTEGER */ ,
+                                        		source: current.source /* THINGNAME */ ,
+                                        		category: category /* STRING */
+                                        	});
+                                        } catch (e) {
+                                        	logger.error("Bayer.RTOD.SqlServerManagerTemplate _ SplitEvent: Error in line " + e.lineNumber + ": " + e);
+                                        }
                                         ]]>
                                         </code>
                                     </Row>

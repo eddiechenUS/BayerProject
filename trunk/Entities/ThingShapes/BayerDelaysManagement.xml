@@ -13,7 +13,7 @@
          description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-01-28T12:43:44.419Z"
+         lastModifiedDate="2021-06-07T11:15:32.536Z"
          name="BayerDelaysManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -419,9 +419,15 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var result = Things['BayerDBDataProvider'].GetDelayShiftDetails({
-                                        shiftScheduleId: shiftScheduleId
-                                    });
+                                    try {
+                                    	//logger.debug("BayerDelaysManagement _ GetDelayShiftDetails: shiftScheduleId=["+shiftScheduleId+"]");
+                                    
+                                    	var result = Things['BayerDBDataProvider'].GetDelayShiftDetails({
+                                    		shiftScheduleId: shiftScheduleId
+                                    	});
+                                    } catch (e) {
+                                    	logger.error("BayerDelaysManagement _ GetDelayShiftDetails: Error in line " + e.lineNumber + ": " + e);
+                                    }
                                     ]]>
                                     </code>
                                 </Row>
