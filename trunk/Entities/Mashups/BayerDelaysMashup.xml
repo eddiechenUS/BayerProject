@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-07T10:52:50.101Z"
+         lastModifiedDate="2021-06-08T09:08:30.088Z"
          name="BayerDelaysMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -160,6 +160,14 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetLossesByTimestamp"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "3f6212c9-6a0c-4cea-96cb-992ce67baa56",
+                    "Name" : "GetLossesByTimestampAndCategory",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetLossesByTimestampAndCategory"
                   } ]
                 },
                 "Things_Bayer.RTOD.LossesScheduledMashupHelperThing" : {
@@ -670,24 +678,7 @@
                 "TargetId" : "collection-105",
                 "TargetSection" : ""
               }, {
-                "Id" : "7c69b76a-078c-4b02-aaff-768b8de5dc0c",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "InfoTable",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetLossesByTimestamp",
-                "SourceSection" : "Things_Bayer.RTOD.LossesOtherMashupHelperThing",
-                "TargetArea" : "UI",
-                "TargetId" : "collection-107",
-                "TargetSection" : ""
-              }, {
-                "Id" : "9c0fe481-4073-4ecc-a7b1-a43aadb3736a",
+                "Id" : "da33b17a-4d74-4228-b9a9-4fbb9b9df51b",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "",
                   "SourcePropertyBaseType" : "INFOTABLE",
@@ -701,7 +692,24 @@
                 "SourceId" : "GetLossesByTimestamp",
                 "SourceSection" : "Things_Bayer.RTOD.LossesScheduledMashupHelperThing",
                 "TargetArea" : "UI",
-                "TargetId" : "collection-108",
+                "TargetId" : "collection-111",
+                "TargetSection" : ""
+              }, {
+                "Id" : "28f9e117-9b5c-4a88-8951-282cc89cf08f",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetLossesByTimestampAndCategory",
+                "SourceSection" : "Things_Bayer.RTOD.LossesOtherMashupHelperThing",
+                "TargetArea" : "UI",
+                "TargetId" : "collection-112",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
@@ -868,6 +876,15 @@
                 "EventTriggerId" : "mashup-root",
                 "EventTriggerSection" : "",
                 "Id" : "19e5fb4e-018b-4d70-8259-280b7a1a60a2"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.LossesOtherMashupHelperThing",
+                "EventHandlerService" : "GetLossesByTimestampAndCategory",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "a9c23a64-4e45-4bc6-9068-439a7922183d"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -945,7 +962,7 @@
                     "ParameterName" : "shiftRefresh"
                   } ],
                   "flex-grow" : 0,
-                  "id_index" : 108,
+                  "id_index" : 112,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -3739,7 +3756,7 @@
                                 "Left" : 330,
                                 "NumberOfTabs" : 3,
                                 "ResponsiveLayout" : true,
-                                "SelectedTab" : 0,
+                                "SelectedTab" : 2,
                                 "ShowDataLoading" : true,
                                 "Tab10Disabled" : false,
                                 "Tab10Name" : "Tab Name 10",
@@ -3971,11 +3988,11 @@
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
-                                    "AllowSelection" : true,
+                                    "AllowSelection" : false,
                                     "AlwaysUseCustomScrollerOniOS" : true,
                                     "Area" : "UI",
-                                    "AutoSelectFirstRow" : true,
-                                    "BottomPadding" : 22,
+                                    "AutoSelectFirstRow" : false,
+                                    "BottomPadding" : 0,
                                     "CellActiveStyle" : "DefaultCollectionCellActiveStyle",
                                     "CellBorderRadius" : 0,
                                     "CellBoxShadow" : "",
@@ -3990,25 +4007,26 @@
                                     "CellSelectedStyle" : "DefaultCollectionCellSelectedStyle",
                                     "CellStyle" : "DefaultCollectionCellStyle",
                                     "DisableWrapping" : false,
-                                    "DisplayName" : "collection-108",
+                                    "DisplayName" : "collection-111",
                                     "FlowLayoutAlignment" : "Center",
                                     "FlowLayoutContentGravity" : "Center",
                                     "FlowLayoutGravity" : "Spaced",
                                     "FooterHeight" : 44,
                                     "FooterSectionParam" : "",
-                                    "HandleSelectionUpdates" : true,
+                                    "HandleSelectionUpdates" : false,
                                     "HasSelectedCells" : false,
-                                    "HeaderHeight" : 44,
-                                    "HeaderSectionParam" : "",
+                                    "HeaderHeight" : 25,
+                                    "HeaderMashupName" : "Bayer.RTOD.LossesScheduledHeaderMashup",
+                                    "HeaderSectionParam" : "shiftId",
                                     "Height" : 300,
-                                    "Id" : "collection-108",
+                                    "Id" : "collection-111",
                                     "ItemLoadBehavior" : "loadAll",
                                     "LastContainer" : false,
                                     "Left" : 0,
                                     "LeftAlignFinalRow" : false,
                                     "Mashup" : "Bayer.RTOD.LossesScheduledMashup",
                                     "MashupGlobalPropertyBinding" : "{}",
-                                    "MashupHeight" : 90,
+                                    "MashupHeight" : 60,
                                     "MashupPropertyBinding" : {
                                       "category" : "category",
                                       "comment" : "comment",
@@ -4022,13 +4040,14 @@
                                     "MultiSelect" : false,
                                     "OffScreenBufferFactor" : 0.1,
                                     "PinFootersToBottom" : false,
-                                    "PinHeadersToTop" : false,
+                                    "PinHeadersToTop" : true,
                                     "PlaysIntroAnimation" : true,
                                     "ResponsiveLayout" : true,
                                     "RippleEffectStyle" : "DefaultCollectionRippleStyle",
                                     "RowSpacing" : 44,
-                                    "ScrollbarType" : "hover",
+                                    "ScrollbarType" : "alwayson",
                                     "ScrollsToSelectedCell" : false,
+                                    "SectionField" : "category",
                                     "SectionInsetBottom" : 0,
                                     "SectionInsetLeft" : 0,
                                     "SectionInsetRight" : 0,
@@ -4036,7 +4055,7 @@
                                     "SelectedCellsCount" : 0,
                                     "ShowDataLoading" : true,
                                     "ShowFooters" : false,
-                                    "ShowHeaders" : false,
+                                    "ShowHeaders" : true,
                                     "SortAscending" : false,
                                     "SortField" : "timestamp",
                                     "Top" : 0,
@@ -4091,11 +4110,11 @@
                                 },
                                 "Widgets" : [ {
                                   "Properties" : {
-                                    "AllowSelection" : true,
+                                    "AllowSelection" : false,
                                     "AlwaysUseCustomScrollerOniOS" : true,
                                     "Area" : "UI",
-                                    "AutoSelectFirstRow" : true,
-                                    "BottomPadding" : 22,
+                                    "AutoSelectFirstRow" : false,
+                                    "BottomPadding" : 0,
                                     "CellActiveStyle" : "DefaultCollectionCellActiveStyle",
                                     "CellBorderRadius" : 0,
                                     "CellBoxShadow" : "",
@@ -4110,25 +4129,26 @@
                                     "CellSelectedStyle" : "DefaultCollectionCellSelectedStyle",
                                     "CellStyle" : "DefaultCollectionCellStyle",
                                     "DisableWrapping" : false,
-                                    "DisplayName" : "collection-107",
+                                    "DisplayName" : "collection-112",
                                     "FlowLayoutAlignment" : "Center",
                                     "FlowLayoutContentGravity" : "Center",
                                     "FlowLayoutGravity" : "Spaced",
                                     "FooterHeight" : 44,
                                     "FooterSectionParam" : "",
-                                    "HandleSelectionUpdates" : true,
+                                    "HandleSelectionUpdates" : false,
                                     "HasSelectedCells" : false,
-                                    "HeaderHeight" : 44,
-                                    "HeaderSectionParam" : "",
+                                    "HeaderHeight" : 25,
+                                    "HeaderMashupName" : "Bayer.RTOD.LossesOtherHeaderMashup",
+                                    "HeaderSectionParam" : "shiftId",
                                     "Height" : 300,
-                                    "Id" : "collection-107",
+                                    "Id" : "collection-112",
                                     "ItemLoadBehavior" : "loadAll",
                                     "LastContainer" : false,
                                     "Left" : 0,
                                     "LeftAlignFinalRow" : false,
                                     "Mashup" : "Bayer.RTOD.LossesOtherMashup",
                                     "MashupGlobalPropertyBinding" : "{}",
-                                    "MashupHeight" : 90,
+                                    "MashupHeight" : 60,
                                     "MashupPropertyBinding" : {
                                       "category" : "category",
                                       "comment" : "comment",
@@ -4147,8 +4167,9 @@
                                     "ResponsiveLayout" : true,
                                     "RippleEffectStyle" : "DefaultCollectionRippleStyle",
                                     "RowSpacing" : 44,
-                                    "ScrollbarType" : "hover",
+                                    "ScrollbarType" : "alwayson",
                                     "ScrollsToSelectedCell" : false,
+                                    "SectionField" : "category",
                                     "SectionInsetBottom" : 0,
                                     "SectionInsetLeft" : 0,
                                     "SectionInsetRight" : 0,
@@ -4156,7 +4177,7 @@
                                     "SelectedCellsCount" : 0,
                                     "ShowDataLoading" : true,
                                     "ShowFooters" : false,
-                                    "ShowHeaders" : false,
+                                    "ShowHeaders" : true,
                                     "SortAscending" : false,
                                     "SortField" : "timestamp",
                                     "Top" : 0,

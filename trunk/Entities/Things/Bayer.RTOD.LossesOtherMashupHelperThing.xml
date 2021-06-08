@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="password">
+    <Things>
+        <Thing
+         description=""
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2021-06-08T02:57:58.653Z"
+         name="Bayer.RTOD.LossesOtherMashupHelperThing"
+         projectName="BayerRTOD"
+         published="false"
+         tags="Applications:Bayer"
+         thingTemplate="GenericThing"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions>
+                <ConfigurationTableDefinition
+                 category=""
+                 dataShapeName="Bayer.RTOD.LossManagerProviderDataShape"
+                 description=""
+                 isHidden="false"
+                 isMultiRow="false"
+                 name="LossManager"
+                 ordinal="0"
+                 source="IMPORT"></ConfigurationTableDefinition>
+            </ConfigurationTableDefinitions>
+            <ConfigurationTables>
+                <ConfigurationTable
+                 description=""
+                 isMultiRow="false"
+                 name="LossManager"
+                 ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="true"
+                             aspect.thingTemplate="Bayer.RTOD.LossManagerTemplate"
+                             baseType="THINGNAME"
+                             description=""
+                             name="LossManager"
+                             ordinal="1"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
+                    <Rows>
+                        <Row>
+                            <LossManager>
+                            <![CDATA[
+                            Bayer.RTOD.LossManagerThing
+                            ]]>
+                            </LossManager>
+                        </Row>
+                    </Rows>
+                </ConfigurationTable>
+            </ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions></PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetLossesByTimestamp">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.LossesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestampFrom"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestampTo"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetLossesByTimestampAndCategory">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.LossesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestampFrom"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestampTo"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetLossesByTimestamp">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetConfigurationTable({
+                                        	tableName: "LossManager" /* STRING */
+                                        });
+                                        
+                                        var date = new Date();
+                                        date.setDate(date.getDate() - 7);
+                                        
+                                        var LossManagerThing = Things[table.rows[0].LossManager];
+                                        result = LossManagerThing.GetLossesByTimestampAndCategory({
+                                        //	timestampTo: timestampTo /* DATETIME */,
+                                        //	timestampFrom: timestampFrom /* DATETIME */
+                                            timestampTo: new Date() /* DATETIME */,
+                                        	timestampFrom: date /* DATETIME */,
+                                            category: "Quality"
+                                        });
+                                        
+                                        // result: INFOTABLE
+                                        //var result = Resources["InfoTableFunctions"].EQFilter({
+                                        //	fieldName: "category" /* STRING */,
+                                        //	isCaseSensitive: false /* BOOLEAN */,
+                                        //	t: queryResult /* INFOTABLE */,
+                                        //	value: "testMu" /* STRING */
+                                        //});
+                                        //
+                                        //
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetLossesByTimestampAndCategory">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetConfigurationTable({
+                                        	tableName: "LossManager" /* STRING */
+                                        });
+                                        
+                                        var date = new Date();
+                                        date.setDate(date.getDate() - 7);
+                                        
+                                        var LossManagerThing = Things[table.rows[0].LossManager];
+                                        result = LossManagerThing.GetLossesByTimestampAndCategory({
+                                        //	timestampTo: timestampTo /* DATETIME */,
+                                        //	timestampFrom: timestampFrom /* DATETIME */
+                                            timestampTo: new Date() /* DATETIME */,
+                                        	timestampFrom: date /* DATETIME */,
+                                            category: "Quality"
+                                        });
+                                        
+                                        // result: INFOTABLE
+                                        //var result = Resources["InfoTableFunctions"].EQFilter({
+                                        //	fieldName: "category" /* STRING */,
+                                        //	isCaseSensitive: false /* BOOLEAN */,
+                                        //	t: queryResult /* INFOTABLE */,
+                                        //	value: "testMu" /* STRING */
+                                        //});
+                                        //
+                                        //
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
+            <ImplementedShapes></ImplementedShapes>
+            <ThingProperties></ThingProperties>
+        </Thing>
+    </Things>
+</Entities>
