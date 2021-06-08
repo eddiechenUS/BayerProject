@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2021-05-31T07:30:02.844Z"
+         lastModifiedDate="2021-06-08T06:12:22.306Z"
          name="BayerProductionLine"
          projectName="BayerIoT"
          tags="Applications:Bayer;Feature:BAYER-177;Feature:BAYER-187"
@@ -189,7 +189,7 @@
                  dataShapeName="Bayer.RTOD.ProductionLineShiftConfigurationDataShape"
                  description=""
                  isHidden="false"
-                 isMultiRow="false"
+                 isMultiRow="true"
                  name="ShiftConfiguration"
                  ordinal="0"
                  source="IMPORT"></ConfigurationTableDefinition>
@@ -603,7 +603,7 @@
                 </ConfigurationTable>
                 <ConfigurationTable
                  description=""
-                 isMultiRow="false"
+                 isMultiRow="true"
                  name="ShiftConfiguration"
                  ordinal="0">
                     <DataShape>
@@ -617,16 +617,31 @@
                              ordinal="1"></FieldDefinition>
                         </FieldDefinitions>
                     </DataShape>
+                    <Rows></Rows>
+                </ConfigurationTable>
+                <ConfigurationTable
+                 description=""
+                 isMultiRow="true"
+                 name="ShiftManagerProvider"
+                 ordinal="0">
+                    <DataShape>
+                        <FieldDefinitions>
+                            <FieldDefinition
+                             aspect.isPrimaryKey="true"
+                             aspect.thingTemplate="Bayer.RTOD.ShiftManagerTemplate"
+                             baseType="THINGNAME"
+                             description=""
+                             name="ShiftManager"
+                             ordinal="1"></FieldDefinition>
+                        </FieldDefinitions>
+                    </DataShape>
                     <Rows>
                         <Row>
-                            <shifts>
-                                <infoTable>
-                                    <DataShape>
-                                        <FieldDefinitions></FieldDefinitions>
-                                    </DataShape>
-                                    <Rows></Rows>
-                                </infoTable>
-                            </shifts>
+                            <ShiftManager>
+                            <![CDATA[
+                            Bayer.Common.ShiftManagerThing
+                            ]]>
+                            </ShiftManager>
                         </Row>
                     </Rows>
                 </ConfigurationTable>
