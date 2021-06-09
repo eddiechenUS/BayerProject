@@ -14,6 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
+         lastModifiedDate="2021-06-08T13:20:31.661Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -1287,6 +1288,28 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetRateStandardByProductionLineName">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="productionLineName"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetRateStandards">
                         <ResultType
                          baseType="INFOTABLE"
@@ -1859,11 +1882,6 @@
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
                             <FieldDefinition
-                             baseType="INTEGER"
-                             description=""
-                             name="catalogId"
-                             ordinal="6"></FieldDefinition>
-                            <FieldDefinition
                              baseType="STRING"
                              description=""
                              name="catalogName"
@@ -2029,6 +2047,11 @@
                              name="productionLine"
                              ordinal="1"></FieldDefinition>
                             <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="rejectedQuantity"
+                             ordinal="27"></FieldDefinition>
+                            <FieldDefinition
                              aspect.isRequired="true"
                              baseType="NUMBER"
                              description=""
@@ -2148,7 +2171,7 @@
                      isPrivate="false"
                      name="InsertRateStandards">
                         <ResultType
-                         baseType="NUMBER"
+                         baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
@@ -2158,11 +2181,6 @@
                              description=""
                              name="adjustedRunRate"
                              ordinal="5"></FieldDefinition>
-                            <FieldDefinition
-                             baseType="INTEGER"
-                             description=""
-                             name="id"
-                             ordinal="1"></FieldDefinition>
                             <FieldDefinition
                              baseType="INTEGER"
                              description=""
@@ -2189,7 +2207,7 @@
                              name="partsPerMachineSignal"
                              ordinal="7"></FieldDefinition>
                             <FieldDefinition
-                             baseType="STRING"
+                             baseType="INTEGER"
                              description=""
                              name="productionFormatId"
                              ordinal="9"></FieldDefinition>
@@ -2308,6 +2326,11 @@
                              description=""
                              name="totalQuantityProduced"
                              ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="totalQuantityRejected"
+                             ordinal="5"></FieldDefinition>
                             <FieldDefinition
                              aspect.isRequired="true"
                              baseType="NUMBER"
@@ -2879,6 +2902,59 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="UpdateProductionPlanOnRejection">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="endTime"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="NUMBER"
+                             description=""
+                             name="rejectedQuantity"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="NUMBER"
+                             description=""
+                             name="remainingHours"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="STRING"
+                             description=""
+                             name="status"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="NUMBER"
+                             description=""
+                             name="workedHours"
+                             ordinal="4"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="UpdateProductionPlanOnStart">
                         <ResultType
                          baseType="NUMBER"
@@ -3061,6 +3137,95 @@
                              baseType="NUMBER"
                              description=""
                              name="quantityProduced"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="timestamp"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateShiftProductionAndRejection">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="productionPlanId_actual"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="NUMBER"
+                             description=""
+                             name="quantityProduced"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="quantityRejected"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="timestamp"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateShiftRejection">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="productionPlanId_actual"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="NUMBER"
+                             description=""
+                             name="quantityRejected"
                              ordinal="4"></FieldDefinition>
                             <FieldDefinition
                              aspect.isRequired="true"
@@ -5335,6 +5500,52 @@
                     <ServiceImplementation
                      description=""
                      handlerName="SQLQuery"
+                     name="GetRateStandardByProductionLineName">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT * FROM [dbo].[RateStandards] 
+                                        
+                                        where
+                                        [productionLine] = [[productionLineName]];
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
                      name="GetRateStandards">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -6346,15 +6557,13 @@
                                                    ,[number]
                                                    ,[description]
                                                    ,[isActive]
-                                                   ,[catalogId]
                                                    ,[productionFormatId])
-                                        OUTPUT INSERTED.id
+                                        --OUTPUT INSERTED.id
                                         VALUES
                                                    ([[catalogName]]
                                                    ,[[number]]
                                                    ,[[description]]
                                                    ,[[isActive]]
-                                                   ,[[catalogId]]
                                                    ,[[productionFormatId]])
                                         ]]>
                                         </sql>
@@ -6402,7 +6611,7 @@
                                         			([name],
                                                      [description],
                                                      [isActive])
-                                        		OUTPUT INSERTED.id
+                                        	--	OUTPUT INSERTED.id
                                                 VALUES
                                                      ([[name]],
                                                       [[description]],
@@ -6464,6 +6673,7 @@
                                                    ,[remainingHours]
                                                    ,[workedHours]
                                                    ,[producedQuantity]
+                                                   ,[rejectedQuantity]
                                                    ,[startTime]
                                                    ,[endTime]
                                                    ,[activeMaterialNumber]
@@ -6492,6 +6702,7 @@
                                                    ,[[remainingHours]]
                                                    ,[[workedHours]]
                                                    ,[[producedQuantity]]
+                                                   ,[[rejectedQuantity]]
                                                    ,[[startTime]]
                                                    ,[[endTime]]
                                                    ,[[activeMaterialNumber]]
@@ -6611,7 +6822,7 @@
                                                    ,[partsPerMachineSignal]
                                                    ,[isActive]
                                                    ,[productionFormatId])
-                                        OUTPUT INSERTED.id           
+                                        -- OUTPUT INSERTED.id           
                                         VALUES
                                                    ([[materialId]]
                                                    ,[[productionLine]]
@@ -6770,12 +6981,14 @@
                                         <![CDATA[
                                         INSERT INTO [dbo].[ShiftSchedule]
                                                    ([totalQuantityProduced]
+                                                   ,[totalQuantityRejected]
                                                    ,[totalTargetQuantity]
                                                    ,[timestamp]
                                                    ,[productionLine])
                                         	OUTPUT Inserted.id
                                              VALUES
                                                    ([[totalQuantityProduced]]
+                                                   ,[[totalQuantityRejected]]
                                                    ,[[totalTargetQuantity]]
                                                    ,[[timestamp]]
                                                    ,[[productionLine]])
@@ -6828,6 +7041,7 @@
                                                    ,[scheduleId]
                                                    ,[productionPlanId]
                                                    ,[quantityProduced]
+                                                   ,[quantityRejected]
                                                    ,[targetQuantity])
                                              VALUES
                                                    ([[hour]]
@@ -6835,6 +7049,7 @@
                                                    ,[[duration]]
                                                    ,[[scheduleId]]
                                                    ,[[productionPlanId]]
+                                                   ,0
                                                    ,0
                                                    ,[[targetQuantity]])
                                         ]]>
@@ -7422,6 +7637,55 @@
                     <ServiceImplementation
                      description=""
                      handlerName="SQLCommand"
+                     name="UpdateProductionPlanOnRejection">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ProductionPlan]
+                                           SET [status] = [[status]]
+                                              ,[remainingHours] = [[remainingHours]]
+                                              ,[workedHours] = [[workedHours]]
+                                              ,[rejectedQuantity] = [[rejectedQuantity]]
+                                              ,[endTime] = [[endTime]]
+                                         WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
                      name="UpdateProductionPlanOnStart">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -7646,6 +7910,120 @@
                                            SET [quantityProduced] = [[quantityProduced]]
                                               ,[productionPlanId_actual] = [[productionPlanId_actual]]
                                               ,[quantityTargetOk] = CASE WHEN [[quantityProduced]] >= [targetQuantity] THEN 1 ELSE 0 END
+                                         WHERE [id] IN (
+                                        	SELECT TOP 1 r.id FROM (
+                                        		SELECT i.[id]
+                                        			  ,i.[time]
+                                        			  ,LEAD (i.[time]) OVER (ORDER BY i.[time] ASC) as time_next
+                                        		  FROM [dbo].[ShiftScheduleItem] i
+                                        		  JOIN [dbo].[ShiftSchedule] s ON (s.[id] = i.[scheduleId])
+                                        		  WHERE s.[productionLine] = [[productionLine]]
+                                        		  ) AS r
+                                        	WHERE [[timestamp]] >= r.time AND (r.time_next IS NULL OR [[timestamp]] < r.time_next)
+                                        )
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
+                     name="UpdateShiftProductionAndRejection">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ShiftScheduleItem]
+                                           SET [quantityProduced] = [[quantityProduced]]
+                                              ,[quantityRejected] = [[quantityRejected]]
+                                              ,[productionPlanId_actual] = [[productionPlanId_actual]]
+                                              ,[quantityTargetOk] = CASE WHEN [[quantityProduced]] >= [targetQuantity] THEN 1 ELSE 0 END
+                                         WHERE [id] IN (
+                                        	SELECT TOP 1 r.id FROM (
+                                        		SELECT i.[id]
+                                        			  ,i.[time]
+                                        			  ,LEAD (i.[time]) OVER (ORDER BY i.[time] ASC) as time_next
+                                        		  FROM [dbo].[ShiftScheduleItem] i
+                                        		  JOIN [dbo].[ShiftSchedule] s ON (s.[id] = i.[scheduleId])
+                                        		  WHERE s.[productionLine] = [[productionLine]]
+                                        		  ) AS r
+                                        	WHERE [[timestamp]] >= r.time AND (r.time_next IS NULL OR [[timestamp]] < r.time_next)
+                                        )
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
+                     name="UpdateShiftRejection">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ShiftScheduleItem]
+                                           SET [quantityRejected] = [[quantityRejected]]
+                                              ,[productionPlanId_actual] = [[productionPlanId_actual]]
                                          WHERE [id] IN (
                                         	SELECT TOP 1 r.id FROM (
                                         		SELECT i.[id]

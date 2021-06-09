@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="">
+ universal="password">
     <Mashups>
         <Mashup
          aspect.isResponsive="true"
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-03T01:58:51.317Z"
+         lastModifiedDate="2021-06-08T08:12:39.058Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -182,6 +182,21 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetLineConfiguration"
+                  } ]
+                },
+                "DynamicThings_Bayer.productionSpeedValidator" : {
+                  "DataName" : "DynamicThings_Bayer.productionSpeedValidator",
+                  "EntityName" : "Bayer.productionSpeedValidator",
+                  "EntityType" : "DynamicThings",
+                  "Id" : "f7fd47c2-469d-44c1-aa79-a6fae5d0d665",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "01d80ff4-0f99-49e8-9c1d-a48800a6dcc7",
+                    "Name" : "compareFuction",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "compareFuction"
                   } ]
                 },
                 "Resources_CurrentSessionInfo" : {
@@ -1869,19 +1884,133 @@
                 "TargetId" : "valuedisplay-561",
                 "TargetSection" : ""
               }, {
-                "Id" : "7eab6145-7093-4734-b941-f37046502f18",
+                "Id" : "eb8d211d-9719-4fb3-b798-54e29ff612f9",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "rejectCounter",
                   "SourcePropertyBaseType" : "NUMBER",
                   "SourcePropertyType" : "Property",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetProperty" : "rejectCounter",
+                  "TargetPropertyBaseType" : "NUMBER",
                   "TargetPropertyType" : "property"
                 } ],
                 "SourceArea" : "Data",
                 "SourceDetails" : "AllData",
                 "SourceId" : "GetProperties",
                 "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "mashupcontainer-320",
+                "TargetSection" : ""
+              }, {
+                "Id" : "4b047c6f-446e-4a5f-9960-458b204de84f",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "actualSpeedPerHour",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "velocity",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetPcsPerShift",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-566",
+                "TargetSection" : ""
+              }, {
+                "Id" : "c647ad92-cad2-4c04-bfa2-407f442577cc",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "blistersPerFoldedBox",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "blistersPerBox",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetCurrentProduct",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-566",
+                "TargetSection" : ""
+              }, {
+                "Id" : "10d55987-bcf6-4ba5-9cb1-1b90d42b86c5",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "subject",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "property",
+                  "TargetProperty" : "subject",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-566",
+                "TargetSection" : ""
+              }, {
+                "Id" : "9877eb69-689b-4263-9596-3a7facee2187",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "TargetProperty" : "speed",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-566",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "compareFuction",
+                "TargetSection" : "DynamicThings_Bayer.productionSpeedValidator"
+              }, {
+                "Id" : "2c0f5297-410d-494a-a4c9-a873bed28854",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "name",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "ProductionLineName",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetProperties",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "compareFuction",
+                "TargetSection" : "DynamicThings_Bayer.productionSpeedValidator"
+              }, {
+                "Id" : "33435d2d-df73-4d25-aef2-90dd8004adbf",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "rejectCounter",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "rejectCount",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetProperties",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-570",
+                "TargetSection" : ""
+              }, {
+                "Id" : "1aa102b5-17bf-4acf-80fd-db705e224f86",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-570",
+                "SourceSection" : "",
                 "TargetArea" : "UI",
                 "TargetId" : "valuedisplay-282",
                 "TargetSection" : ""
@@ -2356,6 +2485,15 @@
                 "EventTriggerId" : "navigation-421",
                 "EventTriggerSection" : "",
                 "Id" : "71fe0827-8afd-47de-90e9-0e4923883adf"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "navigation-572",
+                "EventHandlerService" : "Navigate",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-573",
+                "EventTriggerSection" : "",
+                "Id" : "b62264fc-f444-47db-bc69-4848e55103d3"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -2426,7 +2564,7 @@
                   } ],
                   "flex-grow" : 0,
                   "flex-shrink" : 0,
-                  "id_index" : 562,
+                  "id_index" : 573,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -2527,7 +2665,7 @@
                         "LastContainer" : false,
                         "Left" : 235,
                         "LeftSidebar" : true,
-                        "LeftSidebarWidth" : 10,
+                        "LeftSidebarWidth" : 40,
                         "Orientation" : "horizontal",
                         "PctColumn1" : 100,
                         "PctColumn2" : 0,
@@ -2638,7 +2776,7 @@
                             "LastContainer" : false,
                             "Left" : 640,
                             "LeftSidebar" : true,
-                            "LeftSidebarWidth" : 350,
+                            "LeftSidebarWidth" : 415,
                             "Orientation" : "horizontal",
                             "PctColumn1" : 100,
                             "PctColumn2" : 100,
@@ -2715,7 +2853,7 @@
                                 "Label" : "",
                                 "LabelAlignment" : "left",
                                 "LastContainer" : false,
-                                "Left" : 80,
+                                "Left" : 0,
                                 "Overflow" : "hidden",
                                 "ResponsiveLayout" : true,
                                 "ShowDataLoading" : true,
@@ -2725,7 +2863,7 @@
                                 "TextWrap" : true,
                                 "ToolTipField" : "",
                                 "ToolTipStyle" : "DefaultTooltipStyle",
-                                "Top" : 30,
+                                "Top" : 0,
                                 "Type" : "valuedisplay",
                                 "UseTheme" : false,
                                 "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
@@ -2814,7 +2952,7 @@
                                 "PrintWidth" : 650,
                                 "ResponsiveLayout" : true,
                                 "RightSidebar" : true,
-                                "RightSidebarWidth" : 275,
+                                "RightSidebarWidth" : 355,
                                 "Rows" : 0,
                                 "ShowDataLoading" : false,
                                 "Spacing" : 0,
@@ -5447,8 +5585,7 @@
                                         "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                                         "ValueDisplayStyle" : "Bayer_GreenValue",
                                         "ValueFormat" : {
-                                          "FormatString" : "0.00",
-                                          "renderer" : "NUMBER"
+                                          "renderer" : "DEFAULT"
                                         },
                                         "ValueFormat_StateParameters" : [ ],
                                         "VerticalAlignment" : "middle",
@@ -6228,7 +6365,7 @@
                                     "Footer" : false,
                                     "FooterHeight" : 0,
                                     "Header" : true,
-                                    "HeaderHeight" : 40,
+                                    "HeaderHeight" : 70,
                                     "Id" : "layout-112",
                                     "IncludeSpacingInFixedAreas" : false,
                                     "IsPrintLayout" : false,
@@ -6337,10 +6474,10 @@
                                         "PrintWidth" : 650,
                                         "ResponsiveLayout" : true,
                                         "RightSidebar" : true,
-                                        "RightSidebarWidth" : 300,
+                                        "RightSidebarWidth" : 525.019,
                                         "Rows" : 0,
                                         "ShowDataLoading" : true,
-                                        "Spacing" : 0,
+                                        "Spacing" : 2,
                                         "Top" : 10,
                                         "Type" : "layout",
                                         "Visible" : true,
@@ -6390,7 +6527,7 @@
                                             "Label" : "",
                                             "LabelAlignment" : "left",
                                             "LastContainer" : false,
-                                            "Left" : 10,
+                                            "Left" : 0,
                                             "Overflow" : "hidden",
                                             "ResponsiveLayout" : true,
                                             "ShowDataLoading" : true,
@@ -6481,14 +6618,14 @@
                                               "Height" : 5,
                                               "Id" : "shape-254",
                                               "LastContainer" : false,
-                                              "Left" : 4,
+                                              "Left" : 0,
                                               "RectangleCornerRadius" : 10,
                                               "ResponsiveLayout" : false,
                                               "ShapeFormatter_StateParameters" : [ ],
                                               "ShapeStyle" : "Bayer_BlueBg",
                                               "ShapeType" : "rectangle",
                                               "ShowDataLoading" : true,
-                                              "Top" : 12,
+                                              "Top" : 10,
                                               "Type" : "shape",
                                               "UnfilledBackgroundStyle" : "DefaultShapeUnfilledBackgroundStyle",
                                               "Visible" : true,
@@ -6510,14 +6647,14 @@
                                               "Height" : 15,
                                               "Id" : "shape-255",
                                               "LastContainer" : false,
-                                              "Left" : 106,
+                                              "Left" : 113.96875,
                                               "RectangleCornerRadius" : 10,
                                               "ResponsiveLayout" : false,
                                               "ShapeFormatter_StateParameters" : [ ],
                                               "ShapeStyle" : "Bayer_GreenBg",
                                               "ShapeType" : "rectangle",
                                               "ShowDataLoading" : true,
-                                              "Top" : 7,
+                                              "Top" : 10,
                                               "Type" : "shape",
                                               "UnfilledBackgroundStyle" : "DefaultShapeUnfilledBackgroundStyle",
                                               "Visible" : true,
@@ -6538,7 +6675,7 @@
                                               "Label" : "",
                                               "LabelAlignment" : "left",
                                               "LastContainer" : false,
-                                              "Left" : 49,
+                                              "Left" : 48.984375,
                                               "Overflow" : "hidden",
                                               "ResponsiveLayout" : false,
                                               "ShowDataLoading" : true,
@@ -6548,7 +6685,7 @@
                                               "TextWrap" : true,
                                               "ToolTipField" : "",
                                               "ToolTipStyle" : "DefaultTooltipStyle",
-                                              "Top" : 2,
+                                              "Top" : 5,
                                               "Type" : "valuedisplay",
                                               "UseTheme" : false,
                                               "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
@@ -6574,7 +6711,7 @@
                                               "Label" : "",
                                               "LabelAlignment" : "left",
                                               "LastContainer" : false,
-                                              "Left" : 128,
+                                              "Left" : 136.98828125,
                                               "Overflow" : "hidden",
                                               "ResponsiveLayout" : false,
                                               "ShowDataLoading" : true,
@@ -6584,7 +6721,7 @@
                                               "TextWrap" : true,
                                               "ToolTipField" : "",
                                               "ToolTipStyle" : "DefaultTooltipStyle",
-                                              "Top" : 2,
+                                              "Top" : 5,
                                               "Type" : "valuedisplay",
                                               "UseTheme" : false,
                                               "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
@@ -6620,7 +6757,7 @@
                                               "Id" : "button-469",
                                               "Label" : "[[Bayer.Export]]",
                                               "LastContainer" : false,
-                                              "Left" : 185,
+                                              "Left" : 324.98046875,
                                               "ResponsiveLayout" : false,
                                               "RoundedCorners" : true,
                                               "ShowDataLoading" : true,
@@ -6629,10 +6766,115 @@
                                               "TabSequence" : 0,
                                               "ToolTipField" : "",
                                               "ToolTipStyle" : "DefaultTooltipStyle",
-                                              "Top" : 2,
+                                              "Top" : 5,
                                               "Type" : "button",
                                               "Visible" : false,
                                               "Width" : 100,
+                                              "Z-index" : 10,
+                                              "__TypeDisplayName" : "Button",
+                                              "__supportsTooltip" : true
+                                            },
+                                            "Widgets" : [ ]
+                                          }, {
+                                            "Properties" : {
+                                              "Area" : "UI",
+                                              "DisplayName" : "shape-564",
+                                              "DynamicFillOrientation" : "vertical",
+                                              "DynamicRangeMaximum" : 100,
+                                              "DynamicRangeMinimum" : 0,
+                                              "EnableDynamicFill" : false,
+                                              "GradientOrientation" : "vertical",
+                                              "GradientType" : "linear",
+                                              "Height" : 5,
+                                              "Id" : "shape-564",
+                                              "LastContainer" : false,
+                                              "Left" : 195.95831298828125,
+                                              "RectangleCornerRadius" : 10,
+                                              "ResponsiveLayout" : false,
+                                              "ShapeFormatter_StateParameters" : [ ],
+                                              "ShapeStyle" : "Bayer_RedBg",
+                                              "ShapeType" : "rectangle",
+                                              "ShowDataLoading" : true,
+                                              "Top" : 10,
+                                              "Type" : "shape",
+                                              "UnfilledBackgroundStyle" : "DefaultShapeUnfilledBackgroundStyle",
+                                              "Visible" : true,
+                                              "Width" : 40,
+                                              "Z-index" : 10,
+                                              "__TypeDisplayName" : "Shape"
+                                            },
+                                            "Widgets" : [ ]
+                                          }, {
+                                            "Properties" : {
+                                              "Alignment" : "left",
+                                              "Area" : "UI",
+                                              "BackgroundFill" : "content",
+                                              "DisplayName" : "valuedisplay-565",
+                                              "Height" : 25,
+                                              "Id" : "valuedisplay-565",
+                                              "ImageScaling" : "Width",
+                                              "Label" : "",
+                                              "LabelAlignment" : "left",
+                                              "LastContainer" : false,
+                                              "Left" : 241.984375,
+                                              "Overflow" : "hidden",
+                                              "ResponsiveLayout" : false,
+                                              "ShowDataLoading" : true,
+                                              "TextIfNoValue" : "[[Bayer.Reject]]",
+                                              "TextIfNoValueOffset" : 0,
+                                              "TextIfNoValueStyle" : "Bayer_GreyValue",
+                                              "TextWrap" : true,
+                                              "ToolTipField" : "",
+                                              "ToolTipStyle" : "DefaultTooltipStyle",
+                                              "Top" : 5,
+                                              "Type" : "valuedisplay",
+                                              "UseTheme" : false,
+                                              "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
+                                              "ValueDisplayStyle" : "Bayer_GreyValue",
+                                              "VerticalAlignment" : "middle",
+                                              "Visible" : true,
+                                              "Width" : 60,
+                                              "Z-index" : 10,
+                                              "__TypeDisplayName" : "Value Display",
+                                              "__supportsLabel" : true,
+                                              "__supportsTooltip" : true
+                                            },
+                                            "Widgets" : [ ]
+                                          }, {
+                                            "Properties" : {
+                                              "ActiveStyle" : "BayerButtonStyle",
+                                              "Area" : "UI",
+                                              "CancelConfirmationButton" : "button2",
+                                              "ConfirmationButton1Label" : "[[confirmationOptionYes]]",
+                                              "ConfirmationButton2Label" : "[[confirmationOptionNo]]",
+                                              "ConfirmationPrompt" : "[[Bayer.ConfirmComplete]]",
+                                              "ConfirmationRequired" : false,
+                                              "ConfirmationTitle" : "[[confirmAction]]",
+                                              "ContextId" : "",
+                                              "DefaultConfirmationButton" : "button1",
+                                              "Disabled" : false,
+                                              "DisabledStyle" : "BayerButtonStyle",
+                                              "DisplayName" : "button-573",
+                                              "FocusStyle" : "BayerButtonStyle",
+                                              "Height" : 23,
+                                              "HoverStyle" : "BayerButtonHoverStyle",
+                                              "IconAlignment" : "right",
+                                              "Id" : "button-573",
+                                              "Label" : "Adjust",
+                                              "LastContainer" : false,
+                                              "Left" : 390,
+                                              "ResponsiveLayout" : false,
+                                              "RoundedCorners" : true,
+                                              "ShowDataLoading" : true,
+                                              "SingleClickSelectOnTablets" : true,
+                                              "Style" : "BayerButtonStyle",
+                                              "TabSequence" : 0,
+                                              "ToolTipField" : "",
+                                              "ToolTipStyle" : "DefaultTooltipStyle",
+                                              "Top" : 5,
+                                              "Type" : "button",
+                                              "Visible" : true,
+                                              "Width" : 115,
                                               "Z-index" : 10,
                                               "__TypeDisplayName" : "Button",
                                               "__supportsTooltip" : true
@@ -6695,6 +6937,21 @@
                                             "baseType" : "INFOTABLE",
                                             "description" : "",
                                             "name" : "schedule",
+                                            "ordinal" : 0
+                                          }
+                                        }, {
+                                          "BaseType" : "NUMBER",
+                                          "Description" : "",
+                                          "ParameterName" : "rejectCounter",
+                                          "ParmDef" : {
+                                            "aspects" : {
+                                              "bindingDirection" : "BOTH",
+                                              "isMandatory" : "false",
+                                              "ordinal" : "2"
+                                            },
+                                            "baseType" : "NUMBER",
+                                            "description" : "",
+                                            "name" : "rejectCounter",
                                             "ordinal" : 0
                                           }
                                         }, {
@@ -11117,6 +11374,53 @@
                           "__supportsTooltip" : true
                         },
                         "Widgets" : [ ]
+                      }, {
+                        "Properties" : {
+                          "Alignment" : "left",
+                          "Area" : "UI",
+                          "ClickOutsideToClose" : false,
+                          "DisplayName" : "navigation-572",
+                          "FixedPopupHeight" : 400,
+                          "FixedPopupWidth" : 800,
+                          "Height" : 30,
+                          "Icon" : "",
+                          "IconAlignment" : "left",
+                          "Id" : "navigation-572",
+                          "LastContainer" : false,
+                          "Left" : 155,
+                          "MashupName" : "Bayer.RTOD.AdjustCountersForShiftMashupTEST",
+                          "MashupParameters" : [ ],
+                          "MessageToShow" : "Mashup must be selected",
+                          "ModalPopupOpacity" : 0.5,
+                          "NavigationActiveStyle" : "DefaultNavigationActiveStyle",
+                          "NavigationFocusStyle" : "DefaultNavigationFocusStyle",
+                          "NavigationHoverStyle" : "DefaultNavigationHoverStyle",
+                          "PopupScrolling" : "auto",
+                          "PopupTitle" : "",
+                          "PopupTitleStyle" : "DefaultPopupTitleStyle",
+                          "ReloadOnReplace" : false,
+                          "ResponsiveLayout" : false,
+                          "RoundedCorners" : true,
+                          "ShowCloseButton" : true,
+                          "ShowDataLoading" : true,
+                          "ShowMessageIfNoMashup" : false,
+                          "SingleClickSelectOnTablets" : true,
+                          "Style" : "DefaultNavigationStyle",
+                          "TabSequence" : 0,
+                          "TargetWindow" : "popup",
+                          "Text" : "adjust popup",
+                          "ToolTipField" : "",
+                          "ToolTipStyle" : "DefaultTooltipStyle",
+                          "Top" : 50,
+                          "Transparent" : false,
+                          "Type" : "navigation",
+                          "Visible" : false,
+                          "Width" : 100,
+                          "Z-index" : 10,
+                          "__TypeDisplayName" : "Navigation",
+                          "__supportsTooltip" : true
+                        },
+                        "Widgets" : [ ]
                       } ]
                     } ]
                   } ]
@@ -11815,6 +12119,92 @@
                       "isBindingSource" : false,
                       "isBindingTarget" : true,
                       "name" : "userName"
+                    } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "VALUE",
+                    "DisplayName" : "getProductionSpeed",
+                    "Expression" : "velocity = subject === \"blisters\" ? velocity * blistersPerBox : velocity;\nvelocity = isNaN(velocity) || !isFinite(velocity) ? 0 : velocity;\nMath.round(velocity.toFixed(2)).toFixed(0)",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-566",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "NUMBER",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "STRING",
+                      "Description" : "",
+                      "ParameterName" : "subject",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "subject"
+                    }, {
+                      "BaseType" : "NUMBER",
+                      "Description" : "",
+                      "ParameterName" : "velocity",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "velocity"
+                    }, {
+                      "BaseType" : "NUMBER",
+                      "Description" : "",
+                      "ParameterName" : "blistersPerBox",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "blistersPerBox"
+                    } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : true,
+                    "DataChangeType" : "VALUE",
+                    "DisplayName" : "rejectCountMathRound",
+                    "Expression" : "result = \"\" + Math.round(rejectCount.toFixed(2)).toFixed(0);",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-570",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "NUMBER",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "NUMBER",
+                      "Description" : "",
+                      "ParameterName" : "rejectCount",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "rejectCount"
                     } ]
                   },
                   "Widgets" : [ ]

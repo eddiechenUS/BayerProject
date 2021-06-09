@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="">
+ universal="password">
     <Mashups>
         <Mashup
          aspect.isResponsive="true"
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-02-23T04:55:01.239Z"
+         lastModifiedDate="2021-06-03T05:06:49.644Z"
          name="BayerActualVsTargetPanelMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -45,6 +45,14 @@
             <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
             <ParameterDefinitions>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="2"
+                 baseType="NUMBER"
+                 description=""
+                 name="rejectCounter"
+                 ordinal="0"></FieldDefinition>
                 <FieldDefinition
                  aspect.bindingDirection="BOTH"
                  aspect.dataShape="BayerScheduleDataShape"
@@ -192,7 +200,16 @@
                 } ],
                 "Update" : [ ]
               },
-              "Events" : [ ],
+              "Events" : [ {
+                "EventHandlerArea" : "Mashup",
+                "EventHandlerId" : "mashup-root",
+                "EventHandlerService" : "Refresh",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "rejectCounterChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "a3041800-00e9-4867-beed-702bcd0b67bc"
+              } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
               },
@@ -252,6 +269,14 @@
                     "BaseType" : "STRING",
                     "Description" : "blisters or boxes",
                     "ParameterName" : "subject"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "NUMBER",
+                    "Description" : "",
+                    "ParameterName" : "rejectCounter"
                   } ],
                   "id_index" : 18,
                   "supportsAutoResize" : true
@@ -988,21 +1013,23 @@
                             "ChartType" : "bar",
                             "DataField1" : "quantityProducedBlisters",
                             "DataField2" : "targetQuantityBlisters",
+                            "DataField3" : "rejectCounter",
                             "DataLabel1" : "Actual",
                             "DataLabel2" : "Target",
+                            "DataLabel3" : "Reject",
                             "DisplayName" : "labelchart-blisters",
                             "EnableHover" : true,
                             "GridStyle" : "DefaultChartGridStyle",
                             "Height" : 240,
                             "Id" : "labelchart-9",
                             "LastContainer" : false,
-                            "Left" : 400,
+                            "Left" : 0,
                             "LegendLocation" : "right",
                             "LegendOrientation" : "vertical",
                             "LegendWidth" : 0,
                             "MarkerSize" : 7,
                             "MarkerType" : "circle",
-                            "NumberOfSeries" : 2,
+                            "NumberOfSeries" : 3,
                             "ResponsiveLayout" : true,
                             "SecondaryYAxisAutoscale" : true,
                             "SecondaryYAxisFormat" : "0000",
@@ -1056,6 +1083,15 @@
                             "SeriesDataStyle23_StateParameters" : [ ],
                             "SeriesDataStyle24_StateParameters" : [ ],
                             "SeriesDataStyle2_StateParameters" : [ ],
+                            "SeriesDataStyle3" : {
+                              "FieldName" : "",
+                              "StateDefinition" : "",
+                              "StateDefinitionType" : "fixed",
+                              "StateFormats" : [ {
+                                "state" : "DefaultChartStyle3",
+                                "stateName" : "fixed"
+                              } ]
+                            },
                             "SeriesDataStyle3_StateParameters" : [ ],
                             "SeriesDataStyle4_StateParameters" : [ ],
                             "SeriesDataStyle5_StateParameters" : [ ],
@@ -1128,7 +1164,7 @@
                             "SeriesType22" : "chart",
                             "SeriesType23" : "chart",
                             "SeriesType24" : "chart",
-                            "SeriesType3" : "chart",
+                            "SeriesType3" : "line",
                             "SeriesType4" : "chart",
                             "SeriesType5" : "chart",
                             "SeriesType6" : "chart",
@@ -1150,7 +1186,7 @@
                             "Smoothing" : false,
                             "StackSeries" : false,
                             "ToolTipStyle" : "DefaultTooltipStyle",
-                            "Top" : 150,
+                            "Top" : 0,
                             "TruncateX-AxisLabels" : 0,
                             "TruncateY-AxisLabels" : 0,
                             "Type" : "labelchart",
