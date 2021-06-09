@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="password">
+    <Things>
+        <Thing
+         description=""
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2021-06-04T15:17:30.813Z"
+         name="Bayer.productionSpeedValidator"
+         projectName="BayerIoT"
+         published="false"
+         tags=""
+         thingTemplate="GenericThing"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions>
+                    <PropertyDefinition
+                     aspect.cacheTime="0.0"
+                     aspect.dataChangeType="VALUE"
+                     aspect.dataShape="ProductionSpeed"
+                     aspect.isPersistent="true"
+                     baseType="INFOTABLE"
+                     category=""
+                     description=""
+                     isLocalOnly="false"
+                     name="SpeedTable"
+                     ordinal="2"></PropertyDefinition>
+                </PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="compareFuction">
+                        <ResultType
+                         baseType="STRING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="ProductionLineName"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="speed"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="compareFuction">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //get production speed from Mashup and compare it to adjustedRunRate in RateStandards table in DB
+                                        //get product id from runtime GetProperties from ProductionLine
+                                        
+                                        var result;
+                                        //var ProductionLineName = 'BayerProductionLine_Linie37';//test
+                                        var ProductionLineName =ProductionLineName;
+                                        
+                                        // result: INFOTABLE dataShape: ""
+                                        var RateStandardInfotable =  Things["BayerSqlServerConnector"].GetRateStandardByProductionLineName({
+                                            productionLineName: ProductionLineName /* STRING */ //test
+                                        });
+                                        
+                                        //Sort the last data to top
+                                        var sort = new Object();
+                                        sort.name = 'id';
+                                        sort.ascending = false;
+                                        RateStandardInfotable.Sort(sort);
+                                        
+                                        
+                                        
+                                        var speed =speed;
+                                        
+                                        
+                                        var adjustedRunRateByProductionLine;
+                                        var tableLength = RateStandardInfotable.rows.length;
+                                        
+                                        if(!(tableLength===0 || tableLength===null)){
+                                                for (var x=0; x < tableLength; x++) {
+                                                var row = RateStandardInfotable.rows[x];
+                                                adjustedRunRateByProductionLine =row.adjustedRunRate;      
+                                                //speed = 50;//test
+                                                    if(speed<adjustedRunRateByProductionLine){
+                                                    	result=InserLoss();
+                                                        break;
+                                                    }else{
+                                                    	result =  'no loss';
+                                                        break;
+                                                    }
+                                            }
+                                        }else{
+                                            result =  'not comparable';
+                                        }
+                                        
+                                        
+                                        function InserLoss(){
+                                            var randomEnd = new Date().getMilliseconds();
+                                            var randomName = 'testInsertLoss'.concat(randomEnd);
+                                            var randomCategory = 'category'.concat(randomEnd);
+                                            //var lostReason = randomEnd;//Dont assign value to lostReason!!! because lostReason column is auto generated, if assign value it will have conflicted error.
+                                            var result =  Things["BayerSqlServerConnector"].InsertLoss({
+                                                    lostReason: undefined /* INTEGER */,//keep undefined, generated by DB
+                                                    name: randomName /* STRING */,
+                                                    comment: 'production line speed drops below the expected level' /* STRING */,
+                                                    id: undefined /* INTEGER */,
+                                                    category: randomCategory /* STRING */,
+                                                    timestamp: new Date() /* DATETIME */
+                                                });
+                                             return 'inserted loss';
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations>
+                <AlertDefinitions
+                 name="SpeedTable"></AlertDefinitions>
+            </AlertConfigurations>
+            <ImplementedShapes></ImplementedShapes>
+            <ThingProperties>
+                <SpeedTable>
+                    <Value>
+                        <infoTable>
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     aspect.isPrimaryKey="false"
+                                     baseType="INTEGER"
+                                     description=""
+                                     name="Mspeed"
+                                     ordinal="3"></FieldDefinition>
+                                    <FieldDefinition
+                                     aspect.isPrimaryKey="false"
+                                     baseType="INTEGER"
+                                     description=""
+                                     name="PFspeed"
+                                     ordinal="2"></FieldDefinition>
+                                    <FieldDefinition
+                                     aspect.isPrimaryKey="false"
+                                     baseType="INTEGER"
+                                     description=""
+                                     name="PLspeed"
+                                     ordinal="1"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <Mspeed>333</Mspeed>
+                                    <PFspeed>222</PFspeed>
+                                    <PLspeed>111</PLspeed>
+                                </Row>
+                            </Rows>
+                        </infoTable>
+                    </Value>
+                    <Timestamp>2021-06-01T09:26:49.592Z</Timestamp>
+                    <Quality>GOOD</Quality>
+                </SpeedTable>
+            </ThingProperties>
+        </Thing>
+    </Things>
+</Entities>
