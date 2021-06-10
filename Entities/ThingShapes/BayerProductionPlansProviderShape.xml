@@ -13,7 +13,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-03T06:12:01.082Z"
+         lastModifiedDate="2021-06-10T06:22:16.047Z"
          name="BayerProductionPlansProviderShape"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -270,6 +270,29 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="GetPartOfProductionPlanByOrderSequenceNumber">
+                    <ResultType
+                     aspect.dataShape="Bayer.RTOD.PartDataOfProductionPlanDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="INTEGER"
+                         description=""
+                         name="orderSequenceNumber"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="GetPrevAndNextOrder">
                     <ResultType
                      baseType="INFOTABLE"
@@ -331,7 +354,56 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="GetProductionPlanByOrderSequenceNumber">
+                    <ResultType
+                     aspect.dataShape="BayerProductionPlanDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="INTEGER"
+                         description=""
+                         name="orderSequenceNumber"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="GetProductionPlanForLine">
+                    <ResultType
+                     aspect.dataShape="BayerProductionPlanDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         aspect.thingTemplate="BayerProductionLine"
+                         baseType="THINGNAME"
+                         description=""
+                         name="line"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetProductionPlanForLineOrderByOrderSequenceNumber">
                     <ResultType
                      aspect.dataShape="BayerProductionPlanDataShape"
                      baseType="INFOTABLE"
@@ -378,6 +450,23 @@
                          name="status"
                          ordinal="2"></FieldDefinition>
                     </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="GetProductionPlanOrderSequenceNumberCount">
+                    <ResultType
+                     aspect.dataShape="Bayer.RTOD.ProductionPlanOrderSequenceNumberCountDataShape"
+                     baseType="INFOTABLE"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
@@ -541,6 +630,33 @@
                          baseType="INFOTABLE"
                          description=""
                          name="data"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="UpdateProductionPlanOrderSequenceNumber">
+                    <ResultType
+                     baseType="NUMBER"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="INTEGER"
+                         description=""
+                         name="id"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         baseType="INTEGER"
+                         description=""
+                         name="orderSequenceNumber"
                          ordinal="1"></FieldDefinition>
                     </ParameterDefinitions>
                 </ServiceDefinition>
@@ -881,6 +997,40 @@
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
+                 name="GetPartOfProductionPlanByOrderSequenceNumber">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: ""
+                                    var result =  Things[me.GetConnector()].GetPartOfProductionPlanByOrderSequenceNumber({
+                                    	orderSequenceNumber: orderSequenceNumber /* INTEGER */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
                  name="GetPrevAndNextOrder">
                     <ConfigurationTables>
                         <ConfigurationTable
@@ -951,6 +1101,40 @@
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
+                 name="GetProductionPlanByOrderSequenceNumber">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: ""
+                                    var result =  Things[me.GetConnector()].GetProductionPlanByOrderSequenceNumber({
+                                    	orderSequenceNumber: orderSequenceNumber /* INTEGER */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
                  name="GetProductionPlanForLine">
                     <ConfigurationTables>
                         <ConfigurationTable
@@ -973,6 +1157,40 @@
                                     <![CDATA[
                                     // result: INFOTABLE dataShape: ""
                                     var result =  Things[me.GetConnector()].GetProductionPlanForLine({
+                                    	line: line /* THINGNAME */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetProductionPlanForLineOrderByOrderSequenceNumber">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: ""
+                                    var result =  Things[me.GetConnector()].GetProductionPlanForLineOrderByOrderSequenceNumber({
                                     	line: line /* THINGNAME */
                                     });
                                     ]]>
@@ -1010,6 +1228,38 @@
                                     	productionLine: productionLine /* THINGNAME */,
                                     	status: status /* STRING */
                                     });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="GetProductionPlanOrderSequenceNumberCount">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // result: INFOTABLE dataShape: ""
+                                    var result =  Things[me.GetConnector()].GetProductionPlanOrderSequenceNumberCount();
                                     ]]>
                                     </code>
                                 </Row>
@@ -1230,6 +1480,40 @@
                                     	id: data.id /* INTEGER */,
                                     	startTime: data.startTime /* DATETIME */,
                                     	status: data.status /* STRING */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="UpdateProductionPlanOrderSequenceNumber">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result =  Things[me.GetConnector()].UpdateProductionPlanOrderSequenceNumber({
+                                    	id: id /* INTEGER */,
+                                    	orderSequenceNumber: orderSequenceNumber /* INTEGER */
                                     });
                                     ]]>
                                     </code>

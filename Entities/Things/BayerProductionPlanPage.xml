@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-01-28T12:43:46.544Z"
+         lastModifiedDate="2021-06-10T07:50:13.312Z"
          name="BayerProductionPlanPage"
          projectName="BayerIoT"
          published="false"
@@ -100,6 +100,65 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="ExchangeDownOrderSequenceNumber">
+                        <ResultType
+                         baseType="NOTHING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="productionPlanId"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="ExchangeUpOrderSequenceNumber">
+                        <ResultType
+                         baseType="NOTHING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="productionPlanId"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="FilterProductionPlan">
                         <ResultType
                          aspect.dataShape="BayerProductionPlanStatusFormattedDataShape"
@@ -173,6 +232,140 @@
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="ExchangeDownOrderSequenceNumber">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var bigProductionPlanId;
+                                        var bigOrderSequenceNumbe;
+                                        var smallOrderSequenceNumber;
+                                        
+                                        
+                                        var productionPlan =  Things["BayerDBDataProvider"].GetProductionPlan({
+                                        	id: productionPlanId /* INTEGER */
+                                        }).rows[0];
+                                        var totalCount =  Things["BayerDBDataProvider"].GetProductionPlanOrderSequenceNumberCount().rows[0].count;
+                                        
+                                        smallOrderSequenceNumber = productionPlan.orderSequenceNumber;
+                                        
+                                        for(var index = smallOrderSequenceNumber + 1; index <= totalCount; index++) {
+                                            
+                                            var queryPO =  Things["BayerDBDataProvider"].GetPartOfProductionPlanByOrderSequenceNumber({
+                                                orderSequenceNumber: index /* INTEGER */
+                                            }).rows[0];
+                                            
+                                            if(queryPO.productionLine === productionLine && queryPO.productId !== "Cambio") {
+                                                bigProductionPlanId = queryPO.id;
+                                                bigOrderSequenceNumbe = queryPO.orderSequenceNumber;
+                                                UpdateProductionPlanOrderSequenceNumber(productionPlanId, null);
+                                                UpdateProductionPlanOrderSequenceNumber(bigProductionPlanId, smallOrderSequenceNumber);
+                                                UpdateProductionPlanOrderSequenceNumber(productionPlanId, bigOrderSequenceNumbe);
+                                                break;
+                                            }       
+                                        }
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        function UpdateProductionPlanOrderSequenceNumber(id, orderSequenceNumber) {
+                                        	Things["BayerDBDataProvider"].UpdateProductionPlanOrderSequenceNumber({
+                                                id: id /* INTEGER */,
+                                                orderSequenceNumber: orderSequenceNumber /* INTEGER */
+                                            });
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="ExchangeUpOrderSequenceNumber">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var smallProductionPlanId;
+                                        var smallOrderSequenceNumber;
+                                        var bigOrderSequenceNumbe;
+                                        
+                                        var productionPlan =  Things["BayerDBDataProvider"].GetProductionPlan({
+                                        	id: productionPlanId /* INTEGER */
+                                        }).rows[0];
+                                        
+                                        bigOrderSequenceNumbe = productionPlan.orderSequenceNumber;
+                                        
+                                        for(var index = bigOrderSequenceNumbe - 1; index > 0; index--) {
+                                            
+                                            var queryPO =  Things["BayerDBDataProvider"].GetPartOfProductionPlanByOrderSequenceNumber({
+                                                orderSequenceNumber: index /* INTEGER */
+                                            }).rows[0];
+                                            
+                                            if(queryPO.productionLine === productionLine && queryPO.productId !== "Cambio") {
+                                                smallProductionPlanId = queryPO.id;
+                                                smallOrderSequenceNumber = queryPO.orderSequenceNumber;
+                                                UpdateProductionPlanOrderSequenceNumber(productionPlanId, null);
+                                        		UpdateProductionPlanOrderSequenceNumber(smallProductionPlanId, bigOrderSequenceNumbe);
+                                        		UpdateProductionPlanOrderSequenceNumber(productionPlanId, smallOrderSequenceNumber);
+                                                break;
+                                            }       
+                                        }
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        function UpdateProductionPlanOrderSequenceNumber(id, orderSequenceNumber) {
+                                        	Things["BayerDBDataProvider"].UpdateProductionPlanOrderSequenceNumber({
+                                                id: id /* INTEGER */,
+                                                orderSequenceNumber: orderSequenceNumber /* INTEGER */
+                                            });
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
@@ -330,7 +523,7 @@
                                             'Scheduled': localization.GetEffectiveToken({ token: "Bayer.State.scheduled" }),
                                             'Completed': localization.GetEffectiveToken({ token: "Bayer.State.completed" })
                                         };
-                                        var resultPlan = Things["BayerDBDataProvider"].GetProductionPlanForLine({
+                                        var resultPlan = Things["BayerDBDataProvider"].GetProductionPlanForLineOrderByOrderSequenceNumber({
                                             line: productionLine
                                         });
                                         
