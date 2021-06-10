@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2021-06-08T13:20:31.661Z"
+         lastModifiedDate="2021-06-10T07:26:01.725Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -1135,6 +1135,29 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetPartOfProductionPlanByOrderSequenceNumber">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="orderSequenceNumber"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetPrevAndNextOrder">
                         <ResultType
                          baseType="INFOTABLE"
@@ -1234,7 +1257,83 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetProductionPlanByLineAndOrderSequenceNumber">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="line"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="orderSequenceNumber"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetProductionPlanByOrderSequenceNumber">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="orderSequenceNumber"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetProductionPlanForLine">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             aspect.thingTemplate="BayerProductionLine"
+                             baseType="THINGNAME"
+                             description=""
+                             name="line"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetProductionPlanForLineOrderByOrderSequenceNumber">
                         <ResultType
                          baseType="INFOTABLE"
                          description=""
@@ -1279,6 +1378,22 @@
                              name="status"
                              ordinal="2"></FieldDefinition>
                         </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetProductionPlanOrderSequenceNumberCount">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
                      aspect.isAsync="false"
@@ -2980,6 +3095,33 @@
                              description=""
                              name="status"
                              ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateProductionPlanOrderSequenceNumber">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="orderSequenceNumber"
+                             ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -5121,6 +5263,54 @@
                     <ServiceImplementation
                      description=""
                      handlerName="SQLQuery"
+                     name="GetPartOfProductionPlanByOrderSequenceNumber">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>1.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT d.[id]    
+                                              ,d.[orderSequenceNumber]
+                                              ,d.[productId]
+                                              ,d.[productionLine]
+                                         FROM [dbo].[ProductionPlan] as d 
+                                        WHERE d.[orderSequenceNumber] = [[orderSequenceNumber]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
                      name="GetPrevAndNextOrder">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -5326,6 +5516,8 @@
                                               ,d.[mdatOos]
                                               ,d.[tabletsPerBlister]
                                               ,d.[manufProcess]
+                                              ,d.[numberOfOperators]
+                                              ,d.[orderSequenceNumber]
                                         	  ,p.[originalTargetQuantity]
                                         	  ,p.[userName]
                                         	  ,CAST((CASE WHEN p.[originalTargetQuantity] IS NULL THEN '0' ELSE '1' END) AS Bit) AS ifQuantityChanged
@@ -5333,6 +5525,163 @@
                                           LEFT JOIN [dbo].[ProductionQuantityChanges] as p ON d.[id] = p.[productionPlanId]
                                         
                                           WHERE d.[id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="GetProductionPlanByLineAndOrderSequenceNumber">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>9.99999999E8</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT d.[id]
+                                              ,d.[productionLine]
+                                              ,d.[taNumber]
+                                              ,d.[orderNr]
+                                              ,d.[productId]
+                                              ,d.[productDescription]
+                                              ,d.[version]
+                                              ,d.[targetQuantity]
+                                              ,d.[uom]
+                                              ,d.[targetHours]
+                                              ,d.[targetQuantityPerHour]
+                                              ,d.[status]
+                                              ,d.[remainingHours]
+                                              ,d.[workedHours]
+                                              ,d.[producedQuantity]
+                                              ,d.[startTime]
+                                              ,d.[endTime]
+                                              ,d.[activeMaterialNumber]
+                                              ,d.[blisterType]
+                                              ,d.[foldedBoxFormat]
+                                              ,d.[blistersPerFoldedBox]
+                                              ,d.[commentFirstLine]
+                                              ,d.[mdatSaf]
+                                              ,d.[mdatOos]
+                                              ,d.[tabletsPerBlister]
+                                              ,d.[manufProcess]
+                                              ,d.[numberOfOperators]
+                                              ,d.[orderSequenceNumber]
+                                        	  ,p.[originalTargetQuantity]
+                                        	  ,p.[userName]
+                                        	  ,CAST((CASE WHEN p.[originalTargetQuantity] IS NULL THEN '0' ELSE '1' END) AS Bit) AS ifQuantityChanged
+                                          FROM [dbo].[ProductionPlan] as d
+                                          LEFT JOIN [dbo].[ProductionQuantityChanges] as p ON d.[id] = p.[productionPlanId]
+                                        
+                                          WHERE d.[productionLine] = [[line]] 
+                                          AND d.[orderSequenceNumber] < [[orderSequenceNumber]]
+                                          AND d.[productId] != "Cambio"
+                                          ORDER BY d.[orderSequenceNumber] ASC
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="GetProductionPlanByOrderSequenceNumber">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>1.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT d.[id]
+                                              ,d.[productionLine]
+                                              ,d.[taNumber]
+                                              ,d.[orderNr]
+                                              ,d.[productId]
+                                              ,d.[productDescription]
+                                              ,d.[version]
+                                              ,d.[targetQuantity]
+                                              ,d.[uom]
+                                              ,d.[targetHours]
+                                              ,d.[targetQuantityPerHour]
+                                              ,d.[status]
+                                              ,d.[remainingHours]
+                                              ,d.[workedHours]
+                                              ,d.[producedQuantity]
+                                              ,d.[startTime]
+                                              ,d.[endTime]
+                                              ,d.[activeMaterialNumber]
+                                              ,d.[blisterType]
+                                              ,d.[foldedBoxFormat]
+                                              ,d.[blistersPerFoldedBox]
+                                              ,d.[commentFirstLine]
+                                              ,d.[mdatSaf]
+                                              ,d.[mdatOos]
+                                              ,d.[tabletsPerBlister]
+                                              ,d.[manufProcess]
+                                              ,d.[numberOfOperators]
+                                              ,d.[orderSequenceNumber]
+                                        	  ,p.[originalTargetQuantity]
+                                        	  ,p.[userName]
+                                        	  ,CAST((CASE WHEN p.[originalTargetQuantity] IS NULL THEN '0' ELSE '1' END) AS Bit) AS ifQuantityChanged
+                                          FROM [dbo].[ProductionPlan] as d
+                                          LEFT JOIN [dbo].[ProductionQuantityChanges] as p ON d.[id] = p.[productionPlanId]
+                                        
+                                          WHERE d.[orderSequenceNumber] = [[orderSequenceNumber]]
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -5402,6 +5751,7 @@
                                               ,d.[tabletsPerBlister]
                                               ,d.[manufProcess]
                                               ,d.[numberOfOperators]
+                                              ,d.[orderSequenceNumber]
                                         	  ,p.[originalTargetQuantity]
                                         	  ,p.[userName]
                                         	  ,CAST((CASE WHEN p.[originalTargetQuantity] IS NULL THEN '0' ELSE '1' END) AS Bit) AS ifQuantityChanged
@@ -5414,6 +5764,88 @@
                                         		OR (d.[endTime] IS NULL)
                                            )
                                           ORDER BY d.[id] ASC
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="GetProductionPlanForLineOrderByOrderSequenceNumber">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>9.99999999E8</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT d.[id]
+                                              ,d.[productionLine]
+                                              ,d.[taNumber]
+                                              ,d.[orderNr]
+                                              ,d.[productId]
+                                              ,d.[productDescription]
+                                              ,d.[version]
+                                              ,d.[targetQuantity]
+                                              ,d.[uom]
+                                              ,d.[targetHours]
+                                              ,d.[targetQuantityPerHour]
+                                              ,d.[status]
+                                              ,d.[remainingHours]
+                                              ,d.[workedHours]
+                                              ,d.[producedQuantity]
+                                              ,d.[startTime]
+                                              ,d.[endTime]
+                                              ,d.[activeMaterialNumber]
+                                              ,d.[blisterType]
+                                              ,d.[foldedBoxFormat]
+                                              ,d.[blistersPerFoldedBox]
+                                              ,d.[commentFirstLine]
+                                              ,d.[mdatSaf]
+                                              ,d.[mdatOos]
+                                              ,d.[tabletsPerBlister]
+                                              ,d.[manufProcess]
+                                              ,d.[numberOfOperators]
+                                              ,d.[orderSequenceNumber]
+                                        	  ,p.[originalTargetQuantity]
+                                        	  ,p.[userName]
+                                        	  ,CAST((CASE WHEN p.[originalTargetQuantity] IS NULL THEN '0' ELSE '1' END) AS Bit) AS ifQuantityChanged
+                                          FROM [dbo].[ProductionPlan] as d
+                                          LEFT JOIN [dbo].[ProductionQuantityChanges] as p ON d.[id] = p.[productionPlanId]
+                                        
+                                          WHERE d.[productionLine] = [[line]] AND 
+                                           (
+                                        		d.[endTime] >= DATEADD(day, -7, GETDATE())
+                                        		OR (d.[endTime] IS NULL)
+                                           )
+                                          ORDER BY d.[orderSequenceNumber] ASC
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -5489,6 +5921,50 @@
                                         
                                           WHERE d.[productionLine] = [[productionLine]] AND d.[status] = [[status]]
                                           ORDER BY d.[id] ASC
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="GetProductionPlanOrderSequenceNumberCount">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT COUNT ([orderSequenceNumber]) as "count"
+                                        FROM [dbo].[ProductionPlan]
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -7720,6 +8196,51 @@
                                         UPDATE [dbo].[ProductionPlan]
                                            SET [status] = [[status]]
                                               ,[startTime] = [[startTime]]
+                                         WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
+                     name="UpdateProductionPlanOrderSequenceNumber">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ProductionPlan]
+                                           SET [orderSequenceNumber] = [[orderSequenceNumber]]
                                          WHERE [id] = [[id]]
                                         ]]>
                                         </sql>
