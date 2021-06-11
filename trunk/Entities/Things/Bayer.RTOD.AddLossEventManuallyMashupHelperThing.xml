@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-02T03:33:28.950Z"
+         lastModifiedDate="2021-06-11T03:20:35.212Z"
          name="Bayer.RTOD.AddLossEventManuallyMashupHelperThing"
          projectName="BayerRTOD"
          published="false"
@@ -84,6 +84,23 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="CreateCategory">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.AddLossEventManuallyCategoryDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetLossManager">
                         <ResultType
                          aspect.dataShape="Bayer.RTOD.LossManagerProviderDataShape"
@@ -109,26 +126,31 @@
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
                             <FieldDefinition
+                             aspect.isRequired="true"
                              baseType="STRING"
                              description=""
                              name="category"
                              ordinal="3"></FieldDefinition>
                             <FieldDefinition
+                             aspect.isRequired="true"
                              baseType="STRING"
                              description=""
                              name="comment"
                              ordinal="2"></FieldDefinition>
                             <FieldDefinition
+                             aspect.isRequired="true"
                              baseType="INTEGER"
                              description=""
                              name="lostReason"
                              ordinal="5"></FieldDefinition>
                             <FieldDefinition
+                             aspect.isRequired="true"
                              baseType="STRING"
                              description=""
                              name="name"
                              ordinal="1"></FieldDefinition>
                             <FieldDefinition
+                             aspect.isRequired="true"
                              baseType="DATETIME"
                              description=""
                              name="timestamp"
@@ -139,6 +161,44 @@
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="CreateCategory">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "Bayer.RTOD.AddLossEventManuallyCategoryDataShape"
+                                        });
+                                        
+                                        result.AddRow({"category": "Changeover"});
+                                        result.AddRow({"category": "Maintenance"});
+                                        result.AddRow({"category": "Quality"});
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation
                      description=""
                      handlerName="Script"

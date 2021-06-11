@@ -16,7 +16,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-07T10:04:09.027Z"
+         lastModifiedDate="2021-06-11T03:15:36.421Z"
          name="Bayer.RTOD.AddLossEventManuallyMashup"
          projectName="BayerRTOD"
          rows="0.0"
@@ -74,6 +74,14 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "InsertLoss"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "bd8e6a59-f7ce-4426-978c-16c472b30118",
+                    "Name" : "CreateCategory",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "CreateCategory"
                   } ]
                 },
                 "UserExtensions" : {
@@ -118,21 +126,6 @@
                 } ],
                 "SourceArea" : "UI",
                 "SourceId" : "ptcstextfield-27",
-                "SourceSection" : "",
-                "TargetArea" : "Data",
-                "TargetId" : "InsertLoss",
-                "TargetSection" : "Things_Bayer.RTOD.AddLossEventManuallyMashupHelperThing"
-              }, {
-                "Id" : "aa673d81-6f90-4f39-89c3-f01f7723ae91",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "Text",
-                  "SourcePropertyBaseType" : "STRING",
-                  "TargetProperty" : "category",
-                  "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "Parameter"
-                } ],
-                "SourceArea" : "UI",
-                "SourceId" : "ptcstextfield-28",
                 "SourceSection" : "",
                 "TargetArea" : "Data",
                 "TargetId" : "InsertLoss",
@@ -184,6 +177,39 @@
                 "TargetArea" : "UI",
                 "TargetId" : "validator-35",
                 "TargetSection" : ""
+              }, {
+                "Id" : "5874f451-a07f-4ca2-be72-91b83cbf33a8",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "InfoTable",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CreateCategory",
+                "SourceSection" : "Things_Bayer.RTOD.AddLossEventManuallyMashupHelperThing",
+                "TargetArea" : "UI",
+                "TargetId" : "ptcsdropdown-36",
+                "TargetSection" : ""
+              }, {
+                "Id" : "12c3cbad-197a-4f10-82c5-a53ddf9f359b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "category",
+                  "SourcePropertyBaseType" : "STRING",
+                  "TargetProperty" : "category",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "CreateCategory",
+                "SourceSection" : "Things_Bayer.RTOD.AddLossEventManuallyMashupHelperThing",
+                "TargetArea" : "Data",
+                "TargetId" : "InsertLoss",
+                "TargetSection" : "Things_Bayer.RTOD.AddLossEventManuallyMashupHelperThing"
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -210,6 +236,15 @@
                 "EventTriggerId" : "validator-35",
                 "EventTriggerSection" : " ",
                 "Id" : "01acc471-3539-4a9f-b309-1c11ed1513d6"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.AddLossEventManuallyMashupHelperThing",
+                "EventHandlerService" : "CreateCategory",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "7251b6f9-ddfb-44e7-bed5-f639a7b6b5f6"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -260,7 +295,7 @@
                   "Width" : 1024,
                   "Z-index" : 10,
                   "__TypeDisplayName" : "Mashup",
-                  "id_index" : 35,
+                  "id_index" : 36,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -271,7 +306,7 @@
                     "Expanded" : true,
                     "Id" : "flexcontainer-2",
                     "LastContainer" : true,
-                    "ResponsiveLayout" : false,
+                    "ResponsiveLayout" : true,
                     "ShowDataLoading" : true,
                     "ShowExpandCollapseTab" : false,
                     "SourceURL" : "",
@@ -332,6 +367,46 @@
                     "Widgets" : [ ]
                   }, {
                     "Properties" : {
+                      "Alignment" : "left",
+                      "Area" : "UI",
+                      "AutoSelectFirstRow" : false,
+                      "ClearSelectedItemsLabel" : "[[clearSelectedItems]]",
+                      "ClearSelectionItem" : false,
+                      "ClearSelectionLabel" : "(None)",
+                      "Disabled" : false,
+                      "DisplayField" : "category",
+                      "DisplayFieldBaseType" : "STRING",
+                      "DisplayName" : "ptcs-dropdown-36",
+                      "FilterHintText" : "Filter",
+                      "HintText" : "Select...",
+                      "Id" : "ptcsdropdown-36",
+                      "ItemMeta" : {
+                        "type" : "text"
+                      },
+                      "Label" : "Category",
+                      "LabelAlignment" : "left",
+                      "LastContainer" : false,
+                      "Left" : 595,
+                      "Margin" : "5",
+                      "MultiSelect" : false,
+                      "ResponsiveLayout" : false,
+                      "RowHeight" : 34,
+                      "SelectAllLabel" : "[[selectAll]]",
+                      "ShowDataLoading" : true,
+                      "ShowListFilter" : false,
+                      "TabSequence" : -1,
+                      "Top" : 550,
+                      "Type" : "ptcsdropdown",
+                      "UseTheme" : true,
+                      "ValueField" : "category",
+                      "Visible" : true,
+                      "Width" : 273,
+                      "Z-index" : 10,
+                      "__TypeDisplayName" : "DropDown"
+                    },
+                    "Widgets" : [ ]
+                  }, {
+                    "Properties" : {
                       "Area" : "UI",
                       "Counter" : false,
                       "Disabled" : false,
@@ -365,13 +440,13 @@
                       "Area" : "UI",
                       "Counter" : false,
                       "Disabled" : false,
-                      "DisplayName" : "ptcs-textfield-28",
+                      "DisplayName" : "ptcs-textfield-29",
                       "HasText" : false,
-                      "Id" : "ptcstextfield-28",
-                      "Label" : "Category",
+                      "Id" : "ptcstextfield-29",
+                      "Label" : "Lost Reason",
                       "LabelAlignment" : "left",
                       "LastContainer" : false,
-                      "Left" : 700,
+                      "Left" : 740,
                       "Margin" : "5",
                       "MaxNumberOfCharacters" : 1000000,
                       "Password" : false,
@@ -381,7 +456,7 @@
                       "ShowDataLoading" : true,
                       "TabSequence" : 0,
                       "TextAlignment" : "left",
-                      "Top" : 15,
+                      "Top" : 20,
                       "Type" : "ptcstextfield",
                       "UseTheme" : true,
                       "Visible" : true,
@@ -428,36 +503,6 @@
                       "YearRange" : 10,
                       "Z-index" : 10,
                       "__TypeDisplayName" : "Date Time Picker"
-                    },
-                    "Widgets" : [ ]
-                  }, {
-                    "Properties" : {
-                      "Area" : "UI",
-                      "Counter" : false,
-                      "Disabled" : false,
-                      "DisplayName" : "ptcs-textfield-29",
-                      "HasText" : false,
-                      "Id" : "ptcstextfield-29",
-                      "Label" : "Lost Reason",
-                      "LabelAlignment" : "left",
-                      "LastContainer" : false,
-                      "Left" : 740,
-                      "Margin" : "5",
-                      "MaxNumberOfCharacters" : 1000000,
-                      "Password" : false,
-                      "ReadOnly" : false,
-                      "ResponsiveLayout" : false,
-                      "ShowClearText" : true,
-                      "ShowDataLoading" : true,
-                      "TabSequence" : 0,
-                      "TextAlignment" : "left",
-                      "Top" : 20,
-                      "Type" : "ptcstextfield",
-                      "UseTheme" : true,
-                      "Visible" : true,
-                      "Width" : 273,
-                      "Z-index" : 10,
-                      "__TypeDisplayName" : "Text Field"
                     },
                     "Widgets" : [ ]
                   }, {
