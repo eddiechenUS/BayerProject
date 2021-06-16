@@ -13,7 +13,7 @@
          description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-06T00:53:35.390Z"
+         lastModifiedDate="2021-06-16T01:25:25.795Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -1822,7 +1822,11 @@
                                         changeoverCalculationThing = Things[changeoverCalculationThingName];
                                     }
                                     var dataProvider = Things["BayerDBDataProvider"];
-                                    var productionPlan = me.GetProductionPlan();
+                                    //var productionPlan = me.GetProductionPlan();
+                                    var productionPlan = dataProvider.GetProductionPlanForLineOrderByOrderSequenceNumber({
+                                    	line: me.name /* THINGNAME */
+                                    });
+                                    
                                     productionPlan.Delete({ status: "COMPLETED" });
                                     var numRows = productionPlan.rows.length;
                                     var changeover = null, prev = null, next = null;

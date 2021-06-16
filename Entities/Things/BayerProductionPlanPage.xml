@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-10T07:50:13.312Z"
+         lastModifiedDate="2021-06-16T06:07:09.417Z"
          name="BayerProductionPlanPage"
          projectName="BayerIoT"
          published="false"
@@ -102,7 +102,7 @@
                      isPrivate="false"
                      name="ExchangeDownOrderSequenceNumber">
                         <ResultType
-                         baseType="NOTHING"
+                         baseType="STRING"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
@@ -132,7 +132,7 @@
                      isPrivate="false"
                      name="ExchangeUpOrderSequenceNumber">
                         <ResultType
-                         baseType="NOTHING"
+                         baseType="STRING"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
@@ -258,7 +258,7 @@
                                         var bigProductionPlanId;
                                         var bigOrderSequenceNumbe;
                                         var smallOrderSequenceNumber;
-                                        
+                                        var DefaultLocalizationTables= LocalizationTables["Default"];
                                         
                                         var productionPlan =  Things["BayerDBDataProvider"].GetProductionPlan({
                                         	id: productionPlanId /* INTEGER */
@@ -279,6 +279,10 @@
                                                 UpdateProductionPlanOrderSequenceNumber(productionPlanId, null);
                                                 UpdateProductionPlanOrderSequenceNumber(bigProductionPlanId, smallOrderSequenceNumber);
                                                 UpdateProductionPlanOrderSequenceNumber(productionPlanId, bigOrderSequenceNumbe);
+                                                
+                                                 result = DefaultLocalizationTables.GetToken({
+                                                    name: "Bayer.ExchangeSucceed" /* STRING */
+                                                });
                                                 break;
                                             }       
                                         }
@@ -326,6 +330,7 @@
                                         var smallProductionPlanId;
                                         var smallOrderSequenceNumber;
                                         var bigOrderSequenceNumbe;
+                                        var DefaultLocalizationTables= LocalizationTables["Default"];
                                         
                                         var productionPlan =  Things["BayerDBDataProvider"].GetProductionPlan({
                                         	id: productionPlanId /* INTEGER */
@@ -339,12 +344,23 @@
                                                 orderSequenceNumber: index /* INTEGER */
                                             }).rows[0];
                                             
+                                            if(queryPO.status === "INPROGRESS"){
+                                                result = DefaultLocalizationTables.GetToken({
+                                                    name: "Bayer.ExchangeOrderWithInProgressProductionPlan" /* STRING */
+                                                });
+                                            	break;
+                                            }
+                                            
                                             if(queryPO.productionLine === productionLine && queryPO.productId !== "Cambio") {
                                                 smallProductionPlanId = queryPO.id;
                                                 smallOrderSequenceNumber = queryPO.orderSequenceNumber;
                                                 UpdateProductionPlanOrderSequenceNumber(productionPlanId, null);
                                         		UpdateProductionPlanOrderSequenceNumber(smallProductionPlanId, bigOrderSequenceNumbe);
                                         		UpdateProductionPlanOrderSequenceNumber(productionPlanId, smallOrderSequenceNumber);
+                                                
+                                                result = DefaultLocalizationTables.GetToken({
+                                                    name: "Bayer.ExchangeSucceed" /* STRING */
+                                                });
                                                 break;
                                             }       
                                         }
