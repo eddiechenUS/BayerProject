@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-08T08:12:39.058Z"
+         lastModifiedDate="2021-06-16T16:39:26.563Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -64,6 +64,7 @@
             </ParameterDefinitions>
             <Things>
                 <Thing>BayerUtilities</Thing>
+                <Thing>Bayer.ActualVsTargetPanelThing</Thing>
             </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates>
@@ -514,23 +515,6 @@
                 "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
                 "TargetArea" : "UI",
                 "TargetId" : "mashupcontainer-319",
-                "TargetSection" : ""
-              }, {
-                "Id" : "474bb4a5-9898-4b64-b547-dd35d44f22e0",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "shiftSchedule",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "Field",
-                  "TargetProperty" : "schedule",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "SelectedRows",
-                "SourceId" : "GetShiftsFromNow",
-                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
-                "TargetArea" : "UI",
-                "TargetId" : "mashupcontainer-320",
                 "TargetSection" : ""
               }, {
                 "Id" : "3b6d054f-5d95-4e0e-87d3-4669cfdf2e35",
@@ -1884,23 +1868,6 @@
                 "TargetId" : "valuedisplay-561",
                 "TargetSection" : ""
               }, {
-                "Id" : "eb8d211d-9719-4fb3-b798-54e29ff612f9",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "rejectCounter",
-                  "SourcePropertyBaseType" : "NUMBER",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "rejectCounter",
-                  "TargetPropertyBaseType" : "NUMBER",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetProperties",
-                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
-                "TargetArea" : "UI",
-                "TargetId" : "mashupcontainer-320",
-                "TargetSection" : ""
-              }, {
                 "Id" : "4b047c6f-446e-4a5f-9960-458b204de84f",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "actualSpeedPerHour",
@@ -1982,23 +1949,6 @@
                 "TargetId" : "compareFuction",
                 "TargetSection" : "DynamicThings_Bayer.productionSpeedValidator"
               }, {
-                "Id" : "33435d2d-df73-4d25-aef2-90dd8004adbf",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "rejectCounter",
-                  "SourcePropertyBaseType" : "NUMBER",
-                  "SourcePropertyType" : "Property",
-                  "TargetProperty" : "rejectCount",
-                  "TargetPropertyBaseType" : "NUMBER",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetProperties",
-                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
-                "TargetArea" : "UI",
-                "TargetId" : "expression-570",
-                "TargetSection" : ""
-              }, {
                 "Id" : "1aa102b5-17bf-4acf-80fd-db705e224f86",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "Output",
@@ -2013,6 +1963,121 @@
                 "SourceSection" : "",
                 "TargetArea" : "UI",
                 "TargetId" : "valuedisplay-282",
+                "TargetSection" : ""
+              }, {
+                "Id" : "efbc284e-8505-4ac6-ba9f-5c07c6a21a3b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "shiftSchedule",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "schedule",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "mashupcontainer-320",
+                "TargetSection" : ""
+              }, {
+                "Id" : "fe9adfd9-9b9a-4e4c-a579-38663a702285",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "shiftSchedule",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Schedule",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "navigation-572",
+                "TargetSection" : ""
+              }, {
+                "Id" : "412446f9-a13c-410d-9e77-f3c4e6623eae",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Input1",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-575",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "eventsrouter-577",
+                "TargetSection" : ""
+              }, {
+                "Id" : "194192c3-6d69-44fe-ae2a-4ff3789f3b4b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Input2",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-576",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "eventsrouter-577",
+                "TargetSection" : ""
+              }, {
+                "Id" : "33a503f2-9abf-4457-90e8-04f35c7a2b10",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "AutoRefresh",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "eventsrouter-577",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "autorefresh-26",
+                "TargetSection" : ""
+              }, {
+                "Id" : "e44bc8c1-6ebd-4173-86ae-f36fce221587",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "AutoRefresh",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "eventsrouter-577",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "autorefresh-312",
+                "TargetSection" : ""
+              }, {
+                "Id" : "b826e082-69ae-479c-868f-e6f3570cd63c",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "rejectedQuantity",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "rejectCount",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetCurrentProduct",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "expression-570",
                 "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
@@ -2494,6 +2559,42 @@
                 "EventTriggerId" : "button-573",
                 "EventTriggerSection" : "",
                 "Id" : "b62264fc-f444-47db-bc69-4848e55103d3"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetShiftsFromNow",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "PopupClosed",
+                "EventTriggerId" : "navigation-572",
+                "EventTriggerSection" : "",
+                "Id" : "2cdbc359-302e-4608-98ba-4673dfd99668"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-576",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "debbc0bb-2652-45fb-a326-df050ed2c6d6"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-575",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-573",
+                "EventTriggerSection" : "",
+                "Id" : "a6454420-5ebf-463f-ab36-ea3b5a0f30e4"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "expression-576",
+                "EventHandlerService" : "Evaluate",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "PopupClosed",
+                "EventTriggerId" : "navigation-572",
+                "EventTriggerSection" : "",
+                "Id" : "e43fc673-1219-4a5a-887e-ce38db6fcbb9"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -2564,7 +2665,7 @@
                   } ],
                   "flex-grow" : 0,
                   "flex-shrink" : 0,
-                  "id_index" : 573,
+                  "id_index" : 583,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -6675,7 +6776,7 @@
                                               "Label" : "",
                                               "LabelAlignment" : "left",
                                               "LastContainer" : false,
-                                              "Left" : 48.984375,
+                                              "Left" : 49,
                                               "Overflow" : "hidden",
                                               "ResponsiveLayout" : false,
                                               "ShowDataLoading" : true,
@@ -6711,11 +6812,11 @@
                                               "Label" : "",
                                               "LabelAlignment" : "left",
                                               "LastContainer" : false,
-                                              "Left" : 136.98828125,
+                                              "Left" : 137,
                                               "Overflow" : "hidden",
                                               "ResponsiveLayout" : false,
                                               "ShowDataLoading" : true,
-                                              "TextIfNoValue" : "[[Bayer.ActualStart]]",
+                                              "TextIfNoValue" : "[[Bayer.Good]]",
                                               "TextIfNoValueOffset" : 0,
                                               "TextIfNoValueStyle" : "Bayer_GreyValue",
                                               "TextWrap" : true,
@@ -6816,7 +6917,7 @@
                                               "Label" : "",
                                               "LabelAlignment" : "left",
                                               "LastContainer" : false,
-                                              "Left" : 241.984375,
+                                              "Left" : 240.984375,
                                               "Overflow" : "hidden",
                                               "ResponsiveLayout" : false,
                                               "ShowDataLoading" : true,
@@ -11097,7 +11198,7 @@
                           "Top" : 10,
                           "Type" : "autorefresh",
                           "UseTheme" : false,
-                          "Visible" : false,
+                          "Visible" : true,
                           "Width" : 120,
                           "Z-index" : 10,
                           "__TypeDisplayName" : "Auto Refresh"
@@ -11204,7 +11305,7 @@
                             "Top" : 25,
                             "Type" : "autorefresh",
                             "UseTheme" : false,
-                            "Visible" : false,
+                            "Visible" : true,
                             "Width" : 50,
                             "Z-index" : 10,
                             "__TypeDisplayName" : "Auto Refresh"
@@ -11260,7 +11361,7 @@
                             "Top" : 10,
                             "Type" : "autorefresh",
                             "UseTheme" : false,
-                            "Visible" : false,
+                            "Visible" : true,
                             "Width" : 50,
                             "Z-index" : 10,
                             "__TypeDisplayName" : "Auto Refresh"
@@ -11379,17 +11480,34 @@
                           "Alignment" : "left",
                           "Area" : "UI",
                           "ClickOutsideToClose" : false,
+                          "Description" : "",
                           "DisplayName" : "navigation-572",
                           "FixedPopupHeight" : 400,
-                          "FixedPopupWidth" : 800,
+                          "FixedPopupWidth" : 620,
                           "Height" : 30,
                           "Icon" : "",
                           "IconAlignment" : "left",
                           "Id" : "navigation-572",
                           "LastContainer" : false,
                           "Left" : 155,
-                          "MashupName" : "Bayer.RTOD.AdjustCountersForShiftMashupTEST",
-                          "MashupParameters" : [ ],
+                          "MashupName" : "Bayer.RTOD.AdjustCountersForShiftMashup",
+                          "MashupParameters" : [ {
+                            "BaseType" : "INFOTABLE",
+                            "Description" : "",
+                            "ParameterName" : "Schedule",
+                            "ParmDef" : {
+                              "aspects" : {
+                                "bindingDirection" : "IN",
+                                "dataShape" : "BayerScheduleDataShape",
+                                "isMandatory" : "false",
+                                "ordinal" : "0"
+                              },
+                              "baseType" : "INFOTABLE",
+                              "description" : "",
+                              "name" : "Schedule",
+                              "ordinal" : 0
+                            }
+                          } ],
                           "MessageToShow" : "Mashup must be selected",
                           "ModalPopupOpacity" : 0.5,
                           "NavigationActiveStyle" : "DefaultNavigationActiveStyle",
@@ -12206,6 +12324,70 @@
                       "isBindingTarget" : true,
                       "name" : "rejectCount"
                     } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "ALWAYS",
+                    "DisplayName" : "stopRefresh",
+                    "Expression" : "Output = false;",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-575",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "BOOLEAN",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "ALWAYS",
+                    "DisplayName" : "startRefresh",
+                    "Expression" : "Output = true;",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-576",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "BOOLEAN",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "DataShape" : "",
+                    "DataType" : "BOOLEAN",
+                    "DisplayName" : "startStopRefresh",
+                    "Id" : "eventsrouter-577",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "NumberOfInputs" : "2",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "eventsrouter",
+                    "Visible" : true,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Events Router"
                   },
                   "Widgets" : [ ]
                 } ]

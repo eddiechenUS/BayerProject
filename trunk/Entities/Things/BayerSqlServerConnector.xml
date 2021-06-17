@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="">
+ universal="password">
     <Things>
         <Thing
          description=""
@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-02-26T23:17:07.981Z"
+         lastModifiedDate="2021-06-16T15:13:57.036Z"
          name="BayerSqlServerConnector"
          projectName="BayerIoT"
          published="false"
@@ -102,11 +102,7 @@
                             ]]>
                             </jDBCDriverClass>
                             <maxConnections>5.0</maxConnections>
-                            <password>
-                            <![CDATA[
-                            Z4jbZuPsWq9pNaj+7aXijg==:r+t6GQVxlie63QxLKhXwMQ==
-                            ]]>
-                            </password>
+                            <password></password>
                             <userName>
                             <![CDATA[
                             ThingworxUser
@@ -187,10 +183,249 @@
             </ConfigurationTables>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
-                <ServiceDefinitions></ServiceDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="BlistersQueryTest">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="ProductionQueryTest">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
-                <ServiceImplementations></ServiceImplementations>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="BlistersQueryTest">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>5000.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        -- SELECT s.[id]
+                                        --       ,i.[id] AS itemId
+                                        --       ,s.[totalQuantityProduced]
+                                        --       ,s.[totalQuantityRejected]
+                                        --       ,s.[totalTargetQuantity]
+                                        --       ,s.[timestamp]
+                                        --       ,s.[productionLine]
+                                        --       ,i.[hour]
+                                        --       ,i.[time]
+                                        --       ,i.[duration]
+                                        --       ,i.[productionPlanId]
+                                        --       ,i.[quantityProduced]
+                                        --       ,i.[quantityProduced] * COALESCE(pa.[blistersPerFoldedBox], 1) AS quantityProducedBlisters
+                                        --       ,i.[quantityRejected]
+                                        --       ,i.[quantityRejected] * COALESCE(pa.[blistersPerFoldedBox], 1) AS quantityRejectedBlisters
+                                        --       ,i.[targetQuantity]
+                                        --       ,i.[targetQuantity] * COALESCE(p.[blistersPerFoldedBox], 1) AS targetQuantityBlisters
+                                        --       ,i.[quantityTargetOk]
+                                        --       ,i.[productionPlanId_actual]
+                                        --       ,p.[productId]
+                                        --       ,p.[productDescription]
+                                        --   FROM [dbo].[ShiftSchedule] AS s
+                                        --   JOIN [dbo].[ShiftScheduleItem] AS i ON (i.[scheduleId] = s.[id])
+                                        --   JOIN [dbo].[ProductionPlan] AS p ON (p.[id] = i.[productionPlanId])
+                                        --   LEFT JOIN [dbo].[ProductionPlan] AS pa ON (pa.[id] = i.[productionPlanId_actual])
+                                        --   WHERE s.[productionLine] = 'DEMO_ProductionLine' AND s.[timestamp] >= '2021-06-16 7:00' AND s.[timestamp] < '2021-06-16 16:00'
+                                        --   ORDER BY s.[timestamp] ASC, i.[time] ASC
+                                        --   
+                                        
+                                        SELECT s.[id]
+                                              ,i.[id] AS itemId
+                                              ,s.[totalQuantityProduced]
+                                              ,s.[totalQuantityRejected]
+                                              ,s.[totalTargetQuantity]
+                                              ,s.[timestamp]
+                                              ,s.[productionLine]
+                                              ,i.[hour]
+                                              ,i.[time]
+                                              ,i.[duration]
+                                              ,i.[productionPlanId]
+                                              ,i.[quantityProduced]
+                                              ,i.[quantityProduced] * COALESCE(p.[blistersPerFoldedBox], 1) AS quantityProducedBlisters
+                                              ,i.[quantityRejected]
+                                              ,i.[quantityRejected] * COALESCE(p.[blistersPerFoldedBox], 1) AS quantityRejectedBlisters
+                                              ,i.[targetQuantity]
+                                              ,i.[targetQuantity] * COALESCE(p.[blistersPerFoldedBox], 1) AS targetQuantityBlisters
+                                              ,i.[quantityTargetOk]
+                                              ,i.[productionPlanId_actual]
+                                              ,p.[productId]
+                                              ,p.[productDescription]
+                                          FROM [dbo].[ShiftSchedule] AS s
+                                          JOIN [dbo].[ShiftScheduleItem] AS i ON (i.[scheduleId] = s.[id])
+                                          JOIN [dbo].[ProductionPlan] AS p ON (p.[id] = i.[productionPlanId])
+                                          LEFT JOIN [dbo].[ProductionPlan] AS pa ON (pa.[id] = i.[productionPlanId_actual])
+                                          WHERE s.[productionLine] = 'DEMO_ProductionLine' --AND s.[timestamp] >= '2021-06-01 0:00' -- AND s.[timestamp] < '2021-06-16 16:00'
+                                          ORDER BY s.[timestamp] ASC, i.[time] ASC
+                                          
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        -- SELECT 
+                                        -- 	--*
+                                        --     [id], [productionLine], [productDescription], [status], [targetHours], [remainingHours], [workedHours], [producedQuantity], [startTime], [endTime], [blistersPerFoldedBox]
+                                        --   FROM 
+                                        --   --[dbo].[ShiftSchedule] AS s
+                                        --   --[dbo].[ShiftScheduleItem] AS i --ON (i.[scheduleId] = s.[id])
+                                        --   [dbo].[ProductionPlan] AS p -- ON (p.[id] = i.[productionPlanId])
+                                        -- --  LEFT JOIN [dbo].[ProductionPlan] AS pa ON (pa.[id] = i.[productionPlanId_actual])
+                                        --   --WHERE s.[productionLine] = 'DEMO_ProductionLine' AND s.[timestamp] >= '2021-06-16 0:00' ORDER BY s.[timestamp] DESC --, i.[time] ASC  
+                                        --   --WHERE i.scheduleId = 14221 ORDER BY i.[time] ASC --, i.[time] ASC  
+                                        --   --WHERE i.scheduleId = 14236 ORDER BY i.[time] ASC --, i.[time] ASC  
+                                        -- 
+                                        --   WHERE p.[productionLine] = 'DEMO_ProductionLine' ORDER BY p.[id] ASC --, i.[time] ASC  
+                                        --
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="ProductionQueryTest">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        /****** Script for SelectTopNRows command from SSMS  ******/
+                                        SELECT TOP (100) [id]
+                                              ,[productionLine]
+                                              ,[taNumber]
+                                              ,[orderNr]
+                                              ,[productId]
+                                              ,[productDescription]
+                                              ,[version]
+                                              ,[targetQuantity]
+                                              ,[uom]
+                                              ,[targetHours]
+                                              ,[targetQuantityPerHour]
+                                              ,[status]
+                                              ,[remainingHours]
+                                              ,[workedHours]
+                                              ,[producedQuantity]
+                                              ,[startTime]
+                                              ,[endTime]
+                                              ,[activeMaterialNumber]
+                                              ,[blisterType]
+                                              ,[foldedBoxFormat]
+                                              ,[blistersPerFoldedBox]
+                                              ,[commentFirstLine]
+                                              ,[mdatSaf]
+                                              ,[mdatOos]
+                                              ,[tabletsPerBlister]
+                                              ,[manufProcess]
+                                              ,[materialId]
+                                              ,[productionFormatId]
+                                              ,[numberOfOperators]
+                                              ,[rejectedQuantity]
+                                              ,[orderSequenceNumber]
+                                          FROM [BayerDevDb].[dbo].[ProductionPlan]
+                                          WHERE [productionLine] = 'DEMO_ProductionLine'
+                                        	AND [startTime] IS NOT NULL
+                                          ORDER BY [id] DESC
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
                 <Subscriptions></Subscriptions>
             </ThingShape>
             <PropertyBindings></PropertyBindings>

@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="">
+ universal="password">
     <Mashups>
         <Mashup
          aspect.isFlex="true"
@@ -16,11 +16,11 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-05-31T07:58:49.546Z"
+         lastModifiedDate="2021-06-16T08:13:46.027Z"
          name="BayerDelaysSummaryMashup"
          projectName="BayerIoT"
          rows="0.0"
-         tags="Applications:Bayer">
+         tags="Applications:Bayer;Feature:BAYER-187">
             <avatar></avatar>
             <DesignTimePermissions>
                 <Create></Create>
@@ -65,14 +65,32 @@
             </ParameterDefinitions>
             <Things>
                 <Thing>BayerDelaysSummaryPage</Thing>
+                <Thing>BayerDelaysDetailsPage</Thing>
             </Things>
             <ThingShapes></ThingShapes>
-            <ThingTemplates></ThingTemplates>
+            <ThingTemplates>
+                <ThingTemplate>BayerProductionLine</ThingTemplate>
+            </ThingTemplates>
             <mashupContent>
             <![CDATA[
             {
               "CustomMashupCss" : "#root_mashupcontainer-7_mashupcontainer-309_flexcontainer-2-bounding-box {\n\twidth: calc(100% - 20px);\n}",
               "Data" : {
+                "DynamicThingTemplates_BayerProductionLine" : {
+                  "DataName" : "DynamicThingTemplates_BayerProductionLine",
+                  "EntityName" : "BayerProductionLine",
+                  "EntityType" : "DynamicThingTemplates",
+                  "Id" : "a7d4f552-4a95-44cc-ae09-8d8a75d2bae8",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "2a1eadae-6707-443f-a5c4-aaf1534dc570",
+                    "Name" : "GetDelayShiftDetails",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetDelayShiftDetails"
+                  } ]
+                },
                 "Session" : {
                   "DataName" : "Session",
                   "EntityName" : "",
@@ -86,6 +104,21 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_BayerDelaysDetailsPage" : {
+                  "DataName" : "Things_BayerDelaysDetailsPage",
+                  "EntityName" : "BayerDelaysDetailsPage",
+                  "EntityType" : "Things",
+                  "Id" : "e8a194bc-c5c9-4e52-8a97-1996b9f67547",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "be14778d-cfc7-4067-9e39-ab40f04fbf3c",
+                    "Name" : "GetDurationAndFreqFromShiftDetail",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "GetDurationAndFreqFromShiftDetail"
                   } ]
                 },
                 "Things_BayerDelaysSummaryPage" : {
@@ -218,23 +251,6 @@
                 "TargetId" : "valuedisplay-141",
                 "TargetSection" : ""
               }, {
-                "Id" : "705077d2-9fcc-45c6-b4d7-e8255a33727d",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "microstopFrequency",
-                  "SourcePropertyBaseType" : "INTEGER",
-                  "SourcePropertyType" : "Field",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "ANYSCALAR",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetDelaysSummary",
-                "SourceSection" : "Things_BayerDelaysSummaryPage",
-                "TargetArea" : "UI",
-                "TargetId" : "valuedisplay-131",
-                "TargetSection" : ""
-              }, {
                 "Id" : "1f81716c-ad17-475b-923b-191ecc8ce8d6",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "microstopMajorProblem",
@@ -286,23 +302,6 @@
                 "TargetId" : "valuedisplay-135",
                 "TargetSection" : ""
               }, {
-                "Id" : "26a3deb0-6b86-48ac-9038-ec27d83ea950",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "microstopDuration",
-                  "SourcePropertyBaseType" : "STRING",
-                  "SourcePropertyType" : "Field",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "ANYSCALAR",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetDelaysSummary",
-                "SourceSection" : "Things_BayerDelaysSummaryPage",
-                "TargetArea" : "UI",
-                "TargetId" : "valuedisplay-136",
-                "TargetSection" : ""
-              }, {
                 "Id" : "d7ff4475-f461-4de8-a545-1341441d0c31",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "Output",
@@ -317,6 +316,86 @@
                 "TargetArea" : "Session",
                 "TargetId" : "Session",
                 "TargetSection" : "Session"
+              }, {
+                "Id" : "a7a7bade-1669-4ae2-af31-eebd160906f5",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "TargetProperty" : "DelayShiftDetailsTableInput",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetDelayShiftDetails",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetDurationAndFreqFromShiftDetail",
+                "TargetSection" : "Things_BayerDelaysDetailsPage"
+              }, {
+                "Id" : "72d048a2-fd9f-482f-a23a-f602471ad650",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Duration",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetDurationAndFreqFromShiftDetail",
+                "SourceSection" : "Things_BayerDelaysDetailsPage",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-136",
+                "TargetSection" : ""
+              }, {
+                "Id" : "9cb16232-5718-4413-a01c-f5fff08a55dd",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "value",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Entity"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "EntityName",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "dae88440-6854-4c66-85e8-2de021edd072",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "shiftId",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "TargetProperty" : "shiftScheduleId",
+                  "TargetPropertyBaseType" : "INTEGER",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "GetDelayShiftDetails",
+                "TargetSection" : "DynamicThingTemplates_BayerProductionLine"
+              }, {
+                "Id" : "5cc5fea0-2f77-41d6-9a60-f373565270f2",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Frequency",
+                  "SourcePropertyBaseType" : "INTEGER",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetDurationAndFreqFromShiftDetail",
+                "SourceSection" : "Things_BayerDelaysDetailsPage",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-131",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -356,6 +435,51 @@
                 "EventTriggerId" : "button-144",
                 "EventTriggerSection" : "",
                 "Id" : "87fc1c22-b223-49bb-b333-da033e9d7303"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "DynamicThingTemplates_BayerProductionLine",
+                "EventHandlerService" : "GetDelayShiftDetails",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "76845b05-5d93-4a70-95ba-82074d0ab241"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerDelaysDetailsPage",
+                "EventHandlerService" : "GetDurationAndFreqFromShiftDetail",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "lineChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "28cc31cd-6a77-4b40-a37f-39635c025c11"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerDelaysDetailsPage",
+                "EventHandlerService" : "GetDurationAndFreqFromShiftDetail",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "shiftIdChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "aa6faa56-4509-4c40-8d42-b3d6f16abc3f"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerDelaysDetailsPage",
+                "EventHandlerService" : "GetDurationAndFreqFromShiftDetail",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "c0deaa37-504e-473e-9e8a-d25d874bcf42"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerDelaysDetailsPage",
+                "EventHandlerService" : "GetDurationAndFreqFromShiftDetail",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "GetDelayShiftDetails",
+                "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
+                "Id" : "7a964314-c7d0-4a2e-b0b0-9b18101df93f"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -1552,18 +1676,7 @@
                           "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
                           "ValueDisplayStyle" : "Bayer_GreenValue",
                           "ValueFormat" : {
-                            "FormatString" : "[[Bayer.CustomIntegerFormat]]",
-                            "formatInfo" : {
-                              "FieldName" : "",
-                              "StateDefinition" : "",
-                              "StateDefinitionType" : "fixed",
-                              "StateFormats" : [ {
-                                "state" : "",
-                                "stateName" : "fixed"
-                              } ]
-                            },
-                            "renderer" : "NUMBER",
-                            "roundingEnabled" : true
+                            "renderer" : "DEFAULT"
                           },
                           "ValueFormat_StateParameters" : [ ],
                           "VerticalAlignment" : "middle",
@@ -1631,7 +1744,7 @@
                           "Overflow" : "hidden",
                           "ResponsiveLayout" : true,
                           "ShowDataLoading" : true,
-                          "TextIfNoValue" : "-",
+                          "TextIfNoValue" : "00:00",
                           "TextIfNoValueOffset" : 0,
                           "TextIfNoValueStyle" : "Bayer_GreenValue",
                           "TextWrap" : true,

@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-04T15:17:30.813Z"
+         lastModifiedDate="2021-06-15T07:06:20.674Z"
          name="Bayer.productionSpeedValidator"
          projectName="BayerIoT"
          published="false"
@@ -75,6 +75,28 @@
                              baseType="NUMBER"
                              description=""
                              name="speed"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="configureTargetQuantityPerHour">
+                        <ResultType
+                         baseType="INTEGER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
                              ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
@@ -163,6 +185,95 @@
                                                     timestamp: new Date() /* DATETIME */
                                                 });
                                              return 'inserted loss';
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="configureTargetQuantityPerHour">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var INPROGRESS_ProductionPlanID;
+                                        var MaterialId;
+                                        var ProductionFormatId;
+                                        var rateStandardTable;
+                                        var idealRunRate_ToReplaceTargetQuantityPerHour;
+                                        var result;
+                                        
+                                        // result: INFOTABLE dataShape: ""
+                                        var ProductionplanTable =  Things["BayerSqlServerConnector"].GetProductionPlanForLine({
+                                        	line: productionLine /* THINGNAME */
+                                        });
+                                        try{
+                                            var tableLength = ProductionplanTable.rows.length;
+                                            if(!(tableLength===0 || tableLength==null)){
+                                                for (var x=0; x < tableLength; x++) {
+                                                    var row = ProductionplanTable.rows[x];
+                                                    if(row.status==='INPROGRESS'){
+                                                    	INPROGRESS_ProductionPlanID=row.id;
+                                                        ProductionFormatId=row.productionFormatId;
+                                                        MaterialId=row.materialId;
+                                        
+                                                        //Get rateStandardTable by productionLine. > get idealRunRate value from rateStandardTable
+                                                        rateStandardTable = getRateStandard(productionLine);
+                                                		var tableLength2 = rateStandardTable.rows.length;
+                                                        if(!(tableLength2===0 || tableLength2==null)){
+                                                            for (var y=0; x < tableLength; y++) {
+                                                                var roW = rateStandardTable.rows[y];
+                                                                if(roW.productionFormatId===ProductionFormatId){
+                                                                	idealRunRate_ToReplaceTargetQuantityPerHour=roW.idealRunRate;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                    }
+                                                    break;
+                                                }
+                                                //update the TargetQuantityPerHour
+                                                // result: INFOTABLE dataShape: ""
+                                                	result =  Things["BayerSqlServerConnector"].UpdateProductionPlan_TargetQuantityPerHourById({
+                                                	id: INPROGRESS_ProductionPlanID /* INTEGER */,
+                                                	targetQuantityPerHour: idealRunRate_ToReplaceTargetQuantityPerHour /* NUMBER */
+                                                });
+                                                    
+                                            }
+                                        	
+                                        }catch(e){
+                                        	logger.error(e);
+                                        }
+                                        
+                                        
+                                        
+                                        function getRateStandard(productionLine_Input){
+                                            // result: INFOTABLE dataShape: ""
+                                        	var result =  Things["BayerSqlServerConnector"].GetRateStandardByProductionLineName({
+                                        		productionLineName: productionLine_Input /* STRING */
+                                        	});
+                                            return RateStandardTable;
                                         }
                                         ]]>
                                         </code>
