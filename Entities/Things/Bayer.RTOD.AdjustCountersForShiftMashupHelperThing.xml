@@ -15,11 +15,11 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-07T10:02:02.229Z"
+         lastModifiedDate="2021-06-17T00:32:24.776Z"
          name="Bayer.RTOD.AdjustCountersForShiftMashupHelperThing"
-         projectName="BayerIoT"
+         projectName="BayerRTOD"
          published="false"
-         tags=""
+         tags="Applications:Bayer"
          thingTemplate="GenericThing"
          valueStream="">
             <avatar></avatar>
@@ -37,28 +37,7 @@
             <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
             <ConfigurationTables></ConfigurationTables>
             <ThingShape>
-                <PropertyDefinitions>
-                    <PropertyDefinition
-                     aspect.cacheTime="0.0"
-                     aspect.dataChangeType="VALUE"
-                     aspect.isPersistent="true"
-                     baseType="INFOTABLE"
-                     category=""
-                     description=""
-                     isLocalOnly="false"
-                     name="SourceTable"
-                     ordinal="4"></PropertyDefinition>
-                    <PropertyDefinition
-                     aspect.cacheTime="0.0"
-                     aspect.dataChangeType="VALUE"
-                     aspect.isPersistent="true"
-                     baseType="INFOTABLE"
-                     category=""
-                     description=""
-                     isLocalOnly="false"
-                     name="TableToBeAdjust"
-                     ordinal="3"></PropertyDefinition>
-                </PropertyDefinitions>
+                <PropertyDefinitions></PropertyDefinitions>
                 <ServiceDefinitions>
                     <ServiceDefinition
                      aspect.isAsync="false"
@@ -68,18 +47,13 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
-                     name="cloneTempInfotable">
+                     name="ApplyDisabled">
                         <ResultType
-                         baseType="INFOTABLE"
+                         baseType="BOOLEAN"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
                         <ParameterDefinitions>
-                            <FieldDefinition
-                             baseType="INFOTABLE"
-                             description=""
-                             name="DataSourceTable"
-                             ordinal="2"></FieldDefinition>
                             <FieldDefinition
                              baseType="INFOTABLE"
                              description=""
@@ -95,14 +69,72 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
-                     name="getShiftScheduleFromOneShift">
+                     name="FilterRows">
                         <ResultType
-                         aspect.dataShape="AdjustCountersDS"
+                         aspect.dataShape="BayerScheduleDataShape"
                          baseType="INFOTABLE"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
-                        <ParameterDefinitions></ParameterDefinitions>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.dataShape="BayerScheduleDataShape"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="fullTable"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetBlistersPerFoldedBox">
+                        <ResultType
+                         baseType="INTEGER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="productionId"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateData">
+                        <ResultType
+                         baseType="NOTHING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.dataShape="BayerScheduleDataShape"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="editedTable"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.dataShape="BayerScheduleDataShape"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="originalTable"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
@@ -111,7 +143,7 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="cloneTempInfotable">
+                     name="ApplyDisabled">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description=""
@@ -131,18 +163,7 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        var tableLength = EditedTable.rows.length;
-                                        for (var x=0; x < tableLength; x++) {
-                                            var row = EditedTable.rows[x];
-                                            if(EditedTable.Hour===DataSourceTable.Hour){  //Hour, Good, Reject
-                                                EditedTable.Good;
-                                                EditedTable.Reject;
-                                            }       
-                                        }
-                                        
-                                        
-                                        
-                                        var result = EditedTable;
+                                        result = !(EditedTable && EditedTable.getRowCount()>0);
                                         ]]>
                                         </code>
                                     </Row>
@@ -153,7 +174,7 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
-                     name="getShiftScheduleFromOneShift">
+                     name="FilterRows">
                         <ConfigurationTables>
                             <ConfigurationTable
                              description=""
@@ -173,43 +194,418 @@
                                     <Row>
                                         <code>
                                         <![CDATA[
-                                        //Create output infotable
-                                        var params = {
-                                            infoTableName : "InfoTable",
-                                            dataShapeName : "AdjustCountersDS"
-                                        };
+                                        try {
+                                        	var params = {
+                                        		infoTableName: "InfoTable",
+                                        		dataShapeName: "BayerScheduleDataShape"
+                                        	};
                                         
-                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(AdjustCountersDS)
-                                        var outputinfotableRaw = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        	// CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(BayerScheduleDataShape)
+                                        	var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        	var tableLength = fullTable.rows.length;
+                                        	for (var x = 0; x < tableLength; x++) {
+                                        		var row = fullTable.rows[x];
+                                        
+                                        //		var idsArray = row.ids.split(',');
+                                        //		var idsCount = idsArray.length;
+                                        //
+                                        //		var allHaveProdPlan = true;
+                                        //		for (var item = 0; item < idsCount; item++) {
+                                        //
+                                        //			var shiftScheduleItem = Things["BayerSqlServerConnector"].GetShiftScheduleItemById({
+                                        //				id: idsArray[item] /* INTEGER */
+                                        //			});
+                                        //			var shiftScheduleItemRow = 0;
+                                        //			if (shiftScheduleItem && shiftScheduleItem.getRowCount() > 0) {
+                                        //				shiftScheduleItemRow = shiftScheduleItem.getRow(0);
+                                        //			}
+                                        //
+                                        //			if (shiftScheduleItemRow) {
+                                        //				if (!shiftScheduleItemRow.productionPlanId_actual) {
+                                        //					allHaveProdPlan = false;
+                                        //					break;
+                                        //				}
+                                        //			}
+                                        //		}
+                                        //JESZCE PARAMETR W IF ->
+                                        		if (/*allHaveProdPlan &&*/ row.time && row.time.getTime()) {
+                                        			// BayerScheduleDataShape entry object
+                                        			var newEntry = new Object();
+                                        			newEntry.hour = row.hour; // INTEGER
+                                        			newEntry.time = row.time; // DATETIME
+                                        			newEntry.duration = row.duration; // INTEGER
+                                        			newEntry.productDescription = row.productDescription; // STRING
+                                        			newEntry.productId = row.productId; // STRING
+                                        			newEntry.targetQuantity = row.targetQuantity; // NUMBER
+                                        			newEntry.targetQuantityBlisters = row.targetQuantityBlisters; // NUMBER
+                                        			newEntry.quantityProduced = row.quantityProduced; // NUMBER
+                                        			newEntry.quantityProducedBlisters = row.quantityProducedBlisters; // NUMBER
+                                        			newEntry.quantityRejected = row.quantityRejected; // NUMBER
+                                        			newEntry.quantityRejectedBlisters = row.quantityRejectedBlisters; // NUMBER
+                                        			newEntry.quantityTargetOk = row.quantityTargetOk; // BOOLEAN
+                                        			newEntry.productionPlanId = row.productionPlanId; // INTEGER
+                                        			newEntry.productionPlanId_actual = row.productionPlanId_actual; // INTEGER
+                                        			newEntry.isActualPeriod = row.isActualPeriod; // STRING
+                                        			newEntry.performance = row.performance; // INTEGER
+                                        			newEntry.rejectCounter = row.rejectCounter; // INTEGER
+                                        			newEntry.ids = row.ids; // STRING
+                                        
+                                        			result.AddRow(newEntry);
+                                        
+                                        		}
+                                        	}
+                                        } catch (e) {
+                                        	logger.error("Bayer.RTOD.AdjustCountersForShiftMashupHelperThing _ FilterRows: Error in line " + e.lineNumber + ": " + e);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetBlistersPerFoldedBox">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result = -1;
+                                            
+                                        try {
+                                            var connectorThing = Things["BayerSqlServerConnector"];
+                                        	// result: INFOTABLE dataShape: ""
+                                        	var plan = connectorThing.GetProductionPlan({
+                                        		id: productionId /* INTEGER */
+                                        	});
+                                            
+                                        	if (plan && plan.getRowCount() > 0) {
+                                        		result = plan.getRow(0).blistersPerFoldedBox;
+                                        	}
+                                        } catch (e) {
+                                            logger.error("Bayer.RTOD.AdjustCountersForShiftMashupHelperThing _ GetBlistersPerFoldedBox: Error in line " + e.lineNumber + ": " + e);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="UpdateData">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData =========================================");
+                                        pause(1);
+                                        try {
+                                        	var tableLength = editedTable.rows.length;
+                                        
+                                        	for (var x = 0; x < tableLength; x++) {
+                                        		var editedRow = editedTable.rows[x];
+                                        
+                                        		logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(initial): editedTable.time=[" + editedTable.time + "]");
+                                        		pause(1);
+                                        
+                                        		var ids = editedRow.ids.split(',');
+                                        		var idsCount = ids.length;
+                                        
+                                        		logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: ids=[" + ids.toString() + "]");
+                                        		logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: idsCount=[" + idsCount + "]");
+                                        		pause(1);
+                                        
+                                        		var shiftScheduleItem = Things["BayerSqlServerConnector"].GetShiftScheduleItemById({
+                                        			id: ids[0] /* INTEGER */
+                                        		});
+                                        		var shiftScheduleItemRow;
+                                        		if (shiftScheduleItem && shiftScheduleItem.getRowCount() > 0) {
+                                        			shiftScheduleItemRow = shiftScheduleItem.getRow(0);
+                                        		}
+                                        
+                                        		logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(): shiftScheduleItemRow=[" + shiftScheduleItemRow + "]");
+                                        		pause(1);
+                                        
+                                        		var blisterMultipler = -1;
+                                        		if (shiftScheduleItemRow) {
+                                        			blisterMultipler = me.GetBlistersPerFoldedBox({
+                                        				productionId: shiftScheduleItemRow.productionPlanId_actual /* INTEGER */
+                                        			});
+                                        
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(Prod1): blisterMultipler=[" + blisterMultipler + "]");
+                                        			pause(1);
+                                        
+                                        			if (blisterMultipler == -1) {
+                                        				blisterMultipler = me.GetBlistersPerFoldedBox({
+                                        					productionId: shiftScheduleItemRow.productionPlanId_actual /* INTEGER */
+                                        				});
+                                        			}
+                                        		}
+                                        		logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(Prod2): blisterMultipler=[" + blisterMultipler + "]");
+                                        		pause(1);
                                         
                                         
-                                        // result: INFOTABLE dataShape: "BayerShiftSchedulesDataShape"
-                                        var resultset =  Things["BayerProductionLine_086"].GetShiftsFromNow({  //test
-                                        	nrOfPrevShifts: undefined /* STRING */,
-                                        	interval: 30 /* INTEGER */,
-                                        	nrOfNextShifts: undefined /* STRING */
-                                        });
                                         
-                                        var scheduleTable = resultset.shiftSchedule;
+                                        		//    //blister calculations
+                                        		//logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: editedRow.targetQuantityBlisters=["+editedRow.targetQuantityBlisters+"]");
+                                        		//pause(1);        
+                                        		//logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: editedRow.targetQuantity=["+editedRow.targetQuantity+"]");
+                                        		//pause(1);        
+                                        		//logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: editedRow.quantityProducedBlisters=["+editedRow.quantityProducedBlisters+"]");
+                                        		//pause(1);        
+                                        		//logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: editedRow.quantityProduced=["+editedRow.quantityProduced+"]");
+                                        		//pause(1);        
+                                        		//logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: editedRow.quantityRejectedBlisters=["+editedRow.quantityRejectedBlisters+"]");
+                                        		//pause(1);        
+                                        		//logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: editedRow.quantityRejected=["+editedRow.quantityRejected+"]");
+                                        		//pause(1);        
+                                        		//
+                                        		//    
                                         
-                                        var tableLength = scheduleTable.rows.length;
-                                        for (var x=0; x < tableLength; x++) {
-                                            var row = scheduleTable.rows[x];
-                                            var  tempEmptyRow= new Object();
-                                            var randomNumber1 = Math.floor(Math.random()*1000);
-                                            var randomNumber2 = Math.floor(Math.random()*1000);
-                                            tempEmptyRow.Reject=randomNumber1;//test data
-                                            tempEmptyRow.Good = randomNumber2;//test data
-                                            //tempEmptyRow.Reject=row.rejectCounter;
-                                            //tempEmptyRow.Good = row.actul___;
-                                            tempEmptyRow.Hour=row.time;
-                                            outputinfotableRaw.AddRow(tempEmptyRow);
+                                        
+                                        		if (blisterMultipler == -1) {
+                                        			blisterMultipler = 1;
+                                        			var blisterMultiplerTmp = 0;
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(0): blisterMultipler=[" + blisterMultipler + "]");
+                                        			pause(1);
+                                        			if (editedRow.targetQuantity != 0) {
+                                        				blisterMultiplerTmp = editedRow.targetQuantityBlisters / editedRow.targetQuantity;
+                                        				if (blisterMultiplerTmp > 1) {
+                                        					blisterMultipler = blisterMultiplerTmp;
+                                        					logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(1): blisterMultipler=[" + blisterMultipler + "]");
+                                        					pause(1);
+                                        				}
+                                        			}
+                                        
+                                        			if (blisterMultiplerTmp == 0 && editedRow.quantityProduced != 0) {
+                                        				blisterMultiplerTmp = editedRow.quantityProducedBlisters / editedRow.quantityProduced;
+                                        				if (blisterMultiplerTmp > 1) {
+                                        					blisterMultipler = blisterMultiplerTmp;
+                                        					logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(2): blisterMultipler=[" + blisterMultipler + "]");
+                                        					pause(1);
+                                        				}
+                                        			}
+                                        
+                                        			if (blisterMultiplerTmp == 0 && editedRow.quantityRejected != 0) {
+                                        				blisterMultiplerTmp = editedRow.quantityRejectedBlisters / editedRow.quantityRejected;
+                                        				if (blisterMultiplerTmp > 1) {
+                                        					blisterMultipler = blisterMultiplerTmp;
+                                        					logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(3): blisterMultipler=[" + blisterMultipler + "]");
+                                        					pause(1);
+                                        				}
+                                        			}
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(final): blisterMultipler=[" + blisterMultipler + "]");
+                                        			pause(1);
+                                        		}
+                                        
+                                        		//get the same row from original table
+                                        		var params = {
+                                        			t: originalTable /* INFOTABLE */ ,
+                                        			fieldName: "ids" /* STRING */ ,
+                                        			isCaseSensitive: true /* BOOLEAN */ ,
+                                        			value: editedRow.ids /* STRING */
+                                        		};
+                                        		// result: INFOTABLE
+                                        		var originalRows = Resources["InfoTableFunctions"].EQFilter(params);
+                                        		var originalRow = originalRows.getRow(0);
+                                        
+                                        		var changeGoodValue = editedRow.quantityProducedBlisters != originalRow.quantityProducedBlisters;
+                                        		logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: changeGoodValue=[" + changeGoodValue + "]");
+                                        		pause(1);
+                                        		var changeRejectedValue = editedRow.quantityRejectedBlisters != originalRow.quantityRejectedBlisters;
+                                        		logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: changeRejectedValue=[" + changeRejectedValue + "]");
+                                        		pause(1);
+                                        
+                                        		var goodValues = [];
+                                        		if (changeGoodValue) {
+                                        			var goodValue = editedRow.quantityProducedBlisters / blisterMultipler;
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: goodValue=[" + goodValue + "]");
+                                        			pause(1);
+                                        			var goodValue1;
+                                        			if (goodValue != 0) {
+                                        				goodValue1 = Math.floor(goodValue / idsCount);
+                                        			} else {
+                                        				goodValue1 = 0;
+                                        			}
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: goodValue1=[" + goodValue1 + "]");
+                                        			pause(1);
+                                        			var diffSum = 0;
+                                        			for (var valueI = 0; valueI < idsCount; valueI++) {
+                                        				goodValues[valueI] = goodValue1;
+                                        				diffSum += goodValue1;
+                                        			}
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: goodValues=[" + goodValues.toString() + "]");
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: diffSum=[" + diffSum + "]");
+                                        			pause(1);
+                                        			if (diffSum != goodValue) {
+                                        				//goodValues[0] = goodValue + goodValue1 - diffSum;
+                                        				var toAdd = goodValue - diffSum;
+                                        				var toAddIndex = 0;
+                                        				while (toAdd > 0) {
+                                        					goodValues[toAddIndex] = goodValues[toAddIndex] + (toAdd >= 1 ? 1 : toAdd);
+                                        					toAdd--;
+                                        					toAddIndex++;
+                                        					if (toAddIndex >= idsCount) {
+                                        						toAddIndex = 0;
+                                        					}
+                                        				}
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(2): goodValues=[" + goodValues.toString() + "]");
+                                        				pause(1);
+                                        			}
+                                        		}
+                                        
+                                        
+                                        		var rejectValues = [];
+                                        		if (changeRejectedValue) {
+                                        			var rejectValue = editedRow.quantityRejectedBlisters / blisterMultipler;
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: rejectValue=[" + rejectValue + "]");
+                                        			pause(1);
+                                        			var rejectValue1;
+                                        			if (rejectValue != 0) {
+                                        				rejectValue1 = Math.floor(rejectValue / idsCount);
+                                        			} else {
+                                        				rejectValue1 = 0;
+                                        			}
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: rejectValue1=[" + rejectValue1 + "]");
+                                        			pause(1);
+                                        			var diffSum = 0;
+                                        			for (var valueI = 0; valueI < idsCount; valueI++) {
+                                        				rejectValues[valueI] = rejectValue1;
+                                        				diffSum += rejectValue1;
+                                        			}
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: rejectValues=[" + rejectValues.toString() + "]");
+                                        			logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: diffSum=[" + diffSum + "]");
+                                        			pause(1);
+                                        			if (diffSum != rejectValue) {
+                                        				//rejectValues[0] = rejectValue + rejectValue1 - diffSum;
+                                        				var toAdd = rejectValue - diffSum;
+                                        				var toAddIndex = 0;
+                                        				while (toAdd > 0) {
+                                        					rejectValues[toAddIndex] = rejectValues[toAddIndex] + (toAdd >= 1 ? 1 : toAdd);
+                                        					toAdd--;
+                                        					toAddIndex++;
+                                        					if (toAddIndex >= idsCount) {
+                                        						toAddIndex = 0;
+                                        					}
+                                        				}
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData(2): rejectValues=[" + rejectValues.toString() + "]");
+                                        				pause(1);
+                                        			}
+                                        		}
+                                        
+                                        		for (var valueI = 0; valueI < idsCount; valueI++) {
+                                        
+                                        			var goodValueToUpdate;
+                                        			var rejectedValueToUpdate;
+                                        			var shiftScheduleItem;
+                                        
+                                        			var itemId = ids[valueI];
+                                        
+                                        			if (changeGoodValue || changeRejectedValue) {
+                                        				var shiftScheduleItems = Things["BayerSqlServerConnector"].GetShiftScheduleItemById({
+                                        					id: itemId /* INTEGER */
+                                        				});
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: shiftScheduleItems[" + valueI + "]=[" + shiftScheduleItems.ToJSON() + "]");
+                                        				pause(1);
+                                        				shiftScheduleItem = shiftScheduleItems.getRow(0);
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: shiftScheduleItem.quantityProduced[" + valueI + "]=[" + shiftScheduleItem.quantityProduced + "]");
+                                        				pause(1);
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: shiftScheduleItem.quantityRejected[" + valueI + "]=[" + shiftScheduleItem.quantityRejected + "]");
+                                        				pause(1);
+                                        			}
+                                        
+                                        			if (changeGoodValue) {
+                                        				goodValueToUpdate = goodValues[valueI];
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: goodValueToUpdate[" + valueI + "](changed)=[" + goodValueToUpdate + "]");
+                                        				pause(1);
+                                        			} else {
+                                        				goodValueToUpdate = shiftScheduleItem.quantityProduced;
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: goodValueToUpdate[" + valueI + "](original)=[" + goodValueToUpdate + "]");
+                                        				pause(1);
+                                        			}
+                                        
+                                        			if (changeRejectedValue) {
+                                        				rejectedValueToUpdate = rejectValues[valueI];
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: rejectedValueToUpdate[" + valueI + "](changed)=[" + rejectedValueToUpdate + "]");
+                                        				pause(1);
+                                        			} else {
+                                        				rejectedValueToUpdate = shiftScheduleItem.quantityRejected;
+                                        				logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData: rejectedValueToUpdate[" + valueI + "](original)=[" + rejectedValueToUpdate + "]");
+                                        				pause(1);
+                                        			}
+                                        
+                                        			// result: NUMBER
+                                        			var result = Things["BayerSqlServerConnector"].UpdateShiftScheduleItemQuantityById({
+                                        				EditedquantityProduced: goodValueToUpdate /* NUMBER */ ,
+                                        				EditedquantityRejected: rejectedValueToUpdate /* NUMBER */ ,
+                                        				id: itemId /* INTEGER */
+                                        			});
+                                        		}
+                                        	}
+                                        	logger.debug("AdjustCountersForShiftMashupHelperThing _ UpdateData =========================================");
+                                        } catch (e) {
+                                        	logger.error("Bayer.RTOD.AdjustCountersForShiftMashupHelperThing _ UpdateData: Error in line " + e.lineNumber + ": " + e);
                                         }
                                         
-                                        me.SourceTable=outputinfotableRaw;
-                                        me.TableToBeAdjust=outputinfotableRaw;
                                         
-                                        result = outputinfotableRaw;
+                                        //// BayerScheduleDataShape entry object
+                                        //var newEntry = new Object();
+                                        //newEntry.hour = undefined; // INTEGER
+                                        //newEntry.time = undefined; // DATETIME
+                                        //newEntry.duration = undefined; // INTEGER
+                                        //newEntry.productDescription = undefined; // STRING
+                                        //newEntry.productId = undefined; // STRING
+                                        //newEntry.targetQuantity = undefined; // NUMBER
+                                        //newEntry.targetQuantityBlisters = undefined; // NUMBER
+                                        //newEntry.quantityProduced = undefined; // NUMBER
+                                        //newEntry.quantityProducedBlisters = undefined; // NUMBER
+                                        //newEntry.quantityRejected = undefined; // NUMBER
+                                        //newEntry.quantityRejectedBlisters = undefined; // NUMBER
+                                        //newEntry.quantityTargetOk = undefined; // BOOLEAN
+                                        //newEntry.productionPlanId = undefined; // INTEGER
+                                        //newEntry.productionPlanId_actual = undefined; // INTEGER
+                                        //newEntry.isActualPeriod = undefined; // STRING
+                                        //newEntry.performance = undefined; // INTEGER
+                                        //newEntry.rejectCounter = undefined; // INTEGER
+                                        //newEntry.ids = undefined; // STRING
+                                        //
+                                        //
                                         ]]>
                                         </code>
                                     </Row>
@@ -224,239 +620,9 @@
             <RemotePropertyBindings></RemotePropertyBindings>
             <RemoteServiceBindings></RemoteServiceBindings>
             <RemoteEventBindings></RemoteEventBindings>
-            <AlertConfigurations>
-                <AlertDefinitions
-                 name="SourceTable"></AlertDefinitions>
-                <AlertDefinitions
-                 name="TableToBeAdjust"></AlertDefinitions>
-            </AlertConfigurations>
+            <AlertConfigurations></AlertConfigurations>
             <ImplementedShapes></ImplementedShapes>
-            <ThingProperties>
-                <TableToBeAdjust>
-                    <Value>
-                        <infoTable>
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition
-                                     aspect.isPrimaryKey="false"
-                                     baseType="INTEGER"
-                                     description=""
-                                     name="Good"
-                                     ordinal="2"></FieldDefinition>
-                                    <FieldDefinition
-                                     aspect.isPrimaryKey="false"
-                                     baseType="DATETIME"
-                                     description=""
-                                     name="Hour"
-                                     ordinal="1"></FieldDefinition>
-                                    <FieldDefinition
-                                     aspect.isPrimaryKey="false"
-                                     baseType="INTEGER"
-                                     description=""
-                                     name="Reject"
-                                     ordinal="3"></FieldDefinition>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <Good>939</Good>
-                                    <Hour>2021-06-07T22:00:00.000Z</Hour>
-                                    <Reject>137</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>529</Good>
-                                    <Hour>2021-06-07T22:30:00.000Z</Hour>
-                                    <Reject>13</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>238</Good>
-                                    <Hour>2021-06-07T23:00:00.000Z</Hour>
-                                    <Reject>29</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>544</Good>
-                                    <Hour>2021-06-07T23:30:00.000Z</Hour>
-                                    <Reject>275</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>267</Good>
-                                    <Hour>2021-06-08T00:00:00.000Z</Hour>
-                                    <Reject>673</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>78</Good>
-                                    <Hour>2021-06-08T00:30:00.000Z</Hour>
-                                    <Reject>396</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>579</Good>
-                                    <Hour>2021-06-08T01:00:00.000Z</Hour>
-                                    <Reject>982</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>751</Good>
-                                    <Hour>2021-06-08T01:30:00.000Z</Hour>
-                                    <Reject>467</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>302</Good>
-                                    <Hour>2021-06-08T02:00:00.000Z</Hour>
-                                    <Reject>742</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>27</Good>
-                                    <Hour>2021-06-08T02:30:00.000Z</Hour>
-                                    <Reject>47</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>525</Good>
-                                    <Hour>2021-06-08T03:00:00.000Z</Hour>
-                                    <Reject>734</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>834</Good>
-                                    <Hour>2021-06-08T03:30:00.000Z</Hour>
-                                    <Reject>982</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>323</Good>
-                                    <Hour>2021-06-08T04:00:00.000Z</Hour>
-                                    <Reject>150</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>194</Good>
-                                    <Hour>2021-06-08T04:30:00.000Z</Hour>
-                                    <Reject>757</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>454</Good>
-                                    <Hour>2021-06-08T05:00:00.000Z</Hour>
-                                    <Reject>438</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>247</Good>
-                                    <Hour>2021-06-08T05:30:00.000Z</Hour>
-                                    <Reject>396</Reject>
-                                </Row>
-                            </Rows>
-                        </infoTable>
-                    </Value>
-                    <Timestamp>2021-06-08T08:43:46.199Z</Timestamp>
-                    <Quality>GOOD</Quality>
-                </TableToBeAdjust>
-                <SourceTable>
-                    <Value>
-                        <infoTable>
-                            <DataShape>
-                                <FieldDefinitions>
-                                    <FieldDefinition
-                                     aspect.isPrimaryKey="false"
-                                     baseType="INTEGER"
-                                     description=""
-                                     name="Good"
-                                     ordinal="2"></FieldDefinition>
-                                    <FieldDefinition
-                                     aspect.isPrimaryKey="false"
-                                     baseType="DATETIME"
-                                     description=""
-                                     name="Hour"
-                                     ordinal="1"></FieldDefinition>
-                                    <FieldDefinition
-                                     aspect.isPrimaryKey="false"
-                                     baseType="INTEGER"
-                                     description=""
-                                     name="Reject"
-                                     ordinal="3"></FieldDefinition>
-                                </FieldDefinitions>
-                            </DataShape>
-                            <Rows>
-                                <Row>
-                                    <Good>939</Good>
-                                    <Hour>2021-06-07T22:00:00.000Z</Hour>
-                                    <Reject>137</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>529</Good>
-                                    <Hour>2021-06-07T22:30:00.000Z</Hour>
-                                    <Reject>13</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>238</Good>
-                                    <Hour>2021-06-07T23:00:00.000Z</Hour>
-                                    <Reject>29</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>544</Good>
-                                    <Hour>2021-06-07T23:30:00.000Z</Hour>
-                                    <Reject>275</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>267</Good>
-                                    <Hour>2021-06-08T00:00:00.000Z</Hour>
-                                    <Reject>673</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>78</Good>
-                                    <Hour>2021-06-08T00:30:00.000Z</Hour>
-                                    <Reject>396</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>579</Good>
-                                    <Hour>2021-06-08T01:00:00.000Z</Hour>
-                                    <Reject>982</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>751</Good>
-                                    <Hour>2021-06-08T01:30:00.000Z</Hour>
-                                    <Reject>467</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>302</Good>
-                                    <Hour>2021-06-08T02:00:00.000Z</Hour>
-                                    <Reject>742</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>27</Good>
-                                    <Hour>2021-06-08T02:30:00.000Z</Hour>
-                                    <Reject>47</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>525</Good>
-                                    <Hour>2021-06-08T03:00:00.000Z</Hour>
-                                    <Reject>734</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>834</Good>
-                                    <Hour>2021-06-08T03:30:00.000Z</Hour>
-                                    <Reject>982</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>323</Good>
-                                    <Hour>2021-06-08T04:00:00.000Z</Hour>
-                                    <Reject>150</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>194</Good>
-                                    <Hour>2021-06-08T04:30:00.000Z</Hour>
-                                    <Reject>757</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>454</Good>
-                                    <Hour>2021-06-08T05:00:00.000Z</Hour>
-                                    <Reject>438</Reject>
-                                </Row>
-                                <Row>
-                                    <Good>247</Good>
-                                    <Hour>2021-06-08T05:30:00.000Z</Hour>
-                                    <Reject>396</Reject>
-                                </Row>
-                            </Rows>
-                        </infoTable>
-                    </Value>
-                    <Timestamp>2021-06-08T08:43:46.199Z</Timestamp>
-                    <Quality>GOOD</Quality>
-                </SourceTable>
-            </ThingProperties>
+            <ThingProperties></ThingProperties>
         </Thing>
     </Things>
 </Entities>

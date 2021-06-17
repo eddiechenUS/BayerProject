@@ -33,6 +33,18 @@
                 <Visibility>
                     <Principal
                      isPermitted="true"
+                     name="Bayer"
+                     type="Organization"></Principal>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:Applications"
+                     type="OrganizationalUnit"></Principal>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:Organization"
+                     type="OrganizationalUnit"></Principal>
+                    <Principal
+                     isPermitted="true"
                      name="Bayer:PerformanceDashboard"
                      type="OrganizationalUnit"></Principal>
                 </Visibility>
@@ -1701,6 +1713,72 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetShiftScheduleItemById">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetShiftScheduleItemByScheduleId">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="scheduleId"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetShiftScheduleItemByScheduleIdGroupBy30Minutes">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="scheduleId"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetShiftsScheduleByTime">
                         <ResultType
                          aspect.dataShape="BayerShiftScheduleItemDataShape"
@@ -1919,6 +1997,157 @@
                              description=""
                              name="totalDuration"
                              ordinal="8"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="InsertKPIForHour">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endTime"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="propertyName"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startTime"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="unitOfMeasure"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="value"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="InsertKPIForProductionOrder">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endTime"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="productionOrderId"
+                             ordinal="7"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="propertyName"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startTime"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="unitOfMeasure"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="value"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="InsertKPIForShift">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="endTime"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="6"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="propertyName"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="LONG"
+                             description=""
+                             name="shiftId"
+                             ordinal="7"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="startTime"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="unitOfMeasure"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="value"
+                             ordinal="1"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -2980,6 +3209,33 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="UpdateProductionPlan_TargetQuantityPerHourById">
+                        <ResultType
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="targetQuantityPerHour"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="UpdateProductionPlanHours">
                         <ResultType
                          baseType="NUMBER"
@@ -3238,6 +3494,38 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="updateProductionPlanWithMaterialIdAndproductionFormatId">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="materialId"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="productionFormatId"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="ProductionPlanId"
+                             ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="UpdateRateStandards">
                         <ResultType
                          baseType="NUMBER"
@@ -3480,6 +3768,70 @@
                              description=""
                              name="oldProductionPlanId"
                              ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateShiftScheduleItemByTime">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="EditedquantityProduced"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="EditedquantityRejected"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="time"
+                             ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateShiftScheduleItemQuantityById">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="EditedquantityProduced"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="EditedquantityRejected"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="3"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -5526,7 +5878,7 @@
                                         <maxItems>500.0</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT * FROM [dbo].[ProductionFormat] WHERE [id] == [[id]];
+                                        SELECT * FROM [dbo].[ProductionFormat] WHERE [id] = [[id]];
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -6779,6 +7131,162 @@
                     <ServiceImplementation
                      description=""
                      handlerName="SQLQuery"
+                     name="GetShiftScheduleItemById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT * FROM [dbo].[ShiftScheduleItem]
+                                        where [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="GetShiftScheduleItemByScheduleId">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT * FROM [dbo].[ShiftScheduleItem]
+                                        where [scheduleId] = [[scheduleId]]
+                                        -- ORDER BY [time] DESC
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="GetShiftScheduleItemByScheduleIdGroupBy30Minutes">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        SELECT MIN([id]) AS [id]
+                                        ,MIN([time]) AS [time]
+                                        ,MIN([hour]) AS [hour]
+                                        ,SUM([duration]) AS [duration]
+                                        ,MIN([scheduleId]) AS [scheduleId]
+                                        ,MIN([productionPlanId]) AS [productionPlanId]
+                                        ,SUM([quantityProduced]) AS [quantityProduced]
+                                        ,SUM([targetQuantity]) AS [targetQuantity]
+                                        --,MIN(CONVERT(int,[quantityTargetOk])) AS [quantityTargetOk]
+                                        ,MIN(CASE WHEN [quantityTargetOk]=1 THEN 1 ELSE 0 END) AS [quantityTargetOk]
+                                        ,MIN([productionPlanId_actual]) AS [productionPlanId_actual]
+                                        ,SUM([quantityRejected]) AS [quantityRejected]
+                                        ,[m30]
+                                        FROM (
+                                        	SELECT *
+                                        	,CASE
+                                        		WHEN DATEPART(minute,[time])<30 THEN 10*DATEPART(hour,[time])
+                                        		WHEN DATEPART(minute,[time])>=30 THEN 10*DATEPART(hour,[time]) + 5
+                                        	END AS m30 
+                                        	FROM [dbo].[ShiftScheduleItem]
+                                        	WHERE [scheduleId] = [[scheduleId]]
+                                        ) details
+                                        GROUP BY [m30]
+                                        ORDER by [time] ASC;
+                                        -- 12258
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
                      name="GetShiftsScheduleByTime">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -6813,6 +7321,7 @@
                                         SELECT s.[id]
                                               ,i.[id] AS itemId
                                               ,s.[totalQuantityProduced]
+                                              ,s.[totalQuantityRejected]
                                               ,s.[totalTargetQuantity]
                                               ,s.[timestamp]
                                               ,s.[productionLine]
@@ -6822,6 +7331,8 @@
                                               ,i.[productionPlanId]
                                               ,i.[quantityProduced]
                                               ,i.[quantityProduced] * COALESCE(pa.[blistersPerFoldedBox], 1) AS quantityProducedBlisters
+                                              ,i.[quantityRejected]
+                                              ,i.[quantityRejected] * COALESCE(pa.[blistersPerFoldedBox], 1) AS quantityRejectedBlisters
                                               ,i.[targetQuantity]
                                               ,i.[targetQuantity] * COALESCE(p.[blistersPerFoldedBox], 1) AS targetQuantityBlisters
                                               ,i.[quantityTargetOk]
@@ -7127,6 +7638,193 @@
                                                    ,[[shiftScheduleId]]
                                                    ,[[totalDuration]]);
                                         SELECT * FROM [dbo].[Delay] WHERE [id] = SCOPE_IDENTITY();
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="InsertKPIForHour">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        INSERT INTO [dbo].[KPIsForHour]
+                                                (
+                                                 [value]
+                                                 ,[startTime]
+                                                 ,[endTime]
+                                                 ,[unitOfMeasure]
+                                                 ,[propertyName]
+                                                 ,[productionLine]
+                                                )
+                                            OUTPUT INSERTED.id
+                                            VALUES
+                                                (
+                                                 [[value]]
+                                                 ,[[startTime]]
+                                                 ,[[endTime]]
+                                                 ,[[unitOfMeasure]]
+                                                 ,[[propertyName]]
+                                                 ,[[productionLine]]
+                                                );
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="InsertKPIForProductionOrder">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        INSERT INTO [dbo].[KPIsForProductionOrder]
+                                                (
+                                                 [value]
+                                                 ,[startTime]
+                                                 ,[endTime]
+                                                 ,[unitOfMeasure]
+                                                 ,[propertyName]
+                                                 ,[productionLine]
+                                                 ,[productionOrderId]
+                                                )
+                                            OUTPUT INSERTED.id
+                                            VALUES
+                                                (
+                                                 [[value]]
+                                                 ,[[startTime]]
+                                                 ,[[endTime]]
+                                                 ,[[unitOfMeasure]]
+                                                 ,[[propertyName]]
+                                                 ,[[productionLine]]
+                                                 ,[[productionOrderId]]
+                                                );
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="InsertKPIForShift">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLCommand"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        INSERT INTO [dbo].[KPIsForShift]
+                                                (
+                                                 [value]
+                                                 ,[startTime]
+                                                 ,[endTime]
+                                                 ,[unitOfMeasure]
+                                                 ,[propertyName]
+                                                 ,[productionLine]
+                                                 ,[shiftId]
+                                                )
+                                            OUTPUT INSERTED.id
+                                            VALUES
+                                                (
+                                                 [[value]]
+                                                 ,[[startTime]]
+                                                 ,[[endTime]]
+                                                 ,[[unitOfMeasure]]
+                                                 ,[[propertyName]]
+                                                 ,[[productionLine]]
+                                                 ,[[shiftId]]
+                                                );
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -8319,6 +9017,51 @@
                     </ServiceImplementation>
                     <ServiceImplementation
                      description=""
+                     handlerName="SQLQuery"
+                     name="UpdateProductionPlan_TargetQuantityPerHourById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ProductionPlan]
+                                           SET [targetQuantityPerHour] = [[[[targetQuantityPerHour]]]]
+                                         WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
                      handlerName="SQLCommand"
                      name="UpdateProductionPlanHours">
                         <ConfigurationTables>
@@ -8633,7 +9376,54 @@
                                         <![CDATA[
                                         UPDATE [dbo].[ProductionPlan]
                                            SET [targetHours] = [[targetHours]]
-                                           	  ,[remainingHours] = [[targetHours]]
+                                         WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLQuery"
+                     name="updateProductionPlanWithMaterialIdAndproductionFormatId">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ProductionPlan]
+                                        
+                                        	--SET NOCOUNT ON;
+                                           SET [materialId] = [[materialId]]
+                                           	--  ,[productionFormatId] = [[productionFormatId]]
                                          WHERE [id] = [[id]]
                                         ]]>
                                         </sql>
@@ -8959,6 +9749,98 @@
                     <ServiceImplementation
                      description=""
                      handlerName="SQLCommand"
+                     name="UpdateShiftScheduleItemByTime">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ShiftScheduleItem]
+                                           SET [quantityProduced] = [[EditedquantityProduced]]
+                                              ,[quantityRejected] = [[EditedquantityRejected]] 
+                                        WHERE [time] = [[time]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
+                     name="UpdateShiftScheduleItemQuantityById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description="SQLQuery"
+                             isMultiRow="false"
+                             name="Query"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="maxItems"
+                                         name="maxItems"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="sql"
+                                         name="sql"
+                                         ordinal="0"></FieldDefinition>
+                                        <FieldDefinition
+                                         baseType="NUMBER"
+                                         description="timeout"
+                                         name="timeout"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <maxItems>500.0</maxItems>
+                                        <sql>
+                                        <![CDATA[
+                                        UPDATE [dbo].[ShiftScheduleItem]
+                                           SET [quantityProduced] = [[EditedquantityProduced]]
+                                              ,[quantityRejected] = [[EditedquantityRejected]] 
+                                        WHERE [id] = [[id]]
+                                        ]]>
+                                        </sql>
+                                        <timeout>60.0</timeout>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="SQLCommand"
                      name="UpdateShiftTotalProduction">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -9128,6 +10010,18 @@
             </InstanceRunTimePermissions>
             <InstanceVisibilityPermissions>
                 <Visibility>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer"
+                     type="Organization"></Principal>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:Applications"
+                     type="OrganizationalUnit"></Principal>
+                    <Principal
+                     isPermitted="true"
+                     name="Bayer:Organization"
+                     type="OrganizationalUnit"></Principal>
                     <Principal
                      isPermitted="true"
                      name="Bayer:PerformanceDashboard"

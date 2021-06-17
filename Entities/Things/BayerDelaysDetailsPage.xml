@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="">
+ universal="password">
     <Things>
         <Thing
          description=""
@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2020-05-10T15:12:43.776Z"
+         lastModifiedDate="2021-06-16T09:35:53.914Z"
          name="BayerDelaysDetailsPage"
          projectName="BayerIoT"
          published="false"
@@ -157,6 +157,30 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetDurationAndFreqFromShiftDetail">
+                        <ResultType
+                         aspect.dataShape="DurationAndFreqDS"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.dataShape="GetDelayShiftDetailsDataShape"
+                             baseType="INFOTABLE"
+                             description=""
+                             name="DelayShiftDetailsTableInput"
+                             ordinal="3"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetMachineState">
                         <ResultType
                          aspect.dataShape="DelaysDetailsMaschineStateDataShape"
@@ -275,6 +299,117 @@
                                         	productionLine: productionLine /* THINGNAME */,
                                         	shiftScheduleId: shiftScheduleId /* INTEGER */
                                         });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetDurationAndFreqFromShiftDetail">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //--------------- test input 
+                                        //// result: INFOTABLE dataShape: "GetDelayShiftDetailsDataShape"
+                                        var DelayShiftDetailsTableInput =  Things["DEMO_ProductionLine"].GetDelayShiftDetails({
+                                        //var testDelayShiftDetailsTable =  Things["DEMO_ProductionLine"].GetDelayShiftDetails({
+                                        	shiftScheduleId: 14221 /* INTEGER */
+                                        });
+                                        
+                                        
+                                        
+                                        //-----------------above is test
+                                        //var result;//DelayShiftDetailsTable
+                                        //var result = DelayShiftDetailsTableInput;
+                                        var hours = 0;
+                                        var mins =0;
+                                        var secs =0;
+                                        var Frequency = 0 ;
+                                        var Duration ='';
+                                        var tableLength=0;
+                                        
+                                        ////Make mulyiple output: Duration and Freq
+                                        var params = {
+                                            infoTableName : "InfoTable",
+                                            dataShapeName : "DurationAndFreqDS"
+                                        };
+                                        
+                                        // CreateInfoTableFromDataShape(infoTableName:STRING("InfoTable"), dataShapeName:STRING):INFOTABLE(DurationAndFreqDS)
+                                        var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+                                        
+                                        
+                                        try{
+                                        		tableLength = DelayShiftDetailsTableInput.rows.length;
+                                            	//result = tableLength;
+                                                if(tableLength===0 || tableLength===null || tableLength===undefined){
+                                                	result.Frequency = 0;
+                                                	result.Duration = '00:00';
+                                                    //result = resultTable;
+                                                }else{
+                                                    for (var x=0; x < tableLength; x++) {
+                                                        var row = DelayShiftDetailsTableInput.rows[x];
+                                                        var DurationArray = row.duration.split(':');
+                                                       //result = DurationArray[2];
+                                                        hours += parseFloat(DurationArray[0]);  //hours 
+                                                        mins += parseFloat(DurationArray[1]);  //mins
+                                                        mins += Math.floor(parseFloat(DurationArray[2])/60);  // (sec)/60  -> mins
+                                                        secs += parseFloat(DurationArray[2])%60;   //sec
+                                                    
+                                                   
+                                                        if(secs >=60){                     //calculate mins first.
+                                                        	mins += Math.floor(secs/60);
+                                                            secs=secs%60;
+                                                        }
+                                                        if(mins >=60){                     //calculate secs secondly.
+                                                        	hours += Math.floor(mins/60);
+                                                            mins=mins%60;
+                                                        }
+                                                        
+                                                     }
+                                                        if(hours<10){
+                                                        	hours=('0'+(hours.toString()));
+                                                        }else if(hours==0){
+                                                            hours=('00');
+                                                        }
+                                                        if(mins<10){
+                                                        	mins=('0'+(mins.toString()));
+                                                        }else if(mins==0){
+                                                            mins=('00');
+                                                        }
+                                                        if(secs<10){
+                                                        	secs=('0'+secs.toString());
+                                                        }else if(secs==0){
+                                                            secs=('00');
+                                                        }
+                                                    //result = DurationArray[0];
+                                                   	  result.Frequency = tableLength;
+                                                	  result.Duration = (hours+':'+mins);
+                                                	
+                                            }  
+                                        }catch(e){
+                                        	logger.error('tableLength is undefined '+e);
+                                            tableLength = 0;
+                                        }
                                         ]]>
                                         </code>
                                     </Row>
