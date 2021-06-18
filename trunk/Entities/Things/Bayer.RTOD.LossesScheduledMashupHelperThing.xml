@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-08T02:49:55.414Z"
+         lastModifiedDate="2021-06-18T10:10:26.942Z"
          name="Bayer.RTOD.LossesScheduledMashupHelperThing"
          projectName="BayerRTOD"
          published="false"
@@ -104,22 +104,6 @@
                              ordinal="2"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
-                    <ServiceDefinition
-                     aspect.isAsync="false"
-                     category=""
-                     description=""
-                     isAllowOverride="false"
-                     isLocalOnly="false"
-                     isOpen="false"
-                     isPrivate="false"
-                     name="test">
-                        <ResultType
-                         baseType="DATETIME"
-                         description=""
-                         name="result"
-                         ordinal="0"></ResultType>
-                        <ParameterDefinitions></ParameterDefinitions>
-                    </ServiceDefinition>
                 </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
@@ -151,16 +135,20 @@
                                         	tableName: "LossManager" /* STRING */
                                         });
                                         
-                                        var date = new Date();
-                                        date.setDate(date.getDate() - 7);
+                                        //var date = new Date();
+                                        //date.setDate(date.getDate() - 7);
+                                        //timestampTo = timestampFrom.setHours(timestampFrom.getHours() + 8);
+                                        timestampTo = timestampFrom.getTime() + 28800000;
                                         
                                         var LossManagerThing = Things[table.rows[0].LossManager];
                                         result = LossManagerThing.GetLossesByTimestamp({
-                                        //	timestampTo: timestampTo /* DATETIME */,
-                                        //	timestampFrom: timestampFrom /* DATETIME */
-                                            timestampTo: new Date() /* DATETIME */,
-                                        	timestampFrom: date /* DATETIME */
+                                        	timestampTo: timestampTo /* DATETIME */,
+                                        	timestampFrom: timestampFrom /* DATETIME */
+                                        //    timestampTo: new Date() /* DATETIME */,
+                                        //	timestampFrom: date /* DATETIME */
                                         });
+                                        
+                                        
                                         
                                         
                                         var query = {
@@ -188,39 +176,6 @@
                                         //});
                                         //
                                         //
-                                        ]]>
-                                        </code>
-                                    </Row>
-                                </Rows>
-                            </ConfigurationTable>
-                        </ConfigurationTables>
-                    </ServiceImplementation>
-                    <ServiceImplementation
-                     description=""
-                     handlerName="Script"
-                     name="test">
-                        <ConfigurationTables>
-                            <ConfigurationTable
-                             description=""
-                             isMultiRow="false"
-                             name="Script"
-                             ordinal="0">
-                                <DataShape>
-                                    <FieldDefinitions>
-                                        <FieldDefinition
-                                         baseType="STRING"
-                                         description="code"
-                                         name="code"
-                                         ordinal="0"></FieldDefinition>
-                                    </FieldDefinitions>
-                                </DataShape>
-                                <Rows>
-                                    <Row>
-                                        <code>
-                                        <![CDATA[
-                                        var date = new Date();
-                                        date.setDate(date.getDate() - 7);
-                                        result = date;
                                         ]]>
                                         </code>
                                     </Row>

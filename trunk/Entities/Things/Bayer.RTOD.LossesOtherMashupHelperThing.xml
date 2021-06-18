@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-08T02:57:58.653Z"
+         lastModifiedDate="2021-06-18T10:10:34.958Z"
          name="Bayer.RTOD.LossesOtherMashupHelperThing"
          projectName="BayerRTOD"
          published="false"
@@ -218,15 +218,16 @@
                                         	tableName: "LossManager" /* STRING */
                                         });
                                         
-                                        var date = new Date();
-                                        date.setDate(date.getDate() - 7);
+                                        //var date = new Date();
+                                        //date.setDate(date.getDate() - 7);
+                                        timestampTo = timestampFrom.getTime() + 28800000;
                                         
                                         var LossManagerThing = Things[table.rows[0].LossManager];
                                         result = LossManagerThing.GetLossesByTimestampAndCategory({
-                                        //	timestampTo: timestampTo /* DATETIME */,
-                                        //	timestampFrom: timestampFrom /* DATETIME */
-                                            timestampTo: new Date() /* DATETIME */,
-                                        	timestampFrom: date /* DATETIME */,
+                                        	timestampTo: timestampTo /* DATETIME */,
+                                        	timestampFrom: timestampFrom /* DATETIME */,
+                                        //    timestampTo: new Date() /* DATETIME */,
+                                        //	timestampFrom: date /* DATETIME */,
                                             category: "Quality"
                                         });
                                         
