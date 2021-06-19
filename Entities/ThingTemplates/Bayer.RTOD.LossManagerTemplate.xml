@@ -14,10 +14,10 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2021-06-01T06:26:56.767Z"
+         lastModifiedDate="2021-06-19T04:04:36.488Z"
          name="Bayer.RTOD.LossManagerTemplate"
          projectName="BayerRTOD"
-         tags=""
+         tags="Feature:BAYER-194"
          thingPackage=""
          valueStream="">
             <avatar></avatar>
@@ -79,6 +79,34 @@
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
                 <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetLossesByTimestamp">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.LossesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestampFrom"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestampTo"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                     <ServiceDefinition
                      aspect.isAsync="false"
                      category=""
@@ -162,10 +190,107 @@
                          ordinal="0"></ResultType>
                         <ParameterDefinitions></ParameterDefinitions>
                     </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetLossReasonCodes">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.LossReasonCodesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="InsertLoss">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="category"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="comment"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="lostReason"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="name"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestamp"
+                             ordinal="4"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
                 </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
                 <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetLossesByTimestamp">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // table: INFOTABLE dataShape: ""
+                                        var table =  me.GetLossProvider();
+                                        
+                                        var LossProviderThing = Things[table.rows[0].LossProvider];
+                                        result = LossProviderThing.GetLossesByTimestamp({
+                                        	timestampTo: timestampTo /* DATETIME */,
+                                        	timestampFrom: timestampFrom /* DATETIME */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
@@ -187,7 +312,19 @@
                                 </DataShape>
                                 <Rows>
                                     <Row>
-                                        <code></code>
+                                        <code>
+                                        <![CDATA[
+                                        // table: INFOTABLE dataShape: ""
+                                        var table =  me.GetLossProvider();
+                                        
+                                        var LossProviderThing = Things[table.rows[0].LossProvider];
+                                        result = LossProviderThing.GetLossesByTimestampAndCategory({
+                                        	timestampTo: timestampTo /* DATETIME */,
+                                        	timestampFrom: timestampFrom /* DATETIME */,
+                                        	category: category /* STRING */
+                                        });
+                                        ]]>
+                                        </code>
                                     </Row>
                                 </Rows>
                             </ConfigurationTable>
@@ -245,6 +382,80 @@
                                         <![CDATA[
                                         var result = me.GetConfigurationTable({
                                         	tableName: "LossProvider" /* STRING */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetLossReasonCodes">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetLossProvider();
+                                        var LossProviderThing = Things[table.rows[0].LossProvider];
+                                        var result =  LossProviderThing.GetLossReasonCodes();
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="InsertLoss">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetLossProvider();
+                                        
+                                        var LossProviderThing = Things[table.rows[0].LossProvider];
+                                        
+                                        var result =  LossProviderThing.InsertLoss({
+                                        	lostReason: lostReason /* INTEGER */,
+                                        	name: name /* STRING */,
+                                        	comment: comment /* STRING */,
+                                        	category: category /* STRING */,
+                                        	timestamp: timestamp /* DATETIME */
                                         });
                                         ]]>
                                         </code>
