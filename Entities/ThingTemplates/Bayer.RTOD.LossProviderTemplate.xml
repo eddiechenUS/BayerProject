@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2021-06-19T04:03:02.461Z"
+         lastModifiedDate="2021-06-19T10:57:11.767Z"
          name="Bayer.RTOD.LossProviderTemplate"
          projectName="BayerRTOD"
          tags="Applications:Bayer"
@@ -272,6 +272,30 @@
                          name="result"
                          ordinal="0"></ResultType>
                         <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetLossReasonCodesById">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.LossReasonCodesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
                      aspect.isAsync="false"
@@ -652,6 +676,40 @@
                                         <![CDATA[
                                         var conf =  me.GetSQLServerConnector();
                                         var result =  Things[conf.BayerSQLServerConnector].GetLossReasonCodes();
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetLossReasonCodesById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var conf =  me.GetSQLServerConnector();
+                                        var result =  Things[conf.BayerSQLServerConnector].GetLossReasonCodesById({
+                                        	id: id /* INTEGER */
+                                        });
                                         ]]>
                                         </code>
                                     </Row>
