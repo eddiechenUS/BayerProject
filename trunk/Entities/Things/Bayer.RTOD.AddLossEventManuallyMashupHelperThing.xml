@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-11T03:20:35.212Z"
+         lastModifiedDate="2021-06-19T06:33:37.876Z"
          name="Bayer.RTOD.AddLossEventManuallyMashupHelperThing"
          projectName="BayerRTOD"
          published="false"
@@ -101,6 +101,48 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="DisableSubmitButton">
+                        <ResultType
+                         baseType="BOOLEAN"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="category"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="comment"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="lostReason"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="name"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestamp"
+                             ordinal="5"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="GetLossManager">
                         <ResultType
                          aspect.dataShape="Bayer.RTOD.LossManagerProviderDataShape"
@@ -118,9 +160,26 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetLossReasonCodesAsDropdownMenu">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.LossReasonCodesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions></ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="InsertLoss">
                         <ResultType
-                         baseType="NUMBER"
+                         baseType="STRING"
                          description=""
                          name="result"
                          ordinal="0"></ResultType>
@@ -189,9 +248,65 @@
                                             dataShapeName : "Bayer.RTOD.AddLossEventManuallyCategoryDataShape"
                                         });
                                         
-                                        result.AddRow({"category": "Changeover"});
-                                        result.AddRow({"category": "Maintenance"});
-                                        result.AddRow({"category": "Quality"});
+                                        var localizationFunctions = Resources["RuntimeLocalizationFunctions"];
+                                        
+                                        var changeover = localizationFunctions.GetEffectiveToken({token: "Bayer.Changeover" /* STRING */});
+                                        var maintenance = localizationFunctions.GetEffectiveToken({token: "Bayer.Maintenance" /* STRING */});
+                                        var quality = localizationFunctions.GetEffectiveToken({token: "Bayer.Quality" /* STRING */});
+                                        
+                                        result.AddRow({"category": changeover});
+                                        result.AddRow({"category": maintenance});
+                                        result.AddRow({"category": quality});
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="DisableSubmitButton">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        if(
+                                           !checkString(name) && !checkString(category) && !checkString(comment) && 
+                                           lostReason !== null && typeof(lostReason) === "number"  &&
+                                           timestamp !== null
+                                        ) {
+                                        	result =  false;
+                                        } else {
+                                        	result =  true;
+                                        }
+                                        
+                                        function checkString(stringValue) {
+                                            if(stringValue === null || stringValue === undefined) {
+                                            	stringValue = "";
+                                            }
+                                        	if(stringValue === null || stringValue.trim() === "" || stringValue.length === 0) {
+                                            	return true;
+                                            } else {
+                                            	return false;
+                                            }
+                                        }
                                         ]]>
                                         </code>
                                     </Row>
@@ -235,6 +350,39 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
+                     name="GetLossReasonCodesAsDropdownMenu">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetLossManager();
+                                        var LossManagerThing = Things[table.rows[0].LossManager];
+                                        var result =  LossManagerThing.GetLossReasonCodes();
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
                      name="InsertLoss">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -256,16 +404,26 @@
                                         <code>
                                         <![CDATA[
                                         var table =  me.GetLossManager();
-                                        
                                         var LossManagerThing = Things[table.rows[0].LossManager];
-                                        
-                                        var result =  LossManagerThing.InsertLoss({
-                                        	lostReason: lostReason /* INTEGER */,
-                                        	name: name /* STRING */,
-                                        	comment: comment /* STRING */,
-                                        	category: category /* STRING */,
-                                        	timestamp: timestamp /* DATETIME */
-                                        });
+                                        var localizationResource = Resources["RuntimeLocalizationFunctions"];
+                                        var result;
+                                        try {
+                                        	LossManagerThing.InsertLoss({
+                                                lostReason: lostReason /* INTEGER */,
+                                                name: name /* STRING */,
+                                                comment: comment /* STRING */,
+                                                category: category /* STRING */,
+                                                timestamp: timestamp /* DATETIME */
+                                            });
+                                            result = localizationResource.GetEffectiveToken({
+                                                token: "Bayer.SubmitSucceed" /* STRING */
+                                            });
+                                        } catch (exception) {
+                                        	logger.warn("[" + me.name + "]" + " error occured: " +exception);
+                                        	result = localizationResource.GetEffectiveToken({
+                                                token: "Bayer.SubmitFailed" /* STRING */
+                                            });
+                                        }
                                         ]]>
                                         </code>
                                     </Row>
