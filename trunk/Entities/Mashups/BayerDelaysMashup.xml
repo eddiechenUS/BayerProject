@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-18T09:36:31.609Z"
+         lastModifiedDate="2021-06-19T11:23:44.806Z"
          name="BayerDelaysMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -515,23 +515,6 @@
                 "TargetId" : "D3Timeline-52",
                 "TargetSection" : ""
               }, {
-                "Id" : "07bf876f-bb52-4b89-b55d-6d5f2224b5bd",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "shiftSchedule",
-                  "SourcePropertyBaseType" : "INFOTABLE",
-                  "SourcePropertyType" : "Field",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "INFOTABLE",
-                  "TargetPropertyType" : "property"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "SelectedRows",
-                "SourceId" : "GetShiftsFromNow",
-                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
-                "TargetArea" : "UI",
-                "TargetId" : "labelchart-53",
-                "TargetSection" : ""
-              }, {
                 "Id" : "268eb907-4f03-4aae-b86c-34bf3170a592",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "id",
@@ -711,6 +694,71 @@
                 "TargetArea" : "UI",
                 "TargetId" : "collection-112",
                 "TargetSection" : ""
+              }, {
+                "Id" : "df8c496f-1ac2-4c44-af37-631c79d0f58b",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "TargetProperty" : "DelayShiftDetailsTableInput",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "GetDelayShiftDetails",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetDurationAndFreqFromShiftDetail",
+                "TargetSection" : "Things_BayerDelaysDetailsPage"
+              }, {
+                "Id" : "b1b8de2d-5a23-42f5-9dfa-ea00c0781f07",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "shiftSchedule",
+                  "SourcePropertyBaseType" : "INFOTABLE",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "INFOTABLE",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "UI",
+                "TargetId" : "labelchart-53",
+                "TargetSection" : ""
+              }, {
+                "Id" : "fe0335ef-035d-459b-a7a5-d7f18edeaecb",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timestamp",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "timestampFrom",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetLossesByTimestamp",
+                "TargetSection" : "Things_Bayer.RTOD.LossesScheduledMashupHelperThing"
+              }, {
+                "Id" : "36438c11-08b8-461b-8351-069204b0101e",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "timestamp",
+                  "SourcePropertyBaseType" : "DATETIME",
+                  "TargetProperty" : "timestampFrom",
+                  "TargetPropertyBaseType" : "DATETIME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "SelectedRows",
+                "SourceId" : "GetShiftsFromNow",
+                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
+                "TargetArea" : "Data",
+                "TargetId" : "GetLossesByTimestampAndCategory",
+                "TargetSection" : "Things_Bayer.RTOD.LossesOtherMashupHelperThing"
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -859,6 +907,15 @@
                 "EventTriggerSection" : "",
                 "Id" : "99e1b976-e059-4568-a460-85933a053dd2"
               }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "navigation-114",
+                "EventHandlerService" : "Navigate",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "button-125",
+                "EventTriggerSection" : "",
+                "Id" : "c9b970bc-664e-4e3d-80e7-f628fd99ae46"
+              }, {
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "Things_Bayer.RTOD.LossesOtherMashupHelperThing",
                 "EventHandlerService" : "GetLossesByTimestampAndCategory",
@@ -871,6 +928,15 @@
                 "EventHandlerArea" : "Data",
                 "EventHandlerId" : "Things_Bayer.RTOD.LossesScheduledMashupHelperThing",
                 "EventHandlerService" : "GetLossesByTimestamp",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "PopupClosed",
+                "EventTriggerId" : "navigation-114",
+                "EventTriggerSection" : "",
+                "Id" : "b34e5f4b-b7e3-4569-9986-ac6120225d2f"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerDelaysDetailsPage",
+                "EventHandlerService" : "GetDurationAndFreqFromShiftDetail",
                 "EventTriggerArea" : "Mashup",
                 "EventTriggerEvent" : "Loaded",
                 "EventTriggerId" : "mashup-root",
@@ -957,6 +1023,24 @@
                 "EventTriggerId" : "GetShiftsFromNow",
                 "EventTriggerSection" : "DynamicThingTemplates_BayerProductionLine",
                 "Id" : "a5cb9fde-4b06-4cf4-9478-849fcc0b029b"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.LossesOtherMashupHelperThing",
+                "EventHandlerService" : "GetLossesByTimestampAndCategory",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Refresh",
+                "EventTriggerId" : "autorefresh-68",
+                "EventTriggerSection" : "",
+                "Id" : "8e5dd0b1-3f22-4d58-9c2a-cbc4a76c1e1e"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.LossesScheduledMashupHelperThing",
+                "EventHandlerService" : "GetLossesByTimestamp",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Refresh",
+                "EventTriggerId" : "autorefresh-68",
+                "EventTriggerSection" : "",
+                "Id" : "e6990f9f-d37d-43c6-a26d-6040c4969ebb"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -3931,7 +4015,7 @@
                                 "Left" : 330,
                                 "NumberOfTabs" : 3,
                                 "ResponsiveLayout" : true,
-                                "SelectedTab" : 2,
+                                "SelectedTab" : 1,
                                 "ShowDataLoading" : true,
                                 "Tab10Disabled" : false,
                                 "Tab10Name" : "Tab Name 10",

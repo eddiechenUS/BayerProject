@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="ConfiguredThing"
          homeMashup=""
-         lastModifiedDate="2021-06-19T04:04:36.488Z"
+         lastModifiedDate="2021-06-19T10:58:40.358Z"
          name="Bayer.RTOD.LossManagerTemplate"
          projectName="BayerRTOD"
          tags="Feature:BAYER-194"
@@ -215,6 +215,29 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetLossReasonCodesById">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.LossReasonCodesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="InsertLoss">
                         <ResultType
                          baseType="NUMBER"
@@ -247,6 +270,53 @@
                              description=""
                              name="timestamp"
                              ordinal="4"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateLoss">
+                        <ResultType
+                         baseType="STRING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="category"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="comment"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="lostReason"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="name"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="timestamp"
+                             ordinal="6"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
@@ -426,6 +496,41 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
+                     name="GetLossReasonCodesById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetLossProvider();
+                                        var LossProviderThing = Things[table.rows[0].LossProvider];
+                                        var result =  LossProviderThing.GetLossReasonCodesById({
+                                        	id: id /* INTEGER */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
                      name="InsertLoss">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -454,6 +559,47 @@
                                         	lostReason: lostReason /* INTEGER */,
                                         	name: name /* STRING */,
                                         	comment: comment /* STRING */,
+                                        	category: category /* STRING */,
+                                        	timestamp: timestamp /* DATETIME */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="UpdateLoss">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetLossProvider();
+                                        var LossProviderThing = Things[table.rows[0].LossProvider];
+                                        
+                                        var result =  LossProviderThing.UpdateLoss({
+                                        	lostReason: lostReason /* INTEGER */,
+                                        	name: name /* STRING */,
+                                        	comment: comment /* STRING */,
+                                        	id: id /* INTEGER */,
                                         	category: category /* STRING */,
                                         	timestamp: timestamp /* DATETIME */
                                         });

@@ -15,7 +15,7 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-19T06:33:37.876Z"
+         lastModifiedDate="2021-06-19T11:00:21.276Z"
          name="Bayer.RTOD.AddLossEventManuallyMashupHelperThing"
          projectName="BayerRTOD"
          published="false"
@@ -177,6 +177,30 @@
                      isLocalOnly="false"
                      isOpen="false"
                      isPrivate="false"
+                     name="GetLossReasonCodesById">
+                        <ResultType
+                         aspect.dataShape="Bayer.RTOD.LossReasonCodesDataShape"
+                         baseType="INFOTABLE"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
                      name="InsertLoss">
                         <ResultType
                          baseType="STRING"
@@ -214,6 +238,59 @@
                              description=""
                              name="timestamp"
                              ordinal="4"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="UpdateLoss">
+                        <ResultType
+                         baseType="STRING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="STRING"
+                             description=""
+                             name="category"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="STRING"
+                             description=""
+                             name="comment"
+                             ordinal="4"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="id"
+                             ordinal="1"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="INTEGER"
+                             description=""
+                             name="lostReason"
+                             ordinal="5"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="STRING"
+                             description=""
+                             name="name"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             aspect.isRequired="true"
+                             baseType="DATETIME"
+                             description=""
+                             name="timestamp"
+                             ordinal="6"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                 </ServiceDefinitions>
@@ -383,6 +460,41 @@
                     <ServiceImplementation
                      description=""
                      handlerName="Script"
+                     name="GetLossReasonCodesById">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetLossManager();
+                                        var LossManagerThing = Things[table.rows[0].LossManager];
+                                        var result =  LossManagerThing.GetLossReasonCodesById({
+                                        	id: id /* INTEGER */
+                                        });
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
                      name="InsertLoss">
                         <ConfigurationTables>
                             <ConfigurationTable
@@ -423,6 +535,61 @@
                                         	result = localizationResource.GetEffectiveToken({
                                                 token: "Bayer.SubmitFailed" /* STRING */
                                             });
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="UpdateLoss">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var table =  me.GetLossManager();
+                                        var LossManagerThing = Things[table.rows[0].LossManager];
+                                        var localizationResource = Resources["RuntimeLocalizationFunctions"];
+                                        var result;
+                                        try {	   
+                                            LossManagerThing.UpdateLoss({
+                                                lostReason: lostReason /* INTEGER */,
+                                                name: name /* STRING */,
+                                                comment: comment /* STRING */,
+                                                id: id /* INTEGER */,
+                                                category: category /* STRING */,
+                                                timestamp: timestamp /* DATETIME */
+                                            });   
+                                            
+                                           result = localizationResource.GetEffectiveToken({
+                                                token: "Bayer.SubmitSucceed" /* STRING */
+                                            });
+                                            
+                                        } catch (exception) {
+                                        	logger.warn("[" + me.name + "]" + " error occured: " +exception);
+                                        	result = localizationResource.GetEffectiveToken({
+                                                token: "Bayer.SubmitFailed" /* STRING */
+                                            });
+                                            
                                         }
                                         ]]>
                                         </code>
