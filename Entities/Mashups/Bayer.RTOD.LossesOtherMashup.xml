@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-19T11:29:11.517Z"
+         lastModifiedDate="2021-06-22T11:22:03.906Z"
          name="Bayer.RTOD.LossesOtherMashup"
          projectName="BayerRTOD"
          rows="0.0"
@@ -84,6 +84,14 @@
                  baseType="INTEGER"
                  description=""
                  name="lostReason"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="IN"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="6"
+                 baseType="STRING"
+                 description=""
+                 name="lostReasonName"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
                  aspect.bindingDirection="IN"
@@ -221,20 +229,6 @@
                 "TargetId" : "valuedisplay-38",
                 "TargetSection" : ""
               }, {
-                "Id" : "c4a8b099-71ca-4886-ad61-88ef17356e33",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "lostReason",
-                  "SourcePropertyBaseType" : "INTEGER",
-                  "TargetProperty" : "Data",
-                  "TargetPropertyBaseType" : "ANYSCALAR"
-                } ],
-                "SourceArea" : "Mashup",
-                "SourceId" : "mashup-root",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "valuedisplay-50",
-                "TargetSection" : ""
-              }, {
                 "Id" : "88aa0817-4eff-415e-946b-579e64bcd392",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "lossesId",
@@ -318,6 +312,38 @@
                 "TargetArea" : "UI",
                 "TargetId" : "navigation-62",
                 "TargetSection" : ""
+              }, {
+                "Id" : "0beae80f-a482-4df2-9d41-07b8f85ef083",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "lostReasonName",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "property",
+                  "TargetProperty" : "Data",
+                  "TargetPropertyBaseType" : "ANYSCALAR",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "valuedisplay-50",
+                "TargetSection" : ""
+              }, {
+                "Id" : "72878f14-ce3a-4f3d-97cd-a56bfdd392e4",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "editLossResultMessage",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "Message",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "navigation-62",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "statusmessage-71",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -357,6 +383,15 @@
                 "EventTriggerId" : "button-64",
                 "EventTriggerSection" : "",
                 "Id" : "129c2299-50f2-4e96-804e-70bfa16cb9cb"
+              }, {
+                "EventHandlerArea" : "UI",
+                "EventHandlerId" : "statusmessage-71",
+                "EventHandlerService" : "ShowMessage",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "PopupClosed",
+                "EventTriggerId" : "navigation-62",
+                "EventTriggerSection" : "",
+                "Id" : "90fe9acb-754c-4acb-a7e5-74517b40fab6"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -455,8 +490,16 @@
                     "BaseType" : "INTEGER",
                     "Description" : "",
                     "ParameterName" : "lostReason"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "IN",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "lostReasonName"
                   } ],
-                  "id_index" : 70,
+                  "id_index" : 71,
                   "supportsAutoResize" : true
                 },
                 "Widgets" : [ {
@@ -2109,6 +2152,21 @@
                               "ordinal" : 0
                             }
                           }, {
+                            "BaseType" : "STRING",
+                            "Description" : "",
+                            "ParameterName" : "editLossResultMessage",
+                            "ParmDef" : {
+                              "aspects" : {
+                                "bindingDirection" : "OUT",
+                                "isMandatory" : "false",
+                                "ordinal" : "6"
+                              },
+                              "baseType" : "STRING",
+                              "description" : "",
+                              "name" : "editLossResultMessage",
+                              "ordinal" : 0
+                            }
+                          }, {
                             "BaseType" : "DATETIME",
                             "Description" : "",
                             "ParameterName" : "timestamp",
@@ -2258,6 +2316,23 @@
                       "isBindingTarget" : true,
                       "name" : "eventId"
                     } ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "DisplayName" : "editLossResultMessage",
+                    "Height" : 28,
+                    "Id" : "statusmessage-71",
+                    "LastContainer" : false,
+                    "Message" : "",
+                    "MessageType" : "info",
+                    "ShowDataLoading" : true,
+                    "Type" : "statusmessage",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Status Message"
                   },
                   "Widgets" : [ ]
                 } ]

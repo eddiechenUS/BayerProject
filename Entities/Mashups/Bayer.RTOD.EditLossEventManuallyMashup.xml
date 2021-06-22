@@ -16,7 +16,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-21T07:57:44.024Z"
+         lastModifiedDate="2021-06-22T11:16:30.855Z"
          name="Bayer.RTOD.EditLossEventManuallyMashup"
          projectName="BayerRTOD"
          rows="0.0"
@@ -51,6 +51,14 @@
                  baseType="STRING"
                  description=""
                  name="comment"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="OUT"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="6"
+                 baseType="STRING"
+                 description=""
+                 name="editLossResultMessage"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
                  aspect.bindingDirection="IN"
@@ -567,6 +575,23 @@
                 "TargetArea" : "Data",
                 "TargetId" : "DisableSubmitButton",
                 "TargetSection" : "Things_Bayer.RTOD.AddLossEventManuallyMashupHelperThing"
+              }, {
+                "Id" : "d606ed6a-fdb0-4963-9869-ca567cb2ec61",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "STRING",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "editLossResultMessage",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "UpdateLoss",
+                "SourceSection" : "Things_Bayer.RTOD.AddLossEventManuallyMashupHelperThing",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
+                "TargetSection" : ""
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -683,6 +708,15 @@
                 "EventTriggerId" : "ptcsbutton-32",
                 "EventTriggerSection" : "",
                 "Id" : "57294a8d-5be1-493b-a026-7fb7c3cb2332"
+              }, {
+                "EventHandlerArea" : "Mashup",
+                "EventHandlerId" : "mashup-root",
+                "EventHandlerService" : "CloseIfPopup",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "editLossResultMessageChanged",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "fb69b987-4adb-4a20-b091-7759e0184cce"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -781,6 +815,14 @@
                     "BaseType" : "INTEGER",
                     "Description" : "",
                     "ParameterName" : "lossId"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "OUT",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "STRING",
+                    "Description" : "",
+                    "ParameterName" : "editLossResultMessage"
                   } ],
                   "id_index" : 52,
                   "supportsAutoResize" : true

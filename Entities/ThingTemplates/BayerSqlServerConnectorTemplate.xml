@@ -14,7 +14,7 @@
          documentationContent=""
          effectiveThingPackage="DatabaseThing"
          homeMashup=""
-         lastModifiedDate="2021-06-19T10:55:09.725Z"
+         lastModifiedDate="2021-06-22T11:22:52.716Z"
          name="BayerSqlServerConnectorTemplate"
          projectName="BayerIoT"
          tags="Applications:Bayer"
@@ -3807,6 +3807,11 @@
                              description=""
                              name="oldProductionPlanId"
                              ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="DATETIME"
+                             description=""
+                             name="time"
+                             ordinal="3"></FieldDefinition>
                         </ParameterDefinitions>
                     </ServiceDefinition>
                     <ServiceDefinition
@@ -5317,9 +5322,23 @@
                                         <maxItems>500.0</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT * FROM [dbo].[Losses]
-                                        	WHERE [timestamp] BETWEEN	[[timestampFrom]] AND [[timestampTo]]
-                                        	ORDER BY [timestamp] ASC
+                                        SELECT a.[id]
+                                              ,a.[name]
+                                              ,a.[comment]
+                                              ,a.[category]
+                                              ,a.[timestamp]
+                                              ,a.[lostReason]
+                                              ,b.[localizationTokenName]
+                                          FROM 
+                                          		[BayerDevDb].[dbo].[Losses] as a
+                                          LEFT JOIN 
+                                          		[LossReasonCodes] as b
+                                          ON 
+                                          		a.[lostReason] = b.[id]
+                                          WHERE 
+                                          		[timestamp] BETWEEN	[[timestampFrom]] AND [[timestampTo]]
+                                          ORDER BY 
+                                          		[timestamp] ASC
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -5362,11 +5381,24 @@
                                         <maxItems>500.0</maxItems>
                                         <sql>
                                         <![CDATA[
-                                        SELECT * FROM [dbo].[Losses]
-                                        	WHERE
+                                        SELECT a.[id]
+                                              ,a.[name]
+                                              ,a.[comment]
+                                              ,a.[category]
+                                              ,a.[timestamp]
+                                              ,a.[lostReason]
+                                              ,b.[localizationTokenName]
+                                          FROM 
+                                          		[BayerDevDb].[dbo].[Losses] as a
+                                          LEFT JOIN 
+                                          		[LossReasonCodes] as b
+                                          ON 
+                                          		a.[lostReason] = b.[id]
+                                          WHERE
                                         		[category] = [[category]] AND
                                         		[timestamp] BETWEEN	[[timestampFrom]] AND [[timestampTo]]
-                                        	ORDER BY [timestamp] ASC
+                                          ORDER BY 
+                                          		[timestamp] ASC;
                                         ]]>
                                         </sql>
                                         <timeout>60.0</timeout>
@@ -6068,6 +6100,7 @@
                                               ,d.[remainingHours]
                                               ,d.[workedHours]
                                               ,d.[producedQuantity]
+                                              ,d.[rejectedQuantity]
                                               ,d.[startTime]
                                               ,d.[endTime]
                                               ,d.[activeMaterialNumber]
@@ -6080,7 +6113,6 @@
                                               ,d.[tabletsPerBlister]
                                               ,d.[manufProcess]
                                               ,d.[numberOfOperators]
-                                              ,d.[rejectedQuantity]
                                               ,d.[orderSequenceNumber]
                                         	  ,p.[originalTargetQuantity]
                                         	  ,p.[userName]
@@ -6146,6 +6178,7 @@
                                               ,d.[remainingHours]
                                               ,d.[workedHours]
                                               ,d.[producedQuantity]
+                                              ,d.[rejectedQuantity]
                                               ,d.[startTime]
                                               ,d.[endTime]
                                               ,d.[activeMaterialNumber]
@@ -6226,6 +6259,7 @@
                                               ,d.[remainingHours]
                                               ,d.[workedHours]
                                               ,d.[producedQuantity]
+                                              ,d.[rejectedQuantity]
                                               ,d.[startTime]
                                               ,d.[endTime]
                                               ,d.[activeMaterialNumber]
@@ -6303,6 +6337,7 @@
                                               ,d.[remainingHours]
                                               ,d.[workedHours]
                                               ,d.[producedQuantity]
+                                              ,d.[rejectedQuantity]
                                               ,d.[startTime]
                                               ,d.[endTime]
                                               ,d.[activeMaterialNumber]
@@ -6385,6 +6420,7 @@
                                               ,d.[remainingHours]
                                               ,d.[workedHours]
                                               ,d.[producedQuantity]
+                                              ,d.[rejectedQuantity]
                                               ,d.[startTime]
                                               ,d.[endTime]
                                               ,d.[activeMaterialNumber]
@@ -6469,6 +6505,7 @@
                                               ,d.[remainingHours]
                                               ,d.[workedHours]
                                               ,d.[producedQuantity]
+                                              ,d.[rejectedQuantity]
                                               ,d.[startTime]
                                               ,d.[endTime]
                                               ,d.[activeMaterialNumber]
@@ -6550,6 +6587,7 @@
                                               ,d.[remainingHours]
                                               ,d.[workedHours]
                                               ,d.[producedQuantity]
+                                              ,d.[rejectedQuantity]
                                               ,d.[startTime]
                                               ,d.[endTime]
                                               ,d.[activeMaterialNumber]
@@ -6669,6 +6707,7 @@
                                               ,d.[remainingHours]
                                               ,d.[workedHours]
                                               ,d.[producedQuantity]
+                                              ,d.[rejectedQuantity]
                                               ,d.[startTime]
                                               ,d.[endTime]
                                               ,d.[activeMaterialNumber]
