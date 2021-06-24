@@ -6,14 +6,14 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="">
+ universal="password">
     <ThingShapes>
         <ThingShape
          className=""
          description="Implemented on BayerProductionLine"
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-16T01:25:25.795Z"
+         lastModifiedDate="2021-06-23T12:40:20.670Z"
          name="BayerProductionManagement"
          projectName="BayerIoT"
          tags="Applications:Bayer">
@@ -61,6 +61,7 @@
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="0.0"
                  aspect.isPersistent="true"
                  baseType="NUMBER"
                  category="Production"
@@ -95,6 +96,7 @@
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
+                 aspect.defaultValue="0.0"
                  aspect.isPersistent="true"
                  baseType="NUMBER"
                  category="Production"
@@ -102,6 +104,16 @@
                  isLocalOnly="false"
                  name="previousProductRejectCounter"
                  ordinal="12"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="NUMBER"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="previousRejectCounterValue"
+                 ordinal="13"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
@@ -132,6 +144,16 @@
                  isLocalOnly="false"
                  name="rejectCounter"
                  ordinal="10"></PropertyDefinition>
+                <PropertyDefinition
+                 aspect.cacheTime="0.0"
+                 aspect.dataChangeType="VALUE"
+                 aspect.isPersistent="true"
+                 baseType="NUMBER"
+                 category=""
+                 description=""
+                 isLocalOnly="false"
+                 name="rejectCounterLasestRecord"
+                 ordinal="14"></PropertyDefinition>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
                  aspect.dataChangeType="VALUE"
@@ -649,8 +671,10 @@
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDataShape"
                                         var current = me.GetCurrentProduct();
                                         var currentQuantity = me.counter;
+                                        var currentQuantityRejected = me.rejectCounter;
                                         if (current && current.rows.length > 0) {
                                             current.producedQuantity = currentQuantity;
+                                            current.rejectedQuantity = currentQuantityRejected;
                                             if (allowAdjustment && (editedQuantity != undefined && editedQuantity > 0)) {
                                                 current.producedQuantity = editedQuantity;
                                     
@@ -665,6 +689,10 @@
                                             me.previousProductCounter += me.counter;
                                             me.previousCycleCounter -= me.counter;
                                             me.counter = 0;
+                                            
+                                            me.previousProductRejectCounter += me.rejectCounter;
+                                            me.previousCycleRejectCounter -= me.rejectCounter;
+                                            me.rejectCounter = 0;
                                     
                                             current.status = "COMPLETED";
                                             current.endTime = new Date();
@@ -681,6 +709,7 @@
                                                 data: current /* INFOTABLE */
                                             });
                                         }
+                                        Things[me.GetKPIManager()].CalculateKPIsForProductionOrder({productionOrder: current.id});
                                         // start first pending product
                                         // result: INFOTABLE dataShape: "BayerProductionPlanDbDataShape"
                                         var pending = Things["BayerDBDataProvider"].GetProductionPlanItemByStatus({
@@ -1218,6 +1247,7 @@
                                         newEntry.productId = "standby"; // STRING
                                         newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                         newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.rejectedQuantity = 0; // NUMBER    
                                         newEntry.startTime = undefined; // DATETIME
                                         newEntry.endTime = undefined; // DATETIME
                                         newEntry.workedHours = 0; // NUMBER
@@ -1402,6 +1432,7 @@
                                             newEntry.remainingHours = newEntry.targetHours; // NUMBER
                                             newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                             newEntry.producedQuantity = 0; // NUMBER
+                                            newEntry.rejectedQuantity = 0; // NUMBER
                                             newEntry.startTime = undefined; // DATETIME
                                             newEntry.endTime = undefined; // DATETIME
                                             newEntry.workedHours = 0; // NUMBER
@@ -1432,6 +1463,7 @@
                                         newEntry.productId = "Cambio"; // STRING
                                         newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                         newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.rejectedQuantity = 0; // NUMBER
                                         newEntry.startTime = undefined; // DATETIME
                                         newEntry.endTime = undefined; // DATETIME
                                         newEntry.workedHours = 0; // NUMBER
@@ -1556,6 +1588,7 @@
                                         newEntry.productId = "standby"; // STRING
                                         newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                         newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.rejectedQuantity = 0; // NUMBER
                                         newEntry.startTime = undefined; // DATETIME
                                         newEntry.endTime = undefined; // DATETIME
                                         newEntry.workedHours = 0; // NUMBER
@@ -1656,6 +1689,7 @@
                                                 newEntry.targetHours = Math.round(newEntry.targetQuantity / newEntry.targetQuantityPerHour * 100) / 100; // NUMBER
                                                 newEntry.remainingHours = newEntry.targetHours; // NUMBER
                                                 newEntry.producedQuantity = 0; // NUMBER
+                                                newEntry.rejectedQuantity = 0; // NUMBER
                                                 newEntry.startTime = undefined; // DATETIME
                                                 newEntry.endTime = undefined; // DATETIME
                                                 newEntry.workedHours = 0; // NUMBER
@@ -1708,6 +1742,7 @@
                                         newEntry.productId = "Cambio"; // STRING
                                         newEntry.productionLine = me.name; // THINGNAME - isPrimaryKey = true
                                         newEntry.producedQuantity = 0; // NUMBER
+                                        newEntry.rejectedQuantity = 0; // NUMBER
                                         newEntry.startTime = undefined; // DATETIME
                                         newEntry.endTime = undefined; // DATETIME
                                         newEntry.workedHours = 0; // NUMBER
@@ -2075,14 +2110,18 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
-                                    var incomingValue = eventData.newValue.value;
-                                    
-                                    if (me.previousProductRejectCounter <= incomingValue) {
-                                        me.rejectCounter = incomingValue - me.previousProductRejectCounter;
-                                    }
-                                    else {
-                                        me.previousProductRejectCounter = 0;
-                                        me.rejectCounter = incomingValue;
+                                    try {
+                                    	var incomingValue = eventData.newValue.value;
+                                    	//logger.debug("BayerProductionManagement _ UpdateRejectCounter(1): incomingValue=[" + incomingValue + "], previousProductRejectCounter=[" + me.previousProductRejectCounter + "]");
+                                    	if (me.previousProductRejectCounter <= incomingValue) {
+                                    		me.rejectCounter = incomingValue - me.previousProductRejectCounter;
+                                    	} else {
+                                    		me.previousProductRejectCounter = 0;
+                                    		me.rejectCounter = incomingValue;
+                                    	}
+                                    	//logger.debug("BayerProductionManagement _ UpdateRejectCounter(2): rejectCounter=[" + me.rejectCounter + "], previousProductRejectCounter=[" + me.previousProductRejectCounter + "]");
+                                    } catch (e) {
+                                    	logger.error("BayerProductionManagement _ UpdateRejectCounter: Error in line " + e.lineNumber + ": " + e);
                                     }
                                     ]]>
                                     </code>
@@ -2219,11 +2258,15 @@
                 <AlertDefinitions
                  name="previousProductRejectCounter"></AlertDefinitions>
                 <AlertDefinitions
+                 name="previousRejectCounterValue"></AlertDefinitions>
+                <AlertDefinitions
                  name="productionlinestatus"></AlertDefinitions>
                 <AlertDefinitions
                  name="productionsensorvalue"></AlertDefinitions>
                 <AlertDefinitions
                  name="rejectCounter"></AlertDefinitions>
+                <AlertDefinitions
+                 name="rejectCounterLasestRecord"></AlertDefinitions>
                 <AlertDefinitions
                  name="updateProductLock"></AlertDefinitions>
             </AlertConfigurations>
@@ -2338,6 +2381,19 @@
                         <Principal
                          isPermitted="true"
                          name="BayerProductionPlansProcessingUser"
+                         type="User"></Principal>
+                    </PropertyWrite>
+                    <ServiceInvoke></ServiceInvoke>
+                    <EventInvoke></EventInvoke>
+                    <EventSubscribe></EventSubscribe>
+                </Permissions>
+                <Permissions
+                 resourceName="previousProductRejectCounter">
+                    <PropertyRead></PropertyRead>
+                    <PropertyWrite>
+                        <Principal
+                         isPermitted="true"
+                         name="System"
                          type="User"></Principal>
                     </PropertyWrite>
                     <ServiceInvoke></ServiceInvoke>

@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="password">
+    <Things>
+        <Thing
+         description=""
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2021-06-24T05:26:19.156Z"
+         name="Bayer.RTOD.ProductionSpeedValidator"
+         projectName="BayerRTOD"
+         published="false"
+         tags="Applications:Bayer"
+         thingTemplate="GenericThing"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions>
+                    <PropertyDefinition
+                     aspect.cacheTime="0.0"
+                     aspect.dataChangeType="VALUE"
+                     aspect.dataShape="ProductionSpeed"
+                     aspect.isPersistent="true"
+                     baseType="INFOTABLE"
+                     category=""
+                     description=""
+                     isLocalOnly="false"
+                     name="SpeedTable"
+                     ordinal="2"></PropertyDefinition>
+                </PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="CompareFuction">
+                        <ResultType
+                         baseType="STRING"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             aspect.defaultValue="100.0"
+                             baseType="NUMBER"
+                             description=""
+                             name="defaultIdealRunRate"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="STRING"
+                             description=""
+                             name="productionLineName"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="speed"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="ConfigureTargetQuantityPerHour">
+                        <ResultType
+                         baseType="INTEGER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="configureTargetQuantityPerHour">
+                        <ResultType
+                         baseType="INTEGER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="RecalculateTargetQuantityPerHour">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="materialId_Input"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="INTEGER"
+                             description=""
+                             name="productionFormatId_Input"
+                             ordinal="3"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine_Input"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="CompareFuction">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //get production speed from Mashup and compare it to adjustedRunRate in RateStandards table in DB
+                                        //get product id from runtime GetProperties from ProductionLine
+                                        
+                                            function InserLoss(){
+                                                
+                                                var randomEnd = new Date().getMilliseconds();
+                                                var randomName = 'testInsertLoss'.concat(randomEnd);
+                                               
+                                                //var lostReason = randomEnd;//Dont assign value to lostReason!!! because lostReason column is auto generated, if assign value it will have conflicted error.
+                                                Things["BayerSqlServerConnector"].InsertLoss({
+                                                    lostReason: 1 ,
+                                            		productionLine: productionLineName ,
+                                            		name: randomName,
+                                            		comment: 'SpeedLowerThanExpect',
+                                            		category: 'breakdown' ,
+                                            		timestamp: new Date()   
+                                                 });
+                                                //////return 'inserted loss';   ////return is not working!!!!
+                                                 result =  'inserted loss';  
+                                            }
+                                        
+                                        
+                                        
+                                        try{
+                                            var result;
+                                            //var ProductionLineName = 'DEMO_ProductionLine';//test
+                                            var ProductionLineName =productionLineName;
+                                            var RateStandardsTable_filtered;
+                                            var speed=0;
+                                            var materialId =0;
+                                            var productionFormatId = 0;
+                                            var productionLine = '';
+                                            var IdealRunRate = 0;
+                                            var idealRunRate = 0;
+                                            var default_value=100;   //test value:  ideal run rate.
+                                            var INPROGRESS_counter=0; //if have in progress status -> INPROGRESS_counter = 1
+                                                // result: INFOTABLE dataShape: ""
+                                            ProductionPlanTableByLine =  Things["BayerSqlServerConnector"].GetProductionPlanForLine_EXTEND({   //Include MatarialId, ProductionFormatId
+                                            	line: productionLineName /* THINGNAME */
+                                            });
+                                            
+                                            var tableLength = ProductionPlanTableByLine.rows.length;
+                                            for (var x=0; x < tableLength; x++) {
+                                                var row = ProductionPlanTableByLine.rows[x];
+                                                if(row.status =='INPROGRESS'){
+                                                   INPROGRESS_counter+=1; //if have in progress status -> INPROGRESS_counter = 1
+                                                   materialId = !(row.materialId===undefined ||  row.materialId===null || isNaN(row.materialId))?  row.materialId : 0  ;
+                                                  // result = 'materialId = ' +materialId;
+                                                   productionFormatId = !(row.productionFormatId===undefined ||  row.productionFormatId===null || isNaN(row.productionFormatId))?  row.productionFormatId : 0  ;
+                                                  //result = 'productionFormatId = ' +productionFormatId;
+                                        
+                                        ////-----------------------------------------determination is completed, start to get the correct rate value below-----------------------------------------------------------------------
+                                        ////-----------------------------------------Priority: materialId > productionFormatId > productionLine  > default
+                                           
+                                                	if(materialId!==0){                                                  //material !=0
+                                                   
+                                                        RateStandardsTable_filtered =  Things["BayerSqlServerConnector"].GetRateStandardsByMaterialId({
+                                                        	materialId: materialId /* INTEGER */
+                                                        });
+                                                         IdealRunRate = !(RateStandardsTable_filtered.idealRunRate===undefined ||  RateStandardsTable_filtered.idealRunRate===null || isNaN(RateStandardsTable_filtered.idealRunRate))?  RateStandardsTable_filtered.idealRunRate : 0  ;
+                                                         //result = 'IdealRunRate = ' +IdealRunRate;
+                                                	}else if(productionFormatId!==0){                                   //material = 0,  productionFormatId != 0
+                                                	
+                                                    	RateStandardsTable_filtered =  Things["BayerSqlServerConnector"].GetRateStandardsByProductionFormatId({
+                                                    		productionFormatId: productionFormatId /* INTEGER */
+                                                    	}); 
+                                                        IdealRunRate = !(RateStandardsTable_filtered.idealRunRate===undefined ||  RateStandardsTable_filtered.idealRunRate===null || isNaN(RateStandardsTable_filtered.idealRunRate))?  RateStandardsTable_filtered.idealRunRate : 0  ;
+                                        				
+                                                	}else{                                //material = 0,  productionFormatId =  0, productionLine != nothing
+                                                			
+                                                    	RateStandardsTable_filtered =  Things["BayerSqlServerConnector"].GetRateStandardByProductionLineName({
+                                                    		productionLineName: productionLineName /* STRING */  // 'Thing' input can auto transform to the name of the entity in String.
+                                                    	}); 
+                                                        idealRunRate = !(RateStandardsTable_filtered.idealRunRate===undefined ||  RateStandardsTable_filtered.idealRunRate===null || isNaN(RateStandardsTable_filtered.idealRunRate))?  RateStandardsTable_filtered.idealRunRate : 0  ;
+                                                		
+                                                        
+                                                        if(idealRunRate!==0){
+                                                            IdealRunRate  = idealRunRate;
+                                                        }else{
+                                                        	IdealRunRate = defaultIdealRunRate;
+                                        //                result = 'IdealRunRate = ' +IdealRunRate;
+                                                        }
+                                                    }
+                                                   break; 
+                                                }  
+                                            }
+                                        
+                                        
+                                            
+                                            if(INPROGRESS_counter==0){
+                                            	result =  'no production in progress';
+                                            }else if(speed<IdealRunRate){   //////Insert loss if speed lower than expectation
+                                            	InserLoss();    
+                                            }else{
+                                            	result =  'no loss';
+                                            }
+                                        
+                                        }catch(e){
+                                            logger.error(me.name + " compareFuction: Error in line " + e.lineNumber + ": " + e);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="ConfigureTargetQuantityPerHour">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var INPROGRESS_ProductionPlanID;
+                                        var MaterialId;
+                                        var ProductionFormatId;
+                                        var rateStandardTable;
+                                        var idealRunRate_ToReplaceTargetQuantityPerHour;
+                                        var result;
+                                        
+                                        // result: INFOTABLE dataShape: ""
+                                        var ProductionplanTable =  Things["BayerSqlServerConnector"].GetProductionPlanForLine({
+                                        	line: productionLine /* THINGNAME */
+                                        });
+                                        try{
+                                            var tableLength = ProductionplanTable.rows.length;
+                                            if(!(tableLength===0 || tableLength==null)){
+                                                for (var x=0; x < tableLength; x++) {
+                                                    var row = ProductionplanTable.rows[x];
+                                                    if(row.status==='INPROGRESS'){
+                                                    	INPROGRESS_ProductionPlanID=row.id;
+                                                        ProductionFormatId=row.productionFormatId;
+                                                        MaterialId=row.materialId;
+                                        
+                                                        //Get rateStandardTable by productionLine. > get idealRunRate value from rateStandardTable
+                                                        rateStandardTable = getRateStandard(productionLine);
+                                                		var tableLength2 = rateStandardTable.rows.length;
+                                                        if(!(tableLength2===0 || tableLength2==null)){
+                                                            for (var y=0; x < tableLength; y++) {
+                                                                var roW = rateStandardTable.rows[y];
+                                                                if(roW.productionFormatId===ProductionFormatId){
+                                                                	idealRunRate_ToReplaceTargetQuantityPerHour=roW.idealRunRate;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                    }
+                                                    break;
+                                                }
+                                                //update the TargetQuantityPerHour
+                                                // result: INFOTABLE dataShape: ""
+                                                	result =  Things["BayerSqlServerConnector"].UpdateProductionPlan_TargetQuantityPerHourById({
+                                                	id: INPROGRESS_ProductionPlanID /* INTEGER */,
+                                                	//targetQuantityPerHour: idealRunRate_ToReplaceTargetQuantityPerHour /* NUMBER */
+                                                    targetQuantityPerHour: 778 /* NUMBER */
+                                                });
+                                                    
+                                            }
+                                        	
+                                        }catch(e){
+                                        	logger.error(e);
+                                        }
+                                        
+                                        
+                                        
+                                        function getRateStandard(productionLine_Input){
+                                            // result: INFOTABLE dataShape: ""
+                                        	var result =  Things["BayerSqlServerConnector"].GetRateStandardByProductionLineName({
+                                        		productionLineName: productionLine_Input /* STRING */
+                                        	});
+                                            return RateStandardTable;
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="configureTargetQuantityPerHour">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var INPROGRESS_ProductionPlanID;
+                                        var MaterialId;
+                                        var ProductionFormatId;
+                                        var rateStandardTable;
+                                        var idealRunRate_ToReplaceTargetQuantityPerHour;
+                                        var result;
+                                        
+                                        // result: INFOTABLE dataShape: ""
+                                        var ProductionplanTable =  Things["BayerSqlServerConnector"].GetProductionPlanForLine({
+                                        	line: productionLine /* THINGNAME */
+                                        });
+                                        try{
+                                            var tableLength = ProductionplanTable.rows.length;
+                                            if(!(tableLength===0 || tableLength==null)){
+                                                for (var x=0; x < tableLength; x++) {
+                                                    var row = ProductionplanTable.rows[x];
+                                                    if(row.status==='INPROGRESS'){
+                                                    	INPROGRESS_ProductionPlanID=row.id;
+                                                        ProductionFormatId=row.productionFormatId;
+                                                        MaterialId=row.materialId;
+                                        
+                                                        //Get rateStandardTable by productionLine. > get idealRunRate value from rateStandardTable
+                                                        rateStandardTable = getRateStandard(productionLine);
+                                                		var tableLength2 = rateStandardTable.rows.length;
+                                                        if(!(tableLength2===0 || tableLength2==null)){
+                                                            for (var y=0; x < tableLength; y++) {
+                                                                var roW = rateStandardTable.rows[y];
+                                                                if(roW.productionFormatId===ProductionFormatId){
+                                                                	idealRunRate_ToReplaceTargetQuantityPerHour=roW.idealRunRate;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                    }
+                                                    break;
+                                                }
+                                                //update the TargetQuantityPerHour
+                                                // result: INFOTABLE dataShape: ""
+                                                	result =  Things["BayerSqlServerConnector"].UpdateProductionPlan_TargetQuantityPerHourById({
+                                                	id: INPROGRESS_ProductionPlanID /* INTEGER */,
+                                                	//targetQuantityPerHour: idealRunRate_ToReplaceTargetQuantityPerHour /* NUMBER */
+                                                    targetQuantityPerHour: 778 /* NUMBER */
+                                                });
+                                                    
+                                            }
+                                        	
+                                        }catch(e){
+                                        	logger.error(e);
+                                        }
+                                        
+                                        
+                                        
+                                        function getRateStandard(productionLine_Input){
+                                            // result: INFOTABLE dataShape: ""
+                                        	var result =  Things["BayerSqlServerConnector"].GetRateStandardByProductionLineName({
+                                        		productionLineName: productionLine_Input /* STRING */
+                                        	});
+                                            return RateStandardTable;
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="RecalculateTargetQuantityPerHour">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        // result: INFOTABLE dataShape: ""
+                                        var RateStandardsTable =  Things["BayerSqlServerConnector"].GetRateStandards();
+                                        var materialId =0;
+                                        var productionFormatId = 0;
+                                        var productionLine = '';
+                                        var RateStandardsTable_filtered ;
+                                        var TargetQuantityPerHour=0;   //default
+                                        
+                                        //var  result = !!RateStandardsTable.productionLine;
+                                        if(!(materialId_Input===undefined ||  materialId_Input===null || isNaN(materialId_Input))){
+                                        	materialId = materialId_Input;
+                                        }
+                                        if(!(productionFormatId_Input===undefined || productionFormatId_Input===null ||  isNaN(productionFormatId_Input))){
+                                        	productionFormatId = productionFormatId_Input;
+                                        }
+                                        if(productionLine_Input===undefined || !!productionLine_Input  ||  productionLine_Input.length===0){
+                                        	productionLine = productionLine_Input;
+                                        }
+                                        ////-----------------------------------------determination is completed, start to get the correct rate value below-----------------------------------------------------------------------
+                                        ////-----------------------------------------Priority: materialId > productionFormatId > productionLine  > default
+                                        
+                                        try{
+                                            	if(materialId!==0){                                                  //material !=0
+                                                   
+                                                    RateStandardsTable_filtered =  Things["BayerSqlServerConnector"].GetRateStandardsByMaterialId({
+                                                    	materialId: materialId /* INTEGER */
+                                                    });
+                                                    TargetQuantityPerHour = !(RateStandardsTable_filtered.idealRunRate===undefined ||  RateStandardsTable_filtered.idealRunRate===null || isNaN(RateStandardsTable_filtered.idealRunRate))?  RateStandardsTable_filtered.idealRunRate : 0  ;
+                                                }else if(productionFormatId!==0){                                   //material = 0,  productionFormatId != 0
+                                            	
+                                                	RateStandardsTable_filtered =  Things["BayerSqlServerConnector"].GetRateStandardsByProductionFormatId({
+                                                		productionFormatId: productionFormatId /* INTEGER */
+                                                	}); 
+                                                    TargetQuantityPerHour = !(RateStandardsTable_filtered.idealRunRate===undefined ||  RateStandardsTable_filtered.idealRunRate===null || isNaN(RateStandardsTable_filtered.idealRunRate))?  RateStandardsTable_filtered.idealRunRate : 0  ;
+                                                }else if(productionLine.length!==0){                                //material = 0,  productionFormatId =  0, productionLine != nothing
+                                            			
+                                                	RateStandardsTable_filtered =  Things["BayerSqlServerConnector"].GetRateStandardByProductionLineName({
+                                                		productionLineName: productionLine_Input /* STRING */  // 'Thing' input can auto transform to the name of the entity in String.
+                                                	}); 
+                                                    TargetQuantityPerHour = !(RateStandardsTable_filtered.idealRunRate===undefined ||  RateStandardsTable_filtered.idealRunRate===null || isNaN(RateStandardsTable_filtered.idealRunRate))?  RateStandardsTable_filtered.idealRunRate : 0  ;
+                                            	}else{                                                               //material = 0,  productionFormatId =  0, productionLine =  nothing, then we use default value;
+                                            				//default value = ?			
+                                            	}
+                                        }catch(e){
+                                        	logger.error(e);
+                                        }
+                                        
+                                        
+                                        result = TargetQuantityPerHour;
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations>
+                <AlertDefinitions
+                 name="SpeedTable"></AlertDefinitions>
+            </AlertConfigurations>
+            <ImplementedShapes></ImplementedShapes>
+            <ThingProperties>
+                <SpeedTable>
+                    <Value>
+                        <infoTable>
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     aspect.isPrimaryKey="false"
+                                     baseType="INTEGER"
+                                     description=""
+                                     name="materialId"
+                                     ordinal="1"></FieldDefinition>
+                                    <FieldDefinition
+                                     aspect.isPrimaryKey="false"
+                                     baseType="INTEGER"
+                                     description=""
+                                     name="productionFormatId"
+                                     ordinal="2"></FieldDefinition>
+                                    <FieldDefinition
+                                     aspect.isPrimaryKey="false"
+                                     baseType="THINGNAME"
+                                     description=""
+                                     name="productionLine"
+                                     ordinal="3"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows></Rows>
+                        </infoTable>
+                    </Value>
+                    <Timestamp>1970-01-01T00:00:00.000Z</Timestamp>
+                    <Quality>UNKNOWN</Quality>
+                </SpeedTable>
+            </ThingProperties>
+        </Thing>
+    </Things>
+</Entities>
