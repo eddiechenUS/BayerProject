@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Entities
+ build="b222"
+ majorVersion="8"
+ minorVersion="5"
+ modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
+ revision="4"
+ schemaVersion="1053"
+ universal="password">
+    <Things>
+        <Thing
+         description=""
+         documentationContent=""
+         effectiveThingPackage="ConfiguredThing"
+         enabled="true"
+         homeMashup=""
+         identifier=""
+         lastModifiedDate="2021-06-24T05:44:31.961Z"
+         name="Bayer.RTOD.ChangeOverTimeThing"
+         projectName="BayerIoT"
+         published="false"
+         tags=""
+         thingTemplate="GenericThing"
+         valueStream="">
+            <avatar></avatar>
+            <DesignTimePermissions>
+                <Create></Create>
+                <Read></Read>
+                <Update></Update>
+                <Delete></Delete>
+                <Metadata></Metadata>
+            </DesignTimePermissions>
+            <RunTimePermissions></RunTimePermissions>
+            <VisibilityPermissions>
+                <Visibility></Visibility>
+            </VisibilityPermissions>
+            <ConfigurationTableDefinitions></ConfigurationTableDefinitions>
+            <ConfigurationTables></ConfigurationTables>
+            <ThingShape>
+                <PropertyDefinitions></PropertyDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="GetChangeOverDelay">
+                        <ResultType
+                         baseType="BOOLEAN"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
+                <EventDefinitions></EventDefinitions>
+                <ServiceMappings></ServiceMappings>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="GetChangeOverDelay">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        //Check if current product description is chagneover
+                                        var infotable1=Things[productionLineName].GetCurrentProduct();// only one row
+                                        var product_Description=infotable1.productDescription;
+                                        var result;
+                                        if(product_Description!=='Changeover'){
+                                        }else{
+                                           var infotable2=Things[productionLine].GetChangeoverTime();
+                                            if(infotable2.value>infotable2.max){
+                                            	result = true;//true for changeover delayed.
+                                                //result = infotable2.max;//test ok. => 90
+                                            }else{
+                                                result = false;//false for changeover duration are within the target time.
+                                            }
+                                        }
+                                        
+                                        //////////////////////////////////////////Discard//////////////////////////////////////////    
+                                        
+                                        /*
+                                        
+                                            //getChangeOverTime from current productionLine
+                                            // result: INFOTABLE dataShape: "BayerProgressDisplayDataShape"
+                                            var ChangeoverTimeInfotable =  Things[productionLineName].GetChangeoverTime();
+                                            var productionLineChangeOverTime;
+                                            var tableLength = ChangeoverTimeInfotable.rows.length;
+                                            for (var x=0; x < tableLength; x++) {
+                                                var row = ChangeoverTimeInfotable.rows[x];
+                                                productionLineChangeOverTime=row.value;//mins
+                                            }
+                                            
+                                            //get currentShiftId from productionLine thing
+                                            var currentShiftId=Things[productionLineName].currentShiftId; //INTEGER
+                                            
+                                            
+                                            //Then use currentShiftId to query the GetShiftEvents to find the durationMs
+                                            // result: INFOTABLE dataShape: ""
+                                            var GetShiftEvents_durationMs_infotable =  Things["BayerSqlServerConnector"].GetShiftEvents({
+                                            	shiftScheduleId: currentShiftId // INTEGER
+                                            });
+                                            
+                                            var durationMsByGetShiftEvents;
+                                            var tableLength2 = GetShiftEvents_durationMs_infotable.rows.length;
+                                            for (var y=0; x < tableLength2; x++) {
+                                                var row_ = GetShiftEvents_durationMs_infotable.rows[x];
+                                                //Your code here
+                                                durationMsByGetShiftEvents=row_.durationMs;
+                                            }
+                                            
+                                            //Check if the changeover is delay
+                                            if(durationMsByGetShiftEvents>productionLineChangeOverTime){
+                                            	result =  true;  //durationMs from current shift (from the given  productionLine )  is longer than the given productionLine GetChangeoverTime().
+                                            }else{
+                                            	result =  false;
+                                            }
+                                        */
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
+                <Subscriptions></Subscriptions>
+            </ThingShape>
+            <PropertyBindings></PropertyBindings>
+            <RemotePropertyBindings></RemotePropertyBindings>
+            <RemoteServiceBindings></RemoteServiceBindings>
+            <RemoteEventBindings></RemoteEventBindings>
+            <AlertConfigurations></AlertConfigurations>
+            <ImplementedShapes></ImplementedShapes>
+            <ThingProperties></ThingProperties>
+        </Thing>
+    </Things>
+</Entities>
