@@ -6,7 +6,7 @@
  modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
  revision="4"
  schemaVersion="1053"
- universal="">
+ universal="password">
     <Things>
         <Thing
          description=""
@@ -15,11 +15,11 @@
          enabled="true"
          homeMashup=""
          identifier=""
-         lastModifiedDate="2021-06-01T01:23:02.427Z"
+         lastModifiedDate="2021-06-24T05:49:16.092Z"
          name="Bayer.RTOD.LossManagerThing"
          projectName="BayerRTOD"
          published="false"
-         tags=""
+         tags="Applications:Bayer"
          thingTemplate="Bayer.RTOD.LossManagerTemplate"
          valueStream="">
             <avatar></avatar>
@@ -65,10 +65,155 @@
             </ConfigurationTables>
             <ThingShape>
                 <PropertyDefinitions></PropertyDefinitions>
-                <ServiceDefinitions></ServiceDefinitions>
+                <ServiceDefinitions>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="CheckIfRejectIncrese">
+                        <ResultType
+                         baseType="BOOLEAN"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="NUMBER"
+                             description=""
+                             name="diff"
+                             ordinal="2"></FieldDefinition>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="2"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                    <ServiceDefinition
+                     aspect.isAsync="false"
+                     category=""
+                     description=""
+                     isAllowOverride="false"
+                     isLocalOnly="false"
+                     isOpen="false"
+                     isPrivate="false"
+                     name="TurnOffYellowBell">
+                        <ResultType
+                         baseType="NUMBER"
+                         description=""
+                         name="result"
+                         ordinal="0"></ResultType>
+                        <ParameterDefinitions>
+                            <FieldDefinition
+                             baseType="THINGNAME"
+                             description=""
+                             name="productionLine"
+                             ordinal="1"></FieldDefinition>
+                        </ParameterDefinitions>
+                    </ServiceDefinition>
+                </ServiceDefinitions>
                 <EventDefinitions></EventDefinitions>
                 <ServiceMappings></ServiceMappings>
-                <ServiceImplementations></ServiceImplementations>
+                <ServiceImplementations>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="CheckIfRejectIncrese">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        var result;
+                                        var diff = 0;
+                                        diff=Things[productionLine].rejectCounter - Things[productionLine].previousRejectCounterValue;
+                                        
+                                        try {
+                                            if( diff>0 &&  Things[productionLine].rejectCounterLasestRecord!==Things[productionLine].rejectCounter ){
+                                                    
+                                                	//Insert Loss
+                                                    Things["BayerSqlServerConnector"].InsertLoss({
+                                                    	lostReason: 1 /* INTEGER */,
+                                                    	productionLine: productionLine /* THINGNAME */,
+                                                    	name: 'reject Increase' /* STRING */,
+                                                    	comment: 'reject Increase' /* STRING */,
+                                                    	category: 'breakdown' /* STRING */,
+                                                    	timestamp: new Date() /* DATETIME */
+                                                    });
+                                                Things[productionLine].rejectCounterLasestRecord = Things[productionLine].rejectCounter;  //Record the lastest Reject Counter
+                                                
+                                                result = true;
+                                            	
+                                            }else if(diff>0 && Things[productionLine].rejectCounterLasestRecord==Things[productionLine].rejectCounter){
+                                            	result = true;
+                                            }else{
+                                                diff = 0;
+                                                result = false;
+                                            }
+                                            
+                                        
+                                        } catch (e) {
+                                        	logger.error(me.name + " _ CheckIfRejectIncrese: Error in line " + e.lineNumber + ": " + e);
+                                        }
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                    <ServiceImplementation
+                     description=""
+                     handlerName="Script"
+                     name="TurnOffYellowBell">
+                        <ConfigurationTables>
+                            <ConfigurationTable
+                             description=""
+                             isMultiRow="false"
+                             name="Script"
+                             ordinal="0">
+                                <DataShape>
+                                    <FieldDefinitions>
+                                        <FieldDefinition
+                                         baseType="STRING"
+                                         description="code"
+                                         name="code"
+                                         ordinal="0"></FieldDefinition>
+                                    </FieldDefinitions>
+                                </DataShape>
+                                <Rows>
+                                    <Row>
+                                        <code>
+                                        <![CDATA[
+                                        Things[productionLine].previousRejectCounterValue = Things[productionLine].rejectCounter;
+                                        var diff = 0;
+                                        var result = diff;
+                                        ]]>
+                                        </code>
+                                    </Row>
+                                </Rows>
+                            </ConfigurationTable>
+                        </ConfigurationTables>
+                    </ServiceImplementation>
+                </ServiceImplementations>
                 <Subscriptions></Subscriptions>
             </ThingShape>
             <PropertyBindings></PropertyBindings>

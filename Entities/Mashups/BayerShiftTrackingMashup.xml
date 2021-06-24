@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2021-06-16T16:39:26.563Z"
+         lastModifiedDate="2021-06-24T04:30:04.821Z"
          name="BayerShiftTrackingMashup"
          projectName="BayerIoT"
          rows="0.0"
@@ -54,6 +54,14 @@
                  name="line"
                  ordinal="0"></FieldDefinition>
                 <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="2"
+                 baseType="INTEGER"
+                 description=""
+                 name="rejectCounterForCurrentShift"
+                 ordinal="0"></FieldDefinition>
+                <FieldDefinition
                  aspect.bindingDirection="IN"
                  aspect.isMandatory="false"
                  aspect.ordinal="1"
@@ -61,10 +69,19 @@
                  description="boxes or blisters"
                  name="subject"
                  ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.bindingDirection="BOTH"
+                 aspect.isMandatory="false"
+                 aspect.ordinal="3"
+                 baseType="BOOLEAN"
+                 description=""
+                 name="yellowAlertVisibility"
+                 ordinal="0"></FieldDefinition>
             </ParameterDefinitions>
             <Things>
+                <Thing>Bayer.RTOD.ProductionSpeedValidator</Thing>
                 <Thing>BayerUtilities</Thing>
-                <Thing>Bayer.ActualVsTargetPanelThing</Thing>
+                <Thing>Bayer.RTOD.LossManagerThing</Thing>
             </Things>
             <ThingShapes></ThingShapes>
             <ThingTemplates>
@@ -185,21 +202,6 @@
                     "Target" : "GetLineConfiguration"
                   } ]
                 },
-                "DynamicThings_Bayer.productionSpeedValidator" : {
-                  "DataName" : "DynamicThings_Bayer.productionSpeedValidator",
-                  "EntityName" : "Bayer.productionSpeedValidator",
-                  "EntityType" : "DynamicThings",
-                  "Id" : "f7fd47c2-469d-44c1-aa79-a6fae5d0d665",
-                  "Services" : [ {
-                    "APIMethod" : "post",
-                    "Characteristic" : "Services",
-                    "Id" : "01d80ff4-0f99-49e8-9c1d-a48800a6dcc7",
-                    "Name" : "compareFuction",
-                    "Parameters" : { },
-                    "RefreshInterval" : 0,
-                    "Target" : "compareFuction"
-                  } ]
-                },
                 "Resources_CurrentSessionInfo" : {
                   "DataName" : "Resources_CurrentSessionInfo",
                   "EntityName" : "CurrentSessionInfo",
@@ -261,6 +263,44 @@
                     "Parameters" : { },
                     "RefreshInterval" : 0,
                     "Target" : "GetGlobalSessionValues"
+                  } ]
+                },
+                "Things_Bayer.RTOD.LossManagerThing" : {
+                  "DataName" : "Things_Bayer.RTOD.LossManagerThing",
+                  "EntityName" : "Bayer.RTOD.LossManagerThing",
+                  "EntityType" : "Things",
+                  "Id" : "1d48bc6a-dc7e-427a-9a5b-ba034dd88da5",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "c6bfd397-03cb-4c84-a602-8c2168ed9638",
+                    "Name" : "CheckIfRejectIncrese",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "CheckIfRejectIncrese"
+                  }, {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "cb787015-2b4a-46cb-ade5-c1240a0c86bb",
+                    "Name" : "TurnOffYellowBell",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "TurnOffYellowBell"
+                  } ]
+                },
+                "Things_Bayer.RTOD.ProductionSpeedValidator" : {
+                  "DataName" : "Things_Bayer.RTOD.ProductionSpeedValidator",
+                  "EntityName" : "Bayer.RTOD.ProductionSpeedValidator",
+                  "EntityType" : "Things",
+                  "Id" : "b561d15a-33fa-413d-8be6-abda17b6b964",
+                  "Services" : [ {
+                    "APIMethod" : "post",
+                    "Characteristic" : "Services",
+                    "Id" : "361b1135-e63e-4e1c-a5b1-0b2f6405d4fc",
+                    "Name" : "CompareFuction",
+                    "Parameters" : { },
+                    "RefreshInterval" : 0,
+                    "Target" : "CompareFuction"
                   } ]
                 },
                 "Things_BayerUtilities" : {
@@ -649,20 +689,6 @@
                 "SourceSection" : "",
                 "TargetArea" : "UI",
                 "TargetId" : "image-372",
-                "TargetSection" : ""
-              }, {
-                "Id" : "17364dde-6fcb-41e5-8ff3-3a20f12e093a",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "Output",
-                  "SourcePropertyBaseType" : "BOOLEAN",
-                  "TargetProperty" : "Visible",
-                  "TargetPropertyBaseType" : "BOOLEAN"
-                } ],
-                "SourceArea" : "UI",
-                "SourceId" : "validator-373",
-                "SourceSection" : "",
-                "TargetArea" : "UI",
-                "TargetId" : "image-375",
                 "TargetSection" : ""
               }, {
                 "Id" : "022860d5-afb4-4bf2-83a2-ddd79fa7b317",
@@ -1918,37 +1944,6 @@
                 "TargetId" : "expression-566",
                 "TargetSection" : ""
               }, {
-                "Id" : "9877eb69-689b-4263-9596-3a7facee2187",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "Output",
-                  "SourcePropertyBaseType" : "NUMBER",
-                  "TargetProperty" : "speed",
-                  "TargetPropertyBaseType" : "NUMBER",
-                  "TargetPropertyType" : "Parameter"
-                } ],
-                "SourceArea" : "UI",
-                "SourceId" : "expression-566",
-                "SourceSection" : "",
-                "TargetArea" : "Data",
-                "TargetId" : "compareFuction",
-                "TargetSection" : "DynamicThings_Bayer.productionSpeedValidator"
-              }, {
-                "Id" : "2c0f5297-410d-494a-a4c9-a873bed28854",
-                "PropertyMaps" : [ {
-                  "SourceProperty" : "name",
-                  "SourcePropertyBaseType" : "STRING",
-                  "TargetProperty" : "ProductionLineName",
-                  "TargetPropertyBaseType" : "STRING",
-                  "TargetPropertyType" : "Parameter"
-                } ],
-                "SourceArea" : "Data",
-                "SourceDetails" : "AllData",
-                "SourceId" : "GetProperties",
-                "SourceSection" : "DynamicThingTemplates_BayerProductionLine",
-                "TargetArea" : "Data",
-                "TargetId" : "compareFuction",
-                "TargetSection" : "DynamicThings_Bayer.productionSpeedValidator"
-              }, {
                 "Id" : "1aa102b5-17bf-4acf-80fd-db705e224f86",
                 "PropertyMaps" : [ {
                   "SourceProperty" : "Output",
@@ -2079,6 +2074,147 @@
                 "TargetArea" : "UI",
                 "TargetId" : "expression-570",
                 "TargetSection" : ""
+              }, {
+                "Id" : "681622a6-c2a8-42d4-9c06-57f5cda3f8c8",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "productionLine",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "CheckIfRejectIncrese",
+                "TargetSection" : "Things_Bayer.RTOD.LossManagerThing"
+              }, {
+                "Id" : "4ca63470-1078-47e1-b15e-81ddbb8820d1",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "yellowAlertVisibility",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "validator-595",
+                "SourceSection" : "",
+                "TargetArea" : "Mashup",
+                "TargetId" : "mashup-root",
+                "TargetSection" : ""
+              }, {
+                "Id" : "6d5bc502-b12c-4189-8c58-71557f15ce3a",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "yellowAlertVisibility",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "property",
+                  "TargetProperty" : "ButtonVisibility",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "validator-595",
+                "TargetSection" : ""
+              }, {
+                "Id" : "fc4d2378-7382-4270-b093-6139f6bd27d9",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "SourcePropertyType" : "Property",
+                  "TargetProperty" : "productionLine",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "UI",
+                "TargetId" : "navigation-572",
+                "TargetSection" : ""
+              }, {
+                "Id" : "122bcc2f-7ce7-441b-b4a0-e3661169b379",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "productionLine",
+                  "TargetPropertyBaseType" : "THINGNAME",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "TurnOffYellowBell",
+                "TargetSection" : "Things_Bayer.RTOD.LossManagerThing"
+              }, {
+                "Id" : "6e96e9de-d978-4878-9860-c0f68908b907",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "TargetProperty" : "diff",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "TurnOffYellowBell",
+                "SourceSection" : "Things_Bayer.RTOD.LossManagerThing",
+                "TargetArea" : "Data",
+                "TargetId" : "CheckIfRejectIncrese",
+                "TargetSection" : "Things_Bayer.RTOD.LossManagerThing"
+              }, {
+                "Id" : "852777a1-5197-4484-9a86-313c84ec09c2",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "result",
+                  "SourcePropertyBaseType" : "BOOLEAN",
+                  "SourcePropertyType" : "Field",
+                  "TargetProperty" : "Visible",
+                  "TargetPropertyBaseType" : "BOOLEAN",
+                  "TargetPropertyType" : "property"
+                } ],
+                "SourceArea" : "Data",
+                "SourceDetails" : "AllData",
+                "SourceId" : "CheckIfRejectIncrese",
+                "SourceSection" : "Things_Bayer.RTOD.LossManagerThing",
+                "TargetArea" : "UI",
+                "TargetId" : "image-375",
+                "TargetSection" : ""
+              }, {
+                "Id" : "4cfb39b4-eeb9-4bb1-bb03-780fbbab934e",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "line",
+                  "SourcePropertyBaseType" : "THINGNAME",
+                  "TargetProperty" : "productionLineName",
+                  "TargetPropertyBaseType" : "STRING",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "Mashup",
+                "SourceId" : "mashup-root",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "CompareFuction",
+                "TargetSection" : "Things_Bayer.RTOD.ProductionSpeedValidator"
+              }, {
+                "Id" : "04578168-0e27-4753-96b1-dd6c5074ac98",
+                "PropertyMaps" : [ {
+                  "SourceProperty" : "Output",
+                  "SourcePropertyBaseType" : "NUMBER",
+                  "TargetProperty" : "speed",
+                  "TargetPropertyBaseType" : "NUMBER",
+                  "TargetPropertyType" : "Parameter"
+                } ],
+                "SourceArea" : "UI",
+                "SourceId" : "expression-566",
+                "SourceSection" : "",
+                "TargetArea" : "Data",
+                "TargetId" : "CompareFuction",
+                "TargetSection" : "Things_Bayer.RTOD.ProductionSpeedValidator"
               } ],
               "DesignTimePermissions" : {
                 "Create" : [ ],
@@ -2595,6 +2731,69 @@
                 "EventTriggerId" : "navigation-572",
                 "EventTriggerSection" : "",
                 "Id" : "e43fc673-1219-4a5a-887e-ce38db6fcbb9"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.LossManagerThing",
+                "EventHandlerService" : "CheckIfRejectIncrese",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "3b34e545-52b5-4ba8-bc22-624830646392"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.LossManagerThing",
+                "EventHandlerService" : "CheckIfRejectIncrese",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Refresh",
+                "EventTriggerId" : "autorefresh-312",
+                "EventTriggerSection" : "",
+                "Id" : "c9bf2c04-14cf-4ed3-a65a-80371399bec5"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_BayerUtilities",
+                "EventHandlerService" : "CheckUserInRole1",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "ptcsbutton-594",
+                "EventTriggerSection" : "",
+                "Id" : "58dc6ece-2957-488f-b871-9426d9c0f04c"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.LossManagerThing",
+                "EventHandlerService" : "TurnOffYellowBell",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Clicked",
+                "EventTriggerId" : "ptcsbutton-594",
+                "EventTriggerSection" : "",
+                "Id" : "21600acb-0cd6-4023-ae38-af5b2f33a263"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.LossManagerThing",
+                "EventHandlerService" : "CheckIfRejectIncrese",
+                "EventTriggerArea" : "Data",
+                "EventTriggerEvent" : "ServiceInvokeCompleted",
+                "EventTriggerId" : "TurnOffYellowBell",
+                "EventTriggerSection" : "Things_Bayer.RTOD.LossManagerThing",
+                "Id" : "4db61d5b-69ee-4979-944f-8d86c8c8976c"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.ProductionSpeedValidator",
+                "EventHandlerService" : "CompareFuction",
+                "EventTriggerArea" : "Mashup",
+                "EventTriggerEvent" : "Loaded",
+                "EventTriggerId" : "mashup-root",
+                "EventTriggerSection" : "",
+                "Id" : "bcada2b1-6741-4803-9723-7ba724195270"
+              }, {
+                "EventHandlerArea" : "Data",
+                "EventHandlerId" : "Things_Bayer.RTOD.ProductionSpeedValidator",
+                "EventHandlerService" : "CompareFuction",
+                "EventTriggerArea" : "UI",
+                "EventTriggerEvent" : "Refresh",
+                "EventTriggerId" : "autorefresh-312",
+                "EventTriggerSection" : "",
+                "Id" : "f17bab87-c827-4892-930d-92d4fd4c994a"
               } ],
               "RunTimePermissions" : {
                 "permissions" : [ ]
@@ -2626,7 +2825,29 @@
                   "ShowDataLoading" : true,
                   "Style" : "DefaultMashupStyle",
                   "StyleProperties" : {
-                    "data" : { },
+                    "data" : {
+                      "ptcsbutton-594" : {
+                        "parts" : {
+                          "$" : {
+                            "$" : {
+                              "background" : "inherit",
+                              "border-color" : "#000000",
+                              "border-radius" : "undefined",
+                              "border-width" : "0px",
+                              "min-height" : "undefined",
+                              "min-width" : "undefined"
+                            }
+                          },
+                          "root" : {
+                            "icon" : {
+                              "max-height" : "undefined",
+                              "max-width" : "undefined"
+                            }
+                          }
+                        },
+                        "widget" : "ptcs-button"
+                      }
+                    },
                     "meta" : {
                       "type" : "WidgetStyler",
                       "version" : "1.0"
@@ -2662,11 +2883,29 @@
                     "BaseType" : "STRING",
                     "Description" : "boxes or blisters",
                     "ParameterName" : "subject"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "INTEGER",
+                    "Description" : "",
+                    "ParameterName" : "rejectCounterForCurrentShift"
+                  }, {
+                    "Aspects" : {
+                      "bindingDirection" : "BOTH",
+                      "isMandatory" : false
+                    },
+                    "BaseType" : "BOOLEAN",
+                    "DefaultValue" : false,
+                    "Description" : "",
+                    "ParameterName" : "yellowAlertVisibility"
                   } ],
                   "flex-grow" : 0,
                   "flex-shrink" : 0,
-                  "id_index" : 583,
-                  "supportsAutoResize" : true
+                  "id_index" : 603,
+                  "supportsAutoResize" : true,
+                  "yellowAlertVisibility" : true
                 },
                 "Widgets" : [ {
                   "Properties" : {
@@ -3205,7 +3444,7 @@
                                       "Area" : "UI",
                                       "AutoEvaluate" : true,
                                       "DisplayName" : "validator-371",
-                                      "Expression" : "changeover == 1 || production == 1",
+                                      "Expression" : "changeover == 1 || production == 1;",
                                       "Height" : 28,
                                       "Id" : "validator-371",
                                       "LastContainer" : false,
@@ -3223,13 +3462,21 @@
                                         "BaseType" : "NUMBER",
                                         "Description" : "",
                                         "ParameterName" : "production",
-                                        "isValid" : true,
+                                        "bindingDirection" : "Target",
+                                        "bindingStatus" : true,
+                                        "bindingType" : "Property",
+                                        "isBindingSource" : false,
+                                        "isBindingTarget" : true,
                                         "name" : "production"
                                       }, {
                                         "BaseType" : "NUMBER",
                                         "Description" : "",
                                         "ParameterName" : "changeover",
-                                        "isValid" : true,
+                                        "bindingDirection" : "Target",
+                                        "bindingStatus" : true,
+                                        "bindingType" : "Property",
+                                        "isBindingSource" : false,
+                                        "isBindingTarget" : true,
                                         "name" : "changeover"
                                       } ],
                                       "editMode" : "edit",
@@ -3343,15 +3590,24 @@
                                       "__TypeDisplayName" : "Validator",
                                       "_currentParameterDefs" : [ {
                                         "BaseType" : "NUMBER",
+                                        "DefaultValue" : "3",
                                         "Description" : "",
                                         "ParameterName" : "production",
-                                        "isValid" : true,
+                                        "bindingDirection" : "Target",
+                                        "bindingStatus" : true,
+                                        "bindingType" : "Property",
+                                        "isBindingSource" : false,
+                                        "isBindingTarget" : true,
                                         "name" : "production"
                                       }, {
                                         "BaseType" : "NUMBER",
                                         "Description" : "",
                                         "ParameterName" : "changeover",
-                                        "isValid" : true,
+                                        "bindingDirection" : "Target",
+                                        "bindingStatus" : true,
+                                        "bindingType" : "Property",
+                                        "isBindingSource" : false,
+                                        "isBindingTarget" : true,
                                         "name" : "changeover"
                                       } ],
                                       "editMode" : "edit",
@@ -3389,7 +3645,7 @@
                                       "ToolTipStyle" : "DefaultTooltipStyle",
                                       "Top" : 11,
                                       "Type" : "image",
-                                      "Visible" : true,
+                                      "Visible" : false,
                                       "Width" : 50,
                                       "Z-index" : 9,
                                       "__TypeDisplayName" : "Image",
@@ -3498,6 +3754,34 @@
                                       "Z-index" : 10,
                                       "__TypeDisplayName" : "Value Display",
                                       "__supportsLabel" : true,
+                                      "__supportsTooltip" : true
+                                    },
+                                    "Widgets" : [ ]
+                                  }, {
+                                    "Properties" : {
+                                      "Area" : "UI",
+                                      "ButtonType" : "primary",
+                                      "ContextID" : "",
+                                      "Disabled" : false,
+                                      "DisplayName" : "ptcsbutton-594",
+                                      "Height" : 50,
+                                      "Id" : "ptcsbutton-594",
+                                      "Label" : "",
+                                      "LabelAlignment" : "center",
+                                      "LastContainer" : false,
+                                      "Left" : 212.97918701171875,
+                                      "ResponsiveLayout" : false,
+                                      "ShowDataLoading" : true,
+                                      "TabSequence" : 0,
+                                      "ToolTipField" : "",
+                                      "ToolTipStyle" : "DefaultTooltipStyle",
+                                      "Top" : 11.979164123535156,
+                                      "Type" : "ptcsbutton",
+                                      "UseTheme" : true,
+                                      "Visible" : true,
+                                      "Width" : 50,
+                                      "Z-index" : 12,
+                                      "__TypeDisplayName" : "Button",
                                       "__supportsTooltip" : true
                                     },
                                     "Widgets" : [ ]
@@ -7181,7 +7465,7 @@
                           "Area" : "UI",
                           "BGImageRepeat" : "no-repeat",
                           "BGImageSize" : "auto",
-                          "CustomClass" : "panelShadow",
+                          "CustomClass" : "",
                           "DisplayName" : "Column-DailyTrends",
                           "ExpandCollapseTabLocation" : "outside",
                           "Expanded" : true,
@@ -7211,16 +7495,16 @@
                           "Properties" : {
                             "Area" : "UI",
                             "Columns" : 0,
-                            "DisplayName" : "layout-62",
+                            "DisplayName" : "layout-596",
                             "Footer" : false,
                             "FooterHeight" : 0,
                             "Header" : true,
-                            "HeaderHeight" : 35,
-                            "Id" : "layout-62",
+                            "HeaderHeight" : 260,
+                            "Id" : "layout-596",
                             "IncludeSpacingInFixedAreas" : false,
                             "IsPrintLayout" : false,
                             "LastContainer" : false,
-                            "Left" : 65,
+                            "Left" : 95,
                             "LeftSidebar" : false,
                             "LeftSidebarWidth" : 0,
                             "Orientation" : "vertical",
@@ -7233,7 +7517,7 @@
                             "PctColumn7" : 1,
                             "PctColumn8" : 1,
                             "PctRow1" : 100,
-                            "PctRow2" : 50,
+                            "PctRow2" : 0,
                             "PctRow3" : 0,
                             "PctRow4" : 0,
                             "PctRow5" : 0,
@@ -7248,8 +7532,8 @@
                             "RightSidebarWidth" : 0,
                             "Rows" : 1,
                             "ShowDataLoading" : true,
-                            "Spacing" : 2,
-                            "Top" : 75,
+                            "Spacing" : 0,
+                            "Top" : 275,
                             "Type" : "layout",
                             "Visible" : true,
                             "Z-index" : 10,
@@ -7261,10 +7545,11 @@
                               "Area" : "UI",
                               "BGImageRepeat" : "no-repeat",
                               "BGImageSize" : "auto",
+                              "CustomClass" : "panelShadow",
                               "DisplayName" : "Header",
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
-                              "Id" : "container-63",
+                              "Id" : "container-597",
                               "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
@@ -7288,40 +7573,175 @@
                             },
                             "Widgets" : [ {
                               "Properties" : {
-                                "Alignment" : "left",
                                 "Area" : "UI",
-                                "BackgroundFill" : "content",
-                                "DisplayName" : "VD-Dailyperformancetrends",
-                                "Height" : 22,
-                                "Id" : "valuedisplay-137",
-                                "ImageScaling" : "Width",
-                                "Label" : "",
-                                "LabelAlignment" : "left",
+                                "Columns" : 0,
+                                "DisplayName" : "layout-599",
+                                "Footer" : false,
+                                "FooterHeight" : 0,
+                                "Header" : true,
+                                "HeaderHeight" : 35,
+                                "Id" : "layout-599",
+                                "IncludeSpacingInFixedAreas" : false,
+                                "IsPrintLayout" : false,
                                 "LastContainer" : false,
-                                "Left" : 10,
-                                "Overflow" : "hidden",
+                                "Left" : 65,
+                                "LeftSidebar" : false,
+                                "LeftSidebarWidth" : 0,
+                                "Orientation" : "vertical",
+                                "PctColumn1" : 50,
+                                "PctColumn2" : 50,
+                                "PctColumn3" : 1,
+                                "PctColumn4" : 1,
+                                "PctColumn5" : 1,
+                                "PctColumn6" : 1,
+                                "PctColumn7" : 1,
+                                "PctColumn8" : 1,
+                                "PctRow1" : 100,
+                                "PctRow2" : 50,
+                                "PctRow3" : 0,
+                                "PctRow4" : 0,
+                                "PctRow5" : 0,
+                                "PctRow6" : 0,
+                                "PctRow7" : 0,
+                                "PctRow8" : 0,
+                                "PrintMarginLeftRight" : 0.5,
+                                "PrintMarginTopBottom" : 0.5,
+                                "PrintWidth" : 650,
                                 "ResponsiveLayout" : true,
+                                "RightSidebar" : false,
+                                "RightSidebarWidth" : 0,
+                                "Rows" : 1,
                                 "ShowDataLoading" : true,
-                                "TextIfNoValue" : "[[Bayer.Dailyperformancetrends]]",
-                                "TextIfNoValueOffset" : 10,
-                                "TextIfNoValueStyle" : "Bayer_PanelTitle",
-                                "TextWrap" : true,
-                                "ToolTipField" : "",
-                                "ToolTipStyle" : "DefaultTooltipStyle",
-                                "Top" : 0,
-                                "Type" : "valuedisplay",
-                                "UseTheme" : false,
-                                "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
-                                "ValueDisplayStyle" : "Bayer_PanelTitle",
-                                "VerticalAlignment" : "middle",
+                                "Spacing" : 2,
+                                "Top" : 75,
+                                "Type" : "layout",
                                 "Visible" : true,
-                                "Width" : 215,
                                 "Z-index" : 10,
-                                "__TypeDisplayName" : "Value Display",
-                                "__supportsLabel" : true,
-                                "__supportsTooltip" : true
+                                "__TypeDisplayName" : "Layout"
                               },
-                              "Widgets" : [ ]
+                              "Widgets" : [ {
+                                "Properties" : {
+                                  "AnimateExpandCollapse" : true,
+                                  "Area" : "UI",
+                                  "BGImageRepeat" : "no-repeat",
+                                  "BGImageSize" : "auto",
+                                  "DisplayName" : "Header",
+                                  "ExpandCollapseTabLocation" : "outside",
+                                  "Expanded" : true,
+                                  "Id" : "container-600",
+                                  "LastContainer" : false,
+                                  "MinHeight" : 0,
+                                  "MinWidth" : 0,
+                                  "Overlay" : false,
+                                  "OverlayIsTransparent" : false,
+                                  "ResponsiveLayout" : true,
+                                  "ShowDataLoading" : true,
+                                  "ShowExpandCollapseTab" : false,
+                                  "Style" : "DefaultContainerStyle",
+                                  "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                                  "TabExpandStyle" : "DefaultTabExpandStyle",
+                                  "TabHeight" : 36,
+                                  "TabLocation" : "center",
+                                  "TabOffset" : 0,
+                                  "TabWidth" : 36,
+                                  "Type" : "container",
+                                  "Visible" : true,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
+                                },
+                                "Widgets" : [ {
+                                  "Properties" : {
+                                    "Alignment" : "left",
+                                    "Area" : "UI",
+                                    "BackgroundFill" : "content",
+                                    "DisplayName" : "valuedisplay-601",
+                                    "Height" : 22,
+                                    "Id" : "valuedisplay-601",
+                                    "ImageScaling" : "Width",
+                                    "Label" : "",
+                                    "LabelAlignment" : "left",
+                                    "LastContainer" : false,
+                                    "Left" : 10,
+                                    "Overflow" : "hidden",
+                                    "ResponsiveLayout" : true,
+                                    "ShowDataLoading" : true,
+                                    "TextIfNoValue" : "Overall Equipment Effectiveness",
+                                    "TextIfNoValueOffset" : 10,
+                                    "TextIfNoValueStyle" : "Bayer_PanelTitle",
+                                    "TextWrap" : true,
+                                    "ToolTipField" : "",
+                                    "ToolTipStyle" : "DefaultTooltipStyle",
+                                    "Top" : 0,
+                                    "Type" : "valuedisplay",
+                                    "UseTheme" : false,
+                                    "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
+                                    "ValueDisplayStyle" : "Bayer_PanelTitle",
+                                    "VerticalAlignment" : "middle",
+                                    "Visible" : true,
+                                    "Width" : 215,
+                                    "Z-index" : 10,
+                                    "__TypeDisplayName" : "Value Display",
+                                    "__supportsLabel" : true,
+                                    "__supportsTooltip" : true
+                                  },
+                                  "Widgets" : [ ]
+                                } ]
+                              }, {
+                                "Properties" : {
+                                  "AnimateExpandCollapse" : true,
+                                  "Area" : "UI",
+                                  "BGImageRepeat" : "no-repeat",
+                                  "BGImageSize" : "auto",
+                                  "DisplayName" : "Row",
+                                  "ExpandCollapseTabLocation" : "outside",
+                                  "Expanded" : true,
+                                  "Id" : "container-602",
+                                  "LastContainer" : false,
+                                  "MinHeight" : 0,
+                                  "MinWidth" : 0,
+                                  "Overlay" : false,
+                                  "OverlayIsTransparent" : false,
+                                  "ResponsiveLayout" : true,
+                                  "ShowDataLoading" : true,
+                                  "ShowExpandCollapseTab" : false,
+                                  "Style" : "DefaultContainerStyle",
+                                  "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                                  "TabExpandStyle" : "DefaultTabExpandStyle",
+                                  "TabHeight" : 36,
+                                  "TabLocation" : "center",
+                                  "TabOffset" : 0,
+                                  "TabWidth" : 36,
+                                  "Top" : null,
+                                  "Type" : "container",
+                                  "Visible" : true,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
+                                },
+                                "Widgets" : [ {
+                                  "Properties" : {
+                                    "Area" : "UI",
+                                    "DisplayName" : "mashupcontainer-603",
+                                    "Height" : 300,
+                                    "Id" : "mashupcontainer-603",
+                                    "LastContainer" : false,
+                                    "Left" : 105,
+                                    "MashupParameters" : [ ],
+                                    "Name" : "Bayer.RTOD.OverallEquipmentEffectivenessMashup",
+                                    "ResponsiveLayout" : true,
+                                    "ShowDataLoading" : true,
+                                    "TabSequenceGroup" : 0,
+                                    "Top" : 140,
+                                    "Type" : "mashupcontainer",
+                                    "Visible" : true,
+                                    "Width" : 400,
+                                    "Z-index" : 10,
+                                    "__TypeDisplayName" : "Contained Mashup"
+                                  },
+                                  "Widgets" : [ ]
+                                } ]
+                              } ]
                             } ]
                           }, {
                             "Properties" : {
@@ -7329,10 +7749,11 @@
                               "Area" : "UI",
                               "BGImageRepeat" : "no-repeat",
                               "BGImageSize" : "auto",
+                              "CustomClass" : "panelShadow",
                               "DisplayName" : "Row 1",
                               "ExpandCollapseTabLocation" : "outside",
                               "Expanded" : true,
-                              "Id" : "container-64",
+                              "Id" : "container-598",
                               "LastContainer" : false,
                               "MinHeight" : 0,
                               "MinWidth" : 0,
@@ -7348,7 +7769,6 @@
                               "TabLocation" : "center",
                               "TabOffset" : 0,
                               "TabWidth" : 36,
-                              "Top" : null,
                               "Type" : "container",
                               "Visible" : true,
                               "Z-index" : 10,
@@ -7358,37 +7778,187 @@
                             "Widgets" : [ {
                               "Properties" : {
                                 "Area" : "UI",
-                                "DisplayName" : "Mashup-DailyTrends",
-                                "Height" : 300,
-                                "Id" : "mashupcontainer-308",
+                                "Columns" : 0,
+                                "DisplayName" : "layout-62",
+                                "Footer" : false,
+                                "FooterHeight" : 0,
+                                "Header" : true,
+                                "HeaderHeight" : 35,
+                                "Id" : "layout-62",
+                                "IncludeSpacingInFixedAreas" : false,
+                                "IsPrintLayout" : false,
                                 "LastContainer" : false,
-                                "Left" : 105,
-                                "MashupParameters" : [ {
-                                  "BaseType" : "THINGNAME",
-                                  "Description" : "",
-                                  "ParameterName" : "productionLine",
-                                  "ParmDef" : {
-                                    "aspects" : {
-                                      "ordinal" : "0"
-                                    },
-                                    "baseType" : "THINGNAME",
-                                    "description" : "",
-                                    "name" : "productionLine",
-                                    "ordinal" : 0
-                                  }
-                                } ],
-                                "Name" : "BayerDailyPerformancePanelMashup",
+                                "Left" : 65,
+                                "LeftSidebar" : false,
+                                "LeftSidebarWidth" : 0,
+                                "Orientation" : "vertical",
+                                "PctColumn1" : 50,
+                                "PctColumn2" : 50,
+                                "PctColumn3" : 1,
+                                "PctColumn4" : 1,
+                                "PctColumn5" : 1,
+                                "PctColumn6" : 1,
+                                "PctColumn7" : 1,
+                                "PctColumn8" : 1,
+                                "PctRow1" : 100,
+                                "PctRow2" : 50,
+                                "PctRow3" : 0,
+                                "PctRow4" : 0,
+                                "PctRow5" : 0,
+                                "PctRow6" : 0,
+                                "PctRow7" : 0,
+                                "PctRow8" : 0,
+                                "PrintMarginLeftRight" : 0.5,
+                                "PrintMarginTopBottom" : 0.5,
+                                "PrintWidth" : 650,
                                 "ResponsiveLayout" : true,
+                                "RightSidebar" : false,
+                                "RightSidebarWidth" : 0,
+                                "Rows" : 1,
                                 "ShowDataLoading" : true,
-                                "TabSequenceGroup" : 0,
-                                "Top" : 140,
-                                "Type" : "mashupcontainer",
+                                "Spacing" : 2,
+                                "Top" : 75,
+                                "Type" : "layout",
                                 "Visible" : true,
-                                "Width" : 400,
                                 "Z-index" : 10,
-                                "__TypeDisplayName" : "Contained Mashup"
+                                "__TypeDisplayName" : "Layout"
                               },
-                              "Widgets" : [ ]
+                              "Widgets" : [ {
+                                "Properties" : {
+                                  "AnimateExpandCollapse" : true,
+                                  "Area" : "UI",
+                                  "BGImageRepeat" : "no-repeat",
+                                  "BGImageSize" : "auto",
+                                  "DisplayName" : "Header",
+                                  "ExpandCollapseTabLocation" : "outside",
+                                  "Expanded" : true,
+                                  "Id" : "container-63",
+                                  "LastContainer" : false,
+                                  "MinHeight" : 0,
+                                  "MinWidth" : 0,
+                                  "Overlay" : false,
+                                  "OverlayIsTransparent" : false,
+                                  "ResponsiveLayout" : true,
+                                  "ShowDataLoading" : true,
+                                  "ShowExpandCollapseTab" : false,
+                                  "Style" : "DefaultContainerStyle",
+                                  "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                                  "TabExpandStyle" : "DefaultTabExpandStyle",
+                                  "TabHeight" : 36,
+                                  "TabLocation" : "center",
+                                  "TabOffset" : 0,
+                                  "TabWidth" : 36,
+                                  "Type" : "container",
+                                  "Visible" : true,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
+                                },
+                                "Widgets" : [ {
+                                  "Properties" : {
+                                    "Alignment" : "left",
+                                    "Area" : "UI",
+                                    "BackgroundFill" : "content",
+                                    "DisplayName" : "VD-Dailyperformancetrends",
+                                    "Height" : 22,
+                                    "Id" : "valuedisplay-137",
+                                    "ImageScaling" : "Width",
+                                    "Label" : "",
+                                    "LabelAlignment" : "left",
+                                    "LastContainer" : false,
+                                    "Left" : 10,
+                                    "Overflow" : "hidden",
+                                    "ResponsiveLayout" : true,
+                                    "ShowDataLoading" : true,
+                                    "TextIfNoValue" : "[[Bayer.Dailyperformancetrends]]",
+                                    "TextIfNoValueOffset" : 10,
+                                    "TextIfNoValueStyle" : "Bayer_PanelTitle",
+                                    "TextWrap" : true,
+                                    "ToolTipField" : "",
+                                    "ToolTipStyle" : "DefaultTooltipStyle",
+                                    "Top" : 0,
+                                    "Type" : "valuedisplay",
+                                    "UseTheme" : false,
+                                    "ValueDisplayLabelStyle" : "DefaultWidgetLabelStyle",
+                                    "ValueDisplayStyle" : "Bayer_PanelTitle",
+                                    "VerticalAlignment" : "middle",
+                                    "Visible" : true,
+                                    "Width" : 215,
+                                    "Z-index" : 10,
+                                    "__TypeDisplayName" : "Value Display",
+                                    "__supportsLabel" : true,
+                                    "__supportsTooltip" : true
+                                  },
+                                  "Widgets" : [ ]
+                                } ]
+                              }, {
+                                "Properties" : {
+                                  "AnimateExpandCollapse" : true,
+                                  "Area" : "UI",
+                                  "BGImageRepeat" : "no-repeat",
+                                  "BGImageSize" : "auto",
+                                  "DisplayName" : "Row",
+                                  "ExpandCollapseTabLocation" : "outside",
+                                  "Expanded" : true,
+                                  "Id" : "container-64",
+                                  "LastContainer" : false,
+                                  "MinHeight" : 0,
+                                  "MinWidth" : 0,
+                                  "Overlay" : false,
+                                  "OverlayIsTransparent" : false,
+                                  "ResponsiveLayout" : true,
+                                  "ShowDataLoading" : true,
+                                  "ShowExpandCollapseTab" : false,
+                                  "Style" : "DefaultContainerStyle",
+                                  "TabCollapseStyle" : "DefaultTabCollapseStyle",
+                                  "TabExpandStyle" : "DefaultTabExpandStyle",
+                                  "TabHeight" : 36,
+                                  "TabLocation" : "center",
+                                  "TabOffset" : 0,
+                                  "TabWidth" : 36,
+                                  "Top" : null,
+                                  "Type" : "container",
+                                  "Visible" : true,
+                                  "Z-index" : 10,
+                                  "__TypeDisplayName" : "Container",
+                                  "userCannotRemove" : true
+                                },
+                                "Widgets" : [ {
+                                  "Properties" : {
+                                    "Area" : "UI",
+                                    "DisplayName" : "Mashup-DailyTrends",
+                                    "Height" : 300,
+                                    "Id" : "mashupcontainer-308",
+                                    "LastContainer" : false,
+                                    "Left" : 105,
+                                    "MashupParameters" : [ {
+                                      "BaseType" : "THINGNAME",
+                                      "Description" : "",
+                                      "ParameterName" : "productionLine",
+                                      "ParmDef" : {
+                                        "aspects" : {
+                                          "ordinal" : "0"
+                                        },
+                                        "baseType" : "THINGNAME",
+                                        "description" : "",
+                                        "name" : "productionLine",
+                                        "ordinal" : 0
+                                      }
+                                    } ],
+                                    "Name" : "BayerDailyPerformancePanelMashup",
+                                    "ResponsiveLayout" : true,
+                                    "ShowDataLoading" : true,
+                                    "TabSequenceGroup" : 0,
+                                    "Top" : 140,
+                                    "Type" : "mashupcontainer",
+                                    "Visible" : true,
+                                    "Width" : 400,
+                                    "Z-index" : 10,
+                                    "__TypeDisplayName" : "Contained Mashup"
+                                  },
+                                  "Widgets" : [ ]
+                                } ]
+                              } ]
                             } ]
                           } ]
                         } ]
@@ -11492,6 +12062,21 @@
                           "Left" : 155,
                           "MashupName" : "Bayer.RTOD.AdjustCountersForShiftMashup",
                           "MashupParameters" : [ {
+                            "BaseType" : "THINGNAME",
+                            "Description" : "",
+                            "ParameterName" : "productionLine",
+                            "ParmDef" : {
+                              "aspects" : {
+                                "bindingDirection" : "IN",
+                                "isMandatory" : "false",
+                                "ordinal" : "1"
+                              },
+                              "baseType" : "THINGNAME",
+                              "description" : "",
+                              "name" : "productionLine",
+                              "ordinal" : 0
+                            }
+                          }, {
                             "BaseType" : "INFOTABLE",
                             "Description" : "",
                             "ParameterName" : "Schedule",
@@ -12388,6 +12973,73 @@
                     "Visible" : true,
                     "Z-index" : 10,
                     "__TypeDisplayName" : "Events Router"
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DataChangeType" : "VALUE",
+                    "Description" : "true for button click",
+                    "DisplayName" : "setLossButtonToSleep",
+                    "Expression" : "Output = true;  ",
+                    "FireOnFirstValue" : false,
+                    "Height" : 28,
+                    "Id" : "expression-589",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "OutputBaseType" : "BOOLEAN",
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "expression",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Expression",
+                    "_currentParameterDefs" : [ ]
+                  },
+                  "Widgets" : [ ]
+                }, {
+                  "Properties" : {
+                    "Area" : "UI",
+                    "AutoEvaluate" : false,
+                    "DisplayName" : "ButtonVisibility",
+                    "Expression" : "if(ButtonVisibility ===true){\n\tOutput = false;\n}else{\n\tOutput = true;\n}",
+                    "Height" : 28,
+                    "Id" : "validator-595",
+                    "LastContainer" : false,
+                    "Left" : 0,
+                    "Output" : true,
+                    "ShowDataLoading" : true,
+                    "Top" : 0,
+                    "Type" : "validator",
+                    "Visible" : true,
+                    "Width" : 200,
+                    "Z-index" : 10,
+                    "__TypeDisplayName" : "Validator",
+                    "_currentParameterDefs" : [ {
+                      "BaseType" : "BOOLEAN",
+                      "DefaultValue" : "false",
+                      "Description" : "",
+                      "ParameterName" : "ButtonVisibility",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : true,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "ButtonVisibility"
+                    }, {
+                      "BaseType" : "BOOLEAN",
+                      "DefaultValue" : false,
+                      "Description" : "",
+                      "ParameterName" : "CheckIfRejectIncreaseResult",
+                      "bindingDirection" : "Target",
+                      "bindingStatus" : false,
+                      "bindingType" : "Property",
+                      "isBindingSource" : false,
+                      "isBindingTarget" : true,
+                      "name" : "CheckIfRejectIncreaseResult"
+                    } ]
                   },
                   "Widgets" : [ ]
                 } ]
